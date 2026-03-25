@@ -88,7 +88,7 @@ export default function ProjectPage({ project }: Props) {
         </motion.div>
 
         {/* Gradient overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-surface from-15% via-surface/70 via-50% to-surface/20" />
 
         {/* Content at bottom */}
         <motion.div
@@ -103,7 +103,7 @@ export default function ProjectPage({ project }: Props) {
             >
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 text-text-secondary hover:text-accent transition-colors text-sm mb-6"
+                className="inline-flex items-center gap-2 text-text-primary font-semibold hover:text-accent transition-colors text-sm mb-6"
               >
                 <span>←</span> Retour aux projets
               </Link>
@@ -125,7 +125,7 @@ export default function ProjectPage({ project }: Props) {
             </motion.div>
 
             <motion.h1
-              className="font-display font-bold text-5xl md:text-7xl lg:text-8xl text-text-primary mb-4"
+              className="font-display font-black text-5xl md:text-7xl lg:text-8xl text-text-primary mb-4 drop-shadow-sm"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -138,7 +138,7 @@ export default function ProjectPage({ project }: Props) {
             </motion.h1>
 
             <motion.p
-              className="text-text-secondary text-lg md:text-xl max-w-2xl"
+              className="text-text-secondary text-lg md:text-xl max-w-2xl font-medium"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
