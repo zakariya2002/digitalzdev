@@ -160,7 +160,7 @@ export default function Hero() {
             >
               <span className="text-text-primary">Digitalz Dev</span>
               <br />
-              <span className="text-accent">Sites web qui convertissent</span>
+              <span className="text-accent">Agence Web professionnelle</span>
             </motion.h1>
 
             <motion.p

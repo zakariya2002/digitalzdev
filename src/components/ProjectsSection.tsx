@@ -42,7 +42,7 @@ function StackingCard({
 
 export default function ProjectsSection() {
   return (
-    <section id="projets" className="relative py-24 md:py-32 bg-surface">
+    <section id="projets" className="relative py-24 md:py-32 bg-surface overflow-hidden">
       {/* Section header */}
       <motion.div
         className="text-center mb-16 md:mb-24 px-6"

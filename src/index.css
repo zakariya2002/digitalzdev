@@ -39,11 +39,16 @@
     scroll-behavior: auto;
   }
 
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+
   body {
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
     background-color: rgb(var(--surface));
     color: rgb(var(--text-primary));
   }
