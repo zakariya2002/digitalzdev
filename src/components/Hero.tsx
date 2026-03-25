@@ -34,6 +34,9 @@ const WORDS = [
   { text: 'DIGITAL', x: -28, y: -35, z: -2400, size: '2rem', isGold: false },
 ]
 
+// Fewer words for mobile (no 3D, just decorative)
+const WORDS_MOBILE = WORDS.slice(0, 14)
+
 const getOpacity = (z: number) => {
   if (z > 200) return 0.13
   if (z > -200) return 0.11
@@ -53,6 +56,8 @@ export default function Hero() {
   const z = useTransform(scrollYProgress, [0, 0.9], [0, 3500])
   const contentOpacity = useTransform(scrollYProgress, [0, 0.15, 0.35], [1, 1, 0])
   const contentScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.92])
+  const mobileWordsOpacity = useTransform(scrollYProgress, [0, 0.3, 0.6], [1, 0.5, 0])
+  const mobileWordsScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.3])
 
   const scrollToProjects = () => {
     document.getElementById('projets')?.scrollIntoView({ behavior: 'smooth' })
@@ -61,18 +66,15 @@ export default function Hero() {
   return (
     <section ref={containerRef} className="h-[200vh] relative bg-surface">
       <div className="sticky top-0 h-screen bg-surface">
-        {/* 3D Word Cloud */}
+
+        {/* 3D Word Cloud — DESKTOP ONLY (GPU-heavy) */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 hidden md:block"
           style={{ perspective: 800, perspectiveOrigin: '50% 50%' }}
         >
           <motion.div
             className="absolute inset-0"
-            style={{
-              z,
-              transformStyle: 'preserve-3d',
-              willChange: 'transform',
-            }}
+            style={{ z, transformStyle: 'preserve-3d' }}
           >
             {WORDS.map((word, i) => (
               <div
@@ -96,13 +98,43 @@ export default function Hero() {
           </motion.div>
         </div>
 
+        {/* Simple 2D words — MOBILE ONLY (lightweight) */}
+        <motion.div
+          className="absolute inset-0 md:hidden overflow-hidden"
+          style={{ opacity: mobileWordsOpacity, scale: mobileWordsScale }}
+        >
+          {WORDS_MOBILE.map((word, i) => (
+            <div
+              key={i}
+              className="absolute font-display font-bold whitespace-nowrap select-none"
+              style={{
+                left: `${50 + word.x}%`,
+                top: `${50 + word.y}%`,
+                transform: 'translate(-50%, -50%)',
+                fontSize: `calc(${word.size} * 0.7)`,
+                color: word.isGold
+                  ? 'rgb(var(--accent))'
+                  : 'rgb(var(--text-primary))',
+                opacity: getOpacity(word.z),
+              }}
+            >
+              {word.text}
+            </div>
+          ))}
+        </motion.div>
+
         {/* Center Hero Content */}
         <motion.div
           className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
           style={{ opacity: contentOpacity, scale: contentScale }}
         >
+          {/* Glow - separate for mobile/desktop */}
           <div
-            className="absolute w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full bg-surface"
+            className="absolute w-[350px] h-[350px] rounded-full bg-surface md:hidden"
+            style={{ filter: 'blur(50px)', opacity: 0.95 }}
+          />
+          <div
+            className="absolute hidden md:block w-[800px] h-[800px] rounded-full bg-surface"
             style={{ filter: 'blur(100px)', opacity: 0.95 }}
           />
 
