@@ -1,0 +1,16 @@
+{
+  "name": "Digitalz Dev",
+  "short_name": "Digitalz",
+  "description": "Agence web premium – E-commerce, dashboards santé, portfolios",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --surface: 250 247 242;
+    --surface-light: 240 235 227;
+    --surface-card: 255 255 255;
+    --surface-border: 229 221 211;
+    --accent: 154 123 74;
+    --accent-hover: 135 106 62;
+    --accent-muted: 201 169 110;
+    --text-primary: 26 26 26;
+    --text-secondary: 107 107 107;
+    --text-muted: 170 170 170;
+  }
+
+  .dark {
+    --surface: 10 10 10;
+    --surface-light: 20 20 20;
+    --surface-card: 26 26 26;
+    --surface-border: 42 42 42;
+    --accent: 201 169 110;
+    --accent-hover: 212 184 122;
+    --accent-muted: 139 122 85;
+    --text-primary: 245 245 240;
+    --text-secondary: 139 139 139;
+    --text-muted: 85 85 85;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    background-color: rgb(var(--surface));
+    color: rgb(var(--text-primary));
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.2);
+    color: rgb(var(--text-primary));
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--surface));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--surface-border));
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--accent-muted));
+  }
+}
