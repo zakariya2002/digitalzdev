@@ -90,12 +90,12 @@ export default function Navbar() {
             >
               <ThemeIcon />
             </button>
-            <a
-              href="mailto:zdigitalzdev@gmail.com"
+            <Link
+              to="/contact"
               className="text-sm px-5 py-2 bg-accent/10 text-accent border border-accent/20 rounded-full hover:bg-accent/20 transition-all"
             >
               Contact
-            </a>
+            </Link>
           </div>
 
           {/* Mobile */}
@@ -149,12 +149,12 @@ export default function Navbar() {
             >
               Projets
             </a>
-            <a
-              href="mailto:zdigitalzdev@gmail.com"
+            <Link
+              to="/contact"
               className="text-lg px-8 py-3 bg-text-primary text-surface rounded-full font-semibold"
             >
               Contact
-            </a>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
