@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import ProjectCard from './ProjectCard'
 import { projects } from '../data/projects'
 import type { Project } from '../data/projects'
@@ -57,10 +58,16 @@ export default function ProjectsSection() {
         <h2 className="font-display font-bold text-3xl md:text-5xl text-text-primary mt-4 mb-6">
           Nos réalisations
         </h2>
-        <p className="text-text-secondary max-w-lg mx-auto">
+        <p className="text-text-secondary max-w-lg mx-auto mb-8">
           Chaque projet est une histoire unique. Découvrez comment nous
           transformons les visions en expériences digitales.
         </p>
+        <Link
+          to="/contact"
+          className="inline-block px-8 py-3 bg-text-primary text-surface rounded-full font-display font-semibold tracking-wider text-sm hover:opacity-90 transition-all"
+        >
+          DEMANDER UN DEVIS
+        </Link>
       </motion.div>
 
       {/* Desktop: Stacking cards */}

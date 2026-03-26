@@ -37,6 +37,7 @@ export default function Contact() {
     email: '',
     phone: '',
     projectType: '',
+    projectTypeOther: '',
     budget: '',
     timeline: '',
     hasDesign: '',
@@ -54,7 +55,7 @@ export default function Contact() {
       `Demande de devis – ${form.projectType || 'Nouveau projet'}`
     )
     const body = encodeURIComponent(
-      `Nom : ${form.name}\nEntreprise : ${form.company || '–'}\nEmail : ${form.email}\nTéléphone : ${form.phone || '–'}\n\nType de projet : ${form.projectType}\nBudget : ${form.budget}\nDélai : ${form.timeline}\nDesign existant : ${form.hasDesign || '–'}\nSite actuel : ${form.url || '–'}\n\nDescription :\n${form.description}`
+      `Nom : ${form.name}\nEntreprise : ${form.company || '–'}\nEmail : ${form.email}\nTéléphone : ${form.phone || '–'}\n\nType de projet : ${form.projectType === 'Autre' ? `Autre – ${form.projectTypeOther}` : form.projectType}\nBudget : ${form.budget}\nDélai : ${form.timeline}\nDesign existant : ${form.hasDesign || '–'}\nSite actuel : ${form.url || '–'}\n\nDescription :\n${form.description}`
     )
     window.open(
       `mailto:zdigitalzdev@gmail.com?subject=${subject}&body=${body}`,
@@ -215,6 +216,16 @@ export default function Contact() {
                         </button>
                       ))}
                     </div>
+                    {form.projectType === 'Autre' && (
+                      <input
+                        type="text"
+                        value={form.projectTypeOther}
+                        onChange={(e) => update('projectTypeOther', e.target.value)}
+                        className="mt-3 w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors"
+                        placeholder="Précisez le type de projet..."
+                        autoFocus
+                      />
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm text-text-secondary mb-1.5 font-display">
