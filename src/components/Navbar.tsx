@@ -151,7 +151,7 @@ export default function Navbar() {
             </a>
             <Link
               to="/contact"
-              className="text-lg px-8 py-3 bg-text-primary text-surface rounded-full font-semibold"
+              className="text-lg px-8 py-3 bg-accent text-white rounded-full font-semibold"
             >
               Contact
             </Link>
