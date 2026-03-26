@@ -67,7 +67,7 @@ export default function Contact() {
     <main className="bg-surface min-h-screen">
       {/* Hero */}
       <section className="pt-32 pb-16 md:pt-40 md:pb-20 px-6">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -90,7 +90,7 @@ export default function Contact() {
             Contact
           </motion.span>
           <motion.h1
-            className="font-display font-black text-4xl md:text-6xl text-text-primary mt-4 mb-4"
+            className="font-display font-black text-5xl md:text-7xl text-text-primary mt-4 mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -111,7 +111,7 @@ export default function Contact() {
 
       {/* Form */}
       <section className="pb-24 md:pb-32 px-6">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <AnimatePresence mode="wait">
             {!submitted ? (
               <motion.form
