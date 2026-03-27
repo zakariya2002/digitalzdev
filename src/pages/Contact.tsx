@@ -332,6 +332,30 @@ export default function Contact() {
                   />
                 </fieldset>
 
+                {/* Consentement RGPD */}
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="consent"
+                    required
+                    className="mt-1 w-4 h-4 accent-accent flex-shrink-0"
+                  />
+                  <label
+                    htmlFor="consent"
+                    className="text-text-secondary text-sm leading-relaxed"
+                  >
+                    J'accepte que mes données soient utilisées pour traiter ma
+                    demande de devis. Consultez notre{' '}
+                    <Link
+                      to="/politique-confidentialite"
+                      className="text-accent underline"
+                    >
+                      politique de confidentialité
+                    </Link>
+                    . *
+                  </label>
+                </div>
+
                 {/* Submit */}
                 <motion.button
                   type="submit"

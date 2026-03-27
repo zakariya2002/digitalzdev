@@ -38,6 +38,7 @@ function MockupBrowser({
         <img
           src={mockup.image}
           alt={mockup.title}
+          loading="lazy"
           className="absolute inset-0 w-full h-full object-cover object-top"
           onError={(e) => {
             ;(e.target as HTMLImageElement).style.display = 'none'
@@ -192,6 +193,7 @@ export default function ProjectPage({ project }: Props) {
               <img
                 src={project.heroImage}
                 alt={project.title}
+                loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover object-top"
                 onError={(e) => {
                   ;(e.target as HTMLImageElement).style.display = 'none'

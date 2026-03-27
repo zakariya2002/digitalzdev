@@ -73,6 +73,7 @@ export default function ProjectCard({ project, index }: Props) {
             <img
               src={project.heroImage}
               alt={project.title}
+              loading="lazy"
               className="absolute inset-0 w-full h-full object-cover object-top"
               onError={(e) => {
                 ;(e.target as HTMLImageElement).style.display = 'none'

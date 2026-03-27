@@ -75,11 +75,25 @@ export default function Footer() {
           </button>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-surface-border text-center">
+        <div className="mt-12 pt-8 border-t border-surface-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-text-muted text-sm">
             Digitalz Dev &copy; {new Date().getFullYear()} &mdash; Tous droits
             réservés
           </p>
+          <div className="flex items-center gap-6">
+            <Link
+              to="/mentions-legales"
+              className="text-text-muted text-sm hover:text-accent transition-colors"
+            >
+              Mentions légales
+            </Link>
+            <Link
+              to="/politique-confidentialite"
+              className="text-text-muted text-sm hover:text-accent transition-colors"
+            >
+              Politique de confidentialité
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
