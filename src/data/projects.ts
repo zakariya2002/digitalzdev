@@ -169,4 +169,53 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    id: 'lissage',
+    title: 'lissage-sur-mesure.com',
+    subtitle: 'Beauté & soins capillaires',
+    description:
+      'Site vitrine haut de gamme pour un salon spécialisé en lissage sur mesure. Design luxe sombre avec des animations immersives et une expérience utilisateur soignée.',
+    url: 'https://www.lissage-sur-mesure.com',
+    route: '/lissage',
+    color: '#5B1A3A',
+    gradient: 'from-[#5B1A3A] via-[#7A2A4A] to-[#3D1228]',
+    heroImage: '/screenshots/lissage-hero.png',
+    brief: "Lissage sur Mesure avait besoin d'un site vitrine à la hauteur de son positionnement premium. Le défi : traduire l'expertise capillaire et le savoir-faire artisanal en une expérience digitale élégante. Le site devait présenter la formule unique, les services de lissage personnalisé et la formation professionnelle certifiante, tout en véhiculant confiance et luxe.",
+    solution:
+      "Nous avons conçu un site vitrine immersif avec une esthétique dark luxe, des animations scroll fluides et une typographie serif élégante. L'architecture Next.js assure des performances optimales, tandis que Framer Motion apporte des transitions cinématiques. Chaque section guide le visiteur de la découverte de la formule jusqu'à la prise de rendez-vous.",
+    features: [
+      'Design dark luxe immersif',
+      'Animations scroll avec Framer Motion',
+      'Smooth scroll avec Lenis',
+      'Optimisation SEO avec Schema.org',
+      'Architecture Next.js performante',
+      'Responsive mobile-first',
+    ],
+    mockups: [
+      {
+        title: "Page d'accueil",
+        gradient: 'from-[#5B1A3A] to-[#3D1228]',
+        content: 'Hero plein écran avec vidéo capillaire',
+        image: '/screenshots/lissage-hero.png',
+      },
+      {
+        title: 'Savoir-faire',
+        gradient: 'from-[#3D1228] to-[#5B1A3A]',
+        content: 'Trois piliers : Produits, Lissages, Formation',
+        image: '/screenshots/lissage-2.png',
+      },
+      {
+        title: 'La Formule',
+        gradient: 'from-[#5B1A3A] to-[#7A2A4A]',
+        content: 'Philosophie et formule unique sans compromis',
+        image: '/screenshots/lissage-3.png',
+      },
+      {
+        title: 'Actifs & Contact',
+        gradient: 'from-[#7A2A4A] to-[#5B1A3A]',
+        content: 'Composition des actifs et localisation salon',
+        image: '/screenshots/lissage-4.png',
+      },
+    ],
+  },
 ]
