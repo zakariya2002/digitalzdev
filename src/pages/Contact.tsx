@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import emailjs from '@emailjs/browser'
 import Footer from '../components/Footer'
 
 const PROJECT_TYPES = [
@@ -31,6 +32,8 @@ const TIMELINES = [
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
   const [form, setForm] = useState({
     name: '',
     company: '',
@@ -48,20 +51,37 @@ export default function Contact() {
   const update = (field: string, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }))
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Build mailto with form data
-    const subject = encodeURIComponent(
-      `Demande de devis – ${form.projectType || 'Nouveau projet'}`
-    )
-    const body = encodeURIComponent(
-      `Nom : ${form.name}\nEntreprise : ${form.company || '–'}\nEmail : ${form.email}\nTéléphone : ${form.phone || '–'}\n\nType de projet : ${form.projectType === 'Autre' ? `Autre – ${form.projectTypeOther}` : form.projectType}\nBudget : ${form.budget}\nDélai : ${form.timeline}\nDesign existant : ${form.hasDesign || '–'}\nSite actuel : ${form.url || '–'}\n\nDescription :\n${form.description}`
-    )
-    window.open(
-      `mailto:zdigitalzdev@gmail.com?subject=${subject}&body=${body}`,
-      '_self'
-    )
-    setSubmitted(true)
+    setSending(true)
+    setError('')
+
+    const templateParams = {
+      from_name: form.name,
+      from_email: form.email,
+      company: form.company || '–',
+      phone: form.phone || '–',
+      project_type: form.projectType === 'Autre' ? `Autre – ${form.projectTypeOther}` : form.projectType,
+      budget: form.budget,
+      timeline: form.timeline,
+      has_design: form.hasDesign || '–',
+      website_url: form.url || '–',
+      description: form.description,
+    }
+
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      )
+      setSubmitted(true)
+    } catch {
+      setError('Une erreur est survenue. Veuillez réessayer ou nous contacter directement à zdigitalzdev@gmail.com.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -356,14 +376,22 @@ export default function Contact() {
                   </label>
                 </div>
 
+                {/* Error message */}
+                {error && (
+                  <p className="text-red-500 text-sm text-center bg-red-500/10 py-3 px-4 rounded-lg">
+                    {error}
+                  </p>
+                )}
+
                 {/* Submit */}
                 <motion.button
                   type="submit"
-                  className="w-full py-4 bg-text-primary text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all text-lg"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
+                  disabled={sending}
+                  className="w-full py-4 bg-text-primary text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  whileHover={sending ? {} : { scale: 1.01 }}
+                  whileTap={sending ? {} : { scale: 0.98 }}
                 >
-                  ENVOYER LA DEMANDE
+                  {sending ? 'ENVOI EN COURS...' : 'ENVOYER LA DEMANDE'}
                 </motion.button>
 
                 <p className="text-text-muted text-xs text-center">
