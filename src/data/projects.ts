@@ -218,4 +218,53 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    id: 'angele',
+    title: 'angele.store',
+    subtitle: 'Merch artiste Shopify',
+    description:
+      "Boutique e-commerce Shopify pour l'artiste belge Angèle. Merchandising officiel avec T-shirts, hoodies, vinyles et accessoires. Design épuré et identité visuelle pop.",
+    url: 'https://angele.store',
+    route: '/angele',
+    color: '#7ECDB5',
+    gradient: 'from-[#7ECDB5] via-[#A8E6CF] to-[#C5F0DC]',
+    heroImage: '/screenshots/angele-hero.png',
+    brief: "L'artiste belge Angèle avait besoin d'une boutique en ligne officielle pour sa ligne de merchandising : vêtements, vinyles et accessoires. Le site devait refléter son univers pop et coloré tout en offrant une expérience d'achat fluide et rapide pour ses fans à travers l'Europe.",
+    solution:
+      "Nous avons développé une boutique Shopify sur mesure avec un thème personnalisé. Navigation par catégories (T-shirts, Sweatshirts, CD & Vinyles, Accessoires), fiches produit détaillées avec sélecteur de taille, galerie d'images et gestion des stocks. Le tout optimisé pour le mobile et intégré aux outils marketing (newsletter, Facebook Pixel, Google Analytics).",
+    features: [
+      'Thème Shopify entièrement personnalisé',
+      'Catalogue multi-catégories avec carrousel',
+      'Fiches produit avec sélecteur taille et galerie',
+      'Panier et checkout Shopify optimisés',
+      'Intégration newsletter et marketing (Pixel, GTM)',
+      'Design responsive mobile-first',
+    ],
+    mockups: [
+      {
+        title: "Page d'accueil",
+        gradient: 'from-[#7ECDB5] to-[#A8E6CF]',
+        content: 'Catalogue T-shirts avec carrousel par catégorie',
+        image: '/screenshots/angele-hero.png',
+      },
+      {
+        title: 'Sweatshirts & Joggings',
+        gradient: 'from-[#A8E6CF] to-[#7ECDB5]',
+        content: 'Grille produits hoodies, crewnecks et joggings',
+        image: '/screenshots/angele-2.png',
+      },
+      {
+        title: 'Fiche produit',
+        gradient: 'from-[#7ECDB5] to-[#C5F0DC]',
+        content: 'Galerie photos, sélecteur taille et ajout panier',
+        image: '/screenshots/angele-3.png',
+      },
+      {
+        title: 'CD & Vinyles',
+        gradient: 'from-[#C5F0DC] to-[#7ECDB5]',
+        content: 'Collection vinyles et CD album Nonante-Cinq',
+        image: '/screenshots/angele-4.png',
+      },
+    ],
+  },
 ]
