@@ -182,13 +182,6 @@ export default function Hero() {
               whileTap={{ scale: 0.95 }}
             >
               VOIR LES PROJETS
-              <motion.span
-                className="inline-block ml-2"
-                animate={{ y: [0, 5, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-              >
-                ↓
-              </motion.span>
             </motion.button>
           </div>
         </motion.div>
