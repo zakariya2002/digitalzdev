@@ -141,9 +141,14 @@ export interface Client {
   name: string
   email: string | null
   phone: string | null
+  phone_secondary: string | null
   source: ClientSource
   status: ClientStatus
   notes: string | null
+  last_contacted_at: string | null
+  next_follow_up_at: string | null
+  call_count: number
+  sms_count: number
   created_at: string
 }
 
@@ -153,8 +158,94 @@ export interface ClientInsert {
   name: string
   email?: string | null
   phone?: string | null
+  phone_secondary?: string | null
   source?: string
   status?: string
   notes?: string | null
+  next_follow_up_at?: string | null
   created_at?: string
+}
+
+// --- Telephony types ---
+
+export type CallDirection = 'inbound' | 'outbound'
+export type CallStatus = 'initiated' | 'ringing' | 'in_progress' | 'completed' | 'no_answer' | 'busy' | 'failed' | 'canceled'
+export type SmsDirection = 'inbound' | 'outbound'
+export type SmsStatus = 'queued' | 'sent' | 'delivered' | 'failed' | 'received'
+export type SmsTemplateCategory = 'relance' | 'confirmation' | 'custom'
+
+export interface Call {
+  id: string
+  client_id: string
+  twilio_call_sid: string | null
+  direction: CallDirection
+  status: CallStatus
+  duration: number | null
+  recording_url: string | null
+  call_note: string | null
+  called_at: string
+  created_at: string
+  updated_at: string
+}
+
+export interface CallInsert {
+  id?: string
+  client_id: string
+  twilio_call_sid?: string | null
+  direction: CallDirection
+  status?: CallStatus
+  duration?: number | null
+  recording_url?: string | null
+  call_note?: string | null
+  called_at?: string
+}
+
+export interface Sms {
+  id: string
+  client_id: string
+  twilio_message_sid: string | null
+  direction: SmsDirection
+  body: string
+  status: SmsStatus
+  template_id: string | null
+  sent_at: string
+  created_at: string
+  updated_at: string
+}
+
+export interface SmsInsert {
+  id?: string
+  client_id: string
+  twilio_message_sid?: string | null
+  direction: SmsDirection
+  body: string
+  status?: SmsStatus
+  template_id?: string | null
+  sent_at?: string
+}
+
+export interface SmsTemplate {
+  id: string
+  name: string
+  body: string
+  category: SmsTemplateCategory
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface SmsTemplateInsert {
+  id?: string
+  name: string
+  body: string
+  category: SmsTemplateCategory
+  is_active?: boolean
+}
+
+export interface TimelineEvent {
+  type: 'call' | 'sms'
+  id: string
+  timestamp: string
+  summary: string
+  data: Call | Sms
 }

@@ -14,17 +14,37 @@ export default function DashboardHome() {
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
 
+  const [callsToday, setCallsToday] = useState(0)
+  const [pendingFollowUps, setPendingFollowUps] = useState(0)
+
   const fetchAll = useCallback(async () => {
-    const [{ data: p }, { data: t }, { data: r }, { data: c }] = await Promise.all([
+    const todayStart = new Date()
+    todayStart.setHours(0, 0, 0, 0)
+    const todayEnd = new Date()
+    todayEnd.setHours(23, 59, 59, 999)
+
+    const [{ data: p }, { data: t }, { data: r }, { data: c }, { count: callCount }] = await Promise.all([
       supabase.from('projects').select('*').eq('is_archived', false),
       supabase.from('tasks').select('*'),
       supabase.from('revenues').select('*'),
       supabase.from('clients').select('*'),
+      supabase.from('calls').select('id', { count: 'exact', head: true })
+        .gte('called_at', todayStart.toISOString())
+        .lte('called_at', todayEnd.toISOString()),
     ])
     if (p) setProjects(p as Project[])
     if (t) setTasks(t as Task[])
     if (r) setRevenues(r as Revenue[])
-    if (c) setClients(c as Client[])
+    if (c) {
+      setClients(c as Client[])
+      // Compter les relances en attente
+      const now = new Date().toISOString()
+      const followUps = (c as Client[]).filter(
+        (cl) => cl.next_follow_up_at && cl.next_follow_up_at <= now
+      ).length
+      setPendingFollowUps(followUps)
+    }
+    setCallsToday(callCount || 0)
     setLoading(false)
   }, [])
 
@@ -104,6 +124,18 @@ export default function DashboardHome() {
       sub: nextDeadline?.title,
       color: 'bg-orange-500/20',
       icon: <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>,
+    },
+    {
+      label: "Appels aujourd'hui",
+      value: callsToday,
+      color: 'bg-cyan-500/20',
+      icon: <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" /></svg>,
+    },
+    {
+      label: 'Relances en attente',
+      value: pendingFollowUps,
+      color: pendingFollowUps > 0 ? 'bg-amber-500/20' : 'bg-gray-800',
+      icon: <svg className={`w-4 h-4 ${pendingFollowUps > 0 ? 'text-amber-400' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
     },
   ]
 

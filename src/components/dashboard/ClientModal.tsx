@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import Modal from './Modal'
+import { toE164, isValidFrenchPhone } from '../../lib/phone'
 import type { Client, ClientStatus, ClientSource, Project } from '../../types/database'
 
 interface ClientModalProps {
@@ -11,10 +12,12 @@ interface ClientModalProps {
     name: string
     email: string | null
     phone: string | null
+    phone_secondary?: string | null
     source: ClientSource
     status: ClientStatus
     notes: string | null
     project_id: string | null
+    next_follow_up_at?: string | null
   }) => Promise<void>
   onDelete?: (id: string) => Promise<void>
 }
@@ -39,44 +42,68 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [phoneSecondary, setPhoneSecondary] = useState('')
   const [source, setSource] = useState<ClientSource>('manual')
   const [status, setStatus] = useState<ClientStatus>('new_lead')
   const [notes, setNotes] = useState('')
   const [projectId, setProjectId] = useState('')
+  const [nextFollowUp, setNextFollowUp] = useState('')
   const [loading, setLoading] = useState(false)
+  const [phoneError, setPhoneError] = useState('')
 
   useEffect(() => {
     if (client) {
       setName(client.name)
       setEmail(client.email || '')
       setPhone(client.phone || '')
+      setPhoneSecondary(client.phone_secondary || '')
       setSource(client.source)
       setStatus(client.status)
       setNotes(client.notes || '')
       setProjectId(client.project_id || '')
+      setNextFollowUp(client.next_follow_up_at ? client.next_follow_up_at.slice(0, 16) : '')
     } else {
       setName('')
       setEmail('')
       setPhone('')
+      setPhoneSecondary('')
       setSource('manual')
       setStatus('new_lead')
       setNotes('')
       setProjectId('')
+      setNextFollowUp('')
     }
+    setPhoneError('')
   }, [client, open])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!name.trim()) return
+
+    // Validation téléphone
+    const trimmedPhone = phone.trim()
+    if (trimmedPhone && !isValidFrenchPhone(trimmedPhone)) {
+      setPhoneError('Numéro de téléphone invalide (format français attendu)')
+      return
+    }
+    const trimmedPhone2 = phoneSecondary.trim()
+    if (trimmedPhone2 && !isValidFrenchPhone(trimmedPhone2)) {
+      setPhoneError('Numéro secondaire invalide (format français attendu)')
+      return
+    }
+
+    setPhoneError('')
     setLoading(true)
     await onSave({
       name: name.trim(),
       email: email.trim() || null,
-      phone: phone.trim() || null,
+      phone: trimmedPhone ? toE164(trimmedPhone) : null,
+      phone_secondary: trimmedPhone2 ? toE164(trimmedPhone2) : null,
       source,
       status,
       notes: notes.trim() || null,
       project_id: projectId || null,
+      next_follow_up_at: nextFollowUp || null,
     })
     setLoading(false)
     onClose()
@@ -119,6 +146,32 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
             />
           </div>
         </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Téléphone secondaire</label>
+            <input
+              type="tel"
+              value={phoneSecondary}
+              onChange={(e) => setPhoneSecondary(e.target.value)}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+              placeholder="07 98 76 54 32"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Prochaine relance</label>
+            <input
+              type="datetime-local"
+              value={nextFollowUp}
+              onChange={(e) => setNextFollowUp(e.target.value)}
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        </div>
+
+        {phoneError && (
+          <p className="text-sm text-red-400">{phoneError}</p>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           <div>

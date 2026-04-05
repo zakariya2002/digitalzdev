@@ -6,11 +6,14 @@ const pageTitles: Record<string, string> = {
   '/dashboard/calendar': 'Calendrier',
   '/dashboard/clients': 'Leads & Clients',
   '/dashboard/revenues': 'Revenus',
+  '/dashboard/sms-templates': 'Templates SMS',
 }
 
 export default function Header() {
   const location = useLocation()
-  const title = pageTitles[location.pathname] || 'Dashboard'
+  // Handle dynamic routes like /dashboard/clients/:id
+  const title = pageTitles[location.pathname]
+    || (location.pathname.startsWith('/dashboard/clients/') ? 'Fiche client' : 'Dashboard')
 
   const now = new Date()
   const dateStr = now.toLocaleDateString('fr-FR', {
