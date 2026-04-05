@@ -9,27 +9,32 @@ const SUPABASE_SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 const adminClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+function jsonResponse(data: unknown, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { "Content-Type": "application/json", ...CORS },
+  });
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "authorization, content-type",
-      },
-    });
+    return new Response(null, { headers: CORS });
   }
 
   if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
+    return jsonResponse({ error: "Method not allowed" }, 405);
   }
 
   // Vérifier l'auth Supabase
   const authHeader = req.headers.get("Authorization");
   if (!authHeader) {
-    return new Response(JSON.stringify({ error: "Missing auth" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return jsonResponse({ error: "Missing auth" }, 401);
   }
 
   const userClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -38,10 +43,7 @@ Deno.serve(async (req) => {
 
   const { data: { user }, error: authError } = await userClient.auth.getUser();
   if (authError || !user) {
-    return new Response(JSON.stringify({ error: "Non authentifié" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return jsonResponse({ error: "Non authentifié" }, 401);
   }
 
   try {
@@ -55,18 +57,12 @@ Deno.serve(async (req) => {
       .single();
 
     if (clientError || !client) {
-      return new Response(JSON.stringify({ error: "Client introuvable" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
+      return jsonResponse({ error: "Client introuvable" }, 404);
     }
 
     const phone = client.phone;
     if (!phone) {
-      return new Response(JSON.stringify({ error: "Ce client n'a pas de numéro de téléphone" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return jsonResponse({ error: "Ce client n'a pas de numéro de téléphone" }, 400);
     }
 
     // Déterminer le contenu du SMS
@@ -90,10 +86,7 @@ Deno.serve(async (req) => {
     }
 
     if (!smsBody) {
-      return new Response(JSON.stringify({ error: "Corps du SMS vide" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+      return jsonResponse({ error: "Corps du SMS vide" }, 400);
     }
 
     // Envoyer via Twilio REST API
@@ -119,10 +112,7 @@ Deno.serve(async (req) => {
     if (!twilioResponse.ok) {
       const err = await twilioResponse.text();
       console.error("Twilio send error:", err);
-      return new Response(JSON.stringify({ error: "Erreur envoi Twilio", details: err }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
+      return jsonResponse({ error: "Erreur envoi Twilio", details: err }, 500);
     }
 
     const twilioData = await twilioResponse.json();
@@ -150,17 +140,9 @@ Deno.serve(async (req) => {
       })
       .eq("id", clientId);
 
-    return new Response(JSON.stringify({ messageSid: twilioData.sid }), {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
+    return jsonResponse({ messageSid: twilioData.sid });
   } catch (error) {
     console.error("send-sms error:", error);
-    return new Response(JSON.stringify({ error: "Erreur interne" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return jsonResponse({ error: "Erreur interne" }, 500);
   }
 });
