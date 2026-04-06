@@ -156,7 +156,7 @@ export default function ClientDetailPage() {
   ]
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Back */}
       <button
         onClick={() => navigate('/dashboard/clients')}
@@ -169,7 +169,7 @@ export default function ClientDetailPage() {
       </button>
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-3">
             <h2 className="text-2xl font-bold text-white">{client.name}</h2>
@@ -233,12 +233,12 @@ export default function ClientDetailPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-900 border border-gray-800 rounded-xl p-1 mb-6">
+      <div className="flex gap-1 bg-gray-900 border border-gray-800 rounded-xl p-1 mb-6 overflow-x-auto">
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${
+            className={`flex-1 py-2 px-3 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
               tab === t.key ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800'
             }`}
           >

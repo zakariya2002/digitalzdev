@@ -160,7 +160,7 @@ export default function DashboardHome() {
   ]
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       <KPIWidgets widgets={widgets} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -19,7 +19,11 @@ const pageTitles: Record<string, string> = {
   '/dashboard/automation': 'Automatisation',
 }
 
-export default function Header() {
+interface HeaderProps {
+  onMenuClick: () => void
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
   const location = useLocation()
   const { notifications, unreadCount, dismissNotification, markAllRead } = useAutomation()
 
@@ -40,16 +44,27 @@ export default function Header() {
   })
 
   return (
-    <header className="h-16 border-b border-gray-800 bg-gray-950/80 backdrop-blur-sm flex items-center justify-between px-8 sticky top-0 z-30">
-      <h2 className="text-lg font-semibold text-white">{title}</h2>
-      <div className="flex items-center gap-4">
+    <header className="h-16 border-b border-gray-800 bg-gray-950/80 backdrop-blur-sm flex items-center justify-between px-4 sm:px-8 sticky top-0 z-30">
+      <div className="flex items-center gap-3">
+        {/* Hamburger menu - mobile only */}
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden p-2 -ml-2 text-gray-400 hover:text-white transition-colors"
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+        <h2 className="text-lg font-semibold text-white">{title}</h2>
+      </div>
+      <div className="flex items-center gap-2 sm:gap-4">
         <NotificationCenter
           notifications={notifications}
           unreadCount={unreadCount}
           onDismiss={dismissNotification}
           onMarkAllRead={markAllRead}
         />
-        <p className="text-sm text-gray-500 capitalize">{dateStr}</p>
+        <p className="text-sm text-gray-500 capitalize hidden sm:block">{dateStr}</p>
       </div>
     </header>
   )

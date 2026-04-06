@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { useState } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import Sidebar from '../../components/dashboard/Sidebar'
 import Header from '../../components/dashboard/Header'
 import Softphone from '../../components/dashboard/Softphone'
@@ -19,14 +20,23 @@ import ProposalsPage from './ProposalsPage'
 import ProposalDetailPage from './ProposalDetailPage'
 import ProjectDetailPage from './ProjectDetailPage'
 import AutomationPage from './AutomationPage'
+import { useEffect } from 'react'
 
 export default function DashboardLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const location = useLocation()
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false)
+  }, [location.pathname])
+
   return (
     <TwilioProvider>
       <div className="min-h-screen bg-gray-950 text-white">
-        <Sidebar />
-        <div className="ml-64">
-          <Header />
+        <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="lg:ml-64">
+          <Header onMenuClick={() => setSidebarOpen(true)} />
           <main>
             <Routes>
               <Route index element={<DashboardHome />} />

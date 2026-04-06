@@ -12,7 +12,7 @@ interface KPIWidgetsProps {
 
 export default function KPIWidgets({ widgets }: KPIWidgetsProps) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
       {widgets.map((w, i) => (
         <div key={i} className="bg-gray-900 border border-gray-800 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">

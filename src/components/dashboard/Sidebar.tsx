@@ -13,6 +13,11 @@ interface NavSection {
   items: NavItem[]
 }
 
+interface SidebarProps {
+  open: boolean
+  onClose: () => void
+}
+
 const navSections: NavSection[] = [
   {
     title: 'Commercial',
@@ -39,7 +44,7 @@ const navSections: NavSection[] = [
     ],
   },
   {
-    title: 'R\u00e9glages',
+    title: 'Réglages',
     items: [
       { to: '/dashboard/sms-templates', label: 'Templates SMS', icon: SmsIcon },
       { to: '/dashboard/automation', label: 'Automatisation', icon: AutomationIcon },
@@ -47,61 +52,79 @@ const navSections: NavSection[] = [
   },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ open, onClose }: SidebarProps) {
   const { signOut, user } = useAuth()
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-gray-900 border-r border-gray-800 flex flex-col z-40">
-      {/* Logo */}
-      <div className="px-6 py-5 border-b border-gray-800">
-        <h1 className="text-lg font-bold text-white tracking-wide">Digitalz Dev</h1>
-        <p className="text-xs text-gray-500 mt-0.5">Back-office</p>
-      </div>
+    <>
+      {/* Mobile overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 overflow-y-auto">
-        {navSections.map((section) => (
-          <div key={section.title} className="mb-4">
-            <div className="px-3 py-2">
-              <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">{section.title}</p>
-            </div>
-            <div className="space-y-1">
-              {section.items.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? 'bg-blue-600/10 text-blue-400'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-800'
-                    }`
-                  }
-                >
-                  <item.icon />
-                  {item.label}
-                </NavLink>
-              ))}
-            </div>
+      <aside className={`fixed left-0 top-0 h-screen w-64 bg-gray-900 border-r border-gray-800 flex flex-col z-50 transition-transform duration-300 ${open ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
+        {/* Logo */}
+        <div className="px-6 py-5 border-b border-gray-800 flex items-center justify-between">
+          <div>
+            <h1 className="text-lg font-bold text-white tracking-wide">Digitalz Dev</h1>
+            <p className="text-xs text-gray-500 mt-0.5">Back-office</p>
           </div>
-        ))}
-      </nav>
-
-      {/* User + Logout */}
-      <div className="px-3 py-4 border-t border-gray-800">
-        <div className="px-3 mb-3">
-          <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+          <button onClick={onClose} className="lg:hidden p-1 text-gray-400 hover:text-white">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-        <button
-          onClick={signOut}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
-        >
-          <LogoutIcon />
-          Se d\u00e9connecter
-        </button>
-      </div>
-    </aside>
+
+        {/* Navigation */}
+        <nav className="flex-1 px-3 py-4 overflow-y-auto">
+          {navSections.map((section) => (
+            <div key={section.title} className="mb-4">
+              <div className="px-3 py-2">
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">{section.title}</p>
+              </div>
+              <div className="space-y-1">
+                {section.items.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.end}
+                    onClick={onClose}
+                    className={({ isActive }) =>
+                      `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        isActive
+                          ? 'bg-blue-600/10 text-blue-400'
+                          : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                      }`
+                    }
+                  >
+                    <item.icon />
+                    {item.label}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+
+        {/* User + Logout */}
+        <div className="px-3 py-4 border-t border-gray-800">
+          <div className="px-3 mb-3">
+            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+          </div>
+          <button
+            onClick={signOut}
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+          >
+            <LogoutIcon />
+            Se déconnecter
+          </button>
+        </div>
+      </aside>
+    </>
   )
 }
 

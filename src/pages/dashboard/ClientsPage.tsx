@@ -96,9 +96,9 @@ export default function ClientsPage() {
     : 0
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Stats cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
           <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Nouveaux leads</p>
           <p className="text-2xl font-bold text-blue-400">{newLeads}</p>
@@ -118,7 +118,7 @@ export default function ClientsPage() {
       </div>
 
       {/* Pipeline visuel */}
-      <div className="flex gap-1 mb-6 bg-gray-900 border border-gray-800 rounded-xl p-3">
+      <div className="flex gap-1 mb-6 bg-gray-900 border border-gray-800 rounded-xl p-3 overflow-x-auto">
         {(Object.entries(STATUS_BADGE) as [ClientStatus, typeof STATUS_BADGE[ClientStatus]][]).map(([key, val]) => {
           const count = clients.filter(c => c.status === key).length
           return (
@@ -137,8 +137,8 @@ export default function ClientsPage() {
       </div>
 
       {/* Filters + button */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value as ClientStatus | 'follow_up' | '')}
@@ -175,15 +175,15 @@ export default function ClientsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-        <table className="w-full">
+      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-x-auto">
+        <table className="w-full min-w-[700px]">
           <thead>
             <tr className="border-b border-gray-800">
               <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
               <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Dernier contact</th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
-              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Projet</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Dernier contact</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Source</th>
+              <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Projet</th>
               <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
               <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
@@ -223,15 +223,15 @@ export default function ClientsPage() {
                       <p className="text-sm text-gray-400">{client.email || '—'}</p>
                       {client.phone && <p className="text-xs text-gray-500">{client.phone}</p>}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-400">
+                    <td className="px-4 py-3 text-sm text-gray-400 hidden md:table-cell">
                       {client.last_contacted_at
                         ? formatDistanceToNow(new Date(client.last_contacted_at), { addSuffix: true, locale: fr })
                         : '—'}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-400">
+                    <td className="px-4 py-3 text-sm text-gray-400 hidden lg:table-cell">
                       {SOURCE_LABEL[client.source] || client.source}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 hidden lg:table-cell">
                       {project ? (
                         <div className="flex items-center gap-1.5">
                           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: project.color }} />
