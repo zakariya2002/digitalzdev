@@ -109,7 +109,7 @@ export default function KanbanPage() {
   }
 
   // Save project
-  const handleSaveProject = async (data: { name: string; color: string }) => {
+  const handleSaveProject = async (data: Record<string, unknown>) => {
     if (editingProject) {
       const { error } = await supabase.from('projects').update(data).eq('id', editingProject.id)
       if (error) console.error('Update project error:', error)

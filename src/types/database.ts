@@ -39,12 +39,22 @@ export interface Database {
   }
 }
 
+export type ProjectType = 'landing' | 'vitrine' | 'ecommerce' | 'custom' | 'mobile' | 'maintenance' | 'audit' | 'other'
+export type ProjectStatus = 'briefing' | 'design' | 'development' | 'review' | 'delivered' | 'active' | 'archived'
+
 export interface Project {
   id: string
   name: string
   color: string
   icon: string | null
   is_archived: boolean
+  client_id: string | null
+  status: ProjectStatus
+  budget: number | null
+  start_date: string | null
+  end_date: string | null
+  project_type: ProjectType | null
+  description: string | null
   created_at: string
   updated_at: string
 }
@@ -55,6 +65,13 @@ export interface ProjectInsert {
   color?: string
   icon?: string | null
   is_archived?: boolean
+  client_id?: string | null
+  status?: string
+  budget?: number | null
+  start_date?: string | null
+  end_date?: string | null
+  project_type?: string | null
+  description?: string | null
   created_at?: string
   updated_at?: string
 }
@@ -73,6 +90,8 @@ export interface Task {
   tags: string[]
   position: number
   completed_at: string | null
+  estimated_hours: number | null
+  actual_hours: number
   created_at: string
   updated_at: string
 }
@@ -248,4 +267,173 @@ export interface TimelineEvent {
   timestamp: string
   summary: string
   data: Call | Sms
+}
+
+// === MODULE 1 : DEVIS & FACTURATION ===
+
+export type QuoteStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired'
+export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'partial' | 'overdue' | 'cancelled'
+export type PaymentMethod = 'virement' | 'carte' | 'paypal' | 'especes' | 'cheque' | 'autre'
+
+export interface Quote {
+  id: string
+  client_id: string | null
+  project_id: string | null
+  quote_number: string
+  title: string
+  description: string | null
+  status: QuoteStatus
+  valid_until: string | null
+  notes: string | null
+  terms: string | null
+  total_amount: number
+  accepted_at: string | null
+  sent_at: string | null
+  created_at: string
+  updated_at: string
+  items?: QuoteItem[]
+  client?: Client
+  project?: Project
+}
+
+export interface QuoteItem {
+  id: string
+  quote_id: string
+  description: string
+  quantity: number
+  unit_price: number
+  total: number
+  position: number
+  created_at: string
+}
+
+export interface Invoice {
+  id: string
+  quote_id: string | null
+  client_id: string | null
+  project_id: string | null
+  invoice_number: string
+  title: string
+  description: string | null
+  status: InvoiceStatus
+  issue_date: string
+  due_date: string | null
+  notes: string | null
+  terms: string | null
+  total_amount: number
+  paid_amount: number
+  paid_at: string | null
+  sent_at: string | null
+  created_at: string
+  updated_at: string
+  items?: InvoiceItem[]
+  client?: Client
+  project?: Project
+  payments?: Payment[]
+}
+
+export interface InvoiceItem {
+  id: string
+  invoice_id: string
+  description: string
+  quantity: number
+  unit_price: number
+  total: number
+  position: number
+  created_at: string
+}
+
+export interface Payment {
+  id: string
+  invoice_id: string
+  amount: number
+  method: PaymentMethod
+  reference: string | null
+  paid_at: string
+  notes: string | null
+  created_at: string
+}
+
+// === MODULE 2 : PROJET AVANCÉ ===
+
+export interface TimeEntry {
+  id: string
+  task_id: string
+  project_id: string | null
+  description: string | null
+  hours: number
+  date: string
+  created_at: string
+}
+
+export interface ProjectFile {
+  id: string
+  project_id: string
+  name: string
+  url: string
+  file_type: 'link' | 'figma' | 'drive' | 'github' | 'other'
+  created_at: string
+}
+
+// === MODULE 3 : PROPOSITIONS ===
+
+export type ProposalStatus = 'draft' | 'sent' | 'accepted' | 'rejected'
+
+export interface Proposal {
+  id: string
+  client_id: string | null
+  title: string
+  project_type: ProjectType | null
+  status: ProposalStatus
+  client_company: string | null
+  client_contact: string | null
+  client_email: string | null
+  client_phone: string | null
+  project_description: string | null
+  objectives: string | null
+  target_audience: string | null
+  features: string[]
+  design_preferences: string | null
+  inspirations: string | null
+  seo_requirements: string | null
+  hosting_needs: string | null
+  content_provided: boolean
+  timeline: string | null
+  budget_range: string | null
+  additional_notes: string | null
+  estimated_amount: number | null
+  quote_id: string | null
+  sent_at: string | null
+  accepted_at: string | null
+  created_at: string
+  updated_at: string
+  client?: Client
+}
+
+// === MODULE 4 : AUTOMATISATION ===
+
+export type TriggerType = 'lead_no_activity' | 'quote_no_response' | 'invoice_overdue' | 'follow_up_due' | 'project_milestone'
+export type ActionType = 'sms' | 'email' | 'notification' | 'status_change'
+
+export interface AutomationRule {
+  id: string
+  name: string
+  trigger_type: TriggerType
+  trigger_delay_days: number
+  action_type: ActionType
+  action_template: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface AutomationLog {
+  id: string
+  rule_id: string
+  entity_type: 'client' | 'quote' | 'invoice' | 'project'
+  entity_id: string
+  action_taken: string
+  executed_at: string
+  success: boolean
+  error_message: string | null
 }

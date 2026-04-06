@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase'
 import KPIWidgets from '../../components/dashboard/KPIWidgets'
 import RevenueChart from '../../components/dashboard/RevenueChart'
 import TaskStats from '../../components/dashboard/TaskStats'
-import type { Task, Project, Revenue, Client } from '../../types/database'
+import type { Task, Project, Revenue, Client, Quote, Invoice } from '../../types/database'
 
 export default function DashboardHome() {
   const [projects, setProjects] = useState<Project[]>([])
@@ -16,6 +16,8 @@ export default function DashboardHome() {
 
   const [callsToday, setCallsToday] = useState(0)
   const [pendingFollowUps, setPendingFollowUps] = useState(0)
+  const [pendingQuotes, setPendingQuotes] = useState(0)
+  const [unpaidInvoices, setUnpaidInvoices] = useState(0)
 
   const fetchAll = useCallback(async () => {
     const todayStart = new Date()
@@ -23,7 +25,7 @@ export default function DashboardHome() {
     const todayEnd = new Date()
     todayEnd.setHours(23, 59, 59, 999)
 
-    const [{ data: p }, { data: t }, { data: r }, { data: c }, { count: callCount }] = await Promise.all([
+    const [{ data: p }, { data: t }, { data: r }, { data: c }, { count: callCount }, { count: qCount }, { count: iCount }] = await Promise.all([
       supabase.from('projects').select('*').eq('is_archived', false),
       supabase.from('tasks').select('*'),
       supabase.from('revenues').select('*'),
@@ -31,6 +33,10 @@ export default function DashboardHome() {
       supabase.from('calls').select('id', { count: 'exact', head: true })
         .gte('called_at', todayStart.toISOString())
         .lte('called_at', todayEnd.toISOString()),
+      supabase.from('quotes').select('id', { count: 'exact', head: true })
+        .eq('status', 'sent'),
+      supabase.from('invoices').select('id', { count: 'exact', head: true })
+        .in('status', ['sent', 'partial', 'overdue']),
     ])
     if (p) setProjects(p as Project[])
     if (t) setTasks(t as Task[])
@@ -45,6 +51,8 @@ export default function DashboardHome() {
       setPendingFollowUps(followUps)
     }
     setCallsToday(callCount || 0)
+    setPendingQuotes(qCount || 0)
+    setUnpaidInvoices(iCount || 0)
     setLoading(false)
   }, [])
 
@@ -136,6 +144,18 @@ export default function DashboardHome() {
       value: pendingFollowUps,
       color: pendingFollowUps > 0 ? 'bg-amber-500/20' : 'bg-gray-800',
       icon: <svg className={`w-4 h-4 ${pendingFollowUps > 0 ? 'text-amber-400' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+    },
+    {
+      label: 'Devis en attente',
+      value: pendingQuotes,
+      color: pendingQuotes > 0 ? 'bg-indigo-500/20' : 'bg-gray-800',
+      icon: <svg className={`w-4 h-4 ${pendingQuotes > 0 ? 'text-indigo-400' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" /></svg>,
+    },
+    {
+      label: 'Factures impayées',
+      value: unpaidInvoices,
+      color: unpaidInvoices > 0 ? 'bg-rose-500/20' : 'bg-gray-800',
+      icon: <svg className={`w-4 h-4 ${unpaidInvoices > 0 ? 'text-rose-400' : 'text-gray-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>,
     },
   ]
 

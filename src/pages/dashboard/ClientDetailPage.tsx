@@ -10,7 +10,8 @@ import SmsComposer from '../../components/dashboard/SmsComposer'
 import LeadTimeline from '../../components/dashboard/LeadTimeline'
 import CallHistory from '../../components/dashboard/CallHistory'
 import SmsThread from '../../components/dashboard/SmsThread'
-import type { Client, ClientStatus, ClientSource, Project } from '../../types/database'
+import { formatCurrency } from '../../lib/business'
+import type { Client, ClientStatus, ClientSource, Project, Quote, Invoice, Proposal, QuoteStatus, InvoiceStatus, ProposalStatus } from '../../types/database'
 
 const STATUS_BADGE: Record<ClientStatus, { label: string; bg: string; text: string }> = {
   new_lead: { label: 'Nouveau lead', bg: 'bg-blue-500/20', text: 'text-blue-400' },
@@ -20,7 +21,31 @@ const STATUS_BADGE: Record<ClientStatus, { label: string; bg: string; text: stri
   completed: { label: 'Terminé', bg: 'bg-gray-500/20', text: 'text-gray-400' },
 }
 
-type Tab = 'infos' | 'timeline' | 'calls' | 'sms'
+type Tab = 'infos' | 'timeline' | 'calls' | 'sms' | 'proposals' | 'quotes' | 'invoices'
+
+const QUOTE_STATUS_BADGE: Record<QuoteStatus, { label: string; bg: string; text: string }> = {
+  draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
+  sent: { label: 'Envoyé', bg: 'bg-blue-500/20', text: 'text-blue-400' },
+  accepted: { label: 'Accepté', bg: 'bg-green-500/20', text: 'text-green-400' },
+  rejected: { label: 'Refusé', bg: 'bg-red-500/20', text: 'text-red-400' },
+  expired: { label: 'Expiré', bg: 'bg-amber-500/20', text: 'text-amber-400' },
+}
+
+const INVOICE_STATUS_BADGE: Record<InvoiceStatus, { label: string; bg: string; text: string }> = {
+  draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
+  sent: { label: 'Envoyée', bg: 'bg-blue-500/20', text: 'text-blue-400' },
+  paid: { label: 'Payée', bg: 'bg-green-500/20', text: 'text-green-400' },
+  partial: { label: 'Partielle', bg: 'bg-amber-500/20', text: 'text-amber-400' },
+  overdue: { label: 'En retard', bg: 'bg-red-500/20', text: 'text-red-400' },
+  cancelled: { label: 'Annulée', bg: 'bg-gray-500/20', text: 'text-gray-400' },
+}
+
+const PROPOSAL_STATUS_BADGE: Record<ProposalStatus, { label: string; bg: string; text: string }> = {
+  draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
+  sent: { label: 'Envoyé', bg: 'bg-blue-500/20', text: 'text-blue-400' },
+  accepted: { label: 'Accepté', bg: 'bg-green-500/20', text: 'text-green-400' },
+  rejected: { label: 'Refusé', bg: 'bg-red-500/20', text: 'text-red-400' },
+}
 
 export default function ClientDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -34,12 +59,18 @@ export default function ClientDetailPage() {
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [smsModalOpen, setSmsModalOpen] = useState(false)
   const [followUpDate, setFollowUpDate] = useState('')
+  const [quotes, setQuotes] = useState<Quote[]>([])
+  const [invoices, setInvoices] = useState<Invoice[]>([])
+  const [proposals, setProposals] = useState<Proposal[]>([])
 
   const fetchClient = useCallback(async () => {
     if (!id) return
-    const [{ data: c, error }, { data: p }] = await Promise.all([
+    const [{ data: c, error }, { data: p }, { data: q }, { data: inv }, { data: prop }] = await Promise.all([
       supabase.from('clients').select('*').eq('id', id).single(),
       supabase.from('projects').select('*').eq('is_archived', false).order('name'),
+      supabase.from('quotes').select('*').eq('client_id', id).order('created_at', { ascending: false }),
+      supabase.from('invoices').select('*').eq('client_id', id).order('created_at', { ascending: false }),
+      supabase.from('proposals').select('*').eq('client_id', id).order('created_at', { ascending: false }),
     ])
     if (error) console.error('Fetch client error:', error)
     if (c) {
@@ -47,6 +78,9 @@ export default function ClientDetailPage() {
       setFollowUpDate(c.next_follow_up_at ? c.next_follow_up_at.slice(0, 16) : '')
     }
     if (p) setProjects(p as Project[])
+    if (q) setQuotes(q as Quote[])
+    if (inv) setInvoices(inv as Invoice[])
+    if (prop) setProposals(prop as Proposal[])
     setLoading(false)
   }, [id])
 
@@ -113,6 +147,9 @@ export default function ClientDetailPage() {
 
   const tabs: { key: Tab; label: string }[] = [
     { key: 'infos', label: 'Infos' },
+    { key: 'proposals', label: `Propositions (${proposals.length})` },
+    { key: 'quotes', label: `Devis (${quotes.length})` },
+    { key: 'invoices', label: `Factures (${invoices.length})` },
     { key: 'timeline', label: 'Timeline' },
     { key: 'calls', label: `Appels (${client.call_count || 0})` },
     { key: 'sms', label: `SMS (${client.sms_count || 0})` },
@@ -246,6 +283,102 @@ export default function ClientDetailPage() {
                 Modifier les infos
               </button>
             </div>
+          </div>
+        )}
+
+        {tab === 'proposals' && (
+          <div className="space-y-3">
+            <div className="flex justify-end">
+              <button onClick={() => navigate('/dashboard/proposals/new')} className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                + Créer une proposition
+              </button>
+            </div>
+            {proposals.length === 0 ? (
+              <p className="text-sm text-gray-500 text-center py-4">Aucune proposition</p>
+            ) : (
+              <div className="space-y-2">
+                {proposals.map(prop => {
+                  const badge = PROPOSAL_STATUS_BADGE[prop.status]
+                  return (
+                    <button key={prop.id} onClick={() => navigate(`/dashboard/proposals/${prop.id}`)} className="w-full flex items-center justify-between p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-left">
+                      <div>
+                        <p className="text-sm font-medium text-white">{prop.title}</p>
+                        <p className="text-xs text-gray-500">{format(new Date(prop.created_at), 'dd/MM/yyyy', { locale: fr })}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {prop.estimated_amount && <span className="text-sm text-gray-300">{formatCurrency(prop.estimated_amount)}</span>}
+                        <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${badge.bg} ${badge.text}`}>{badge.label}</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab === 'quotes' && (
+          <div className="space-y-3">
+            <div className="flex justify-end">
+              <button onClick={() => navigate('/dashboard/quotes/new')} className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                + Créer un devis
+              </button>
+            </div>
+            {quotes.length === 0 ? (
+              <p className="text-sm text-gray-500 text-center py-4">Aucun devis</p>
+            ) : (
+              <div className="space-y-2">
+                {quotes.map(q => {
+                  const badge = QUOTE_STATUS_BADGE[q.status]
+                  return (
+                    <button key={q.id} onClick={() => navigate(`/dashboard/quotes/${q.id}`)} className="w-full flex items-center justify-between p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-left">
+                      <div>
+                        <p className="text-sm font-medium text-white">{q.quote_number} — {q.title}</p>
+                        <p className="text-xs text-gray-500">{format(new Date(q.created_at), 'dd/MM/yyyy', { locale: fr })}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-gray-300">{formatCurrency(q.total_amount)}</span>
+                        <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${badge.bg} ${badge.text}`}>{badge.label}</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {tab === 'invoices' && (
+          <div className="space-y-3">
+            <div className="flex justify-end">
+              <button onClick={() => navigate('/dashboard/invoices/new')} className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                + Créer une facture
+              </button>
+            </div>
+            {invoices.length === 0 ? (
+              <p className="text-sm text-gray-500 text-center py-4">Aucune facture</p>
+            ) : (
+              <div className="space-y-2">
+                {invoices.map(inv => {
+                  const badge = INVOICE_STATUS_BADGE[inv.status]
+                  return (
+                    <button key={inv.id} onClick={() => navigate(`/dashboard/invoices/${inv.id}`)} className="w-full flex items-center justify-between p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-left">
+                      <div>
+                        <p className="text-sm font-medium text-white">{inv.invoice_number} — {inv.title}</p>
+                        <p className="text-xs text-gray-500">{format(new Date(inv.created_at), 'dd/MM/yyyy', { locale: fr })}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm text-gray-300">{formatCurrency(inv.total_amount)}</span>
+                        {inv.paid_amount > 0 && inv.paid_amount < inv.total_amount && (
+                          <span className="text-xs text-amber-400">Payé: {formatCurrency(inv.paid_amount)}</span>
+                        )}
+                        <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${badge.bg} ${badge.text}`}>{badge.label}</span>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )}
 

@@ -10,6 +10,15 @@ import ClientsPage from './ClientsPage'
 import ClientDetailPage from './ClientDetailPage'
 import RevenuesPage from './RevenuesPage'
 import SmsTemplatesPage from './SmsTemplatesPage'
+import QuotesPage from './QuotesPage'
+import QuoteDetailPage from './QuoteDetailPage'
+import InvoicesPage from './InvoicesPage'
+import InvoiceDetailPage from './InvoiceDetailPage'
+import FinancesPage from './FinancesPage'
+import ProposalsPage from './ProposalsPage'
+import ProposalDetailPage from './ProposalDetailPage'
+import ProjectDetailPage from './ProjectDetailPage'
+import AutomationPage from './AutomationPage'
 
 export default function DashboardLayout() {
   return (
@@ -27,6 +36,18 @@ export default function DashboardLayout() {
               <Route path="clients/:id" element={<ClientDetailPage />} />
               <Route path="revenues" element={<RevenuesPage />} />
               <Route path="sms-templates" element={<SmsTemplatesPage />} />
+              <Route path="quotes" element={<QuotesPage />} />
+              <Route path="quotes/new" element={<QuoteDetailPage />} />
+              <Route path="quotes/:id" element={<QuoteDetailPage />} />
+              <Route path="invoices" element={<InvoicesPage />} />
+              <Route path="invoices/new" element={<InvoiceDetailPage />} />
+              <Route path="invoices/:id" element={<InvoiceDetailPage />} />
+              <Route path="finances" element={<FinancesPage />} />
+              <Route path="proposals" element={<ProposalsPage />} />
+              <Route path="proposals/new" element={<ProposalDetailPage />} />
+              <Route path="proposals/:id" element={<ProposalDetailPage />} />
+              <Route path="projects/:id" element={<ProjectDetailPage />} />
+              <Route path="automation" element={<AutomationPage />} />
             </Routes>
           </main>
         </div>

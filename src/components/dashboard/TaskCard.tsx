@@ -62,6 +62,22 @@ export default function TaskCard({ task, project, onClick }: TaskCardProps) {
         </div>
       )}
 
+      {/* Time tracking indicator */}
+      {task.estimated_hours != null && task.estimated_hours > 0 && (
+        <div className="mt-2 mb-1">
+          <div className="flex items-center justify-between text-[10px] text-gray-400 mb-0.5">
+            <span>&#9201; {task.actual_hours || 0}h / {task.estimated_hours}h</span>
+            <span>{Math.min(100, Math.round(((task.actual_hours || 0) / task.estimated_hours) * 100))}%</span>
+          </div>
+          <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all ${(task.actual_hours || 0) > task.estimated_hours ? 'bg-red-500' : 'bg-blue-500'}`}
+              style={{ width: `${Math.min(100, ((task.actual_hours || 0) / task.estimated_hours) * 100)}%` }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Bottom row: priority + deadline */}
       <div className="flex items-center justify-between mt-1">
         <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-medium ${priority.bg} ${priority.text}`}>
