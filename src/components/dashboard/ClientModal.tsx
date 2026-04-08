@@ -1,6 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import Modal from './Modal'
-import { toE164, isValidFrenchPhone } from '../../lib/phone'
+import { toE164, isValidPhone } from '../../lib/phone'
 import type { Client, ClientStatus, ClientSource, Project } from '../../types/database'
 
 interface ClientModalProps {
@@ -80,15 +80,15 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
     e.preventDefault()
     if (!name.trim()) return
 
-    // Validation téléphone
+    // Validation téléphone — accepte tout format international
     const trimmedPhone = phone.trim()
-    if (trimmedPhone && !isValidFrenchPhone(trimmedPhone)) {
-      setPhoneError('Numéro de téléphone invalide (format français attendu)')
+    if (trimmedPhone && !isValidPhone(trimmedPhone)) {
+      setPhoneError('Numéro de téléphone invalide')
       return
     }
     const trimmedPhone2 = phoneSecondary.trim()
-    if (trimmedPhone2 && !isValidFrenchPhone(trimmedPhone2)) {
-      setPhoneError('Numéro secondaire invalide (format français attendu)')
+    if (trimmedPhone2 && !isValidPhone(trimmedPhone2)) {
+      setPhoneError('Numéro secondaire invalide')
       return
     }
 
