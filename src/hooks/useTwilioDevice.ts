@@ -77,10 +77,27 @@ export function useTwilioDevice(): TwilioDeviceState {
     try {
       const token = await fetchTwilioToken()
 
+      // Pre-create audio element to avoid _onAddTrack error
+      let audioElement = document.getElementById('twilio-audio') as HTMLAudioElement | null
+      if (!audioElement) {
+        audioElement = document.createElement('audio')
+        audioElement.id = 'twilio-audio'
+        audioElement.autoplay = true
+        document.body.appendChild(audioElement)
+      }
+
       const device = new Device(token, {
         edge: 'ashburn',
         closeProtection: true,
+        sounds: {
+          incoming: undefined,
+          outgoing: undefined,
+          disconnect: undefined,
+        },
       })
+
+      device.audio?.speakerDevices.set('default')
+      device.audio?.ringtoneDevices.set('default')
 
       device.on('registered', () => {
         setStatus('idle')
