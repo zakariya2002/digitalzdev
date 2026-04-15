@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { Device, Call } from '@twilio/voice-sdk'
 import { fetchTwilioToken } from '../lib/twilio'
 
@@ -18,7 +18,7 @@ export interface TwilioDeviceState {
 }
 
 export function useTwilioDevice(): TwilioDeviceState {
-  const [status, setStatus] = useState<TwilioStatus>('loading')
+  const [status, setStatus] = useState<TwilioStatus>('idle')
   const [activeCall, setActiveCall] = useState<Call | null>(null)
   const [isMuted, setIsMuted] = useState(false)
   const [callDuration, setCallDuration] = useState(0)
@@ -26,6 +26,7 @@ export function useTwilioDevice(): TwilioDeviceState {
 
   const deviceRef = useRef<Device | null>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const initializingRef = useRef(false)
 
   const startTimer = useCallback(() => {
     setCallDuration(0)
@@ -67,77 +68,70 @@ export function useTwilioDevice(): TwilioDeviceState {
     [startTimer, cleanupCall]
   )
 
-  // Initialize device
-  useEffect(() => {
-    let mounted = true
+  // Initialize device lazily — only called after user gesture
+  const ensureDevice = useCallback(async (): Promise<Device | null> => {
+    if (deviceRef.current) return deviceRef.current
+    if (initializingRef.current) return null
 
-    async function init() {
-      try {
-        const token = await fetchTwilioToken()
-        if (!mounted) return
+    initializingRef.current = true
+    try {
+      const token = await fetchTwilioToken()
 
-        const device = new Device(token, {
-          edge: 'ashburn',
-          closeProtection: true,
-        })
+      const device = new Device(token, {
+        edge: 'ashburn',
+        closeProtection: true,
+      })
 
-        device.on('registered', () => {
-          if (mounted) setStatus('idle')
-        })
+      device.on('registered', () => {
+        setStatus('idle')
+      })
 
-        device.on('incoming', (call: Call) => {
-          if (mounted) {
-            setActiveCall(call)
-            setStatus('incoming')
-            setupCallEvents(call)
-          }
-        })
+      device.on('incoming', (call: Call) => {
+        setActiveCall(call)
+        setStatus('incoming')
+        setupCallEvents(call)
+      })
 
-        device.on('tokenWillExpire', async () => {
-          try {
-            const newToken = await fetchTwilioToken()
-            device.updateToken(newToken)
-          } catch (e) {
-            console.error('Token refresh error:', e)
-          }
-        })
-
-        device.on('error', (err) => {
-          console.error('Twilio device error:', err)
-          if (mounted) {
-            setError(err.message || 'Erreur Twilio')
-            setStatus('error')
-          }
-        })
-
-        await device.register()
-        deviceRef.current = device
-      } catch (e) {
-        if (mounted) {
-          console.error('Twilio init error:', e)
-          setError(e instanceof Error ? e.message : 'Erreur initialisation Twilio')
-          setStatus('error')
+      device.on('tokenWillExpire', async () => {
+        try {
+          const newToken = await fetchTwilioToken()
+          device.updateToken(newToken)
+        } catch (e) {
+          console.error('Token refresh error:', e)
         }
-      }
-    }
+      })
 
-    init()
+      device.on('error', (err) => {
+        console.error('Twilio device error:', err)
+        setError(err.message || 'Erreur Twilio')
+        setStatus('error')
+      })
 
-    return () => {
-      mounted = false
-      stopTimer()
-      deviceRef.current?.destroy()
-      deviceRef.current = null
+      await device.register()
+      deviceRef.current = device
+      initializingRef.current = false
+      return device
+    } catch (e) {
+      console.error('Twilio init error:', e)
+      setError(e instanceof Error ? e.message : 'Erreur initialisation Twilio')
+      setStatus('error')
+      initializingRef.current = false
+      return null
     }
-  }, [setupCallEvents, stopTimer])
+  }, [setupCallEvents])
 
   const makeCall = useCallback(
     async (phoneNumber: string) => {
-      if (!deviceRef.current || status !== 'idle') return
-
       setStatus('calling')
       try {
-        const call = await deviceRef.current.connect({
+        // Initialize device on first call (user gesture context)
+        const device = await ensureDevice()
+        if (!device) {
+          setStatus('idle')
+          return
+        }
+
+        const call = await device.connect({
           params: { To: phoneNumber },
         })
         setActiveCall(call)
@@ -148,7 +142,7 @@ export function useTwilioDevice(): TwilioDeviceState {
         setStatus('idle')
       }
     },
-    [status, setupCallEvents]
+    [ensureDevice, setupCallEvents]
   )
 
   const hangup = useCallback(() => {
