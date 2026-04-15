@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTwilio } from '../../contexts/TwilioContext'
 import { supabase } from '../../lib/supabase'
+import { toE164 } from '../../lib/phone'
 import type { ClientStatus } from '../../types/database'
 
 interface PostCallData {
@@ -14,19 +15,37 @@ interface PostCallData {
 }
 
 export default function Softphone() {
-  const { status, callDuration, isMuted, hangup, toggleMute, acceptIncoming, rejectIncoming, activeCall } = useTwilio()
+  const { status, callDuration, isMuted, makeCall, hangup, toggleMute, acceptIncoming, rejectIncoming, activeCall } = useTwilio()
 
   const [callNote, setCallNote] = useState('')
   const [showPostCall, setShowPostCall] = useState(false)
   const [postCallData, setPostCallData] = useState<PostCallData | null>(null)
   const [saving, setSaving] = useState(false)
 
+  // Dialer state
+  const [dialerOpen, setDialerOpen] = useState(false)
+  const [dialNumber, setDialNumber] = useState('')
+
   // Formatage timer
   const minutes = Math.floor(callDuration / 60).toString().padStart(2, '0')
   const seconds = (callDuration % 60).toString().padStart(2, '0')
 
+  const handleDial = () => {
+    if (!dialNumber.trim()) return
+    const e164 = toE164(dialNumber.trim())
+    makeCall(e164)
+    setDialerOpen(false)
+  }
+
+  const handleDialPad = (digit: string) => {
+    setDialNumber(prev => prev + digit)
+  }
+
+  const handleBackspace = () => {
+    setDialNumber(prev => prev.slice(0, -1))
+  }
+
   const handleHangup = () => {
-    // Sauvegarder les infos pour le post-call
     const params = activeCall?.parameters || {}
     setPostCallData({
       clientId: (params as Record<string, string>).clientId || '',
@@ -44,7 +63,6 @@ export default function Softphone() {
     if (!postCallData) return
     setSaving(true)
 
-    // Sauvegarder la note d'appel si un callSid existe
     if (postCallData.callSid) {
       await supabase
         .from('calls')
@@ -52,7 +70,6 @@ export default function Softphone() {
         .eq('twilio_call_sid', postCallData.callSid)
     }
 
-    // Mettre à jour le client si un clientId et un nouveau statut
     if (postCallData.clientId) {
       const updateData: Record<string, unknown> = {}
       if (postCallData.newStatus) updateData.status = postCallData.newStatus
@@ -73,6 +90,13 @@ export default function Softphone() {
     setPostCallData(null)
     setCallNote('')
   }
+
+  const dialPadKeys = [
+    ['1', '2', '3'],
+    ['4', '5', '6'],
+    ['7', '8', '9'],
+    ['*', '0', '#'],
+  ]
 
   // Post-call modal
   if (showPostCall && postCallData) {
@@ -142,19 +166,94 @@ export default function Softphone() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <AnimatePresence mode="wait">
-        {/* IDLE — Petit bouton rond */}
-        {status === 'idle' && (
-          <motion.div
+        {/* IDLE — Bouton rond cliquable + Dialer */}
+        {status === 'idle' && !dialerOpen && (
+          <motion.button
             key="idle"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            className="w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg cursor-default transition-colors"
-            title="Téléphone prêt"
+            onClick={() => setDialerOpen(true)}
+            className="w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg cursor-pointer transition-colors"
+            title="Composer un numéro"
           >
             <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
             </svg>
+          </motion.button>
+        )}
+
+        {/* DIALER — Pavé numérique */}
+        {status === 'idle' && dialerOpen && (
+          <motion.div
+            key="dialer"
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="w-72 bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-4"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-sm font-semibold text-white">Composer</h4>
+              <button
+                onClick={() => { setDialerOpen(false); setDialNumber('') }}
+                className="p-1 text-gray-400 hover:text-white transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Number display */}
+            <div className="relative mb-3">
+              <input
+                type="tel"
+                value={dialNumber}
+                onChange={(e) => setDialNumber(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleDial() }}
+                placeholder="+33 6 12 34 56 78"
+                className="w-full px-3 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white text-center text-lg font-mono tracking-wider placeholder-gray-600 focus:outline-none focus:border-blue-500"
+                autoFocus
+              />
+              {dialNumber && (
+                <button
+                  onClick={handleBackspace}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-white transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9.75L14.25 12m0 0l2.25 2.25M14.25 12l2.25-2.25M14.25 12L12 14.25m-2.58 4.92l-6.374-6.375a1.125 1.125 0 010-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33z" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {/* Dial pad */}
+            <div className="grid grid-cols-3 gap-2 mb-3">
+              {dialPadKeys.map((row) =>
+                row.map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => handleDialPad(key)}
+                    className="py-3 bg-gray-700 hover:bg-gray-600 text-white text-lg font-medium rounded-xl transition-colors active:bg-gray-500"
+                  >
+                    {key}
+                  </button>
+                ))
+              )}
+            </div>
+
+            {/* Call button */}
+            <button
+              onClick={handleDial}
+              disabled={!dialNumber.trim()}
+              className="w-full py-3 bg-green-600 hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+              </svg>
+              Appeler
+            </button>
           </motion.div>
         )}
 
@@ -178,8 +277,9 @@ export default function Softphone() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
-            className="w-14 h-14 bg-red-600/20 border border-red-500/30 rounded-full flex items-center justify-center shadow-lg"
-            title="Erreur Twilio"
+            className="w-14 h-14 bg-red-600/20 border border-red-500/30 rounded-full flex items-center justify-center shadow-lg cursor-pointer"
+            title="Erreur Twilio — cliquer pour réessayer"
+            onClick={() => window.location.reload()}
           >
             <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
