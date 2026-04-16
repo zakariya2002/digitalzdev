@@ -15,6 +15,7 @@ export interface TwilioDeviceState {
   toggleMute: () => void
   acceptIncoming: () => void
   rejectIncoming: () => void
+  sendDigit: (digit: string) => void
 }
 
 export function useTwilioDevice(): TwilioDeviceState {
@@ -182,6 +183,10 @@ export function useTwilioDevice(): TwilioDeviceState {
     activeCall?.reject()
   }, [activeCall])
 
+  const sendDigit = useCallback((digit: string) => {
+    activeCall?.sendDigits(digit)
+  }, [activeCall])
+
   return {
     status,
     activeCall,
@@ -193,5 +198,6 @@ export function useTwilioDevice(): TwilioDeviceState {
     toggleMute,
     acceptIncoming,
     rejectIncoming,
+    sendDigit,
   }
 }

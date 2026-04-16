@@ -15,7 +15,7 @@ interface PostCallData {
 }
 
 export default function Softphone() {
-  const { status, callDuration, isMuted, makeCall, hangup, toggleMute, acceptIncoming, rejectIncoming, activeCall } = useTwilio()
+  const { status, callDuration, isMuted, makeCall, hangup, toggleMute, acceptIncoming, rejectIncoming, activeCall, sendDigit } = useTwilio()
 
   const [callNote, setCallNote] = useState('')
   const [showPostCall, setShowPostCall] = useState(false)
@@ -25,6 +25,15 @@ export default function Softphone() {
   // Dialer state
   const [dialerOpen, setDialerOpen] = useState(false)
   const [dialNumber, setDialNumber] = useState('')
+
+  // In-call dtmf keypad state
+  const [keypadOpen, setKeypadOpen] = useState(false)
+  const [dtmfHistory, setDtmfHistory] = useState('')
+
+  const handleDtmf = (digit: string) => {
+    sendDigit(digit)
+    setDtmfHistory(prev => prev + digit)
+  }
 
   // Formatage timer
   const minutes = Math.floor(callDuration / 60).toString().padStart(2, '0')
@@ -56,6 +65,8 @@ export default function Softphone() {
       callSid: (params as Record<string, string>).CallSid || null,
     })
     hangup()
+    setKeypadOpen(false)
+    setDtmfHistory('')
     setShowPostCall(true)
   }
 
@@ -338,6 +349,38 @@ export default function Softphone() {
               </div>
             </div>
 
+            {/* DTMF keypad (collapsible) */}
+            {keypadOpen && (
+              <div className="mb-3 p-3 bg-gray-900 rounded-xl">
+                {dtmfHistory && (
+                  <div className="text-center text-lg font-mono text-green-400 mb-2 tracking-widest">
+                    {dtmfHistory}
+                  </div>
+                )}
+                <div className="grid grid-cols-3 gap-1.5">
+                  {dialPadKeys.map((row) =>
+                    row.map((key) => (
+                      <button
+                        key={key}
+                        onClick={() => handleDtmf(key)}
+                        className="py-2.5 bg-gray-700 hover:bg-gray-600 text-white text-base font-medium rounded-lg transition-colors active:bg-gray-500"
+                      >
+                        {key}
+                      </button>
+                    ))
+                  )}
+                </div>
+                {dtmfHistory && (
+                  <button
+                    onClick={() => setDtmfHistory('')}
+                    className="mt-2 w-full py-1.5 text-xs text-gray-400 hover:text-white transition-colors"
+                  >
+                    Effacer l'affichage
+                  </button>
+                )}
+              </div>
+            )}
+
             <textarea
               value={callNote}
               onChange={(e) => setCallNote(e.target.value)}
@@ -346,10 +389,10 @@ export default function Softphone() {
               placeholder="Notes d'appel..."
             />
 
-            <div className="flex gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <button
                 onClick={toggleMute}
-                className={`flex-1 py-2.5 text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2 ${
+                className={`py-2.5 text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-1 ${
                   isMuted
                     ? 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
                     : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -368,13 +411,31 @@ export default function Softphone() {
                 {isMuted ? 'Muté' : 'Mute'}
               </button>
               <button
+                onClick={() => setKeypadOpen(!keypadOpen)}
+                className={`py-2.5 text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-1 ${
+                  keypadOpen
+                    ? 'bg-blue-500/20 text-blue-400 hover:bg-blue-500/30'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                }`}
+                title="Pavé numérique (DTMF)"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <rect x="3" y="3" width="6" height="6" rx="1" />
+                  <rect x="15" y="3" width="6" height="6" rx="1" />
+                  <rect x="3" y="15" width="6" height="6" rx="1" />
+                  <rect x="15" y="15" width="6" height="6" rx="1" />
+                  <rect x="9" y="9" width="6" height="6" rx="1" />
+                </svg>
+                Clavier
+              </button>
+              <button
                 onClick={handleHangup}
-                className="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
+                className="py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-xl transition-colors flex items-center justify-center gap-1"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M12 12h.01M8.464 8.464a5 5 0 000 7.072M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Raccrocher
+                Fin
               </button>
             </div>
           </motion.div>

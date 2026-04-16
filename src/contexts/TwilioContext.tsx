@@ -43,6 +43,7 @@ export function useTwilio(): TwilioDeviceState {
       toggleMute: () => {},
       acceptIncoming: () => {},
       rejectIncoming: () => {},
+      sendDigit: () => {},
     }
   }
   return context
