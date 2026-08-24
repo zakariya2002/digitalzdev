@@ -5,7 +5,10 @@ import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import CommentThread from '../../components/dashboard/CommentThread'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
-import { formatCurrency, BUSINESS, PRICING_GRID, calculateCharges } from '../../lib/business'
+import DocumentPDF from '../../components/dashboard/DocumentPDF'
+import { formatCurrency, BUSINESS, PRICING_GRID } from '../../lib/business'
+import { useTaxRegimes } from '../../hooks/useTaxRegimes'
+import { isMicro } from '../../lib/tax'
 import Modal from '../../components/dashboard/Modal'
 import type { Database, Invoice, InvoiceItem, InvoiceStatus, Payment, PaymentMethod, Client, Project } from '../../types/database'
 
@@ -71,6 +74,8 @@ export default function InvoiceDetailPage() {
   // Adresse pré-remplie dans l'envoi au client
   const [projects, setProjects] = useState<Project[]>([])
   const [saving, setSaving] = useState(false)
+  const [pdfOpen, setPdfOpen] = useState(false)
+  const { activeRegime } = useTaxRegimes()
 
   // Fetch invoice data (for edit mode)
   const fetchInvoice = useCallback(async () => {
@@ -175,7 +180,7 @@ export default function InvoiceDetailPage() {
     setItems([
       ...items,
       {
-        description: gridItem.label + ' \u00b7 ' + gridItem.description,
+        description: gridItem.label + ' · ' + gridItem.description,
         quantity: 1,
         unit_price: Math.round((gridItem.min + gridItem.max) / 2),
         position: items.length,
@@ -186,7 +191,17 @@ export default function InvoiceDetailPage() {
   // Total calculation
   const totalHT = items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0)
   const resteDu = totalHT - paidAmount
-  const charges = calculateCharges(totalHT)
+  // Taux du statut en vigueur, modifiables depuis le Simulateur
+  const taxParams = activeRegime && isMicro(activeRegime.params) ? activeRegime.params : null
+  const socialRate = taxParams?.social_rate ?? 0.212
+  const trainingRate = taxParams?.training_rate ?? 0.001
+  const ratePct = (rate: number) => (rate * 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 })
+  const charges = {
+    urssaf: totalHT * socialRate,
+    cfp: totalHT * trainingRate,
+    totalCharges: totalHT * (socialRate + trainingRate),
+    net: totalHT * (1 - socialRate - trainingRate),
+  }
 
   // Save logic
   const handleSave = async (newStatus?: InvoiceStatus) => {
@@ -328,7 +343,7 @@ export default function InvoiceDetailPage() {
             </button>
           )}
           <button
-            onClick={() => window.print()}
+            onClick={() => setPdfOpen(true)}
             className="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors"
           >
             Imprimer / PDF
@@ -635,11 +650,11 @@ export default function InvoiceDetailPage() {
                 <span className="text-sm font-medium text-white">{formatCurrency(totalHT)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-400">Charges URSSAF (21,1%)</span>
+                <span className="text-sm text-gray-400">{`Charges URSSAF (${ratePct(socialRate)} %)`}</span>
                 <span className="text-sm font-medium text-red-400">-{formatCurrency(charges.urssaf)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-400">CFP (0,1%)</span>
+                <span className="text-sm text-gray-400">{`CFP (${ratePct(trainingRate)} %)`}</span>
                 <span className="text-sm font-medium text-red-400">-{formatCurrency(charges.cfp)}</span>
               </div>
               <div className="flex items-center justify-between pt-3 border-t border-gray-700">
@@ -670,7 +685,7 @@ export default function InvoiceDetailPage() {
           </button>
         )}
         <button
-          onClick={() => window.print()}
+          onClick={() => setPdfOpen(true)}
           className="px-5 py-2.5 text-sm bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors"
         >
           Imprimer / PDF
@@ -752,6 +767,24 @@ export default function InvoiceDetailPage() {
         <div className="print:hidden mt-6">
           <CommentThread entityType="invoice" entityId={id} title="Discussion interne" />
         </div>
+      )}
+    
+      {pdfOpen && (
+        <DocumentPDF
+          type="invoice"
+          number={invoiceNumber}
+          date={issueDate || new Date().toISOString()}
+          dueDate={dueDate || null}
+          title={title}
+          description={description || null}
+          client={clients.find(c => c.id === clientId) ?? null}
+          items={items.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price }))}
+          total={items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0)}
+          terms={terms || null}
+          notes={notes || null}
+          paidAmount={payments.reduce((sum, p) => sum + Number(p.amount), 0)}
+          onClose={() => setPdfOpen(false)}
+        />
       )}
     </div>
   )

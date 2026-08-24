@@ -51,7 +51,7 @@ export default function CalendarView({
       })),
     ...milestones.map(m => ({
       id: m.id,
-      title: '\u25C6 ' + m.title,
+      title: '◆ ' + m.title,
       date: parseISO(m.due_date),
       type: 'milestone' as const,
       color: m.status === 'reached' ? '#22C55E' : m.status === 'missed' ? '#EF4444' : '#F59E0B',

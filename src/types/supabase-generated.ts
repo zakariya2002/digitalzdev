@@ -291,49 +291,64 @@ export type Database = {
       }
       clients: {
         Row: {
+          address: string | null
           call_count: number
           created_at: string
           email: string | null
           id: string
           last_contacted_at: string | null
+          legal_form: string | null
           name: string
           next_follow_up_at: string | null
           notes: string | null
           phone: string | null
           phone_secondary: string | null
           project_id: string | null
+          representative: string | null
+          share_capital: string | null
+          siren: string | null
           sms_count: number
           source: string
           status: string
         }
         Insert: {
+          address?: string | null
           call_count?: number
           created_at?: string
           email?: string | null
           id?: string
           last_contacted_at?: string | null
+          legal_form?: string | null
           name: string
           next_follow_up_at?: string | null
           notes?: string | null
           phone?: string | null
           phone_secondary?: string | null
           project_id?: string | null
+          representative?: string | null
+          share_capital?: string | null
+          siren?: string | null
           sms_count?: number
           source?: string
           status?: string
         }
         Update: {
+          address?: string | null
           call_count?: number
           created_at?: string
           email?: string | null
           id?: string
           last_contacted_at?: string | null
+          legal_form?: string | null
           name?: string
           next_follow_up_at?: string | null
           notes?: string | null
           phone?: string | null
           phone_secondary?: string | null
           project_id?: string | null
+          representative?: string | null
+          share_capital?: string | null
+          siren?: string | null
           sms_count?: number
           source?: string
           status?: string
@@ -398,12 +413,20 @@ export type Database = {
           eur_to_dzd: number | null
           iban: string | null
           id: boolean
+          ip_terms: string | null
+          late_penalty_terms: string | null
+          legal_form: string | null
           legal_name: string | null
+          logo_url: string | null
+          payment_terms: string | null
           phone: string | null
           siret: string | null
           trade_name: string | null
           updated_at: string
+          validity_days: number
+          vat_applicable: boolean
           vat_number: string | null
+          vat_rate: number
         }
         Insert: {
           active_regime_id?: string | null
@@ -413,12 +436,20 @@ export type Database = {
           eur_to_dzd?: number | null
           iban?: string | null
           id?: boolean
+          ip_terms?: string | null
+          late_penalty_terms?: string | null
+          legal_form?: string | null
           legal_name?: string | null
+          logo_url?: string | null
+          payment_terms?: string | null
           phone?: string | null
           siret?: string | null
           trade_name?: string | null
           updated_at?: string
+          validity_days?: number
+          vat_applicable?: boolean
           vat_number?: string | null
+          vat_rate?: number
         }
         Update: {
           active_regime_id?: string | null
@@ -428,12 +459,20 @@ export type Database = {
           eur_to_dzd?: number | null
           iban?: string | null
           id?: boolean
+          ip_terms?: string | null
+          late_penalty_terms?: string | null
+          legal_form?: string | null
           legal_name?: string | null
+          logo_url?: string | null
+          payment_terms?: string | null
           phone?: string | null
           siret?: string | null
           trade_name?: string | null
           updated_at?: string
+          validity_days?: number
+          vat_applicable?: boolean
           vat_number?: string | null
+          vat_rate?: number
         }
         Relationships: [
           {
@@ -1525,6 +1564,7 @@ export type Database = {
           client_id: string | null
           created_at: string
           description: string | null
+          duration_note: string | null
           id: string
           notes: string | null
           project_id: string | null
@@ -1542,6 +1582,7 @@ export type Database = {
           client_id?: string | null
           created_at?: string
           description?: string | null
+          duration_note?: string | null
           id?: string
           notes?: string | null
           project_id?: string | null
@@ -1559,6 +1600,7 @@ export type Database = {
           client_id?: string | null
           created_at?: string
           description?: string | null
+          duration_note?: string | null
           id?: string
           notes?: string | null
           project_id?: string | null

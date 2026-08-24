@@ -1,5 +1,19 @@
-import { useEffect } from 'react'
-import { BUSINESS, formatCurrency } from '../../lib/business'
+import { useEffect, useState } from 'react'
+import { format, parseISO } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import { supabase } from '../../lib/supabase'
+import { BUSINESS } from '../../lib/business'
+
+interface Party {
+  name: string
+  email?: string | null
+  phone?: string | null
+  legal_form?: string | null
+  share_capital?: string | null
+  siren?: string | null
+  representative?: string | null
+  address?: string | null
+}
 
 interface DocumentPDFProps {
   type: 'quote' | 'invoice'
@@ -7,7 +21,10 @@ interface DocumentPDFProps {
   date: string
   validUntil?: string | null
   dueDate?: string | null
-  client: { name: string; email?: string | null; phone?: string | null } | null
+  title?: string | null
+  description?: string | null
+  durationNote?: string | null
+  client: Party | null
   items: Array<{ description: string; quantity: number; unit_price: number }>
   total: number
   terms: string | null
@@ -16,201 +33,253 @@ interface DocumentPDFProps {
   onClose: () => void
 }
 
+interface Company {
+  legal_name: string | null
+  trade_name: string | null
+  legal_form: string | null
+  siret: string | null
+  email: string | null
+  phone: string | null
+  address: string | null
+  vat_number: string | null
+  logo_url: string | null
+  vat_applicable: boolean
+  vat_rate: number
+  validity_days: number
+  payment_terms: string | null
+  late_penalty_terms: string | null
+  ip_terms: string | null
+}
+
+/** Montant sans décimales quand elles sont nulles, comme sur un devis imprimé. */
+function money(amount: number) {
+  const rounded = Math.round(amount * 100) / 100
+  const hasCents = rounded % 1 !== 0
+  return new Intl.NumberFormat('fr-FR', {
+    minimumFractionDigits: hasCents ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(rounded) + ' €'
+}
+
+/**
+ * Une ligne peut porter un titre, une phrase d'accroche et des puces :
+ * la première ligne est le titre, les lignes commençant par un tiret ou une
+ * puce deviennent des points, le reste forme l'accroche.
+ */
+function splitDescription(raw: string) {
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean)
+  if (lines.length === 0) return { title: '', lead: null as string | null, bullets: [] as string[] }
+  const [title, ...rest] = lines
+  const bullets = rest.filter(l => /^[-•*·]/.test(l)).map(l => l.replace(/^[-•*·]\s*/, ''))
+  const lead = rest.filter(l => !/^[-•*·]/.test(l)).join(' ') || null
+  return { title, lead, bullets }
+}
+
 export default function DocumentPDF({
-  type,
-  number,
-  date,
-  validUntil,
-  dueDate,
-  client,
-  items,
-  total,
-  terms,
-  notes,
-  paidAmount,
-  onClose,
+  type, number, date, validUntil, dueDate, title, description, durationNote,
+  client, items, total, terms, notes, paidAmount, onClose,
 }: DocumentPDFProps) {
+  const [company, setCompany] = useState<Company | null>(null)
+
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
   useEffect(() => {
-    const el = document.getElementById('print-area')
-    if (el) el.focus()
+    supabase.from('company_settings').select('*').maybeSingle()
+      .then(({ data }) => setCompany((data || null) as unknown as Company | null))
   }, [])
 
-  const docTitle = type === 'quote' ? 'DEVIS' : 'FACTURE'
-  const remaining = type === 'invoice' && paidAmount !== undefined ? total - paidAmount : 0
+  const isQuote = type === 'quote'
+  const docTitle = isQuote ? 'DEVIS' : 'FACTURE'
+
+  const emitterName = company?.legal_name || BUSINESS.name
+  const emitterTrade = company?.trade_name || BUSINESS.tradeName
+  const emitterSiret = company?.siret || BUSINESS.siret
+  const emitterEmail = company?.email || BUSINESS.email
+  const vatApplicable = company?.vat_applicable ?? false
+  const vatRate = Number(company?.vat_rate ?? 0.2)
+  const validityDays = company?.validity_days ?? 30
+
+  const vat = vatApplicable ? total * vatRate : 0
+  const totalTtc = total + vat
+  const remaining = !isQuote && paidAmount !== undefined ? total - paidAmount : 0
+
+  const conditions = [
+    { label: 'Règlement', text: company?.payment_terms || terms },
+    { label: 'Pénalités', text: company?.late_penalty_terms },
+    { label: 'Propriété intellectuelle', text: company?.ip_terms },
+  ].filter(c => c.text)
 
   return (
-    <div className="fixed inset-0 z-[100] bg-white overflow-auto" id="print-area" tabIndex={-1}>
-      {/* Top bar - hidden when printing */}
-      <div className="no-print sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-gray-100 border-b border-gray-300">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => window.print()}
-            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm"
-          >
-            Imprimer
-          </button>
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition-colors text-sm"
-          >
-            Fermer
-          </button>
-        </div>
-        <p className="text-sm text-gray-500">{docTitle} {number}</p>
+    <div className="doc-root" id="print-area" tabIndex={-1}>
+      <div className="no-print doc-toolbar">
+        <button onClick={() => window.print()} className="doc-btn doc-btn-primary">Imprimer</button>
+        <button onClick={onClose} className="doc-btn">Fermer</button>
+        <span className="doc-hint">Dans la fenêtre d'impression, décoche « En-têtes et pieds de page » et coche « Graphiques d'arrière-plan ».</span>
       </div>
 
-      {/* Document */}
-      <div className="max-w-[210mm] mx-auto p-8 bg-white text-black" style={{ minHeight: '297mm' }}>
-        {/* Header */}
-        <div className="flex justify-between items-start">
-          {/* Left - Business info */}
-          <div>
-            <p className="text-xl font-bold text-black">{BUSINESS.tradeName}</p>
-            <div className="mt-1 text-sm text-gray-600 space-y-0.5">
-              <p>{BUSINESS.name}</p>
-              <p>SIRET : {BUSINESS.siret}</p>
-              {BUSINESS.address && <p>{BUSINESS.address}</p>}
-              <p>{BUSINESS.email}</p>
-              <p>{BUSINESS.phone}</p>
-              <p>{BUSINESS.website}</p>
-            </div>
+      <div className="doc-page">
+        {/* En-tête */}
+        <header className="doc-head">
+          <div className="doc-head-left">
+            <img src={company?.logo_url || '/logo.png'} alt="" className="doc-logo" />
           </div>
-
-          {/* Right - Document info */}
-          <div className="text-right">
-            <p className="text-3xl font-bold text-black">{docTitle}</p>
-            <div className="mt-2 text-sm text-gray-600 space-y-0.5">
-              <p>N° {number}</p>
-              <p>Date : {date}</p>
-              {type === 'quote' && validUntil && (
-                <p>Valide jusqu'au : {validUntil}</p>
-              )}
-              {type === 'invoice' && dueDate && (
-                <p>Échéance : {dueDate}</p>
-              )}
-            </div>
+          <div className="doc-head-right">
+            <h1 className="doc-title">{docTitle}</h1>
+            <p className="doc-meta">N° {number}</p>
+            <p className="doc-meta">Date : {format(parseISO(date), 'd MMMM yyyy', { locale: fr })}</p>
+            {isQuote && (
+              <p className="doc-meta">
+                {validUntil
+                  ? `Valable jusqu'au ${format(parseISO(validUntil), 'd MMMM yyyy', { locale: fr })}`
+                  : `Validité : ${validityDays} jours`}
+              </p>
+            )}
+            {!isQuote && dueDate && (
+              <p className="doc-meta">Échéance : {format(parseISO(dueDate), 'd MMMM yyyy', { locale: fr })}</p>
+            )}
           </div>
-        </div>
+        </header>
 
-        {/* Client block */}
-        <div className="mt-8 bg-gray-50 p-4 rounded">
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Client</p>
-          {client ? (
-            <div>
-              <p className="font-bold text-black">{client.name}</p>
-              {client.email && <p className="text-sm text-gray-600">{client.email}</p>}
-              {client.phone && <p className="text-sm text-gray-600">{client.phone}</p>}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-400 italic">Client non renseigné</p>
-          )}
-        </div>
-
-        {/* Items table */}
-        <div className="mt-8">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="text-left px-4 py-2 text-sm font-semibold text-black border border-gray-300">Description</th>
-                <th className="text-center px-4 py-2 text-sm font-semibold text-black border border-gray-300 w-20">Qté</th>
-                <th className="text-right px-4 py-2 text-sm font-semibold text-black border border-gray-300 w-32">Prix unitaire</th>
-                <th className="text-right px-4 py-2 text-sm font-semibold text-black border border-gray-300 w-32">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item, i) => (
-                <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                  <td className="px-4 py-2 text-sm text-black border border-gray-300">{item.description}</td>
-                  <td className="text-center px-4 py-2 text-sm text-black border border-gray-300">{item.quantity}</td>
-                  <td className="text-right px-4 py-2 text-sm text-black border border-gray-300">{formatCurrency(item.unit_price)}</td>
-                  <td className="text-right px-4 py-2 text-sm text-black border border-gray-300">{formatCurrency(item.quantity * item.unit_price)}</td>
-                </tr>
-              ))}
-              {/* Total row */}
-              <tr className="bg-gray-100">
-                <td colSpan={3} className="px-4 py-2 text-sm font-bold text-black border border-gray-300 text-right">
-                  Total HT
-                </td>
-                <td className="px-4 py-2 text-sm font-bold text-black border border-gray-300 text-right">
-                  {formatCurrency(total)}
-                </td>
-              </tr>
-              {type === 'invoice' && paidAmount !== undefined && paidAmount > 0 && (
-                <>
-                  <tr>
-                    <td colSpan={3} className="px-4 py-2 text-sm text-black border border-gray-300 text-right">
-                      Montant payé
-                    </td>
-                    <td className="px-4 py-2 text-sm text-black border border-gray-300 text-right">
-                      {formatCurrency(paidAmount)}
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-100">
-                    <td colSpan={3} className="px-4 py-2 text-sm font-bold text-black border border-gray-300 text-right">
-                      Reste à payer
-                    </td>
-                    <td className="px-4 py-2 text-sm font-bold text-black border border-gray-300 text-right">
-                      {formatCurrency(remaining)}
-                    </td>
-                  </tr>
-                </>
-              )}
-            </tbody>
-          </table>
-          <p className="mt-2 text-xs text-gray-500 italic">{BUSINESS.tvaMessage}</p>
-        </div>
-
-        {/* Footer section */}
-        <div className="mt-8 space-y-4">
-          {/* Bank details for invoices */}
-          {type === 'invoice' && (BUSINESS.iban || BUSINESS.bic) && (
-            <div className="bg-gray-50 p-4 rounded">
-              <p className="text-sm font-semibold text-black mb-1">Coordonnées bancaires</p>
-              {BUSINESS.bankName && <p className="text-sm text-gray-600">Banque : {BUSINESS.bankName}</p>}
-              {BUSINESS.iban && <p className="text-sm text-gray-600">IBAN : {BUSINESS.iban}</p>}
-              {BUSINESS.bic && <p className="text-sm text-gray-600">BIC : {BUSINESS.bic}</p>}
-            </div>
-          )}
-
-          {/* Payment terms */}
-          {terms && (
-            <div>
-              <p className="text-sm font-semibold text-black mb-1">Conditions de paiement</p>
-              <p className="text-sm text-gray-600 whitespace-pre-line">{terms}</p>
-            </div>
-          )}
-
-          {/* Notes */}
-          {notes && (
-            <div>
-              <p className="text-sm font-semibold text-black mb-1">Notes</p>
-              <p className="text-sm text-gray-600 whitespace-pre-line">{notes}</p>
-            </div>
-          )}
-
-          {/* Signature block for quotes */}
-          {type === 'quote' && (
-            <div className="mt-8">
-              <p className="text-sm text-black">Bon pour accord · Signature du client :</p>
-              <div className="h-16 border-b border-gray-400 mt-2" />
-            </div>
-          )}
-        </div>
-
-        {/* Legal footer */}
-        <div className="mt-12 pt-4 border-t border-gray-300">
-          <p className="text-xs text-gray-400 text-center">
-            {BUSINESS.tradeName} · {BUSINESS.name} · Auto-entrepreneur · SIRET : {BUSINESS.siret}
+        {/* Parties */}
+        <section className="doc-parties">
+          <p className="doc-label">Émetteur</p>
+          <p className="doc-line doc-line-strong">
+            {emitterName}{emitterTrade ? ` / ${emitterTrade}` : ''}
           </p>
+          {company?.legal_form && <p className="doc-line">{company.legal_form}</p>}
+          {company?.address && <p className="doc-line">{company.address}</p>}
+          {emitterSiret && <p className="doc-line">SIRET : {emitterSiret}</p>}
+          {company?.vat_number && <p className="doc-line">TVA : {company.vat_number}</p>}
+          {emitterEmail && <p className="doc-line">{emitterEmail}</p>}
+
+          {client && (
+            <>
+              <p className="doc-label doc-label-spaced">Client</p>
+              <p className="doc-line doc-line-strong">{client.name}</p>
+              {(client.legal_form || client.share_capital) && (
+                <p className="doc-line">
+                  {[client.legal_form, client.share_capital ? `au capital de ${client.share_capital}` : null]
+                    .filter(Boolean).join(' ')}
+                </p>
+              )}
+              {client.address && <p className="doc-line">{client.address}</p>}
+              {client.siren && <p className="doc-line">SIREN : {client.siren}</p>}
+              {client.representative && <p className="doc-line">Représentée par {client.representative}</p>}
+              {client.email && <p className="doc-line">{client.email}</p>}
+            </>
+          )}
+        </section>
+
+        <hr className="doc-rule" />
+
+        {/* Objet */}
+        {(title || description) && (
+          <section className="doc-object">
+            <p className="doc-label">Objet</p>
+            {title && <h2 className="doc-object-title">{title}</h2>}
+            {description && <p className="doc-object-text">{description}</p>}
+            {durationNote && <p className="doc-object-duration">{durationNote}</p>}
+          </section>
+        )}
+
+        {/* Lignes */}
+        <table className="doc-table">
+          <thead>
+            <tr>
+              <th className="doc-th">Désignation</th>
+              <th className="doc-th doc-th-right">Montant HT</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => {
+              const { title: lineTitle, lead, bullets } = splitDescription(item.description)
+              return (
+                <tr key={index} className={index % 2 === 1 ? 'doc-row doc-row-alt' : 'doc-row'}>
+                  <td className="doc-td">
+                    <p className="doc-item-title">
+                      {items.length > 1 ? `${index + 1}. ` : ''}{lineTitle}
+                      {item.quantity !== 1 && (
+                        <span className="doc-item-qty"> · {item.quantity} × {money(item.unit_price)}</span>
+                      )}
+                    </p>
+                    {lead && <p className="doc-item-lead">{lead}</p>}
+                    {bullets.length > 0 && (
+                      <ul className="doc-bullets">
+                        {bullets.map((b, i) => <li key={i}>{b}</li>)}
+                      </ul>
+                    )}
+                  </td>
+                  <td className="doc-td doc-td-amount">{money(item.quantity * item.unit_price)}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+
+        {/* Total */}
+        <div className="doc-total">
+          <span className="doc-total-label">Total HT</span>
+          <span className="doc-total-value">{money(total)} HT</span>
         </div>
+
+        {vatApplicable ? (
+          <p className="doc-total-note">
+            TVA ({Math.round(vatRate * 100)} %) : {money(vat)} · Total TTC : {money(totalTtc)}
+          </p>
+        ) : (
+          <p className="doc-total-note">{BUSINESS.tvaMessage}</p>
+        )}
+
+        {!isQuote && paidAmount !== undefined && paidAmount > 0 && (
+          <p className="doc-total-note">
+            Déjà réglé : {money(paidAmount)} · Reste à régler : {money(remaining)}
+          </p>
+        )}
+
+        {notes && (
+          <section className="doc-block">
+            <h3 className="doc-block-title">Notes</h3>
+            <p className="doc-block-text">{notes}</p>
+          </section>
+        )}
+
+        {/* Conditions */}
+        {conditions.length > 0 && (
+          <section className="doc-terms">
+            <h3 className="doc-block-title">Termes et conditions</h3>
+            {conditions.map(c => (
+              <div key={c.label} className="doc-term">
+                <p className="doc-term-label">{c.label}</p>
+                <p className="doc-term-text">{c.text}</p>
+              </div>
+            ))}
+          </section>
+        )}
+
+        {/* Signatures */}
+        {isQuote && (
+          <>
+            <hr className="doc-rule doc-rule-signature" />
+            <section className="doc-signatures">
+              <div className="doc-sign">
+                <p className="doc-sign-title">Le prestataire</p>
+                <p className="doc-line doc-line-strong">
+                  {emitterName}{emitterTrade ? ` / ${emitterTrade}` : ''}
+                </p>
+                <p className="doc-sign-hint">Date et signature :</p>
+              </div>
+              <div className="doc-sign">
+                <p className="doc-sign-title">Le client</p>
+                <p className="doc-sign-hint">Précédé de la mention « Bon pour accord »</p>
+                <p className="doc-sign-hint doc-sign-hint-spaced">Date et signature :</p>
+              </div>
+            </section>
+          </>
+        )}
       </div>
     </div>
   )

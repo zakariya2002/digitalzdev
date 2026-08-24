@@ -34,7 +34,7 @@ const FEATURE_CATEGORIES = [
   },
 ]
 
-const BUDGET_RANGES = ['< 500\u20ac', '500-1000\u20ac', '1000-2000\u20ac', '2000-3000\u20ac', '3000-5000\u20ac', '5000\u20ac+', 'A definir']
+const BUDGET_RANGES = ['< 500€', '500-1000€', '1000-2000€', '2000-3000€', '3000-5000€', '5000€+', 'A definir']
 
 const STATUS_BADGE: Record<string, { label: string; bg: string; text: string }> = {
   draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
@@ -271,7 +271,7 @@ export default function ProposalDetailPage() {
         await supabase.from('quote_items').insert({
           quote_id: quote.id,
           description:
-            title + (projectType ? ' \u00b7 ' + TYPE_LABELS[projectType] : ''),
+            title + (projectType ? ' · ' + TYPE_LABELS[projectType] : ''),
           quantity: 1,
           unit_price: parseFloat(estimatedAmount),
           position: 0,

@@ -5,16 +5,17 @@ import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import CommentThread from '../../components/dashboard/CommentThread'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
+import DocumentPDF from '../../components/dashboard/DocumentPDF'
 import TaxSimulator from '../../components/dashboard/TaxSimulator'
 import { formatCurrency, BUSINESS, PRICING_GRID } from '../../lib/business'
 import type { Database, Quote, QuoteItem, Client, Project, QuoteStatus } from '../../types/database'
 
 const STATUS_BADGE: Record<QuoteStatus, { label: string; bg: string; text: string }> = {
   draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
-  sent: { label: 'Envoy\u00e9', bg: 'bg-blue-500/20', text: 'text-blue-400' },
-  accepted: { label: 'Accept\u00e9', bg: 'bg-green-500/20', text: 'text-green-400' },
-  rejected: { label: 'Refus\u00e9', bg: 'bg-red-500/20', text: 'text-red-400' },
-  expired: { label: 'Expir\u00e9', bg: 'bg-amber-500/20', text: 'text-amber-400' },
+  sent: { label: 'Envoyé', bg: 'bg-blue-500/20', text: 'text-blue-400' },
+  accepted: { label: 'Accepté', bg: 'bg-green-500/20', text: 'text-green-400' },
+  rejected: { label: 'Refusé', bg: 'bg-red-500/20', text: 'text-red-400' },
+  expired: { label: 'Expiré', bg: 'bg-amber-500/20', text: 'text-amber-400' },
 }
 
 const inputClass = 'w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500'
@@ -51,6 +52,7 @@ export default function QuoteDetailPage() {
   // Adresse pré-remplie dans l'envoi au client
   const [projects, setProjects] = useState<Project[]>([])
   const [saving, setSaving] = useState(false)
+  const [pdfOpen, setPdfOpen] = useState(false)
 
   // Fetch quote data (for edit mode)
   const fetchQuote = useCallback(async () => {
@@ -142,7 +144,7 @@ export default function QuoteDetailPage() {
     setItems([
       ...items,
       {
-        description: gridItem.label + ' \u00b7 ' + gridItem.description,
+        description: gridItem.label + ' · ' + gridItem.description,
         quantity: 1,
         unit_price: Math.round((gridItem.min + gridItem.max) / 2),
         position: items.length,
@@ -309,7 +311,7 @@ export default function QuoteDetailPage() {
               disabled={saving}
               className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
             >
-              Marquer comme envoy\u00e9
+              Marquer comme envoyé
             </button>
           )}
           {status === 'sent' && (
@@ -318,7 +320,7 @@ export default function QuoteDetailPage() {
               disabled={saving}
               className="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
             >
-              Marquer comme accept\u00e9
+              Marquer comme accepté
             </button>
           )}
           {status === 'accepted' && (
@@ -331,7 +333,7 @@ export default function QuoteDetailPage() {
             </button>
           )}
           <button
-            onClick={() => window.print()}
+            onClick={() => setPdfOpen(true)}
             className="px-4 py-2 text-sm bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors"
           >
             Imprimer / PDF
@@ -354,7 +356,7 @@ export default function QuoteDetailPage() {
                   onChange={(e) => setClientId(e.target.value || null)}
                   className={inputClass}
                 >
-                  <option value="">-- S\u00e9lectionner un client --</option>
+                  <option value="">-- Sélectionner un client --</option>
                   {clients.map((client) => (
                     <option key={client.id} value={client.id}>
                       {client.name}
@@ -435,7 +437,7 @@ export default function QuoteDetailPage() {
                 <thead>
                   <tr className="border-b border-gray-700">
                     <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Quantit\u00e9</th>
+                    <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Quantité</th>
                     <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-28">Prix unitaire</th>
                     <th className="text-right pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-28">Total</th>
                     <th className="pb-2 w-10"></th>
@@ -524,7 +526,7 @@ export default function QuoteDetailPage() {
         <div className="lg:col-span-1">
           {/* Validity */}
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6">
-            <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Validit\u00e9</h2>
+            <h2 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Validité</h2>
             <div>
               <label className="block text-sm text-gray-400 mb-1">Valable jusqu'au</label>
               <input
@@ -582,7 +584,7 @@ export default function QuoteDetailPage() {
             disabled={saving}
             className="px-5 py-2.5 text-sm bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
           >
-            Marquer comme envoy\u00e9
+            Marquer comme envoyé
           </button>
         )}
         {status === 'sent' && (
@@ -591,7 +593,7 @@ export default function QuoteDetailPage() {
             disabled={saving}
             className="px-5 py-2.5 text-sm bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
           >
-            Marquer comme accept\u00e9
+            Marquer comme accepté
           </button>
         )}
         {status === 'accepted' && (
@@ -604,7 +606,7 @@ export default function QuoteDetailPage() {
           </button>
         )}
         <button
-          onClick={() => window.print()}
+          onClick={() => setPdfOpen(true)}
           className="px-5 py-2.5 text-sm bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors"
         >
           Imprimer / PDF
@@ -627,6 +629,23 @@ export default function QuoteDetailPage() {
         <div className="print:hidden mt-6">
           <CommentThread entityType="quote" entityId={id} title="Discussion interne" />
         </div>
+      )}
+    
+      {pdfOpen && (
+        <DocumentPDF
+          type="quote"
+          number={quoteNumber}
+          date={new Date().toISOString()}
+          validUntil={validUntil || null}
+          title={title}
+          description={description || null}
+          client={clients.find(c => c.id === clientId) ?? null}
+          items={items.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price }))}
+          total={items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0)}
+          terms={terms || null}
+          notes={notes || null}
+          onClose={() => setPdfOpen(false)}
+        />
       )}
     </div>
   )

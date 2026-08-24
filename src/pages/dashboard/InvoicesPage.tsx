@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { format, isPast, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
-import { formatCurrency, calculateCharges } from '../../lib/business'
+import { formatCurrency } from '../../lib/business'
+import { useTaxRegimes } from '../../hooks/useTaxRegimes'
+import { isMicro } from '../../lib/tax'
 import type { Invoice, InvoiceStatus } from '../../types/database'
 
 const STATUS_BADGE: Record<InvoiceStatus, { label: string; bg: string; text: string }> = {
@@ -16,6 +18,7 @@ const STATUS_BADGE: Record<InvoiceStatus, { label: string; bg: string; text: str
 }
 
 export default function InvoicesPage() {
+  const { activeRegime } = useTaxRegimes()
   const navigate = useNavigate()
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [filterStatus, setFilterStatus] = useState<InvoiceStatus | ''>('')
@@ -53,7 +56,10 @@ export default function InvoicesPage() {
   const caEncaisse = invoices
     .filter(inv => inv.paid_at && inv.paid_at >= currentMonthStart && inv.paid_at <= currentMonthEnd)
     .reduce((sum, inv) => sum + inv.paid_amount, 0)
-  const charges = calculateCharges(caEncaisse)
+  // Taux du statut en vigueur plutôt qu'une constante du code
+  const taxParams = activeRegime && isMicro(activeRegime.params) ? activeRegime.params : null
+  const chargeRate = (taxParams?.social_rate ?? 0.212) + (taxParams?.training_rate ?? 0.001)
+  const charges = { totalCharges: caEncaisse * chargeRate, net: caEncaisse * (1 - chargeRate) }
 
   // Helpers
   const isOverdue = (inv: Invoice) =>

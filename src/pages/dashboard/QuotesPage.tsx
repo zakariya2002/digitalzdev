@@ -36,7 +36,7 @@ export default function QuotesPage() {
       .select('*, client:clients(id, name)')
       .order('created_at', { ascending: false })
     if (error) console.error('Fetch quotes error:', error)
-    if (data) setQuotes(data as Quote[])
+    if (data) setQuotes(data as unknown as Quote[])
   }, [])
 
   useEffect(() => { fetchAll() }, [fetchAll])

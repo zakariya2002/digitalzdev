@@ -297,6 +297,11 @@ export interface Client {
   next_follow_up_at: string | null
   call_count: number
   sms_count: number
+  legal_form: string | null
+  share_capital: string | null
+  siren: string | null
+  representative: string | null
+  address: string | null
   created_at: string
 }
 

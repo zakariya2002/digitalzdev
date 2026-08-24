@@ -89,9 +89,6 @@
   }
 
   @media print {
-    body * { visibility: hidden; }
-    .print-area, .print-area * { visibility: visible; }
-    .print-area { position: absolute; left: 0; top: 0; width: 100%; }
     .no-print { display: none !important; }
   }
 
@@ -103,4 +100,147 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/* =========================================================
+   Devis et factures imprimés
+   Rendu identique à l'écran et sur papier : mêmes couleurs,
+   mêmes marges, mêmes ruptures de page.
+   ========================================================= */
+
+.doc-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: auto;
+  background: #e7e4dd;
+}
+
+.doc-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+  background: #1c1c1a;
+  color: #f5f2ec;
+}
+.doc-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: #3a3a37;
+  color: #f5f2ec;
+  transition: background .15s;
+}
+.doc-btn:hover { background: #4a4a46; }
+.doc-btn-primary { background: #2563eb; }
+.doc-btn-primary:hover { background: #1d4ed8; }
+.doc-hint { font-size: 11px; color: #a8a49c; }
+
+.doc-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 24px auto;
+  padding: 22mm 20mm 18mm;
+  background: #f5f2ec;
+  color: #2b2b2b;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, .18);
+}
+
+/* --- En-tête --- */
+.doc-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
+.doc-logo { width: 58px; height: 58px; object-fit: contain; border: 1px solid #d8d3c8; border-radius: 3px; background: #fff; }
+.doc-head-right { text-align: right; }
+.doc-title { font-size: 40px; font-weight: 300; letter-spacing: .5px; color: #3a3a37; line-height: 1; margin-bottom: 8px; }
+.doc-meta { font-size: 10.5px; color: #8a857c; }
+
+/* --- Parties --- */
+.doc-parties { margin-top: 14px; }
+.doc-label { font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: #a8a29a; margin-bottom: 3px; }
+.doc-label-spaced { margin-top: 16px; }
+.doc-line { font-size: 11px; color: #3a3a37; }
+.doc-line-strong { font-size: 13px; color: #2b2b2b; }
+
+.doc-rule { border: 0; border-top: 1px solid #ddd8cd; margin: 22px 0 16px; }
+.doc-rule-signature { margin: 26px 0 16px; }
+
+/* --- Objet --- */
+.doc-object { margin-bottom: 20px; }
+.doc-object-title { font-size: 16px; font-weight: 400; color: #2b2b2b; margin: 2px 0 6px; }
+.doc-object-text { font-size: 11px; color: #8a857c; max-width: 62ch; }
+.doc-object-duration { font-size: 11px; color: #3a3a37; margin-top: 10px; }
+
+/* --- Lignes --- */
+.doc-table { width: 100%; border-collapse: collapse; }
+.doc-th {
+  background: #1c1c1a; color: #f5f2ec;
+  font-size: 9px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+  padding: 9px 14px; text-align: left;
+}
+.doc-th-right { text-align: right; }
+.doc-row-alt { background: #eeeae1; }
+.doc-td { padding: 12px 14px; vertical-align: top; }
+.doc-td-amount { text-align: right; white-space: nowrap; font-size: 12px; color: #2b2b2b; }
+.doc-item-title { font-size: 12.5px; color: #2b2b2b; }
+.doc-item-qty { color: #8a857c; font-size: 11px; }
+.doc-item-lead { font-size: 10.5px; color: #8a857c; margin-top: 3px; max-width: 62ch; }
+.doc-bullets { margin: 6px 0 0; padding: 0; list-style: none; }
+.doc-bullets li { font-size: 10.5px; color: #3a3a37; padding-left: 12px; text-indent: -12px; margin-top: 3px; max-width: 64ch; }
+.doc-bullets li::before { content: "· "; color: #6b6862; }
+
+/* --- Total --- */
+.doc-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  background: #1c1c1a; color: #f5f2ec;
+  padding: 12px 14px; margin-top: 22px;
+}
+.doc-total-label { font-size: 13px; letter-spacing: .04em; }
+.doc-total-value { font-size: 15px; font-weight: 500; }
+.doc-total-note { text-align: right; font-size: 10px; color: #8a857c; margin-top: 6px; }
+
+/* --- Blocs de texte --- */
+.doc-block { margin-top: 24px; }
+.doc-block-title { font-size: 13px; font-weight: 400; color: #2b2b2b; margin-bottom: 8px; }
+.doc-block-text { font-size: 10.5px; color: #3a3a37; white-space: pre-wrap; max-width: 68ch; }
+.doc-terms { margin-top: 26px; }
+.doc-term { margin-bottom: 12px; }
+.doc-term-label { font-size: 10.5px; color: #6b6862; }
+.doc-term-text { font-size: 10.5px; color: #3a3a37; max-width: 72ch; }
+
+/* --- Signatures --- */
+.doc-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.doc-sign-title { font-size: 12px; color: #3a3a37; margin-bottom: 8px; }
+.doc-sign-hint { font-size: 10.5px; color: #a8a29a; margin-top: 12px; }
+.doc-sign-hint-spaced { margin-top: 18px; }
+
+/* --- Impression --- */
+@page { size: A4; margin: 0; }
+
+@media print {
+  html, body { background: #f5f2ec !important; }
+  .doc-root { position: static; overflow: visible; background: #f5f2ec; }
+  .doc-page {
+    width: auto; min-height: auto; margin: 0; box-shadow: none;
+    padding: 18mm 18mm 14mm;
+  }
+  .doc-toolbar, .no-print { display: none !important; }
+
+  /* Les aplats noirs et les fonds alternés doivent survivre à l'impression */
+  .doc-th, .doc-total, .doc-row-alt, .doc-page, .doc-logo {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Une prestation ne doit pas être coupée entre deux pages */
+  .doc-row { break-inside: avoid; page-break-inside: avoid; }
+  .doc-total, .doc-signatures, .doc-term { break-inside: avoid; page-break-inside: avoid; }
+  .doc-table thead { display: table-header-group; }
 }
