@@ -175,7 +175,7 @@ export default function InvoiceDetailPage() {
     setItems([
       ...items,
       {
-        description: gridItem.label + ' \u2014 ' + gridItem.description,
+        description: gridItem.label + ' \u00b7 ' + gridItem.description,
         quantity: 1,
         unit_price: Math.round((gridItem.min + gridItem.max) / 2),
         position: items.length,

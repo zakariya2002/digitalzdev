@@ -271,7 +271,7 @@ export default function ProposalDetailPage() {
         await supabase.from('quote_items').insert({
           quote_id: quote.id,
           description:
-            title + (projectType ? ' \u2014 ' + TYPE_LABELS[projectType] : ''),
+            title + (projectType ? ' \u00b7 ' + TYPE_LABELS[projectType] : ''),
           quantity: 1,
           unit_price: parseFloat(estimatedAmount),
           position: 0,

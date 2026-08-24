@@ -77,7 +77,7 @@ export default function Footer() {
 
         <div className="mt-12 pt-8 border-t border-surface-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-text-muted text-sm">
-            Digitalz Dev &copy; {new Date().getFullYear()} &mdash; Tous droits
+            Digitalz Dev &copy; {new Date().getFullYear()} &middot; Tous droits
             réservés
           </p>
           <div className="flex items-center gap-6">
