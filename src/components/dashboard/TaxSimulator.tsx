@@ -80,6 +80,10 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
     })
   }, [amount, expenses, revenueToDate, liberatory, marginalRate, salaryShare, annual, visibleRegimes, eurToDzd])
 
+  /** Contrepartie en euros d'un montant exprimé dans une autre monnaie. */
+  const inEur = (amount: number, currency: string) =>
+    currency === 'EUR' || !eurToDzd ? null : formatAmount(amount / eurToDzd, 'EUR')
+
   const hasCorporate = results.some(r => !isMicro(r.regime.params))
   const inputClass = 'w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500'
 
@@ -236,13 +240,20 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
                       {line.label}
                       {line.hint && <span className="block text-[10px] text-gray-600">{line.hint}</span>}
                     </span>
-                    <span className={`tabular-nums flex-shrink-0 ${
-                      line.kind === 'net' ? 'text-green-400 font-medium'
-                        : line.kind === 'info' ? 'text-gray-500'
-                        : 'text-amber-400'
-                    }`}>
-                      {line.kind === 'charge' || line.kind === 'tax' ? '− ' : ''}
-                      {formatAmount(line.amount, result.currency)}
+                    <span className="flex-shrink-0 text-right">
+                      <span className={`tabular-nums block ${
+                        line.kind === 'net' ? 'text-green-400 font-medium'
+                          : line.kind === 'info' ? 'text-gray-500'
+                          : 'text-amber-400'
+                      }`}>
+                        {line.kind === 'charge' || line.kind === 'tax' ? '− ' : ''}
+                        {formatAmount(line.amount, result.currency)}
+                      </span>
+                      {inEur(line.amount, result.currency) && (
+                        <span className="block text-[10px] text-gray-600 tabular-nums">
+                          soit {inEur(line.amount, result.currency)}
+                        </span>
+                      )}
                     </span>
                   </div>
                 ))}
@@ -254,6 +265,11 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
                   <p className="text-lg font-bold text-green-400 tabular-nums">
                     {formatAmount(result.net, result.currency)}
                   </p>
+                  {inEur(result.net, result.currency) && (
+                    <p className="text-xs text-green-400/70 tabular-nums">
+                      soit {inEur(result.net, result.currency)}
+                    </p>
+                  )}
                   <p className="text-[11px] text-gray-500 tabular-nums">
                     {Math.round(result.netRate * 100)} % du montant facturé
                   </p>
