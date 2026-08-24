@@ -152,8 +152,10 @@ export default function KanbanPage() {
       const { error: e } = await supabase.from('projects').update(data).eq('id', editingProject.id)
       if (e) setError("Le projet n'a pas pu être modifié.")
     } else {
-      const { error: e } = await supabase.from('projects').insert(data)
+      // Un projet neuf part avec la liste des contenus à demander au client
+      const { data: created, error: e } = await supabase.from('projects').insert(data).select('id').single()
       if (e) setError("Le projet n'a pas pu être créé.")
+      else if (created) await supabase.rpc('seed_content_requests', { p_project: created.id })
     }
     setEditingProject(null)
     fetchProjects()

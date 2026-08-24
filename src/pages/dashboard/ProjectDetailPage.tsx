@@ -12,6 +12,7 @@ import MilestonesPanel from '../../components/dashboard/MilestonesPanel'
 import AcceptanceChecklist from '../../components/dashboard/AcceptanceChecklist'
 import ProfitabilityCard from '../../components/dashboard/ProfitabilityCard'
 import ProjectModal from '../../components/dashboard/ProjectModal'
+import ContentRequestsPanel from '../../components/dashboard/ContentRequestsPanel'
 import ProjectFilesPanel from '../../components/dashboard/ProjectFilesPanel'
 import EnvironmentsPanel from '../../components/dashboard/EnvironmentsPanel'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
@@ -212,6 +213,7 @@ export default function ProjectDetailPage() {
   const tabs = [
     { key: 'overview', label: "Vue d'ensemble" },
     { key: 'tasks', label: 'Tâches' },
+    { key: 'contents', label: 'Contenus client' },
     { key: 'milestones', label: 'Jalons' },
     { key: 'acceptance', label: 'Recette' },
     { key: 'discussion', label: 'Discussion' },
@@ -538,6 +540,8 @@ export default function ProjectDetailPage() {
       {activeTab === 'discussion' && id && (
         <CommentThread entityType="project" entityId={id} title="Discussion du projet" />
       )}
+
+      {activeTab === 'contents' && id && <ContentRequestsPanel projectId={id} />}
 
       {activeTab === 'milestones' && id && <MilestonesPanel projectId={id} />}
 

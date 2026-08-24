@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { BUSINESS, formatCurrency } from '../lib/business'
+import ClientContentSection, { type ClientContentItem } from '../components/ClientContentSection'
 
 const FUNCTION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/client-portal`
 
@@ -40,6 +41,7 @@ interface PortalPayload {
   response: 'accepted' | 'rejected' | null
   document?: DocumentPayload
   project?: ProjectPayload
+  contents?: ClientContentItem[]
   error?: string
 }
 
@@ -225,6 +227,15 @@ export default function ClientPortal() {
               </div>
             )}
           </>
+        )}
+
+        {project && data?.contents && (
+          <ClientContentSection
+            items={data.contents}
+            functionUrl={FUNCTION_URL}
+            token={token || ''}
+            onChanged={load}
+          />
         )}
 
         {/* Réponse du client */}

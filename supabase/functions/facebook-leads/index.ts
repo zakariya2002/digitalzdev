@@ -116,6 +116,10 @@ Deno.serve(async (req) => {
       }
 
       console.log("Lead inserted:", data.id, clientData.name);
+
+      // Envoi notification email (Resend)
+      await sendNewLeadEmail(clientData, extraFields);
+
       return jsonResponse({ success: true, id: data.id, name: clientData.name });
     } catch (error) {
       console.error("Error processing lead:", error);
@@ -164,5 +168,63 @@ async function processNativeLead(leadgenId: string, accessToken: string) {
     console.error("Supabase insert error:", error);
   } else {
     console.log("Native lead inserted:", clientData.name);
+    await sendNewLeadEmail(clientData, []);
+  }
+}
+
+// Envoi d'une notification email via Resend
+async function sendNewLeadEmail(
+  client: { name: string; email: string | null; phone: string | null; notes?: string },
+  extraFields: string[]
+) {
+  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+  const NOTIFICATION_EMAIL = Deno.env.get("NOTIFICATION_EMAIL") || "zakariyanebbache@gmail.com";
+
+  if (!RESEND_API_KEY) {
+    console.warn("RESEND_API_KEY not set — skipping email notification");
+    return;
+  }
+
+  const extraHtml = extraFields.length > 0
+    ? `<h3 style="color:#666;font-size:14px;margin-top:16px;">Informations du formulaire</h3><ul>${extraFields.map(f => `<li>${f}</li>`).join("")}</ul>`
+    : "";
+
+  const html = `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:20px;">
+      <h2 style="color:#2563eb;">Nouveau lead Facebook</h2>
+      <p>Un nouveau prospect vient d'arriver depuis Facebook Ads :</p>
+      <table style="border-collapse:collapse;width:100%;margin-top:16px;">
+        <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;width:120px;">Nom</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.name}</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;">Email</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.email || "—"}</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;">Téléphone</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.phone || "—"}</td></tr>
+      </table>
+      ${extraHtml}
+      <p style="margin-top:24px;">
+        <a href="https://digitalzdev.com/dashboard/clients" style="display:inline-block;padding:10px 20px;background:#2563eb;color:white;text-decoration:none;border-radius:8px;">Voir dans le dashboard</a>
+      </p>
+    </div>
+  `;
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Digitalz Dev <onboarding@resend.dev>",
+        to: [NOTIFICATION_EMAIL],
+        subject: `Nouveau lead : ${client.name}`,
+        html,
+      }),
+    });
+    if (!res.ok) {
+      console.error("Resend error:", await res.text());
+    } else {
+      console.log("Email sent to", NOTIFICATION_EMAIL);
+    }
+  } catch (err) {
+    console.error("Email send failed:", err);
   }
 }

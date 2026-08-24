@@ -127,6 +127,33 @@ export interface RevenueLedgerEntry {
   source: 'payment' | 'manual'
 }
 
+
+// === CONTENUS ATTENDUS DU CLIENT ===
+
+export type ContentKind = 'file' | 'text' | 'both'
+export type ContentCategory = 'identite' | 'contenu' | 'media' | 'juridique' | 'technique' | 'autre'
+export type ContentStatus = 'pending' | 'received' | 'validated' | 'rejected'
+
+export interface ContentRequest {
+  id: string
+  project_id: string
+  label: string
+  description: string | null
+  kind: ContentKind
+  category: ContentCategory
+  is_required: boolean
+  status: ContentStatus
+  response_text: string | null
+  review_note: string | null
+  due_date: string | null
+  position: number
+  received_at: string | null
+  validated_at: string | null
+  validated_by: string | null
+  created_at: string
+  updated_at: string
+}
+
 export type ProjectType = 'landing' | 'vitrine' | 'ecommerce' | 'custom' | 'mobile' | 'maintenance' | 'audit' | 'other'
 export type ProjectStatus = 'briefing' | 'design' | 'development' | 'review' | 'delivered' | 'active' | 'archived'
 
@@ -481,6 +508,9 @@ export interface ProjectFile {
   size_bytes: number | null
   mime_type: string | null
   uploaded_by: string | null
+  content_request_id: string | null
+  uploaded_by_client: boolean
+  client_name: string | null
   created_at: string
 }
 

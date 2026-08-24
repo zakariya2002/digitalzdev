@@ -445,6 +445,114 @@ export type Database = {
           },
         ]
       }
+      content_requests: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          is_required: boolean
+          kind: string
+          label: string
+          position: number
+          project_id: string
+          received_at: string | null
+          response_text: string | null
+          review_note: string | null
+          status: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_required?: boolean
+          kind?: string
+          label: string
+          position?: number
+          project_id: string
+          received_at?: string | null
+          response_text?: string | null
+          review_note?: string | null
+          status?: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          is_required?: boolean
+          kind?: string
+          label?: string
+          position?: number
+          project_id?: string
+          received_at?: string | null
+          response_text?: string | null
+          review_note?: string | null
+          status?: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_requests_validated_by_fkey"
+            columns: ["validated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_templates: {
+        Row: {
+          category: string
+          description: string | null
+          id: string
+          is_required: boolean
+          kind: string
+          label: string
+          position: number
+          project_type: string
+        }
+        Insert: {
+          category?: string
+          description?: string | null
+          id?: string
+          is_required?: boolean
+          kind?: string
+          label: string
+          position?: number
+          project_type: string
+        }
+        Update: {
+          category?: string
+          description?: string | null
+          id?: string
+          is_required?: boolean
+          kind?: string
+          label?: string
+          position?: number
+          project_type?: string
+        }
+        Relationships: []
+      }
       conversation_members: {
         Row: {
           conversation_id: string
@@ -958,6 +1066,8 @@ export type Database = {
       }
       project_files: {
         Row: {
+          client_name: string | null
+          content_request_id: string | null
           created_at: string
           file_type: string
           id: string
@@ -967,9 +1077,12 @@ export type Database = {
           size_bytes: number | null
           storage_path: string | null
           uploaded_by: string | null
+          uploaded_by_client: boolean
           url: string
         }
         Insert: {
+          client_name?: string | null
+          content_request_id?: string | null
           created_at?: string
           file_type?: string
           id?: string
@@ -979,9 +1092,12 @@ export type Database = {
           size_bytes?: number | null
           storage_path?: string | null
           uploaded_by?: string | null
+          uploaded_by_client?: boolean
           url: string
         }
         Update: {
+          client_name?: string | null
+          content_request_id?: string | null
           created_at?: string
           file_type?: string
           id?: string
@@ -991,9 +1107,17 @@ export type Database = {
           size_bytes?: number | null
           storage_path?: string | null
           uploaded_by?: string | null
+          uploaded_by_client?: boolean
           url?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "project_files_content_request_id_fkey"
+            columns: ["content_request_id"]
+            isOneToOne: false
+            referencedRelation: "content_requests"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "project_files_project_id_fkey"
             columns: ["project_id"]
@@ -1940,6 +2064,7 @@ export type Database = {
       }
       refresh_milestone_states: { Args: never; Returns: number }
       run_automation_rules: { Args: never; Returns: number }
+      seed_content_requests: { Args: { p_project: string }; Returns: number }
       share_link_is_valid: {
         Args: { l: Database["public"]["Tables"]["share_links"]["Row"] }
         Returns: boolean
