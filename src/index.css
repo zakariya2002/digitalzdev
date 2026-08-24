@@ -226,6 +226,10 @@
 
 @media print {
   html, body { background: #f5f2ec !important; }
+
+  /* Seul le document part à l'impression : le back-office reste à l'écran */
+  body.doc-printing > #root { display: none !important; }
+
   .doc-root { position: static; overflow: visible; background: #f5f2ec; }
   .doc-page {
     width: auto; min-height: auto; margin: 0; box-shadow: none;

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
@@ -87,6 +88,12 @@ export default function DocumentPDF({
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  // Le document s'imprime seul : le back-office est écarté de la page papier.
+  useEffect(() => {
+    document.body.classList.add('doc-printing')
+    return () => { document.body.classList.remove('doc-printing') }
+  }, [])
+
   useEffect(() => {
     supabase.from('company_settings').select('*').maybeSingle()
       .then(({ data }) => setCompany((data || null) as unknown as Company | null))
@@ -113,7 +120,7 @@ export default function DocumentPDF({
     { label: 'Propriété intellectuelle', text: company?.ip_terms },
   ].filter(c => c.text)
 
-  return (
+  return createPortal(
     <div className="doc-root" id="print-area" tabIndex={-1}>
       <div className="no-print doc-toolbar">
         <button onClick={() => window.print()} className="doc-btn doc-btn-primary">Imprimer</button>
@@ -281,6 +288,7 @@ export default function DocumentPDF({
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

@@ -104,6 +104,45 @@ for (const route of routes) {
   host.remove()
 }
 
+if (SCENARIO === 'print-document') {
+  const route = process.env.DOC_ROUTE
+  dom.window.history.pushState({}, '', route)
+  const host = dom.window.document.createElement('div')
+  host.id = 'root'
+  dom.window.document.body.appendChild(host)
+  mount(host, errors)
+  await wait(4000)
+
+  const step = (n, ok, d = '') => { console.log(`  ${ok ? '✓' : '✗'} ${n}${!ok && d ? ' — ' + d : ''}`); if (!ok) failures++ }
+
+  const btn = findByText(host, 'button', 'Imprimer')
+  step('le bouton d\'impression est présent', !!btn)
+  if (btn) { click(btn); await wait(2500) }
+
+  // L'aperçu est rendu hors du back-office, directement sous body
+  const preview = dom.window.document.querySelector('.doc-root')
+  step('l\'aperçu s\'ouvre hors du back-office', !!preview && !host.contains(preview))
+  step('le back-office est marqué comme mis de côté', dom.window.document.body.classList.contains('doc-printing'))
+
+  if (preview) {
+    const t = preview.textContent.replace(/\s+/g, ' ')
+    for (const [label, needle] of [
+      ['le type de document', /DEVIS|FACTURE/],
+      ['le numéro', /(DEVIS|FACT)-\d{4}-\d+/],
+      ['l\'émetteur', /Zakariya|Digital/],
+      ['le bloc Émetteur', /Émetteur/],
+      ['l\'en-tête du tableau', /Désignation/],
+      ['le total', /Total HT/],
+      ['un montant en euros', /\d\s?€/],
+    ]) step(label, needle.test(t), t.slice(0, 120))
+    const lines = preview.querySelectorAll('.doc-row').length
+    step('les lignes de prestation sont présentes', lines > 0, `${lines} ligne(s)`)
+    console.log('\n  --- début du document ---')
+    console.log('  ' + preview.textContent.replace(/\s+/g, ' ').trim().slice(0, 1400))
+  }
+  dom.window.document.body.classList.remove('doc-printing')
+}
+
 if (SCENARIO === 'send-message') {
   errors.length = 0
   dom.window.history.pushState({}, '', '/dashboard/messages')
