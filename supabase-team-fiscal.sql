@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS company_settings (
 INSERT INTO tax_regimes (id, label, country, currency, fiscal_year, position, params, notes, source_note) VALUES
 (
   'fr_micro_bic',
-  'Auto-entreprise — prestations de services (BIC)',
+  'Auto-entreprise, prestations de services (BIC)',
   'FR', 'EUR', 2026, 1,
   '{
      "kind": "micro",
@@ -62,11 +62,11 @@ INSERT INTO tax_regimes (id, label, country, currency, fiscal_year, position, pa
      "vat_rate": 0.20
    }'::jsonb,
   'Activité commerciale de prestation de services : développement, intégration, maintenance. Cotisations calculées sur le chiffre d''affaires encaissé, sans déduction de charges. Pas de récupération de TVA tant que la franchise s''applique.',
-  'Taux à confirmer chaque janvier sur urssaf.fr — jeu saisi pour 2026.'
+  'Taux à confirmer chaque janvier sur urssaf.fr : jeu saisi pour 2026.'
 ),
 (
   'fr_micro_bnc',
-  'Auto-entreprise — profession libérale (BNC)',
+  'Auto-entreprise, profession libérale (BNC)',
   'FR', 'EUR', 2026, 2,
   '{
      "kind": "micro",
@@ -79,11 +79,11 @@ INSERT INTO tax_regimes (id, label, country, currency, fiscal_year, position, pa
      "vat_rate": 0.20
    }'::jsonb,
   'Activité libérale non réglementée (conseil, audit). Le taux de cotisations des BNC augmente par paliers depuis 2024 : vérifier le palier de l''année en cours.',
-  'Taux à confirmer chaque janvier sur urssaf.fr — jeu saisi pour 2026.'
+  'Taux à confirmer chaque janvier sur urssaf.fr : jeu saisi pour 2026.'
 ),
 (
   'fr_sasu',
-  'SASU — président assimilé salarié',
+  'SASU, président assimilé salarié',
   'FR', 'EUR', 2026, 3,
   '{
      "kind": "corporate",
@@ -98,11 +98,11 @@ INSERT INTO tax_regimes (id, label, country, currency, fiscal_year, position, pa
      "vat_rate": 0.20
    }'::jsonb,
   'Les cotisations ne portent que sur la rémunération versée, et les charges réelles sont déductibles. La TVA est facturée puis récupérée. Compter un expert-comptable et le dépôt des comptes chaque année.',
-  'Taux de cotisations approchés pour un mandataire sans allègement général — à ajuster avec un expert-comptable.'
+  'Taux de cotisations approchés pour un mandataire sans allègement général, à ajuster avec un expert-comptable.'
 ),
 (
   'dz_auto_entrepreneur',
-  'Auto-entrepreneur — Algérie',
+  'Auto-entrepreneur, Algérie',
   'DZ', 'DZD', 2026, 4,
   '{
      "kind": "micro",
@@ -116,7 +116,7 @@ INSERT INTO tax_regimes (id, label, country, currency, fiscal_year, position, pa
      "vat_rate": 0.19
    }'::jsonb,
   'Statut créé par la loi 22-23. Cotisation sociale CASNOS assise sur le revenu déclaré avec une base minimale annuelle, et contribution fiscale unique assise sur le chiffre d''affaires. Montants exprimés en dinars.',
-  'Paramètres à confirmer auprès de l''ANAE et de la CASNOS — les barèmes algériens évoluent et ma source date de 2026.'
+  'Paramètres à confirmer auprès de l''ANAE et de la CASNOS : les barèmes algériens évoluent et ma source date de 2026.'
 )
 ON CONFLICT (id) DO UPDATE SET
   label = EXCLUDED.label, params = EXCLUDED.params, notes = EXCLUDED.notes,

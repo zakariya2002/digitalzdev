@@ -1,5 +1,5 @@
 -- =============================================
--- UPGRADE BACKOFFICE — 4 MODULES
+-- UPGRADE BACKOFFICE : 4 MODULES
 -- À exécuter dans Supabase SQL Editor
 -- =============================================
 
@@ -234,7 +234,7 @@ INSERT INTO automation_rules (name, trigger_type, trigger_delay_days, action_typ
   ('Relance devis J+5', 'quote_no_response', 5, 'notification', 'Le devis {{quote_number}} envoyé à {{client_name}} attend une réponse depuis 5 jours'),
   ('Relance devis J+10', 'quote_no_response', 10, 'notification', 'URGENT : Le devis {{quote_number}} est sans réponse depuis 10 jours'),
   ('Facture impayée J+15', 'invoice_overdue', 15, 'notification', 'La facture {{invoice_number}} de {{client_name}} est impayée depuis 15 jours'),
-  ('Facture impayée J+30', 'invoice_overdue', 30, 'notification', 'CRITIQUE : La facture {{invoice_number}} est impayée depuis 30 jours — envisager une mise en demeure'),
+  ('Facture impayée J+30', 'invoice_overdue', 30, 'notification', 'CRITIQUE : La facture {{invoice_number}} est impayée depuis 30 jours, envisager une mise en demeure'),
   ('Rappel follow-up', 'follow_up_due', 0, 'notification', 'Rappel : follow-up prévu aujourd''hui avec {{name}}')
 ON CONFLICT DO NOTHING;
 

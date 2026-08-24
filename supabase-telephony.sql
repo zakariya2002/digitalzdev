@@ -1,5 +1,5 @@
 -- =============================================
--- TABLES TÉLÉPHONIE & SMS — BACKOFFICE DIGITALZ DEV
+-- TABLES TÉLÉPHONIE & SMS · BACKOFFICE DIGITALZ DEV
 -- =============================================
 
 -- Ajouter des colonnes à la table clients existante
@@ -80,7 +80,7 @@ CREATE TRIGGER set_updated_at_sms_templates
 -- Seed : templates SMS par défaut
 INSERT INTO sms_templates (name, body, category) VALUES
   ('relance_j0', 'Bonjour {{prenom}}, c''est Zakariya de Z Digital Dev. J''ai essayé de vous joindre suite à votre demande pour un projet web. N''hésitez pas à me rappeler ou à me dire un créneau qui vous arrange. Bonne journée !', 'relance'),
-  ('relance_j1', 'Bonjour {{prenom}}, je me permets de revenir vers vous concernant votre projet web. Je suis disponible pour en discuter par téléphone ou visio. Zakariya — Z Digital Dev', 'relance'),
-  ('relance_j3', 'Bonjour {{prenom}}, je voulais m''assurer que vous aviez bien reçu mes messages. Si votre projet est toujours d''actualité, je reste disponible. Sinon, bonne continuation ! Zakariya — Z Digital Dev', 'relance'),
-  ('confirmation_rdv', 'Bonjour {{prenom}}, je confirme notre RDV téléphonique le {{date}} à {{heure}}. À très bientôt ! Zakariya — Z Digital Dev', 'confirmation')
+  ('relance_j1', 'Bonjour {{prenom}}, je me permets de revenir vers vous concernant votre projet web. Je suis disponible pour en discuter par téléphone ou visio. Zakariya · Z Digital Dev', 'relance'),
+  ('relance_j3', 'Bonjour {{prenom}}, je voulais m''assurer que vous aviez bien reçu mes messages. Si votre projet est toujours d''actualité, je reste disponible. Sinon, bonne continuation ! Zakariya · Z Digital Dev', 'relance'),
+  ('confirmation_rdv', 'Bonjour {{prenom}}, je confirme notre RDV téléphonique le {{date}} à {{heure}}. À très bientôt ! Zakariya · Z Digital Dev', 'confirmation')
 ON CONFLICT (name) DO NOTHING;

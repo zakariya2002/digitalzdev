@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { supabase } from '../../lib/supabase'
 import { useTaxRegimes } from '../../hooks/useTaxRegimes'
 import { simulate, isMicro, formatAmount, convertFromEur, type SimulationInput } from '../../lib/tax'
 
@@ -27,15 +28,44 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
   const [marginalRate, setMarginalRate] = useState(0.11)
   const [salaryShare, setSalaryShare] = useState(0.5)
   const [revenueToDate, setRevenueToDate] = useState('')
+  const [quotes, setQuotes] = useState<{ id: string; quote_number: string; title: string; total_amount: number }[]>([])
+  const [quoteId, setQuoteId] = useState('')
+  // Statuts retenus pour la comparaison : par défaut, tous
+  const [selectedIds, setSelectedIds] = useState<string[] | null>(null)
   const [annual, setAnnual] = useState(false)
 
   const eurToDzd = Number(settings?.eur_to_dzd) || 145
+
+  useEffect(() => {
+    supabase.from('quotes').select('id, quote_number, title, total_amount')
+      .order('created_at', { ascending: false }).limit(50)
+      .then(({ data }) => setQuotes((data || []) as typeof quotes))
+  }, [])
+
+  const pickQuote = (id: string) => {
+    setQuoteId(id)
+    const quote = quotes.find(q => q.id === id)
+    if (quote) setAmount(String(quote.total_amount))
+  }
+
+  const visibleRegimes = compact && activeRegime
+    ? [activeRegime]
+    : regimes.filter(r => !selectedIds || selectedIds.includes(r.id))
+
+  const toggleRegime = (id: string) => {
+    setSelectedIds(prev => {
+      const current = prev ?? regimes.map(r => r.id)
+      const next = current.includes(id) ? current.filter(x => x !== id) : [...current, id]
+      // On garde toujours au moins un statut affiché
+      return next.length === 0 ? current : next
+    })
+  }
 
   const results = useMemo(() => {
     const eurAmount = parseFloat(amount) || 0
     const eurExpenses = parseFloat(expenses) || 0
     const eurToDate = parseFloat(revenueToDate) || 0
-    const list = compact && activeRegime ? [activeRegime] : regimes
+    const list = visibleRegimes
     return list.map(regime => {
       const input: SimulationInput = {
         revenue: convertFromEur(eurAmount, regime.currency, eurToDzd),
@@ -48,7 +78,7 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
       }
       return simulate(regime, input)
     })
-  }, [amount, expenses, revenueToDate, liberatory, marginalRate, salaryShare, annual, regimes, activeRegime, compact, eurToDzd])
+  }, [amount, expenses, revenueToDate, liberatory, marginalRate, salaryShare, annual, visibleRegimes, eurToDzd])
 
   const hasCorporate = results.some(r => !isMicro(r.regime.params))
   const inputClass = 'w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-blue-500'
@@ -67,6 +97,49 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
       </div>
 
       {error && <p className="text-sm text-red-400 mb-3">{error}</p>}
+
+      {/* Statuts à comparer */}
+      {!compact && regimes.length > 1 && (
+        <div className="mb-4">
+          <p className="text-xs text-gray-400 mb-2">Statuts à comparer</p>
+          <div className="flex flex-wrap gap-2">
+            {regimes.map(regime => {
+              const on = !selectedIds || selectedIds.includes(regime.id)
+              return (
+                <button
+                  key={regime.id}
+                  type="button"
+                  onClick={() => toggleRegime(regime.id)}
+                  className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                    on ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {regime.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Partir d'un devis déjà enregistré */}
+      {!compact && quotes.length > 0 && (
+        <div className="mb-4">
+          <label className="block text-xs text-gray-400 mb-1">Partir d'un devis enregistré</label>
+          <select
+            value={quoteId}
+            onChange={(e) => pickQuote(e.target.value)}
+            className="w-full sm:w-96 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
+          >
+            <option value="">Saisir un montant librement</option>
+            {quotes.map(q => (
+              <option key={q.id} value={q.id}>
+                {q.quote_number} · {q.title} · {q.total_amount.toLocaleString('fr-FR')} €
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Nature du montant : une facture ou une année entière */}
       <div className="flex items-center gap-2 mb-4">

@@ -1,5 +1,5 @@
 -- =============================================
--- PHASE 1 — TRAVAILLER À DEUX
+-- PHASE 1 : TRAVAILLER À DEUX
 -- Profils & rôles · Assignation · Commentaires · Cloisonnement finances
 -- À exécuter dans Supabase SQL Editor
 -- =============================================
@@ -9,7 +9,7 @@
 -- ============================================
 
 -- owner   : accès total, y compris les finances personnelles (URSSAF, plafond, revenus)
--- manager : chefferie de projet — clients, projets, devis, factures, production
+-- manager : chefferie de projet : clients, projets, devis, factures, production
 -- member  : production uniquement
 
 CREATE TABLE IF NOT EXISTS profiles (

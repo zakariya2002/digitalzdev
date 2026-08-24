@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
+import QuoteImportModal from '../../components/dashboard/QuoteImportModal'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import { formatCurrency } from '../../lib/business'
-import type { Quote, QuoteStatus } from '../../types/database'
+import type { Quote, QuoteStatus, Client, Project } from '../../types/database'
 
 const STATUS_BADGE: Record<QuoteStatus, { label: string; bg: string; text: string }> = {
   draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
@@ -19,8 +20,17 @@ export default function QuotesPage() {
   const [quotes, setQuotes] = useState<Quote[]>([])
   const [filterStatus, setFilterStatus] = useState<QuoteStatus | ''>('')
   const [searchQuery, setSearchQuery] = useState('')
+  const [importOpen, setImportOpen] = useState(false)
+  const [clients, setClients] = useState<Client[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
 
   const fetchAll = useCallback(async () => {
+    const [{ data: c }, { data: p }] = await Promise.all([
+      supabase.from('clients').select('*').order('name'),
+      supabase.from('projects').select('*').eq('is_archived', false).order('name'),
+    ])
+    if (c) setClients(c as unknown as Client[])
+    if (p) setProjects(p as unknown as Project[])
     const { data, error } = await supabase
       .from('quotes')
       .select('*, client:clients(id, name)')
@@ -178,6 +188,12 @@ export default function QuotesPage() {
         >
           + Nouveau devis
         </button>
+        <button
+          onClick={() => setImportOpen(true)}
+          className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm font-medium rounded-lg transition-colors"
+        >
+          Importer un devis
+        </button>
       </div>
 
       {/* Table */}
@@ -285,6 +301,14 @@ export default function QuotesPage() {
         </table>
       </div>
       </div>
+    
+      <QuoteImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        clients={clients}
+        projects={projects}
+        onImported={fetchAll}
+      />
     </div>
   )
 }

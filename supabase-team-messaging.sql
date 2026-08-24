@@ -33,7 +33,7 @@ CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id
 CREATE INDEX IF NOT EXISTS idx_conv_members_profile ON conversation_members(profile_id);
 
 -- ============================================
--- APPARTENANCE — sans récursion dans les règles d'accès
+-- APPARTENANCE : sans récursion dans les règles d'accès
 -- ============================================
 
 CREATE OR REPLACE FUNCTION is_conversation_member(conv UUID)
@@ -154,7 +154,7 @@ CREATE TRIGGER on_profile_join_channel
   FOR EACH ROW EXECUTE FUNCTION join_team_channel();
 
 -- ============================================
--- SÉCURITÉ — on ne lit que ses propres conversations
+-- SÉCURITÉ : on ne lit que ses propres conversations
 -- ============================================
 
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
