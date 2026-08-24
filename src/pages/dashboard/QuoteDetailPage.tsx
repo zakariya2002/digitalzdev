@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { format, addDays } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
+import CommentThread from '../../components/dashboard/CommentThread'
 import { formatCurrency, BUSINESS, PRICING_GRID } from '../../lib/business'
 import type { Quote, QuoteItem, Client, Project, QuoteStatus } from '../../types/database'
 
@@ -599,6 +600,12 @@ export default function QuoteDetailPage() {
           Imprimer / PDF
         </button>
       </div>
+    
+      {!isNew && id && (
+        <div className="print:hidden mt-6">
+          <CommentThread entityType="quote" entityId={id} title="Discussion interne" />
+        </div>
+      )}
     </div>
   )
 }

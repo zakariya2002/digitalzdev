@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { useTeam } from '../../contexts/TeamContext'
 import KPIWidgets from '../../components/dashboard/KPIWidgets'
 import MyWeek from '../../components/dashboard/MyWeek'
+import ActivityFeed from '../../components/dashboard/ActivityFeed'
 import RevenueChart from '../../components/dashboard/RevenueChart'
 import TaskStats from '../../components/dashboard/TaskStats'
 import type { Task, Project, Revenue, Client, Quote, Invoice } from '../../types/database'
@@ -180,11 +181,16 @@ export default function DashboardHome() {
         </div>
       </div>
 
-      {isOwner && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <MyWeek tasks={tasks} projects={projects} />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {isOwner && (
+          <div className="lg:col-span-2">
+            <MyWeek tasks={tasks} projects={projects} />
+          </div>
+        )}
+        <div className={isOwner ? '' : 'lg:col-span-3'}>
+          <ActivityFeed title="Activité de l'équipe" limit={15} />
         </div>
-      )}
+      </div>
     </div>
   )
 }

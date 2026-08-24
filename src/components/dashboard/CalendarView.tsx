@@ -5,7 +5,7 @@ import {
   startOfDay, parseISO,
 } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import type { Task, CalendarEvent, Project } from '../../types/database'
+import type { Task, CalendarEvent, Project, Milestone } from '../../types/database'
 
 type ViewMode = 'month' | 'week'
 
@@ -13,7 +13,7 @@ interface CalendarItem {
   id: string
   title: string
   date: Date
-  type: 'task' | 'event'
+  type: 'task' | 'event' | 'milestone'
   color: string
   allDay?: boolean
   time?: string
@@ -24,6 +24,7 @@ interface CalendarViewProps {
   viewMode: ViewMode
   tasks: Task[]
   events: CalendarEvent[]
+  milestones?: Milestone[]
   projects: Project[]
   onChangeDate: (date: Date) => void
   onChangeViewMode: (mode: ViewMode) => void
@@ -32,7 +33,7 @@ interface CalendarViewProps {
 }
 
 export default function CalendarView({
-  currentDate, viewMode, tasks, events, projects, onChangeDate, onChangeViewMode, onClickDay, onClickEvent,
+  currentDate, viewMode, tasks, events, milestones = [], projects, onChangeDate, onChangeViewMode, onClickDay, onClickEvent,
 }: CalendarViewProps) {
   const projectMap = Object.fromEntries(projects.map(p => [p.id, p]))
 
@@ -48,6 +49,14 @@ export default function CalendarView({
         color: projectMap[t.project_id || '']?.color || '#6B7280',
         allDay: true,
       })),
+    ...milestones.map(m => ({
+      id: m.id,
+      title: '\u25C6 ' + m.title,
+      date: parseISO(m.due_date),
+      type: 'milestone' as const,
+      color: m.status === 'reached' ? '#22C55E' : m.status === 'missed' ? '#EF4444' : '#F59E0B',
+      allDay: true,
+    })),
     ...events.map(e => ({
       id: e.id,
       title: e.title,

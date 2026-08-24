@@ -52,6 +52,7 @@ export interface Profile {
   job_title: string | null
   color: string
   is_active: boolean
+  hourly_rate: number | null
   created_at: string
   updated_at: string
 }
@@ -68,6 +69,100 @@ export interface Comment {
   created_at: string
   updated_at: string
   author?: Profile
+}
+
+
+export type NotificationType = 'mention' | 'comment' | 'assignment' | 'activity'
+
+/** Notification persistée, propre à un destinataire. Nommée AppNotification pour ne pas
+ *  entrer en collision avec le type Notification du navigateur. */
+export interface AppNotification {
+  id: string
+  recipient_id: string
+  actor_id: string | null
+  type: NotificationType
+  entity_type: CommentEntity
+  entity_id: string
+  title: string
+  body: string | null
+  link: string | null
+  read_at: string | null
+  created_at: string
+}
+
+export interface ActivityEntry {
+  id: string
+  actor_id: string | null
+  entity_type: CommentEntity | 'comment'
+  entity_id: string
+  project_id: string | null
+  action: string
+  summary: string
+  created_at: string
+}
+
+
+// === PRODUCTION : JALONS, SOUS-TÂCHES, RECETTE, CHRONOMÈTRE ===
+
+export type MilestoneStatus = 'planned' | 'at_risk' | 'reached' | 'missed'
+
+export interface Milestone {
+  id: string
+  project_id: string
+  title: string
+  description: string | null
+  due_date: string
+  status: MilestoneStatus
+  is_client_commitment: boolean
+  reached_at: string | null
+  position: number
+  created_at: string
+  updated_at: string
+}
+
+export interface Subtask {
+  id: string
+  task_id: string
+  title: string
+  is_done: boolean
+  position: number
+  done_at: string | null
+  done_by: string | null
+  created_at: string
+}
+
+export type CheckCategory = 'fonctionnel' | 'design' | 'contenu' | 'technique' | 'seo' | 'legal'
+export type CheckStatus = 'todo' | 'ok' | 'ko'
+
+export interface AcceptanceCheck {
+  id: string
+  project_id: string
+  title: string
+  category: CheckCategory
+  status: CheckStatus
+  note: string | null
+  checked_by: string | null
+  checked_at: string | null
+  position: number
+  created_at: string
+}
+
+export interface ActiveTimer {
+  profile_id: string
+  task_id: string
+  project_id: string | null
+  description: string | null
+  started_at: string
+}
+
+export interface RevenueLedgerEntry {
+  id: string
+  project_id: string | null
+  amount: number
+  description: string
+  month: string
+  occurred_at: string
+  source: 'payment' | 'manual'
 }
 
 export type ProjectType = 'landing' | 'vitrine' | 'ecommerce' | 'custom' | 'mobile' | 'maintenance' | 'audit' | 'other'
@@ -87,6 +182,7 @@ export interface Project {
   end_date: string | null
   project_type: ProjectType | null
   description: string | null
+  hourly_rate: number | null
   created_at: string
   updated_at: string
 }
@@ -112,10 +208,16 @@ export interface ProjectInsert {
 export type TaskStatus = 'todo' | 'in_progress' | 'review' | 'done'
 export type TaskPriority = 'urgent' | 'high' | 'medium' | 'low'
 
+export type TaskKind = 'task' | 'bug'
+export type BugSeverity = 'critical' | 'major' | 'minor'
+
 export interface Task {
   id: string
   project_id: string | null
   assignee_id: string | null
+  kind: TaskKind
+  severity: BugSeverity | null
+  steps_to_reproduce: string | null
   title: string
   description: string | null
   status: TaskStatus
@@ -134,6 +236,9 @@ export interface TaskInsert {
   id?: string
   project_id?: string | null
   assignee_id?: string | null
+  kind?: string
+  severity?: string | null
+  steps_to_reproduce?: string | null
   title: string
   description?: string | null
   status?: string
@@ -395,9 +500,12 @@ export interface TimeEntry {
   id: string
   task_id: string
   project_id: string | null
+  profile_id: string | null
   description: string | null
   hours: number
   date: string
+  started_at: string | null
+  ended_at: string | null
   created_at: string
 }
 

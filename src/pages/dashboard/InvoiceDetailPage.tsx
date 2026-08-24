@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { format, addDays } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
+import CommentThread from '../../components/dashboard/CommentThread'
 import { formatCurrency, BUSINESS, PRICING_GRID, calculateCharges } from '../../lib/business'
 import Modal from '../../components/dashboard/Modal'
 import type { Invoice, InvoiceItem, InvoiceStatus, Payment, PaymentMethod, Client, Project } from '../../types/database'
@@ -736,6 +737,12 @@ export default function InvoiceDetailPage() {
           </div>
         </div>
       </Modal>
+    
+      {!isNew && id && (
+        <div className="print:hidden mt-6">
+          <CommentThread entityType="invoice" entityId={id} title="Discussion interne" />
+        </div>
+      )}
     </div>
   )
 }

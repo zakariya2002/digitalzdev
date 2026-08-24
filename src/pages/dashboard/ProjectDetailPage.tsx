@@ -7,6 +7,10 @@ import { formatCurrency } from '../../lib/business'
 import { useTeam } from '../../contexts/TeamContext'
 import Avatar from '../../components/dashboard/Avatar'
 import CommentThread from '../../components/dashboard/CommentThread'
+import ActivityFeed from '../../components/dashboard/ActivityFeed'
+import MilestonesPanel from '../../components/dashboard/MilestonesPanel'
+import AcceptanceChecklist from '../../components/dashboard/AcceptanceChecklist'
+import ProfitabilityCard from '../../components/dashboard/ProfitabilityCard'
 import Modal from '../../components/dashboard/Modal'
 import type { Project, Task, TimeEntry, ProjectFile, Quote, Invoice, Client } from '../../types/database'
 
@@ -222,7 +226,10 @@ export default function ProjectDetailPage() {
   const tabs = [
     { key: 'overview', label: "Vue d'ensemble" },
     { key: 'tasks', label: 'Tâches' },
+    { key: 'milestones', label: 'Jalons' },
+    { key: 'acceptance', label: 'Recette' },
     { key: 'discussion', label: 'Discussion' },
+    { key: 'activity', label: 'Activité' },
     { key: 'files', label: 'Fichiers' },
     { key: 'financial', label: 'Financier' },
   ]
@@ -341,6 +348,15 @@ export default function ProjectDetailPage() {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Rentabilité */}
+          <div className="mb-6">
+            <ProfitabilityCard
+              project={project}
+              hoursSpent={totalHours}
+              collected={invoices.reduce((sum, inv) => sum + (Number(inv.paid_amount) || 0), 0)}
+            />
           </div>
 
           {/* Description */}
@@ -523,6 +539,14 @@ export default function ProjectDetailPage() {
       {/* ===== Discussion Tab ===== */}
       {activeTab === 'discussion' && id && (
         <CommentThread entityType="project" entityId={id} title="Discussion du projet" />
+      )}
+
+      {activeTab === 'milestones' && id && <MilestonesPanel projectId={id} />}
+
+      {activeTab === 'acceptance' && id && <AcceptanceChecklist projectId={id} />}
+
+      {activeTab === 'activity' && id && (
+        <ActivityFeed projectId={id} title="Journal du projet" limit={50} />
       )}
 
       {activeTab === 'files' && (

@@ -24,7 +24,7 @@ interface KanbanBoardProps {
   tasks: Task[]
   projects: Project[]
   members?: Profile[]
-  onMoveTask: (taskId: string, newStatus: TaskStatus) => void
+  onMoveTask: (taskId: string, newStatus: TaskStatus, newIndex: number) => void
   onClickTask: (task: Task) => void
 }
 
@@ -49,24 +49,33 @@ export default function KanbanBoard({ tasks, projects, members = [], onMoveTask,
     if (!over) return
 
     const taskId = active.id as string
+    const task = tasks.find(t => t.id === taskId)
+    if (!task) return
+
     const overData = over.data.current
-
-    // Dropped on a column
     let newStatus: TaskStatus | undefined
+    let newIndex: number | undefined
+
     if (overData?.type === 'column') {
+      // Déposée dans le vide d'une colonne : elle se place en dernier
       newStatus = overData.status as TaskStatus
-    }
-    // Dropped on a task card — use that card's status
-    if (overData?.type === 'task') {
-      newStatus = (overData.task as Task).status
+      newIndex = tasks.filter(t => t.status === newStatus && t.id !== taskId).length
     }
 
-    if (newStatus) {
-      const task = tasks.find(t => t.id === taskId)
-      if (task && task.status !== newStatus) {
-        onMoveTask(taskId, newStatus)
-      }
+    if (overData?.type === 'task') {
+      // Déposée sur une carte : elle prend sa place, les suivantes descendent
+      const overTask = overData.task as Task
+      newStatus = overTask.status
+      const column = tasks.filter(t => t.status === newStatus && t.id !== taskId)
+      newIndex = Math.max(0, column.findIndex(t => t.id === overTask.id))
     }
+
+    if (newStatus === undefined || newIndex === undefined) return
+
+    const currentIndex = tasks.filter(t => t.status === task.status).findIndex(t => t.id === taskId)
+    if (task.status === newStatus && currentIndex === newIndex) return
+
+    onMoveTask(taskId, newStatus, newIndex)
   }
 
   return (

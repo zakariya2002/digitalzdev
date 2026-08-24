@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { supabase } from '../../lib/supabase'
 import CalendarView from '../../components/dashboard/CalendarView'
 import EventModal from '../../components/dashboard/EventModal'
-import type { Task, CalendarEvent, Project } from '../../types/database'
+import type { Task, CalendarEvent, Project, Milestone } from '../../types/database'
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -11,20 +11,23 @@ export default function CalendarPage() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [events, setEvents] = useState<CalendarEvent[]>([])
   const [projects, setProjects] = useState<Project[]>([])
+  const [milestones, setMilestones] = useState<Milestone[]>([])
 
   const [eventModalOpen, setEventModalOpen] = useState(false)
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null)
   const [selectedDate, setSelectedDate] = useState<string>('')
 
   const fetchAll = useCallback(async () => {
-    const [{ data: p }, { data: t }, { data: e }] = await Promise.all([
+    const [{ data: p }, { data: t }, { data: e }, { data: m }] = await Promise.all([
       supabase.from('projects').select('*').eq('is_archived', false).order('created_at'),
       supabase.from('tasks').select('*').not('deadline', 'is', null),
       supabase.from('events').select('*').order('start_time'),
+      supabase.from('milestones').select('*').order('due_date'),
     ])
     if (p) setProjects(p as Project[])
     if (t) setTasks(t as Task[])
     if (e) setEvents(e as CalendarEvent[])
+    if (m) setMilestones(m as Milestone[])
   }, [])
 
   useEffect(() => { fetchAll() }, [fetchAll])
@@ -90,6 +93,7 @@ export default function CalendarPage() {
           viewMode={viewMode}
           tasks={tasks}
           events={events}
+          milestones={milestones}
           projects={projects}
           onChangeDate={setCurrentDate}
           onChangeViewMode={setViewMode}

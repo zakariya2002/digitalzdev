@@ -8,6 +8,7 @@ import { formatPhone, toE164 } from '../../lib/phone'
 import ClientModal from '../../components/dashboard/ClientModal'
 import SmsComposer from '../../components/dashboard/SmsComposer'
 import LeadTimeline from '../../components/dashboard/LeadTimeline'
+import CommentThread from '../../components/dashboard/CommentThread'
 import CallHistory from '../../components/dashboard/CallHistory'
 import SmsThread from '../../components/dashboard/SmsThread'
 import { formatCurrency } from '../../lib/business'
@@ -21,7 +22,7 @@ const STATUS_BADGE: Record<ClientStatus, { label: string; bg: string; text: stri
   completed: { label: 'Terminé', bg: 'bg-gray-500/20', text: 'text-gray-400' },
 }
 
-type Tab = 'infos' | 'timeline' | 'calls' | 'sms' | 'proposals' | 'quotes' | 'invoices'
+type Tab = 'infos' | 'discussion' | 'timeline' | 'calls' | 'sms' | 'proposals' | 'quotes' | 'invoices'
 
 const QUOTE_STATUS_BADGE: Record<QuoteStatus, { label: string; bg: string; text: string }> = {
   draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
@@ -150,6 +151,7 @@ export default function ClientDetailPage() {
     { key: 'proposals', label: `Propositions (${proposals.length})` },
     { key: 'quotes', label: `Devis (${quotes.length})` },
     { key: 'invoices', label: `Factures (${invoices.length})` },
+    { key: 'discussion', label: 'Discussion' },
     { key: 'timeline', label: 'Timeline' },
     { key: 'calls', label: `Appels (${client.call_count || 0})` },
     { key: 'sms', label: `SMS (${client.sms_count || 0})` },
@@ -382,6 +384,7 @@ export default function ClientDetailPage() {
           </div>
         )}
 
+        {tab === 'discussion' && <CommentThread entityType="client" entityId={client.id} compact />}
         {tab === 'timeline' && <LeadTimeline clientId={client.id} />}
         {tab === 'calls' && <CallHistory clientId={client.id} clientPhone={client.phone} />}
         {tab === 'sms' && (

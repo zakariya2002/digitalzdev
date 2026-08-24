@@ -4,26 +4,33 @@ import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import { formatCurrency, calculateCharges, BUSINESS } from '../../lib/business'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import type { Invoice } from '../../types/database'
+import type { Invoice, RevenueLedgerEntry } from '../../types/database'
 
 export default function FinancesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([])
+  const [ledger, setLedger] = useState<RevenueLedgerEntry[]>([])
+  const [error, setError] = useState<string | null>(null)
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
   const [loading, setLoading] = useState(true)
 
   const fetchInvoices = useCallback(async () => {
     setLoading(true)
-    const { data, error } = await supabase
-      .from('invoices')
-      .select('*')
-      .in('status', ['paid', 'partial', 'sent', 'overdue'])
-      .order('paid_at', { ascending: false })
+    // Le grand livre réunit encaissements de factures et revenus saisis à la main :
+    // une seule source de vérité pour le chiffre d'affaires.
+    const [{ data, error: invoiceError }, { data: led, error: ledgerError }] = await Promise.all([
+      supabase.from('invoices').select('*')
+        .in('status', ['paid', 'partial', 'sent', 'overdue'])
+        .order('paid_at', { ascending: false }),
+      supabase.from('revenue_ledger').select('*').order('occurred_at', { ascending: false }),
+    ])
 
-    if (error) {
-      console.error('Error fetching invoices:', error)
+    if (invoiceError || ledgerError) {
+      setError("Une partie des données financières n'a pas pu être chargée.")
     } else {
-      setInvoices((data || []) as Invoice[])
+      setError(null)
     }
+    setInvoices((data || []) as Invoice[])
+    setLedger((led || []) as RevenueLedgerEntry[])
     setLoading(false)
   }, [])
 
@@ -39,26 +46,16 @@ export default function FinancesPage() {
   const yearStart = startOfYear(now)
   const yearEnd = endOfYear(now)
 
-  // Only paid/partial invoices for revenue calculations
-  const paidInvoices = invoices.filter(inv => inv.status === 'paid' || inv.status === 'partial')
-
-  // CA encaisse du mois
-  const monthCA = paidInvoices
-    .filter(inv => {
-      if (!inv.paid_at) return false
-      const d = new Date(inv.paid_at)
+  const monthCA = ledger
+    .filter(entry => {
+      const d = new Date(entry.occurred_at)
       return d >= monthStart && d <= monthEnd
     })
-    .reduce((sum, inv) => sum + (inv.paid_amount || 0), 0)
+    .reduce((sum, entry) => sum + Number(entry.amount), 0)
 
-  // CA encaisse de l'annee
-  const yearCA = paidInvoices
-    .filter(inv => {
-      if (!inv.paid_at) return false
-      const d = new Date(inv.paid_at)
-      return d.getFullYear() === currentYear
-    })
-    .reduce((sum, inv) => sum + (inv.paid_amount || 0), 0)
+  const yearCA = ledger
+    .filter(entry => new Date(entry.occurred_at).getFullYear() === currentYear)
+    .reduce((sum, entry) => sum + Number(entry.amount), 0)
 
   const yearCharges = calculateCharges(yearCA)
   const plafondPercent = Math.min((yearCA / BUSINESS.caPlafond) * 100, 100)
@@ -70,12 +67,11 @@ export default function FinancesPage() {
 
   // Monthly breakdown
   const months = Array.from({ length: 12 }, (_, i) => {
-    const monthInvoices = paidInvoices.filter(inv => {
-      if (!inv.paid_at) return false
-      const d = new Date(inv.paid_at)
+    const monthEntries = ledger.filter(entry => {
+      const d = new Date(entry.occurred_at)
       return d.getFullYear() === currentYear && d.getMonth() === i
     })
-    const ca = monthInvoices.reduce((sum, inv) => sum + (inv.paid_amount || 0), 0)
+    const ca = monthEntries.reduce((sum, entry) => sum + Number(entry.amount), 0)
     const charges = calculateCharges(ca)
     return {
       month: format(new Date(currentYear, i, 1), 'MMM', { locale: fr }),
