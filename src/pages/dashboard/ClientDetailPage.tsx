@@ -253,7 +253,7 @@ export default function ClientDetailPage() {
       <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
         {tab === 'infos' && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-gray-500 mb-0.5">Email</p>
                 <p className="text-sm text-white">{client.email || '-'}</p>

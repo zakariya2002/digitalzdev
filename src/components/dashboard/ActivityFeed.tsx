@@ -73,7 +73,7 @@ export default function ActivityFeed({ projectId, limit = 20, title = 'Activité
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs text-gray-300 leading-snug">
+                  <p className="text-xs text-gray-300 leading-snug break-words">
                     <span className="font-medium text-white">{actor?.full_name || 'Système'}</span>{' '}
                     {entry.summary}
                   </p>

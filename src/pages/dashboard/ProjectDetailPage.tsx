@@ -228,10 +228,10 @@ export default function ProjectDetailPage() {
   return (
     <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
-        <div>
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
+        <div className="min-w-0 flex-1">
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/dashboard/projects')}
             className="flex items-center gap-1 text-gray-400 hover:text-white text-sm mb-2 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -239,7 +239,7 @@ export default function ProjectDetailPage() {
             </svg>
             Retour
           </button>
-          <h1 className="text-2xl font-bold text-white">{project.name}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white break-words">{project.name}</h1>
           <div className="flex items-center gap-2 mt-2 flex-wrap">
             {project.project_type && (
               <span className="px-2 py-0.5 text-xs rounded-full bg-gray-700 text-gray-300">
@@ -257,29 +257,19 @@ export default function ProjectDetailPage() {
                 {client.name}
               </Link>
             )}
+            {/* Le responsable tient dans la ligne de badges plutôt que dans un bloc flottant */}
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-800 text-xs text-gray-300">
+              <Avatar profile={lead} size="xs" />
+              {lead?.full_name || 'Non assigné'}
+            </span>
           </div>
         </div>
-        <div className="flex items-start gap-4 sm:gap-6 flex-wrap">
-          <button
-            onClick={() => setEditOpen(true)}
-            className="px-3 py-1.5 text-sm bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors"
-          >
-            Modifier le projet
-          </button>
-          <div className="text-right">
-            <div className="text-sm text-gray-400 mb-1">Responsable</div>
-            <div className="flex items-center justify-end gap-2">
-              <Avatar profile={lead} size="sm" />
-              <span className="text-sm text-white">{lead?.full_name || 'Non assigné'}</span>
-            </div>
-          </div>
-          {project.budget !== null && project.budget !== undefined && (
-            <div className="text-right">
-              <div className="text-sm text-gray-400">Budget</div>
-              <div className="text-xl font-bold text-white">{formatCurrency(project.budget)}</div>
-            </div>
-          )}
-        </div>
+        <button
+          onClick={() => setEditOpen(true)}
+          className="px-3 py-1.5 text-sm bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors flex-shrink-0"
+        >
+          Modifier le projet
+        </button>
       </div>
 
       {/* Tabs */}
@@ -308,18 +298,18 @@ export default function ProjectDetailPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <div className="text-sm text-gray-400 mb-1">Tâches terminées</div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-bold text-white break-words">
                 {doneTasks} / {totalTasks}
               </div>
               <div className="text-sm text-gray-500">{donePercent}%</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <div className="text-sm text-gray-400 mb-1">Temps total</div>
-              <div className="text-2xl font-bold text-white">{totalHours.toFixed(1)}h</div>
+              <div className="text-xl sm:text-2xl font-bold text-white break-words">{totalHours.toFixed(1)}h</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <div className="text-sm text-gray-400 mb-1">Budget</div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-bold text-white break-words">
                 {project.budget !== null && project.budget !== undefined
                   ? formatCurrency(project.budget)
                   : 'Non défini'}
@@ -327,20 +317,14 @@ export default function ProjectDetailPage() {
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <div className="text-sm text-gray-400 mb-1">Période</div>
-              <div className="text-lg font-bold text-white">
-                {project.start_date || project.end_date ? (
-                  <>
-                    {project.start_date
-                      ? format(new Date(project.start_date), 'dd MMM yyyy', { locale: fr })
-                      : '-'}
-                    {' → '}
-                    {project.end_date
-                      ? format(new Date(project.end_date), 'dd MMM yyyy', { locale: fr })
-                      : '-'}
-                  </>
-                ) : (
-                  'Non définie'
-                )}
+              <div className="text-base sm:text-lg font-bold text-white break-words">
+                {project.start_date && project.end_date
+                  ? `${format(new Date(project.start_date), 'd MMM yyyy', { locale: fr })} → ${format(new Date(project.end_date), 'd MMM yyyy', { locale: fr })}`
+                  : project.start_date
+                    ? `Depuis le ${format(new Date(project.start_date), 'd MMM yyyy', { locale: fr })}`
+                    : project.end_date
+                      ? `Jusqu'au ${format(new Date(project.end_date), 'd MMM yyyy', { locale: fr })}`
+                      : 'Non définie'}
               </div>
             </div>
           </div>
@@ -363,7 +347,7 @@ export default function ProjectDetailPage() {
           {project.description && (
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6">
               <h3 className="text-sm font-medium text-gray-400 mb-2">Description</h3>
-              <p className="text-white whitespace-pre-wrap">{project.description}</p>
+              <p className="text-white whitespace-pre-wrap break-words">{project.description}</p>
             </div>
           )}
 
@@ -561,7 +545,7 @@ export default function ProjectDetailPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <div className="text-sm text-gray-400 mb-1">Budget projet</div>
-              <div className="text-2xl font-bold text-white">
+              <div className="text-xl sm:text-2xl font-bold text-white break-words">
                 {project.budget !== null && project.budget !== undefined
                   ? formatCurrency(project.budget)
                   : 'Non défini'}
@@ -569,11 +553,11 @@ export default function ProjectDetailPage() {
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <div className="text-sm text-gray-400 mb-1">Montant facturé</div>
-              <div className="text-2xl font-bold text-white">{formatCurrency(totalInvoiced)}</div>
+              <div className="text-xl sm:text-2xl font-bold text-white break-words">{formatCurrency(totalInvoiced)}</div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
               <div className="text-sm text-gray-400 mb-1">Montant encaissé</div>
-              <div className="text-2xl font-bold text-green-400">{formatCurrency(totalPaid)}</div>
+              <div className="text-xl sm:text-2xl font-bold text-green-400 break-words">{formatCurrency(totalPaid)}</div>
             </div>
           </div>
 

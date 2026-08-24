@@ -22,9 +22,9 @@ export default function ProfitabilityCard({ project, hoursSpent, collected }: Pr
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <h3 className="text-sm font-semibold text-white">Rentabilité</h3>
-        <span className="text-xs text-gray-500">{rate} €/h · {hoursSpent.toFixed(1)}h passées</span>
+        <span className="text-xs text-gray-500 flex-shrink-0">{rate} €/h · {hoursSpent.toFixed(1)}h passées</span>
       </div>
 
       {budget === 0 ? (
@@ -33,18 +33,18 @@ export default function ProfitabilityCard({ project, hoursSpent, collected }: Pr
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4">
             <div>
               <p className="text-[11px] text-gray-500 uppercase tracking-wide mb-1">Budget</p>
-              <p className="text-lg font-bold text-white tabular-nums">{formatCurrency(budget)}</p>
+              <p className="text-base sm:text-lg font-bold text-white tabular-nums break-words">{formatCurrency(budget)}</p>
             </div>
             <div>
               <p className="text-[11px] text-gray-500 uppercase tracking-wide mb-1">Coût du temps</p>
-              <p className="text-lg font-bold text-amber-400 tabular-nums">{formatCurrency(cost)}</p>
+              <p className="text-base sm:text-lg font-bold text-amber-400 tabular-nums break-words">{formatCurrency(cost)}</p>
             </div>
             <div>
               <p className="text-[11px] text-gray-500 uppercase tracking-wide mb-1">Marge</p>
-              <p className={`text-lg font-bold tabular-nums ${margin >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+              <p className={`text-base sm:text-lg font-bold tabular-nums break-words ${margin >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {formatCurrency(margin)}
               </p>
               {marginRate !== null && (
@@ -53,7 +53,7 @@ export default function ProfitabilityCard({ project, hoursSpent, collected }: Pr
             </div>
             <div>
               <p className="text-[11px] text-gray-500 uppercase tracking-wide mb-1">Encaissé</p>
-              <p className="text-lg font-bold text-emerald-400 tabular-nums">{formatCurrency(collected)}</p>
+              <p className="text-base sm:text-lg font-bold text-emerald-400 tabular-nums break-words">{formatCurrency(collected)}</p>
               {budget > 0 && (
                 <p className="text-[11px] text-gray-500">{Math.round((collected / budget) * 100)} % du budget</p>
               )}

@@ -122,7 +122,7 @@ export default function AcceptanceChecklist({ projectId }: AcceptanceChecklistPr
           {checks.map(check => {
             const checker = memberById(check.checked_by)
             return (
-              <div key={check.id} className="flex items-center gap-3 p-2.5 bg-gray-800/60 rounded-lg group">
+              <div key={check.id} className="flex items-center gap-3 p-2.5 bg-gray-800/60 rounded-lg group flex-wrap sm:flex-nowrap">
                 <div className="min-w-0 flex-1">
                   <p className={`text-sm ${check.status === 'ok' ? 'text-gray-400' : 'text-gray-200'}`}>
                     {check.title}
@@ -134,7 +134,7 @@ export default function AcceptanceChecklist({ projectId }: AcceptanceChecklistPr
                     {checker && <Avatar profile={checker} size="xs" />}
                   </div>
                 </div>
-                <div className="flex items-center gap-1 flex-shrink-0">
+                <div className="flex items-center gap-1 flex-shrink-0 flex-wrap">
                   {(['ok', 'ko', 'todo'] as CheckStatus[]).map(s => (
                     <button
                       key={s}

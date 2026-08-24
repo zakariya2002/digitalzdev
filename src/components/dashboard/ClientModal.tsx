@@ -124,7 +124,7 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Email</label>
             <input
@@ -147,7 +147,7 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Téléphone secondaire</label>
             <input
@@ -173,7 +173,7 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
           <p className="text-sm text-red-400">{phoneError}</p>
         )}
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Source</label>
             <select

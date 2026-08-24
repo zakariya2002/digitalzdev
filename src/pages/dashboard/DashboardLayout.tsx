@@ -44,9 +44,9 @@ export default function DashboardLayout() {
       <TwilioProvider>
       <div className="min-h-screen bg-gray-950 text-white">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="lg:ml-64">
+        <div className="lg:ml-64 min-w-0">
           <Header onMenuClick={() => setSidebarOpen(true)} />
-          <main>
+          <main className="min-w-0 overflow-x-hidden">
             <Routes>
               <Route index element={<DashboardHome />} />
               <Route path="kanban" element={<KanbanPage />} />

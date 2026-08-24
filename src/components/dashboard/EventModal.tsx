@@ -117,7 +117,7 @@ export default function EventModal({ open, onClose, event, projects, defaultDate
           <label htmlFor="allDay" className="text-sm text-gray-400">Toute la journée</label>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Date de début</label>
             <input
@@ -141,7 +141,7 @@ export default function EventModal({ open, onClose, event, projects, defaultDate
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Date de fin</label>
             <input
