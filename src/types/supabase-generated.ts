@@ -2025,6 +2025,44 @@ export type Database = {
           },
         ]
       }
+      work_sessions: {
+        Row: {
+          created_at: string
+          ended_at: string | null
+          id: string
+          is_manual: boolean
+          note: string | null
+          profile_id: string
+          started_at: string
+        }
+        Insert: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          is_manual?: boolean
+          note?: string | null
+          profile_id: string
+          started_at?: string
+        }
+        Update: {
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          is_manual?: boolean
+          note?: string | null
+          profile_id?: string
+          started_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_sessions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       revenue_ledger: {
@@ -2039,12 +2077,33 @@ export type Database = {
         }
         Relationships: []
       }
+      work_days: {
+        Row: {
+          day: string | null
+          first_in: string | null
+          hours: number | null
+          is_open: boolean | null
+          last_out: string | null
+          profile_id: string | null
+          sessions: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_sessions_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       add_task_hours: {
         Args: { p_hours: number; p_task_id: string }
         Returns: undefined
       }
+      close_stale_sessions: { Args: never; Returns: number }
       current_user_role: { Args: never; Returns: string }
       entity_label: { Args: { eid: string; etype: string }; Returns: string }
       entity_link: { Args: { eid: string; etype: string }; Returns: string }
@@ -2058,6 +2117,7 @@ export type Database = {
       }
       next_sequence_number: { Args: { seq_id: string }; Returns: string }
       open_direct_conversation: { Args: { p_other: string }; Returns: string }
+      punch: { Args: { p_note?: string }; Returns: Json }
       record_share_response: {
         Args: { p_name: string; p_response: string; p_token: string }
         Returns: Json

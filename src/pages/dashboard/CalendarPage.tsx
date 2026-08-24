@@ -85,7 +85,7 @@ export default function CalendarPage() {
   const todayTasks = tasks.filter(t => t.deadline === today && t.status !== 'done')
 
   return (
-    <div className="p-6 h-[calc(100vh-4rem)] flex gap-6">
+    <div className="p-4 sm:p-6 min-h-[calc(100vh-4rem)] flex flex-col lg:flex-row gap-4 lg:gap-6">
       {/* Calendar */}
       <div className="flex-1 flex flex-col">
         <CalendarView
@@ -103,7 +103,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Today sidebar */}
-      <div className="w-72 flex-shrink-0">
+      <div className="w-full lg:w-72 flex-shrink-0">
         <div className="bg-gray-900 rounded-xl border border-gray-800 p-4">
           <h3 className="text-sm font-semibold text-white mb-3">Aujourd'hui</h3>
           {todayTasks.length === 0 ? (

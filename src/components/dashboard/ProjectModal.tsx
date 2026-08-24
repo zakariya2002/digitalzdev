@@ -219,7 +219,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
                 Supprimer définitivement « {project.name} » ?
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                Ses tâches, le temps passé, les fichiers déposés, les jalons et la recette
+                Ses tâches, le temps passé, les fichiers déposés, les deadlines et la recette
                 seront effacés avec lui. Les devis et factures seront conservés, mais
                 détachés du projet. Cette action est irréversible.
               </p>

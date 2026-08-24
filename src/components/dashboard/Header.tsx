@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import NotificationCenter, { type FeedItem } from './NotificationCenter'
+import PunchButton from './PunchButton'
 import { useAutomation } from '../../hooks/useAutomation'
 import { useNotifications } from '../../hooks/useNotifications'
 import { useTeam } from '../../contexts/TeamContext'
@@ -18,6 +19,7 @@ const pageTitles: Record<string, string> = {
   '/dashboard/finances': 'Finances',
   '/dashboard/comptabilite': 'Simulateur de statut',
   '/dashboard/messages': 'Messagerie',
+  '/dashboard/pointage': 'Temps de travail',
   '/dashboard/proposals': 'Propositions',
   '/dashboard/proposals/new': 'Nouvelle proposition',
   '/dashboard/automation': 'Automatisation',
@@ -93,7 +95,8 @@ export default function Header({ onMenuClick }: HeaderProps) {
         </button>
         <h2 className="text-lg font-semibold text-white">{title}</h2>
       </div>
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <PunchButton />
         <NotificationCenter
           items={items}
           unreadCount={unreadCount + alerts.unreadCount}
@@ -104,7 +107,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
           }}
           onMarkAllRead={() => { markAllRead(); alerts.markAllRead() }}
         />
-        <p className="text-sm text-gray-500 capitalize hidden sm:block">{dateStr}</p>
+        <p className="text-sm text-gray-500 capitalize hidden xl:block">{dateStr}</p>
       </div>
     </header>
   )

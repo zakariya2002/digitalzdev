@@ -111,7 +111,7 @@ export default function ProposalsPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Filters + New button */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -138,6 +138,7 @@ export default function ProposalsPage() {
 
       {/* Table */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-800">
@@ -238,6 +239,7 @@ export default function ProposalsPage() {
             )}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   )

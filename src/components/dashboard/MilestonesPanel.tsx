@@ -26,7 +26,7 @@ export default function MilestonesPanel({ projectId }: MilestonesPanelProps) {
   const fetchMilestones = useCallback(async () => {
     const { data, error: e } = await supabase
       .from('milestones').select('*').eq('project_id', projectId).order('due_date')
-    if (e) { setError('Impossible de charger les jalons.'); return }
+    if (e) { setError('Impossible de charger les deadlines.'); return }
     setMilestones((data || []) as Milestone[])
   }, [projectId])
 
@@ -43,7 +43,7 @@ export default function MilestonesPanel({ projectId }: MilestonesPanelProps) {
       is_client_commitment: isCommitment,
       position,
     })
-    if (err) { setError("Le jalon n'a pas pu être créé."); return }
+    if (err) { setError("La deadline n'a pas pu être créée."); return }
     setTitle(''); setDueDate(''); setError(null)
     fetchMilestones()
   }
@@ -67,7 +67,7 @@ export default function MilestonesPanel({ projectId }: MilestonesPanelProps) {
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-white">Jalons</h3>
+        <h3 className="text-sm font-semibold text-white">Deadlines</h3>
         <span className="text-xs text-gray-500">
           {milestones.filter(m => m.status === 'reached').length}/{milestones.length} atteints
         </span>
@@ -75,7 +75,7 @@ export default function MilestonesPanel({ projectId }: MilestonesPanelProps) {
 
       {milestones.length === 0 ? (
         <p className="text-xs text-gray-500 mb-4">
-          Aucun jalon. Pose ici les dates que tu engages auprès du client — elles remontent dans le calendrier et déclenchent une alerte à l'approche.
+          Aucune deadline. Pose ici les dates que tu engages auprès du client — elles remontent dans le calendrier et déclenchent une alerte à l'approche.
         </p>
       ) : (
         <div className="space-y-2 mb-4">

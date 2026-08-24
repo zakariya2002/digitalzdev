@@ -180,7 +180,7 @@ export default function KanbanPage() {
   const selectClass = 'px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300 focus:outline-none focus:border-blue-500'
 
   return (
-    <div className="p-6 h-[calc(100vh-4rem)]">
+    <div className="p-4 sm:p-6 h-[calc(100vh-4rem)]">
       {/* Top bar */}
       <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">

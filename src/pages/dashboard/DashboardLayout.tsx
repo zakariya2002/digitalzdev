@@ -21,6 +21,7 @@ import InvoiceDetailPage from './InvoiceDetailPage'
 import FinancesPage from './FinancesPage'
 import AccountingPage from './AccountingPage'
 import MessagesPage from './MessagesPage'
+import TimeClockPage from './TimeClockPage'
 import ProposalsPage from './ProposalsPage'
 import ProposalDetailPage from './ProposalDetailPage'
 import ProjectsPage from './ProjectsPage'
@@ -61,6 +62,7 @@ export default function DashboardLayout() {
               <Route path="invoices/:id" element={<InvoiceDetailPage />} />
               <Route path="finances" element={<RequireOwner><FinancesPage /></RequireOwner>} />
               <Route path="comptabilite" element={<AccountingPage />} />
+              <Route path="pointage" element={<TimeClockPage />} />
               <Route path="messages" element={<MessagesPage />} />
               <Route path="messages/:id" element={<MessagesPage />} />
               <Route path="proposals" element={<ProposalsPage />} />

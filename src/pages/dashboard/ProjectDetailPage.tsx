@@ -214,7 +214,7 @@ export default function ProjectDetailPage() {
     { key: 'overview', label: "Vue d'ensemble" },
     { key: 'tasks', label: 'Tâches' },
     { key: 'contents', label: 'Contenus client' },
-    { key: 'milestones', label: 'Jalons' },
+    { key: 'milestones', label: 'Deadlines' },
     { key: 'acceptance', label: 'Recette' },
     { key: 'discussion', label: 'Discussion' },
     { key: 'activity', label: 'Activité' },
@@ -226,9 +226,9 @@ export default function ProjectDetailPage() {
   const lead = memberById(project.lead_id)
 
   return (
-    <div>
+    <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
         <div>
           <button
             onClick={() => navigate('/dashboard')}
@@ -259,7 +259,7 @@ export default function ProjectDetailPage() {
             )}
           </div>
         </div>
-        <div className="flex items-start gap-6">
+        <div className="flex items-start gap-4 sm:gap-6 flex-wrap">
           <button
             onClick={() => setEditOpen(true)}
             className="px-3 py-1.5 text-sm bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors"
@@ -283,12 +283,12 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-gray-800 mb-6">
+      <div className="flex gap-1 border-b border-gray-800 mb-6 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
         {tabs.map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
+            className={`px-3 sm:px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
               activeTab === tab.key
                 ? 'border-b-2 border-blue-500 text-white'
                 : 'text-gray-400 hover:text-white'

@@ -280,7 +280,7 @@ export default function QuoteDetailPage() {
   const clientEmail = clients.find(c => c.id === clientId)?.email ?? null
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
+    <div className="min-h-screen bg-gray-950 p-4 sm:p-6">
       {/* Header bar */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">

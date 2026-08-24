@@ -80,7 +80,7 @@ export default function KanbanBoard({ tasks, projects, members = [], onMoveTask,
 
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="grid grid-cols-4 gap-4 h-[calc(100vh-10rem)]">
+      <div className="flex lg:grid lg:grid-cols-4 gap-3 sm:gap-4 h-[calc(100vh-12rem)] overflow-x-auto snap-x snap-mandatory lg:overflow-visible">
         {COLUMNS.map((col) => {
           const columnTasks = tasks.filter(t => t.status === col.id)
           return (
@@ -139,7 +139,7 @@ function Column({
   return (
     <div
       ref={setNodeRef}
-      className={`flex flex-col rounded-xl transition-colors ${isOver ? 'bg-gray-800/60' : 'bg-gray-900/50'}`}
+      className={`flex flex-col rounded-xl transition-colors w-[80vw] sm:w-64 lg:w-auto flex-shrink-0 lg:flex-shrink snap-start ${isOver ? 'bg-gray-800/60' : 'bg-gray-900/50'}`}
     >
       <div className="flex items-center justify-between px-3 py-3">
         <h3 className="text-sm font-semibold text-gray-300">{label}</h3>

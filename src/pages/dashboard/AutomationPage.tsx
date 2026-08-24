@@ -10,7 +10,7 @@ const TRIGGER_LABELS: Record<TriggerType, string> = {
   quote_no_response: 'Devis sans réponse',
   invoice_overdue: 'Facture impayée',
   follow_up_due: 'Rappel follow-up',
-  project_milestone: 'Jalon de projet',
+  project_milestone: 'Deadline de projet',
 }
 
 const ACTION_LABELS: Record<ActionType, string> = {
@@ -99,7 +99,7 @@ export default function AutomationPage() {
     'w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-blue-500'
 
   return (
-    <div className="min-h-screen bg-gray-950 p-6">
+    <div className="min-h-screen bg-gray-950 p-4 sm:p-6">
       {/* Title + button */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-lg font-semibold text-white">Règles d'automatisation</h1>

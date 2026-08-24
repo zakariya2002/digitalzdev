@@ -92,7 +92,7 @@ export default function SmsTemplatesPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-white">Templates SMS</h2>
         <button
@@ -110,6 +110,7 @@ export default function SmsTemplatesPage() {
       </div>
 
       <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-800">
@@ -172,6 +173,7 @@ export default function SmsTemplatesPage() {
             )}
           </tbody>
         </table>
+      </div>
       </div>
 
       {/* Modal */}

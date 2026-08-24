@@ -76,7 +76,7 @@ export default function InvoicesPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
@@ -132,6 +132,7 @@ export default function InvoicesPage() {
 
       {/* Table */}
       <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-800">
@@ -234,6 +235,7 @@ export default function InvoicesPage() {
             )}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   )
