@@ -75,6 +75,10 @@ export default function ProposalsPage() {
 
   const handleConvertToQuote = async (proposal: Proposal) => {
     const { data: quoteNumber } = await supabase.rpc('next_sequence_number', { seq_id: 'quote' })
+    if (!quoteNumber) {
+      alert("Le numéro n'a pas pu être généré. Réessaie dans un instant.")
+      return
+    }
     const { data: quote } = await supabase.from('quotes').insert({
       quote_number: quoteNumber,
       client_id: proposal.client_id,

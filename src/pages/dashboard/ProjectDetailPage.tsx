@@ -149,17 +149,17 @@ export default function ProjectDetailPage() {
       supabase.from('invoices').select('*, client:clients(id, name)').eq('project_id', id).order('created_at', { ascending: false }),
     ])
     if (proj) {
-      setProject(proj)
+      setProject(proj as unknown as Project)
       if (proj.client_id) {
         const { data: cl } = await supabase.from('clients').select('*').eq('id', proj.client_id).single()
-        if (cl) setClient(cl)
+        if (cl) setClient(cl as unknown as Client)
       }
     }
-    if (t) setTasks(t)
-    if (te) setTimeEntries(te)
-    if (f) setFiles(f)
-    if (q) setQuotes(q)
-    if (inv) setInvoices(inv)
+    if (t) setTasks(t as unknown as Task[])
+    if (te) setTimeEntries(te as unknown as TimeEntry[])
+    if (f) setFiles(f as unknown as ProjectFile[])
+    if (q) setQuotes(q as unknown as Quote[])
+    if (inv) setInvoices(inv as unknown as Invoice[])
   }, [id])
 
   useEffect(() => {

@@ -1,43 +1,5 @@
-export interface Database {
-  public: {
-    Tables: {
-      projects: {
-        Row: Project
-        Insert: ProjectInsert
-        Update: Partial<ProjectInsert>
-        Relationships: []
-      }
-      tasks: {
-        Row: Task
-        Insert: TaskInsert
-        Update: Partial<TaskInsert>
-        Relationships: []
-      }
-      events: {
-        Row: CalendarEvent
-        Insert: EventInsert
-        Update: Partial<EventInsert>
-        Relationships: []
-      }
-      revenues: {
-        Row: Revenue
-        Insert: RevenueInsert
-        Update: Partial<RevenueInsert>
-        Relationships: []
-      }
-      clients: {
-        Row: Client
-        Insert: ClientInsert
-        Update: Partial<ClientInsert>
-        Relationships: []
-      }
-    }
-    Views: Record<string, never>
-    Functions: Record<string, never>
-    Enums: Record<string, never>
-    CompositeTypes: Record<string, never>
-  }
-}
+// Le schéma complet est généré depuis la base : voir supabase-generated.ts
+export type { Database } from './supabase-generated'
 
 
 // === ÉQUIPE : PROFILS, RÔLES, COMMENTAIRES ===

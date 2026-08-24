@@ -7,7 +7,7 @@ import { useTeam } from '../../contexts/TeamContext'
 import { formatCurrency } from '../../lib/business'
 import ProjectModal from '../../components/dashboard/ProjectModal'
 import Avatar from '../../components/dashboard/Avatar'
-import type { Project, Task, Client, ProjectStatus } from '../../types/database'
+import type { ProjectInsert, Project, Task, Client, ProjectStatus } from '../../types/database'
 
 const STATUS_LABELS: Record<string, string> = {
   briefing: 'Briefing', design: 'Design', development: 'Développement',
@@ -72,7 +72,7 @@ export default function ProjectsPage() {
     }
   }
 
-  const handleSave = async (data: Record<string, unknown>) => {
+  const handleSave = async (data: ProjectInsert) => {
     if (editingProject) {
       const { error: e } = await supabase.from('projects').update(data).eq('id', editingProject.id)
       if (e) setError("Le projet n'a pas pu être modifié.")

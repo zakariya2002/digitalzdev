@@ -7,7 +7,7 @@ import CommentThread from '../../components/dashboard/CommentThread'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
 import { formatCurrency, BUSINESS, PRICING_GRID, calculateCharges } from '../../lib/business'
 import Modal from '../../components/dashboard/Modal'
-import type { Invoice, InvoiceItem, InvoiceStatus, Payment, PaymentMethod, Client, Project } from '../../types/database'
+import type { Database, Invoice, InvoiceItem, InvoiceStatus, Payment, PaymentMethod, Client, Project } from '../../types/database'
 
 const STATUS_BADGE: Record<InvoiceStatus, { label: string; bg: string; text: string }> = {
   draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
@@ -108,7 +108,7 @@ export default function InvoiceDetailPage() {
     if (itemsError) console.error('Fetch items error:', itemsError)
     if (itemsData) {
       setItems(
-        itemsData.map((i: InvoiceItem) => ({
+        itemsData.map((i) => ({
           id: i.id,
           description: i.description,
           quantity: i.quantity,
@@ -193,7 +193,7 @@ export default function InvoiceDetailPage() {
     setSaving(true)
     const total = items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0)
 
-    const invoiceData: Record<string, unknown> = {
+    const invoiceData: Database['public']['Tables']['invoices']['Insert'] = {
       invoice_number: invoiceNumber,
       client_id: clientId,
       project_id: projectId,
@@ -241,7 +241,7 @@ export default function InvoiceDetailPage() {
     if (items.length > 0) {
       const { error: itemsError } = await supabase.from('invoice_items').insert(
         items.map((item, index) => ({
-          invoice_id: invoiceId,
+          invoice_id: invoiceId!,
           description: item.description,
           quantity: item.quantity,
           unit_price: item.unit_price,

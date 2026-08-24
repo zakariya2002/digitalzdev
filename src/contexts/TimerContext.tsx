@@ -46,7 +46,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
     if (!profile) return
     setError(null)
     // Un seul chronomètre à la fois : celui en cours est arrêté et comptabilisé
-    if (timer) await supabase.rpc('stop_timer', { p_note: null })
+    if (timer) await supabase.rpc('stop_timer', {})
     const { error: e } = await supabase.from('active_timers').upsert({
       profile_id: profile.id,
       task_id: task.id,
@@ -61,7 +61,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   const stop = useCallback(async (note?: string) => {
     if (!timer) return null
     setError(null)
-    const { data, error: e } = await supabase.rpc('stop_timer', { p_note: note ?? null })
+    const { data, error: e } = await supabase.rpc('stop_timer', note ? { p_note: note } : {})
     if (e) { setError("Le temps n'a pas pu être enregistré."); return null }
     setTimer(null)
     setTaskTitle(null)

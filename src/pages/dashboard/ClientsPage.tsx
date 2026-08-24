@@ -6,6 +6,7 @@ import { supabase } from '../../lib/supabase'
 import { useTwilio } from '../../contexts/TwilioContext'
 import { toE164 } from '../../lib/phone'
 import ClientModal from '../../components/dashboard/ClientModal'
+import ErrorBanner from '../../components/dashboard/ErrorBanner'
 import SmsComposer from '../../components/dashboard/SmsComposer'
 import type { Client, ClientStatus, ClientSource, Project } from '../../types/database'
 
@@ -35,13 +36,14 @@ export default function ClientsPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [editingClient, setEditingClient] = useState<Client | null>(null)
   const [smsClient, setSmsClient] = useState<Client | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchAll = useCallback(async () => {
     const [{ data: c, error: ce }, { data: p }] = await Promise.all([
       supabase.from('clients').select('*').order('created_at', { ascending: false }),
       supabase.from('projects').select('*').eq('is_archived', false).order('name'),
     ])
-    if (ce) console.error('Fetch clients error:', ce)
+    if (ce) setError('Impossible de charger les clients.')
     if (c) setClients(c as Client[])
     if (p) setProjects(p as Project[])
   }, [])
@@ -71,10 +73,10 @@ export default function ClientsPage() {
   }) => {
     if (editingClient) {
       const { error } = await supabase.from('clients').update(data).eq('id', editingClient.id)
-      if (error) console.error('Update client error:', error)
+      if (error) setError("Le client n'a pas pu être modifié.")
     } else {
       const { error } = await supabase.from('clients').insert(data)
-      if (error) console.error('Insert client error:', error)
+      if (error) setError("Le client n'a pas pu être créé.")
     }
     setEditingClient(null)
     fetchAll()
@@ -82,7 +84,7 @@ export default function ClientsPage() {
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('clients').delete().eq('id', id)
-    if (error) console.error('Delete client error:', error)
+    if (error) setError("Le client n'a pas pu être supprimé.")
     setEditingClient(null)
     fetchAll()
   }
@@ -97,6 +99,8 @@ export default function ClientsPage() {
 
   return (
     <div className="p-4 sm:p-6">
+      <ErrorBanner message={error} onDismiss={() => setError(null)} />
+
       {/* Stats cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">

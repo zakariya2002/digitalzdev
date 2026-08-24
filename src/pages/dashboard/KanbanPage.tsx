@@ -5,7 +5,7 @@ import KanbanBoard from '../../components/dashboard/KanbanBoard'
 import TaskModal from '../../components/dashboard/TaskModal'
 import ProjectModal from '../../components/dashboard/ProjectModal'
 import Avatar from '../../components/dashboard/Avatar'
-import type { Task, TaskStatus, TaskPriority, TaskKind, BugSeverity, Project, Client } from '../../types/database'
+import type { ProjectInsert, Task, TaskStatus, TaskPriority, TaskKind, BugSeverity, Project, Client } from '../../types/database'
 
 type AssigneeFilter = 'all' | 'mine' | 'unassigned' | string
 
@@ -146,7 +146,7 @@ export default function KanbanPage() {
     fetchTasks()
   }
 
-  const handleSaveProject = async (data: Record<string, unknown>) => {
+  const handleSaveProject = async (data: ProjectInsert) => {
     if (editingProject) {
       const { error: e } = await supabase.from('projects').update(data).eq('id', editingProject.id)
       if (e) setError("Le projet n'a pas pu être modifié.")

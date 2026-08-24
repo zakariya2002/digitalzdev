@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase'
 import CommentThread from '../../components/dashboard/CommentThread'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
 import { formatCurrency, BUSINESS, PRICING_GRID } from '../../lib/business'
-import type { Quote, QuoteItem, Client, Project, QuoteStatus } from '../../types/database'
+import type { Database, Quote, QuoteItem, Client, Project, QuoteStatus } from '../../types/database'
 
 const STATUS_BADGE: Record<QuoteStatus, { label: string; bg: string; text: string }> = {
   draft: { label: 'Brouillon', bg: 'bg-gray-500/20', text: 'text-gray-400' },
@@ -80,12 +80,12 @@ export default function QuoteDetailPage() {
     const { data: itemsData, error: itemsError } = await supabase
       .from('quote_items')
       .select('*')
-      .eq('quote_id', id)
+      .eq('quote_id', id!)
       .order('position', { ascending: true })
     if (itemsError) console.error('Fetch items error:', itemsError)
     if (itemsData) {
       setItems(
-        itemsData.map((i: QuoteItem) => ({
+        itemsData.map((i) => ({
           id: i.id,
           description: i.description,
           quantity: i.quantity,
@@ -157,7 +157,7 @@ export default function QuoteDetailPage() {
     setSaving(true)
     const total = items.reduce((sum, item) => sum + item.quantity * item.unit_price, 0)
 
-    const quoteData: Record<string, unknown> = {
+    const quoteData: Database['public']['Tables']['quotes']['Insert'] = {
       quote_number: quoteNumber,
       client_id: clientId,
       project_id: projectId,
@@ -202,7 +202,7 @@ export default function QuoteDetailPage() {
     if (items.length > 0) {
       const { error: itemsError } = await supabase.from('quote_items').insert(
         items.map((item, index) => ({
-          quote_id: quoteId,
+          quote_id: quoteId!,
           description: item.description,
           quantity: item.quantity,
           unit_price: item.unit_price,
@@ -227,8 +227,13 @@ export default function QuoteDetailPage() {
     const { data: quoteItems } = await supabase
       .from('quote_items')
       .select('*')
-      .eq('quote_id', id)
+      .eq('quote_id', id!)
     const { data: invoiceNumber } = await supabase.rpc('next_sequence_number', { seq_id: 'invoice' })
+    if (!invoiceNumber) {
+      setSaving(false)
+      alert("Le numéro de facture n'a pas pu être généré.")
+      return
+    }
     const dueDate = new Date()
     dueDate.setDate(dueDate.getDate() + 30)
 
@@ -256,7 +261,7 @@ export default function QuoteDetailPage() {
 
     if (invoice && quoteItems) {
       await supabase.from('invoice_items').insert(
-        quoteItems.map((i: QuoteItem) => ({
+        quoteItems.map((i) => ({
           invoice_id: invoice.id,
           description: i.description,
           quantity: i.quantity,

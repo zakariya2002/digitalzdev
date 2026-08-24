@@ -59,6 +59,10 @@ export default function QuotesPage() {
   const handleDuplicate = async (quote: Quote) => {
     const { data: items } = await supabase.from('quote_items').select('*').eq('quote_id', quote.id)
     const { data: number } = await supabase.rpc('next_sequence_number', { seq_id: 'quote' })
+    if (!number) {
+      alert("Le numéro n'a pas pu être généré. Réessaie dans un instant.")
+      return
+    }
     const { data: newQuote, error } = await supabase.from('quotes').insert({
       quote_number: number,
       client_id: quote.client_id,
@@ -86,6 +90,10 @@ export default function QuotesPage() {
   const handleConvertToInvoice = async (quote: Quote) => {
     const { data: items } = await supabase.from('quote_items').select('*').eq('quote_id', quote.id)
     const { data: invoiceNumber } = await supabase.rpc('next_sequence_number', { seq_id: 'invoice' })
+    if (!invoiceNumber) {
+      alert("Le numéro n'a pas pu être généré. Réessaie dans un instant.")
+      return
+    }
     const dueDate = new Date()
     dueDate.setDate(dueDate.getDate() + 30)
     const { data: invoice } = await supabase.from('invoices').insert({

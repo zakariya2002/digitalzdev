@@ -7,6 +7,7 @@ import { TwilioProvider } from '../../contexts/TwilioContext'
 import { TeamProvider } from '../../contexts/TeamContext'
 import { TimerProvider } from '../../contexts/TimerContext'
 import TimerBar from '../../components/dashboard/TimerBar'
+import RequireOwner from '../../components/dashboard/RequireOwner'
 import DashboardHome from './DashboardHome'
 import KanbanPage from './KanbanPage'
 import CalendarPage from './CalendarPage'
@@ -50,7 +51,7 @@ export default function DashboardLayout() {
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="clients" element={<ClientsPage />} />
               <Route path="clients/:id" element={<ClientDetailPage />} />
-              <Route path="revenues" element={<RevenuesPage />} />
+              <Route path="revenues" element={<RequireOwner><RevenuesPage /></RequireOwner>} />
               <Route path="sms-templates" element={<SmsTemplatesPage />} />
               <Route path="quotes" element={<QuotesPage />} />
               <Route path="quotes/new" element={<QuoteDetailPage />} />
@@ -58,7 +59,7 @@ export default function DashboardLayout() {
               <Route path="invoices" element={<InvoicesPage />} />
               <Route path="invoices/new" element={<InvoiceDetailPage />} />
               <Route path="invoices/:id" element={<InvoiceDetailPage />} />
-              <Route path="finances" element={<FinancesPage />} />
+              <Route path="finances" element={<RequireOwner><FinancesPage /></RequireOwner>} />
               <Route path="proposals" element={<ProposalsPage />} />
               <Route path="proposals/new" element={<ProposalDetailPage />} />
               <Route path="proposals/:id" element={<ProposalDetailPage />} />

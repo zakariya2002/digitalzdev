@@ -248,6 +248,11 @@ export default function ProposalDetailPage() {
     })
     const featuresDesc =
       features.length > 0 ? '\n\nFonctionnalites :\n- ' + features.join('\n- ') : ''
+    if (!quoteNumber) {
+      alert("Le numéro n'a pas pu être généré. Réessaie dans un instant.")
+      return
+    }
+
     const { data: quote } = await supabase
       .from('quotes')
       .insert({
@@ -261,7 +266,7 @@ export default function ProposalDetailPage() {
       .select()
       .single()
     if (quote) {
-      await supabase.from('proposals').update({ quote_id: quote.id }).eq('id', id)
+      await supabase.from('proposals').update({ quote_id: quote.id }).eq('id', id!)
       if (estimatedAmount) {
         await supabase.from('quote_items').insert({
           quote_id: quote.id,

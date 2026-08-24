@@ -38,8 +38,8 @@ export default function AutomationPage() {
       supabase.from('automation_rules').select('*').order('created_at'),
       supabase.from('automation_logs').select('*').order('executed_at', { ascending: false }).limit(50),
     ])
-    if (r) setRules(r)
-    if (l) setLogs(l)
+    if (r) setRules(r as unknown as AutomationRule[])
+    if (l) setLogs(l as unknown as AutomationLog[])
   }, [])
 
   useEffect(() => {
