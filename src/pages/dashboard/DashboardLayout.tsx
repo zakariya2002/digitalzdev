@@ -5,6 +5,8 @@ import Header from '../../components/dashboard/Header'
 import Softphone from '../../components/dashboard/Softphone'
 import { TwilioProvider } from '../../contexts/TwilioContext'
 import { TeamProvider } from '../../contexts/TeamContext'
+import { TimerProvider } from '../../contexts/TimerContext'
+import TimerBar from '../../components/dashboard/TimerBar'
 import DashboardHome from './DashboardHome'
 import KanbanPage from './KanbanPage'
 import CalendarPage from './CalendarPage'
@@ -35,6 +37,7 @@ export default function DashboardLayout() {
 
   return (
     <TeamProvider>
+      <TimerProvider>
       <TwilioProvider>
       <div className="min-h-screen bg-gray-950 text-white">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -66,8 +69,10 @@ export default function DashboardLayout() {
           </main>
         </div>
         <Softphone />
+        <TimerBar />
       </div>
       </TwilioProvider>
+      </TimerProvider>
     </TeamProvider>
   )
 }

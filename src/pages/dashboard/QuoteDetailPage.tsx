@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { format, addDays } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
+import CommentThread from '../../components/dashboard/CommentThread'
+import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
 import { formatCurrency, BUSINESS, PRICING_GRID } from '../../lib/business'
 import type { Quote, QuoteItem, Client, Project, QuoteStatus } from '../../types/database'
 
@@ -45,6 +47,7 @@ export default function QuoteDetailPage() {
 
   // Reference data
   const [clients, setClients] = useState<Client[]>([])
+  // Adresse pré-remplie dans l'envoi au client
   const [projects, setProjects] = useState<Project[]>([])
   const [saving, setSaving] = useState(false)
 
@@ -267,6 +270,8 @@ export default function QuoteDetailPage() {
   }
 
   const badge = STATUS_BADGE[status]
+
+  const clientEmail = clients.find(c => c.id === clientId)?.email ?? null
 
   return (
     <div className="min-h-screen bg-gray-950 p-6">
@@ -599,6 +604,18 @@ export default function QuoteDetailPage() {
           Imprimer / PDF
         </button>
       </div>
+    
+      {!isNew && id && (
+        <div className="print:hidden mt-6">
+          <ShareLinkPanel entityType="quote" entityId={id} defaultAllowAccept={true} defaultEmail={clientEmail} />
+        </div>
+      )}
+
+      {!isNew && id && (
+        <div className="print:hidden mt-6">
+          <CommentThread entityType="quote" entityId={id} title="Discussion interne" />
+        </div>
+      )}
     </div>
   )
 }

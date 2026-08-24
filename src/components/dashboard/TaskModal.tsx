@@ -2,7 +2,9 @@ import { useState, useEffect, type FormEvent } from 'react'
 import Modal from './Modal'
 import AssigneeSelect from './AssigneeSelect'
 import CommentThread from './CommentThread'
-import type { Project, Task, TaskPriority } from '../../types/database'
+import SubtaskList from './SubtaskList'
+import { useTimer } from '../../contexts/TimerContext'
+import type { Project, Task, TaskPriority, TaskKind, BugSeverity } from '../../types/database'
 
 interface TaskModalProps {
   open: boolean
@@ -20,6 +22,9 @@ interface TaskModalProps {
     project_id: string | null
     assignee_id: string | null
     estimated_hours: number | null
+    kind: TaskKind
+    severity: BugSeverity | null
+    steps_to_reproduce: string | null
   }) => Promise<void>
   onDelete?: (id: string) => Promise<void>
 }
@@ -32,6 +37,7 @@ const PRIORITIES: { value: TaskPriority; label: string; color: string }[] = [
 ]
 
 export default function TaskModal({ open, onClose, task, projects, defaultProjectId, defaultAssigneeId, onSave, onDelete }: TaskModalProps) {
+  const { start, stop, running, timer } = useTimer()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [priority, setPriority] = useState<TaskPriority>('medium')
@@ -40,6 +46,9 @@ export default function TaskModal({ open, onClose, task, projects, defaultProjec
   const [projectId, setProjectId] = useState<string>('')
   const [assigneeId, setAssigneeId] = useState<string | null>(null)
   const [estimatedHours, setEstimatedHours] = useState('')
+  const [kind, setKind] = useState<TaskKind>('task')
+  const [severity, setSeverity] = useState<BugSeverity>('major')
+  const [steps, setSteps] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -54,6 +63,9 @@ export default function TaskModal({ open, onClose, task, projects, defaultProjec
       setProjectId(task.project_id || '')
       setAssigneeId(task.assignee_id || null)
       setEstimatedHours(task.estimated_hours != null ? String(task.estimated_hours) : '')
+      setKind(task.kind || 'task')
+      setSeverity(task.severity || 'major')
+      setSteps(task.steps_to_reproduce || '')
     } else {
       setTitle('')
       setDescription('')
@@ -63,6 +75,9 @@ export default function TaskModal({ open, onClose, task, projects, defaultProjec
       setProjectId(defaultProjectId || '')
       setAssigneeId(defaultAssigneeId || null)
       setEstimatedHours('')
+      setKind('task')
+      setSeverity('major')
+      setSteps('')
     }
   }, [task, open, defaultProjectId, defaultAssigneeId])
 
@@ -82,6 +97,9 @@ export default function TaskModal({ open, onClose, task, projects, defaultProjec
         project_id: projectId || null,
         assignee_id: assigneeId,
         estimated_hours: estimatedHours ? parseFloat(estimatedHours) : null,
+        kind,
+        severity: kind === 'bug' ? severity : null,
+        steps_to_reproduce: kind === 'bug' ? (steps || null) : null,
       })
       setLoading(false)
       onClose()
@@ -96,6 +114,34 @@ export default function TaskModal({ open, onClose, task, projects, defaultProjec
   return (
     <Modal open={open} onClose={onClose} title={task ? 'Modifier la tâche' : 'Nouvelle tâche'} maxWidth="max-w-2xl">
       <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex items-center gap-2">
+          {(['task', 'bug'] as TaskKind[]).map(k => (
+            <button
+              key={k}
+              type="button"
+              onClick={() => setKind(k)}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                kind === k
+                  ? k === 'bug' ? 'bg-red-600 text-white' : 'bg-blue-600 text-white'
+                  : 'bg-gray-800 text-gray-400 hover:text-white'
+              }`}
+            >
+              {k === 'bug' ? 'Bug' : 'Tâche'}
+            </button>
+          ))}
+          {kind === 'bug' && (
+            <select
+              value={severity}
+              onChange={(e) => setSeverity(e.target.value as BugSeverity)}
+              className="ml-auto px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300 focus:outline-none focus:border-blue-500"
+            >
+              <option value="critical">Bloquant</option>
+              <option value="major">Majeur</option>
+              <option value="minor">Mineur</option>
+            </select>
+          )}
+        </div>
+
         <div>
           <label className="block text-sm text-gray-400 mb-1">Titre</label>
           <input
@@ -175,6 +221,19 @@ export default function TaskModal({ open, onClose, task, projects, defaultProjec
           </div>
         </div>
 
+        {kind === 'bug' && (
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Étapes pour reproduire</label>
+            <textarea
+              value={steps}
+              onChange={(e) => setSteps(e.target.value)}
+              rows={3}
+              className={`${inputClass} resize-none`}
+              placeholder={'1. Aller sur…\n2. Cliquer sur…\n3. Le bug apparaît'}
+            />
+          </div>
+        )}
+
         <div>
           <label className="block text-sm text-gray-400 mb-1">Tags (séparés par des virgules)</label>
           <input
@@ -209,10 +268,43 @@ export default function TaskModal({ open, onClose, task, projects, defaultProjec
       </form>
 
       {task && (
-        <div className="mt-5 pt-5 border-t border-gray-800">
-          <h4 className="text-sm font-semibold text-white mb-3">Discussion</h4>
-          <CommentThread entityType="task" entityId={task.id} compact />
-        </div>
+        <>
+          <div className="mt-5 pt-5 border-t border-gray-800 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-white">Temps passé</p>
+              <p className="text-xs text-gray-500">
+                {(task.actual_hours || 0).toFixed(2)}h enregistrées
+                {task.estimated_hours ? ` sur ${task.estimated_hours}h estimées` : ''}
+              </p>
+            </div>
+            {running && timer?.task_id === task.id ? (
+              <button
+                type="button"
+                onClick={() => stop()}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                Arrêter le chrono
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => start(task)}
+                className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm font-medium rounded-lg transition-colors"
+              >
+                Démarrer le chrono
+              </button>
+            )}
+          </div>
+
+          <div className="mt-5 pt-5 border-t border-gray-800">
+            <SubtaskList taskId={task.id} />
+          </div>
+
+          <div className="mt-5 pt-5 border-t border-gray-800">
+            <h4 className="text-sm font-semibold text-white mb-3">Discussion</h4>
+            <CommentThread entityType="task" entityId={task.id} compact />
+          </div>
+        </>
       )}
     </Modal>
   )

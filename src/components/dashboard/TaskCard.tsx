@@ -12,6 +12,15 @@ const PRIORITY_CONFIG = {
   low: { label: 'Basse', bg: 'bg-green-500/20', text: 'text-green-400', dot: 'bg-green-500' },
 }
 
+const SEVERITY_LABEL: Record<string, string> = {
+  critical: 'Bloquant', major: 'Majeur', minor: 'Mineur',
+}
+const SEVERITY_STYLE: Record<string, string> = {
+  critical: 'bg-red-500/20 text-red-400',
+  major: 'bg-orange-500/20 text-orange-400',
+  minor: 'bg-gray-700 text-gray-300',
+}
+
 interface TaskCardProps {
   task: Task
   project?: Project
@@ -54,7 +63,19 @@ export default function TaskCard({ task, project, assignee, onClick }: TaskCardP
       </div>
 
       {/* Title */}
-      <p className="text-sm font-medium text-white mb-2">{task.title}</p>
+      <div className="flex items-start gap-1.5 mb-2">
+        {task.kind === 'bug' && (
+          <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-red-500/20 text-red-400 flex-shrink-0 mt-0.5">
+            Bug
+          </span>
+        )}
+        <p className="text-sm font-medium text-white">{task.title}</p>
+      </div>
+      {task.kind === 'bug' && task.severity && (
+        <span className={`inline-block px-1.5 py-0.5 text-[10px] font-medium rounded mb-2 ${SEVERITY_STYLE[task.severity]}`}>
+          {SEVERITY_LABEL[task.severity]}
+        </span>
+      )}
 
       {/* Tags */}
       {task.tags && task.tags.length > 0 && (

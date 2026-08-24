@@ -5,7 +5,7 @@ import KanbanBoard from '../../components/dashboard/KanbanBoard'
 import TaskModal from '../../components/dashboard/TaskModal'
 import ProjectModal from '../../components/dashboard/ProjectModal'
 import Avatar from '../../components/dashboard/Avatar'
-import type { Task, TaskStatus, TaskPriority, Project, Client } from '../../types/database'
+import type { Task, TaskStatus, TaskPriority, TaskKind, BugSeverity, Project, Client } from '../../types/database'
 
 type AssigneeFilter = 'all' | 'mine' | 'unassigned' | string
 
@@ -17,6 +17,7 @@ export default function KanbanPage() {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
   const [filterPriority, setFilterPriority] = useState<TaskPriority | ''>('')
   const [filterAssignee, setFilterAssignee] = useState<AssigneeFilter>('all')
+  const [filterKind, setFilterKind] = useState<TaskKind | ''>('')
   const [error, setError] = useState<string | null>(null)
 
   // Modals
@@ -58,6 +59,7 @@ export default function KanbanPage() {
   }, [fetchTasks])
 
   const filteredTasks = tasks
+    .filter(t => !filterKind || (t.kind || 'task') === filterKind)
     .filter(t => !filterPriority || t.priority === filterPriority)
     .filter(t => {
       if (filterAssignee === 'all') return true
@@ -68,23 +70,26 @@ export default function KanbanPage() {
 
   const myOpenCount = tasks.filter(t => t.assignee_id === profile?.id && t.status !== 'done').length
 
-  const handleMoveTask = async (taskId: string, newStatus: TaskStatus) => {
+  const handleMoveTask = async (taskId: string, newStatus: TaskStatus, newIndex: number) => {
     const previous = tasks
     setTasks(prev =>
       prev.map(t =>
         t.id === taskId
-          ? { ...t, status: newStatus, completed_at: newStatus === 'done' ? new Date().toISOString() : null }
+          ? { ...t, status: newStatus, position: newIndex, completed_at: newStatus === 'done' ? new Date().toISOString() : null }
           : t
       )
     )
-    const { error: e } = await supabase.from('tasks').update({
-      status: newStatus,
-      completed_at: newStatus === 'done' ? new Date().toISOString() : null,
-    }).eq('id', taskId)
+    const { error: e } = await supabase.rpc('move_task', {
+      p_task_id: taskId,
+      p_status: newStatus,
+      p_position: newIndex,
+    })
     if (e) {
       setError("Le déplacement n'a pas été enregistré.")
       setTasks(previous)
+      return
     }
+    fetchTasks()
   }
 
   const handleSaveTask = async (data: {
@@ -96,6 +101,9 @@ export default function KanbanPage() {
     project_id: string | null
     assignee_id: string | null
     estimated_hours: number | null
+    kind: TaskKind
+    severity: BugSeverity | null
+    steps_to_reproduce: string | null
   }) => {
     const payload = {
       title: data.title,
@@ -106,6 +114,9 @@ export default function KanbanPage() {
       project_id: data.project_id,
       assignee_id: data.assignee_id,
       estimated_hours: data.estimated_hours,
+      kind: data.kind,
+      severity: data.severity,
+      steps_to_reproduce: data.steps_to_reproduce,
     }
 
     if (editingTask) {
@@ -226,6 +237,16 @@ export default function KanbanPage() {
             {members.map(m => (
               <option key={m.id} value={m.id}>{m.full_name}</option>
             ))}
+          </select>
+
+          <select
+            value={filterKind}
+            onChange={(e) => setFilterKind(e.target.value as TaskKind | '')}
+            className={selectClass}
+          >
+            <option value="">Tâches et bugs</option>
+            <option value="task">Tâches seules</option>
+            <option value="bug">Bugs seuls</option>
           </select>
 
           <select
