@@ -169,7 +169,7 @@ export default function InvoicesPage() {
                       {invoice.invoice_number}
                     </td>
                     <td className="px-4 py-3 text-sm text-white">
-                      {invoice.client?.name ?? '—'}
+                      {invoice.client?.name ?? '-'}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-300 truncate max-w-xs">
                       {invoice.title}
@@ -191,7 +191,7 @@ export default function InvoicesPage() {
                     <td className="px-4 py-3 text-sm text-gray-400">
                       {invoice.due_date
                         ? format(new Date(invoice.due_date), 'dd/MM/yyyy', { locale: fr })
-                        : '—'}
+                        : '-'}
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>

@@ -65,7 +65,7 @@ export default function SmsComposer({ open, onClose, client, onSent }: SmsCompos
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={`SMS — ${client.name}`}>
+    <Modal open={open} onClose={onClose} title={`SMS · ${client.name}`}>
       <div className="space-y-4">
         {/* Tabs */}
         <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
@@ -125,7 +125,7 @@ export default function SmsComposer({ open, onClose, client, onSent }: SmsCompos
 
         {/* Compteur */}
         <p className="text-xs text-gray-500">
-          {charCount} caractères — {smsSegments} segment{smsSegments > 1 ? 's' : ''} SMS
+          {charCount} caractères · {smsSegments} segment{smsSegments > 1 ? 's' : ''} SMS
         </p>
 
         {/* Destinataire */}

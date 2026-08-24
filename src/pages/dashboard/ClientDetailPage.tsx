@@ -256,7 +256,7 @@ export default function ClientDetailPage() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-gray-500 mb-0.5">Email</p>
-                <p className="text-sm text-white">{client.email || '—'}</p>
+                <p className="text-sm text-white">{client.email || '-'}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500 mb-0.5">Téléphone</p>
@@ -335,7 +335,7 @@ export default function ClientDetailPage() {
                   return (
                     <button key={q.id} onClick={() => navigate(`/dashboard/quotes/${q.id}`)} className="w-full flex items-center justify-between p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-left">
                       <div>
-                        <p className="text-sm font-medium text-white">{q.quote_number} — {q.title}</p>
+                        <p className="text-sm font-medium text-white">{q.quote_number} · {q.title}</p>
                         <p className="text-xs text-gray-500">{format(new Date(q.created_at), 'dd/MM/yyyy', { locale: fr })}</p>
                       </div>
                       <div className="flex items-center gap-3">
@@ -366,7 +366,7 @@ export default function ClientDetailPage() {
                   return (
                     <button key={inv.id} onClick={() => navigate(`/dashboard/invoices/${inv.id}`)} className="w-full flex items-center justify-between p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors text-left">
                       <div>
-                        <p className="text-sm font-medium text-white">{inv.invoice_number} — {inv.title}</p>
+                        <p className="text-sm font-medium text-white">{inv.invoice_number} · {inv.title}</p>
                         <p className="text-xs text-gray-500">{format(new Date(inv.created_at), 'dd/MM/yyyy', { locale: fr })}</p>
                       </div>
                       <div className="flex items-center gap-3">

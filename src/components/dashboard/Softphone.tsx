@@ -177,7 +177,7 @@ export default function Softphone() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       <AnimatePresence mode="wait">
-        {/* IDLE — Bouton rond cliquable + Dialer */}
+        {/* IDLE : Bouton rond cliquable + Dialer */}
         {status === 'idle' && !dialerOpen && (
           <motion.button
             key="idle"
@@ -194,7 +194,7 @@ export default function Softphone() {
           </motion.button>
         )}
 
-        {/* DIALER — Pavé numérique */}
+        {/* DIALER : Pavé numérique */}
         {status === 'idle' && dialerOpen && (
           <motion.div
             key="dialer"
@@ -289,7 +289,7 @@ export default function Softphone() {
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}
             className="w-14 h-14 bg-red-600/20 border border-red-500/30 rounded-full flex items-center justify-center shadow-lg cursor-pointer"
-            title="Erreur Twilio — cliquer pour réessayer"
+            title="Erreur Twilio, cliquer pour réessayer"
             onClick={() => window.location.reload()}
           >
             <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

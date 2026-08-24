@@ -80,7 +80,7 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
     e.preventDefault()
     if (!name.trim()) return
 
-    // Validation téléphone — accepte tout format international
+    // Validation téléphone : accepte tout format international
     const trimmedPhone = phone.trim()
     if (trimmedPhone && !isValidPhone(trimmedPhone)) {
       setPhoneError('Numéro de téléphone invalide')

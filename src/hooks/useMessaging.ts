@@ -7,7 +7,7 @@ export interface Conversation {
   kind: 'direct' | 'channel'
   name: string | null
   last_message_at: string
-  /** Membres autres que soi — sert à nommer une conversation directe */
+  /** Membres autres que soi : sert à nommer une conversation directe */
   otherIds: string[]
   lastReadAt: string
   unread: number

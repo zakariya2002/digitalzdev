@@ -11,7 +11,7 @@ export function toE164(phone: string): string {
 
 // Formate un numéro E.164 pour l'affichage
 export function formatPhone(phone: string | null): string {
-  if (!phone) return '—'
+  if (!phone) return '-'
   // Format français lisible
   const matchFr = phone.match(/^\+33(\d)(\d{2})(\d{2})(\d{2})(\d{2})$/)
   if (matchFr) return `0${matchFr[1]} ${matchFr[2]} ${matchFr[3]} ${matchFr[4]} ${matchFr[5]}`
@@ -25,7 +25,7 @@ export function isValidPhone(phone: string): boolean {
   return /^\+\d{8,15}$/.test(e164)
 }
 
-// Conservé pour compatibilité — équivalent à isValidPhone maintenant
+// Conservé pour compatibilité : équivalent à isValidPhone maintenant
 export function isValidFrenchPhone(phone: string): boolean {
   return isValidPhone(phone)
 }

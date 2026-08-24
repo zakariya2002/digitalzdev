@@ -2,12 +2,15 @@ import { useState, useEffect, useCallback } from 'react'
 import { format, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
-import { formatCurrency, calculateCharges, BUSINESS } from '../../lib/business'
+import { formatCurrency } from '../../lib/business'
+import { useTaxRegimes } from '../../hooks/useTaxRegimes'
+import { isMicro } from '../../lib/tax'
 import ManualRevenuePanel from '../../components/dashboard/ManualRevenuePanel'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import type { Invoice, RevenueLedgerEntry } from '../../types/database'
 
 export default function FinancesPage() {
+  const { activeRegime } = useTaxRegimes()
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [ledger, setLedger] = useState<RevenueLedgerEntry[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -58,8 +61,20 @@ export default function FinancesPage() {
     .filter(entry => new Date(entry.occurred_at).getFullYear() === currentYear)
     .reduce((sum, entry) => sum + Number(entry.amount), 0)
 
-  const yearCharges = calculateCharges(yearCA)
-  const plafondPercent = Math.min((yearCA / BUSINESS.caPlafond) * 100, 100)
+  // Barème du statut en vigueur, modifiable depuis l'écran Simulateur
+  const params = activeRegime && isMicro(activeRegime.params) ? activeRegime.params : null
+  const socialRate = params?.social_rate ?? 0.212
+  const trainingRate = params?.training_rate ?? 0.001
+  const ceiling = params?.revenue_ceiling ?? 77700
+  const charges = (amount: number) => {
+    const urssaf = amount * socialRate
+    const cfp = amount * trainingRate
+    return { urssaf, cfp, totalCharges: urssaf + cfp, net: amount - urssaf - cfp }
+  }
+  const pct = (rate: number) => (rate * 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 })
+
+  const yearCharges = charges(yearCA)
+  const plafondPercent = Math.min((yearCA / ceiling) * 100, 100)
 
   // Factures en attente
   const pendingCount = invoices.filter(
@@ -73,16 +88,16 @@ export default function FinancesPage() {
       return d.getFullYear() === currentYear && d.getMonth() === i
     })
     const ca = monthEntries.reduce((sum, entry) => sum + Number(entry.amount), 0)
-    const charges = calculateCharges(ca)
+    const monthCharges = charges(ca)
     return {
       month: format(new Date(currentYear, i, 1), 'MMM', { locale: fr }),
       monthFull: format(new Date(currentYear, i, 1), 'MMMM yyyy', { locale: fr }),
       monthIndex: i,
       ca,
-      urssaf: charges.urssaf,
-      cfp: charges.cfp,
-      totalCharges: charges.totalCharges,
-      net: charges.net,
+      urssaf: monthCharges.urssaf,
+      cfp: monthCharges.cfp,
+      totalCharges: monthCharges.totalCharges,
+      net: monthCharges.net,
     }
   })
 
@@ -251,8 +266,8 @@ export default function FinancesPage() {
               <tr className="border-b border-gray-800">
                 <th className="text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Mois</th>
                 <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">CA brut</th>
-                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">URSSAF (21,1%)</th>
-                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">CFP (0,1%)</th>
+                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">{`URSSAF (${pct(socialRate)} %)`}</th>
+                <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">{`CFP (${pct(trainingRate)} %)`}</th>
                 <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Total charges</th>
                 <th className="text-right px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Net</th>
               </tr>

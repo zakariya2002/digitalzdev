@@ -24,7 +24,7 @@ export default function AssigneeSelect({ value, onChange, label = 'Responsable' 
           <option value="">Non assignée</option>
           {members.map(m => (
             <option key={m.id} value={m.id}>
-              {m.full_name}{m.job_title ? ` — ${m.job_title}` : ''}
+              {m.full_name}{m.job_title ? ` · ${m.job_title}` : ''}
             </option>
           ))}
         </select>

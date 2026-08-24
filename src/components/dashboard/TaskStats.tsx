@@ -73,7 +73,7 @@ export default function TaskStats({ tasks, projects }: TaskStatsProps) {
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-white truncate">{task.title}</p>
                     <p className="text-[10px] text-gray-500">
-                      {project?.name} — Deadline: {task.deadline}
+                      {project?.name} · Deadline : {task.deadline}
                     </p>
                   </div>
                 </div>

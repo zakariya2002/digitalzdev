@@ -12,7 +12,9 @@ export const BUSINESS = {
   // Fiscal
   tvaExempt: true,
   tvaMessage: 'TVA non applicable, article 293 B du Code G\u00e9n\u00e9ral des Imp\u00f4ts',
-  urssafRate: 0.211,
+  // Les taux et plafonds sont désormais des données modifiables : voir la table
+  // tax_regimes et l'écran Simulateur. Ces valeurs ne servent que de repli.
+  urssafRate: 0.256,
   cfpRate: 0.001,
   caPlafond: 77700,
 

@@ -332,11 +332,11 @@ export default function ProjectDetailPage() {
                   <>
                     {project.start_date
                       ? format(new Date(project.start_date), 'dd MMM yyyy', { locale: fr })
-                      : '—'}
-                    {' — '}
+                      : '-'}
+                    {' → '}
                     {project.end_date
                       ? format(new Date(project.end_date), 'dd MMM yyyy', { locale: fr })
-                      : '—'}
+                      : '-'}
                   </>
                 ) : (
                   'Non définie'
@@ -447,7 +447,7 @@ export default function ProjectDetailPage() {
                           <td className="px-4 py-3 text-sm text-gray-400">
                             {task.deadline
                               ? format(new Date(task.deadline), 'dd/MM/yyyy')
-                              : '—'}
+                              : '-'}
                           </td>
                           <td className="px-4 py-3">
                             <button
@@ -564,7 +564,7 @@ export default function ProjectDetailPage() {
               <div className="text-2xl font-bold text-white">
                 {project.budget !== null && project.budget !== undefined
                   ? formatCurrency(project.budget)
-                  : '—'}
+                  : 'Non défini'}
               </div>
             </div>
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">

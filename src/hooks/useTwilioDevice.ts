@@ -69,7 +69,7 @@ export function useTwilioDevice(): TwilioDeviceState {
     [startTimer, cleanupCall]
   )
 
-  // Initialize device lazily — only called after user gesture
+  // Initialize device lazily: only called after user gesture
   const ensureDevice = useCallback(async (): Promise<Device | null> => {
     if (deviceRef.current) return deviceRef.current
     if (initializingRef.current) return null

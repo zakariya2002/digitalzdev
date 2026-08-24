@@ -34,9 +34,9 @@ export default function LeadTimeline({ clientId }: LeadTimelineProps) {
             timestamp: call.called_at,
             summary: call.direction === 'outbound'
               ? isMissed
-                ? 'Appel sortant — Pas de réponse'
-                : `Appel sortant — ${duration}`
-              : `Appel entrant — ${duration || 'Manqué'}`,
+                ? 'Appel sortant · Pas de réponse'
+                : `Appel sortant · ${duration}`
+              : `Appel entrant · ${duration || 'Manqué'}`,
             data: call,
           })
         }
@@ -50,8 +50,8 @@ export default function LeadTimeline({ clientId }: LeadTimelineProps) {
             id: sms.id,
             timestamp: sms.sent_at,
             summary: sms.direction === 'outbound'
-              ? `SMS envoyé — ${preview}`
-              : `SMS reçu — ${preview}`,
+              ? `SMS envoyé · ${preview}`
+              : `SMS reçu · ${preview}`,
             data: sms,
           })
         }

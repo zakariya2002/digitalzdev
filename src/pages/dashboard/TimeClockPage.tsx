@@ -129,14 +129,14 @@ export default function TimeClockPage() {
                             <div
                               className={`w-full rounded transition-all ${h > 0 ? '' : 'bg-gray-800'}`}
                               style={{ height: `${height}px`, backgroundColor: h > 0 ? member.color : undefined }}
-                              title={`${format(day, 'EEEE d', { locale: fr })} — ${formatHours(h)}`}
+                              title={`${format(day, 'EEEE d', { locale: fr })} · ${formatHours(h)}`}
                             />
                           </div>
                           <span className={`text-[10px] ${isToday ? 'text-white font-medium' : 'text-gray-600'}`}>
                             {format(day, 'EEEEE', { locale: fr })}
                           </span>
                           <span className="text-[10px] text-gray-500 tabular-nums">
-                            {h > 0 ? h.toFixed(1) : '—'}
+                            {h > 0 ? h.toFixed(1) : '-'}
                           </span>
                         </div>
                       )

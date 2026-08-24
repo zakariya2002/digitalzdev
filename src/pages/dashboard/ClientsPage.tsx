@@ -224,13 +224,13 @@ export default function ClientsPage() {
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-sm text-gray-400">{client.email || '—'}</p>
+                      <p className="text-sm text-gray-400">{client.email || '-'}</p>
                       {client.phone && <p className="text-xs text-gray-500">{client.phone}</p>}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-400 hidden md:table-cell">
                       {client.last_contacted_at
                         ? formatDistanceToNow(new Date(client.last_contacted_at), { addSuffix: true, locale: fr })
-                        : '—'}
+                        : '-'}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-400 hidden lg:table-cell">
                       {SOURCE_LABEL[client.source] || client.source}
@@ -242,7 +242,7 @@ export default function ClientsPage() {
                           <span className="text-sm text-gray-300">{project.name}</span>
                         </div>
                       ) : (
-                        <span className="text-sm text-gray-500">—</span>
+                        <span className="text-sm text-gray-500">Aucun</span>
                       )}
                     </td>
                     <td className="px-4 py-3">

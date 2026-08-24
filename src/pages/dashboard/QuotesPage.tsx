@@ -215,7 +215,7 @@ export default function QuotesPage() {
                       {quote.quote_number}
                     </td>
                     <td className="px-4 py-3 text-sm text-white">
-                      {quote.client?.name ?? '—'}
+                      {quote.client?.name ?? '-'}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-300 truncate max-w-xs">
                       {quote.title}

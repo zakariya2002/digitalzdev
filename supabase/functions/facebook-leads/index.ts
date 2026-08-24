@@ -24,7 +24,7 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: CORS });
   }
 
-  // Facebook webhook verification (GET) — conservé pour compatibilité
+  // Facebook webhook verification (GET) : conservé pour compatibilité
   if (req.method === "GET") {
     const VERIFY_TOKEN = Deno.env.get("FB_VERIFY_TOKEN") || "";
     const url = new URL(req.url);
@@ -39,7 +39,7 @@ Deno.serve(async (req) => {
     return new Response("Forbidden", { status: 403, headers: CORS });
   }
 
-  // POST — Réception des leads
+  // POST : Réception des leads
   if (req.method === "POST") {
     try {
       const body = await req.json();
@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
 
       // Détecter si c'est le format Facebook webhook natif (entry[].changes[])
       if (leadData.entry && Array.isArray(leadData.entry)) {
-        // Format Facebook natif — traiter comme avant
+        // Format Facebook natif : traiter comme avant
         const FB_ACCESS_TOKEN = Deno.env.get("FB_PAGE_ACCESS_TOKEN") || "";
         for (const entry of leadData.entry) {
           for (const change of entry.changes || []) {
@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
         return jsonResponse({ success: true, source: "facebook_native" });
       }
 
-      // Format Make.com / n8n — champs parsés directement
+      // Format Make.com / n8n : champs parsés directement
       const name = leadData["nom_complet"] || leadData["full_name"] || leadData["name"] || "Lead Facebook";
       const email = leadData["e-mail"] || leadData["email"] || null;
       const phone = leadData["numéro_de_téléphone"] || leadData["phone_number"] || leadData["phone"] || null;
@@ -94,8 +94,8 @@ Deno.serve(async (req) => {
       }
 
       const notes = extraFields.length > 0
-        ? `Facebook Lead — ${new Date().toLocaleDateString("fr-FR")}\n${extraFields.join("\n")}`
-        : `Facebook Lead — ${new Date().toLocaleDateString("fr-FR")}`;
+        ? `Facebook Lead · ${new Date().toLocaleDateString("fr-FR")}\n${extraFields.join("\n")}`
+        : `Facebook Lead · ${new Date().toLocaleDateString("fr-FR")}`;
 
       const clientData = {
         name,
@@ -160,7 +160,7 @@ async function processNativeLead(leadgenId: string, accessToken: string) {
     phone: fields.phone_number || fields.phone || null,
     source: "facebook",
     status: "new_lead",
-    notes: `Lead Facebook #${leadgenId} — ${new Date().toLocaleDateString("fr-FR")}`,
+    notes: `Lead Facebook #${leadgenId} · ${new Date().toLocaleDateString("fr-FR")}`,
   };
 
   const { error } = await supabase.from("clients").insert(clientData);
@@ -181,7 +181,7 @@ async function sendNewLeadEmail(
   const NOTIFICATION_EMAIL = Deno.env.get("NOTIFICATION_EMAIL") || "zakariyanebbache@gmail.com";
 
   if (!RESEND_API_KEY) {
-    console.warn("RESEND_API_KEY not set — skipping email notification");
+    console.warn("RESEND_API_KEY not set: skipping email notification");
     return;
   }
 
@@ -195,8 +195,8 @@ async function sendNewLeadEmail(
       <p>Un nouveau prospect vient d'arriver depuis Facebook Ads :</p>
       <table style="border-collapse:collapse;width:100%;margin-top:16px;">
         <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;width:120px;">Nom</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.name}</td></tr>
-        <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;">Email</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.email || "—"}</td></tr>
-        <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;">Téléphone</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.phone || "—"}</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;">Email</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.email || "Non renseigné"}</td></tr>
+        <tr><td style="padding:8px;border-bottom:1px solid #e5e7eb;font-weight:bold;">Téléphone</td><td style="padding:8px;border-bottom:1px solid #e5e7eb;">${client.phone || "Non renseigné"}</td></tr>
       </table>
       ${extraHtml}
       <p style="margin-top:24px;">

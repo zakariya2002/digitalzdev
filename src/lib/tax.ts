@@ -131,7 +131,7 @@ export function simulate(regime: TaxRegime, input: SimulationInput): SimulationR
       tax = revenue * p.liberatory_tax_rate
       lines.push({
         kind: 'tax',
-        label: 'Impôt — versement libératoire',
+        label: 'Impôt (versement libératoire)',
         amount: round(tax),
         hint: `${(p.liberatory_tax_rate * 100).toFixed(1)} % du chiffre d'affaires`,
       })

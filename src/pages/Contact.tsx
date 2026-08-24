@@ -15,17 +15,17 @@ const PROJECT_TYPES = [
 
 const BUDGETS = [
   'Moins de 1 500 €',
-  '1 500 € – 3 000 €',
-  '3 000 € – 5 000 €',
-  '5 000 € – 10 000 €',
+  '1 500 € à 3 000 €',
+  '3 000 € à 5 000 €',
+  '5 000 € à 10 000 €',
   'Plus de 10 000 €',
   'À définir',
 ]
 
 const TIMELINES = [
   'Moins de 1 mois',
-  '1 – 2 mois',
-  '2 – 3 mois',
+  '1 à 2 mois',
+  '2 à 3 mois',
   '3+ mois',
   'Pas de deadline',
 ]
@@ -59,13 +59,13 @@ export default function Contact() {
     const templateParams = {
       from_name: form.name,
       from_email: form.email,
-      company: form.company || '–',
-      phone: form.phone || '–',
-      project_type: form.projectType === 'Autre' ? `Autre – ${form.projectTypeOther}` : form.projectType,
+      company: form.company || 'Non renseigné',
+      phone: form.phone || 'Non renseigné',
+      project_type: form.projectType === 'Autre' ? `Autre : ${form.projectTypeOther}` : form.projectType,
       budget: form.budget,
       timeline: form.timeline,
-      has_design: form.hasDesign || '–',
-      website_url: form.url || '–',
+      has_design: form.hasDesign || 'Non renseigné',
+      website_url: form.url || 'Non renseigné',
       description: form.description,
     }
 
@@ -395,7 +395,7 @@ export default function Contact() {
                 </motion.button>
 
                 <p className="text-text-muted text-xs text-center">
-                  Nous revenons vers vous sous 24–48h avec une proposition
+                  Nous revenons vers vous sous 24 à 48h avec une proposition
                   adaptée.
                 </p>
               </motion.form>
@@ -426,7 +426,7 @@ export default function Contact() {
                   Demande envoyée !
                 </h2>
                 <p className="text-text-secondary text-lg mb-8">
-                  Nous analysons votre projet et revenons vers vous sous 24–48h.
+                  Nous analysons votre projet et revenons vers vous sous 24 à 48h.
                 </p>
                 <Link
                   to="/"

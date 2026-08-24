@@ -51,7 +51,7 @@ export function TeamProvider({ children }: { children: ReactNode }) {
 
   // Tant que la migration d'équipe n'est pas appliquée, aucun profil n'existe.
   // On rend alors la main complète au compte connecté plutôt que de masquer
-  // des modules à tort — la vraie barrière reste la sécurité côté base.
+  // des modules à tort : la vraie barrière reste la sécurité côté base.
   const noTeamYet = !loading && !!user && !profile
 
   const value: TeamContextType = {

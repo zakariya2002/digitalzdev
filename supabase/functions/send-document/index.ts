@@ -119,7 +119,7 @@ Deno.serve(async (req) => {
     body: JSON.stringify({
       from: FROM_EMAIL,
       to: [to],
-      subject: `${label} ${number}${doc.title ? " — " + doc.title : ""}`,
+      subject: `${label} ${number}${doc.title ? " · " + doc.title : ""}`,
       html,
     }),
   });

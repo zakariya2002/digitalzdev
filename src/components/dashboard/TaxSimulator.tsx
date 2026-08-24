@@ -11,7 +11,7 @@ const MARGINAL_RATES = [
 ]
 
 interface TaxSimulatorProps {
-  /** Montant de départ, en euros — celui d'un devis par exemple */
+  /** Montant de départ, en euros (celui d'un devis par exemple) */
   defaultAmount?: number
   /** Affiche uniquement le régime en vigueur, sans le comparateur */
   compact?: boolean
@@ -113,7 +113,7 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
           >
             <option value="lib">Versement libératoire</option>
             {MARGINAL_RATES.map(r => (
-              <option key={r.value} value={r.value}>Barème — tranche {r.label}</option>
+              <option key={r.value} value={r.value}>Barème : tranche {r.label}</option>
             ))}
           </select>
         </div>
@@ -122,7 +122,7 @@ export default function TaxSimulator({ defaultAmount = 1500, compact = false, ti
       {hasCorporate && (
         <div className="mb-5">
           <label className="block text-xs text-gray-400 mb-1">
-            En société : part versée en rémunération — {Math.round(salaryShare * 100)} %, le reste en dividendes
+            En société : {Math.round(salaryShare * 100)} % versés en rémunération, le reste en dividendes
           </label>
           <input
             type="range" min="0" max="1" step="0.05" value={salaryShare}

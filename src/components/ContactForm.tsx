@@ -18,7 +18,7 @@ export default function ContactForm() {
           Un projet en tête ?
         </h2>
         <p className="text-text-secondary mb-8">
-          Remplissez notre formulaire de devis pour recevoir une proposition adaptée sous 24–48h.
+          Remplissez notre formulaire de devis pour recevoir une proposition adaptée sous 24 à 48h.
         </p>
         <Link
           to="/contact"

@@ -101,7 +101,7 @@ export default function DashboardHome() {
   const nextDeadline = upcomingTasks[0]
   const nextDeadlineStr = nextDeadline
     ? format(parseISO(nextDeadline.deadline!), 'd MMM', { locale: fr })
-    : '—'
+    : 'Aucune'
 
   const allWidgets = [
     {

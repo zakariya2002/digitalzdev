@@ -65,7 +65,7 @@ export default function MissionSection() {
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <h3 className="font-display font-bold text-2xl md:text-3xl text-text-primary mb-6">
-              NeuroCare — bien plus qu'une plateforme
+              NeuroCare : bien plus qu'une plateforme
             </h3>
 
             <div className="space-y-4 text-text-secondary leading-relaxed">

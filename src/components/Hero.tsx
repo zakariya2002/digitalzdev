@@ -67,7 +67,7 @@ export default function Hero() {
     <section ref={containerRef} className="h-[200vh] relative bg-surface">
       <div className="sticky top-0 h-screen bg-surface">
 
-        {/* 3D Word Cloud — DESKTOP ONLY (GPU-heavy) */}
+        {/* 3D Word Cloud: DESKTOP ONLY (GPU-heavy) */}
         <div
           className="absolute inset-0 hidden md:block"
           style={{ perspective: 800, perspectiveOrigin: '50% 50%' }}
@@ -98,7 +98,7 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* Simple 2D words — MOBILE ONLY (lightweight) */}
+        {/* Simple 2D words: MOBILE ONLY (lightweight) */}
         <motion.div
           className="absolute inset-0 md:hidden overflow-hidden"
           style={{ opacity: mobileWordsOpacity, scale: mobileWordsScale }}

@@ -243,7 +243,7 @@ export default function ClientPortal() {
           <div className={`rounded-xl p-5 ${data.response === 'accepted' ? 'bg-green-50 border border-green-200' : 'bg-gray-100 border border-gray-200'}`}>
             <p className="text-sm font-medium">
               {data.response === 'accepted' ? 'Document accepté' : 'Document refusé'}
-              {' — '}
+              {' · '}
               {format(parseISO(data.respondedAt), 'd MMMM yyyy à HH:mm', { locale: fr })}
             </p>
             <p className="text-sm text-gray-600 mt-1">

@@ -199,7 +199,7 @@ export default function DocumentPDF({
           {/* Signature block for quotes */}
           {type === 'quote' && (
             <div className="mt-8">
-              <p className="text-sm text-black">Bon pour accord — Signature du client :</p>
+              <p className="text-sm text-black">Bon pour accord · Signature du client :</p>
               <div className="h-16 border-b border-gray-400 mt-2" />
             </div>
           )}
@@ -208,7 +208,7 @@ export default function DocumentPDF({
         {/* Legal footer */}
         <div className="mt-12 pt-4 border-t border-gray-300">
           <p className="text-xs text-gray-400 text-center">
-            {BUSINESS.tradeName} — {BUSINESS.name} — Auto-entrepreneur — SIRET : {BUSINESS.siret}
+            {BUSINESS.tradeName} · {BUSINESS.name} · Auto-entrepreneur · SIRET : {BUSINESS.siret}
           </p>
         </div>
       </div>

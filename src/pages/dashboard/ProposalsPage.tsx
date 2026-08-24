@@ -94,7 +94,7 @@ export default function ProposalsPage() {
       if (proposal.estimated_amount) {
         await supabase.from('quote_items').insert({
           quote_id: quote.id,
-          description: proposal.title + (proposal.project_type ? ' — ' + TYPE_LABELS[proposal.project_type] : ''),
+          description: proposal.title + (proposal.project_type ? ' · ' + TYPE_LABELS[proposal.project_type] : ''),
           quantity: 1,
           unit_price: proposal.estimated_amount,
           position: 0,
@@ -171,13 +171,13 @@ export default function ProposalsPage() {
                       {proposal.title}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-300">
-                      {proposal.client?.name ?? '—'}
+                      {proposal.client?.name ?? '-'}
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-400">
-                      {proposal.project_type ? TYPE_LABELS[proposal.project_type] ?? proposal.project_type : '—'}
+                      {proposal.project_type ? TYPE_LABELS[proposal.project_type] ?? proposal.project_type : '-'}
                     </td>
                     <td className="px-4 py-3 text-sm font-medium text-white">
-                      {proposal.estimated_amount != null ? formatCurrency(proposal.estimated_amount) : '—'}
+                      {proposal.estimated_amount != null ? formatCurrency(proposal.estimated_amount) : '-'}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${badge.bg} ${badge.text}`}>

@@ -75,7 +75,7 @@ export default function MilestonesPanel({ projectId }: MilestonesPanelProps) {
 
       {milestones.length === 0 ? (
         <p className="text-xs text-gray-500 mb-4">
-          Aucune deadline. Pose ici les dates que tu engages auprès du client — elles remontent dans le calendrier et déclenchent une alerte à l'approche.
+          Aucune deadline. Pose ici les dates que tu engages auprès du client : elles remontent dans le calendrier et déclenchent une alerte à l'approche.
         </p>
       ) : (
         <div className="space-y-2 mb-4">
@@ -98,7 +98,7 @@ export default function MilestonesPanel({ projectId }: MilestonesPanelProps) {
                     {format(parseISO(milestone.due_date), 'd MMMM yyyy', { locale: fr })}
                     {open && (
                       <span className={days < 0 ? ' text-red-400' : days <= 3 ? ' text-amber-400' : ''}>
-                        {days < 0 ? ` — dépassé de ${Math.abs(days)} j` : days === 0 ? " — c'est aujourd'hui" : ` — dans ${days} j`}
+                        {days < 0 ? ` · dépassé de ${Math.abs(days)} j` : days === 0 ? " · c'est aujourd'hui" : ` · dans ${days} j`}
                       </span>
                     )}
                   </p>
