@@ -183,11 +183,24 @@ export default function ProjectsPage() {
             const client = clients.find(c => c.id === p.client_id)
             const lead = memberById(p.lead_id)
             return (
-              <button
+              <div
                 key={p.id}
-                onClick={() => navigate(`/dashboard/projects/${p.id}`)}
-                className="text-left bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-xl p-5 transition-colors group"
+                className="relative bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-xl p-5 transition-colors group"
               >
+                <button
+                  onClick={(e) => { e.stopPropagation(); setEditingProject(p); setModalOpen(true) }}
+                  title="Modifier, archiver ou supprimer"
+                  aria-label={`Actions sur ${p.name}`}
+                  className="absolute top-3 right-3 p-1.5 rounded-lg text-gray-600 hover:text-white hover:bg-gray-800 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity z-10"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => navigate(`/dashboard/projects/${p.id}`)}
+                  className="text-left w-full"
+                >
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: p.color }} />
@@ -195,8 +208,10 @@ export default function ProjectsPage() {
                       {p.name}
                     </h3>
                   </div>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-medium flex-shrink-0 ${STATUS_COLORS[p.status] || STATUS_COLORS.active}`}>
-                    {STATUS_LABELS[p.status] || p.status}
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-medium flex-shrink-0 mr-6 ${
+                    p.is_archived ? STATUS_COLORS.archived : (STATUS_COLORS[p.status] || STATUS_COLORS.active)
+                  }`}>
+                    {p.is_archived ? 'Archivé' : (STATUS_LABELS[p.status] || p.status)}
                   </span>
                 </div>
 
@@ -234,7 +249,8 @@ export default function ProjectsPage() {
                     <Avatar profile={lead} size="sm" />
                   </div>
                 </div>
-              </button>
+                </button>
+              </div>
             )
           })}
         </div>

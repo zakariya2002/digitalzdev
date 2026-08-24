@@ -63,6 +63,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
   const [endDate, setEndDate] = useState('')
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     if (project) {
@@ -88,6 +89,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
       setEndDate('')
       setDescription('')
     }
+    setConfirmDelete(false)
   }, [project, open])
 
   const handleSubmit = async (e: FormEvent) => {
@@ -198,16 +200,64 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
               {project.is_archived ? 'Désarchiver' : 'Archiver'}
             </button>
           )}
-          {project && onDelete && (
+          {project && onDelete && !confirmDelete && (
             <button
               type="button"
-              onClick={() => { onDelete(project.id); onClose() }}
+              onClick={() => setConfirmDelete(true)}
               className="px-4 py-2 bg-red-600/10 hover:bg-red-600/20 text-red-400 text-sm font-medium rounded-lg transition-colors"
             >
               Supprimer
             </button>
           )}
         </div>
+
+        {/* La suppression emporte tout l'historique : on le dit avant, pas après */}
+        {project && onDelete && confirmDelete && (
+          <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg space-y-3">
+            <div>
+              <p className="text-sm font-medium text-red-300">
+                Supprimer définitivement « {project.name} » ?
+              </p>
+              <p className="text-xs text-gray-400 mt-1">
+                Ses tâches, le temps passé, les fichiers déposés, les jalons et la recette
+                seront effacés avec lui. Les devis et factures seront conservés, mais
+                détachés du projet. Cette action est irréversible.
+              </p>
+              {onArchive && !project.is_archived && (
+                <p className="text-xs text-gray-400 mt-2">
+                  Si le projet est simplement terminé, préfère <strong className="text-gray-300">Archiver</strong> :
+                  il disparaît des écrans de travail et son historique reste consultable.
+                </p>
+              )}
+            </div>
+            <div className="flex items-center gap-3 flex-wrap">
+              <button
+                type="button"
+                onClick={() => { onDelete(project.id); onClose() }}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                Oui, supprimer définitivement
+              </button>
+              {onArchive && !project.is_archived && (
+                <button
+                  type="button"
+                  onClick={() => { onArchive(project.id, true); onClose() }}
+                  className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-sm font-medium rounded-lg transition-colors"
+                >
+                  Archiver plutôt
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                className="px-4 py-2 text-gray-400 hover:text-white text-sm transition-colors"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        )}
+
       </form>
     </Modal>
   )

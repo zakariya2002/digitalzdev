@@ -191,18 +191,34 @@ export default function KanbanPage() {
             Tous
           </button>
           {projects.map((p) => (
-            <button
+            <div
               key={p.id}
-              onClick={() => setSelectedProjectId(p.id)}
-              onDoubleClick={() => { setEditingProject(p); setProjectModalOpen(true) }}
-              className={`px-3 py-1.5 text-sm rounded-lg transition-colors flex items-center gap-1.5 ${
-                selectedProjectId === p.id ? 'text-white' : 'bg-gray-800 text-gray-400 hover:text-white'
+              className={`flex items-center rounded-lg transition-colors ${
+                selectedProjectId === p.id ? '' : 'bg-gray-800'
               }`}
-              style={selectedProjectId === p.id ? { backgroundColor: p.color + '20', color: p.color } : {}}
+              style={selectedProjectId === p.id ? { backgroundColor: p.color + '20' } : {}}
             >
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
-              {p.name}
-            </button>
+              <button
+                onClick={() => setSelectedProjectId(p.id)}
+                className={`pl-3 pr-2 py-1.5 text-sm flex items-center gap-1.5 ${
+                  selectedProjectId === p.id ? '' : 'text-gray-400 hover:text-white'
+                }`}
+                style={selectedProjectId === p.id ? { color: p.color } : {}}
+              >
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
+                {p.name}
+              </button>
+              <button
+                onClick={() => { setEditingProject(p); setProjectModalOpen(true) }}
+                title={`Modifier, archiver ou supprimer ${p.name}`}
+                aria-label={`Modifier ${p.name}`}
+                className="pr-2.5 pl-1 py-1.5 text-gray-500 hover:text-white transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                </svg>
+              </button>
+            </div>
           ))}
           <button
             onClick={() => { setEditingProject(null); setProjectModalOpen(true) }}

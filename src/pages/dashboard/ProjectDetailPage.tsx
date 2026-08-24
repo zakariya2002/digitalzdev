@@ -11,6 +11,7 @@ import ActivityFeed from '../../components/dashboard/ActivityFeed'
 import MilestonesPanel from '../../components/dashboard/MilestonesPanel'
 import AcceptanceChecklist from '../../components/dashboard/AcceptanceChecklist'
 import ProfitabilityCard from '../../components/dashboard/ProfitabilityCard'
+import ProjectModal from '../../components/dashboard/ProjectModal'
 import ProjectFilesPanel from '../../components/dashboard/ProjectFilesPanel'
 import EnvironmentsPanel from '../../components/dashboard/EnvironmentsPanel'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
@@ -122,6 +123,8 @@ export default function ProjectDetailPage() {
   const [quotes, setQuotes] = useState<Quote[]>([])
   const [invoices, setInvoices] = useState<Invoice[]>([])
   const [activeTab, setActiveTab] = useState('overview')
+  const [editOpen, setEditOpen] = useState(false)
+  const [clients, setClients] = useState<Client[]>([])
 
   // Time entry modal
   const [timeModalOpen, setTimeModalOpen] = useState(false)
@@ -160,6 +163,9 @@ export default function ProjectDetailPage() {
     if (f) setFiles(f as unknown as ProjectFile[])
     if (q) setQuotes(q as unknown as Quote[])
     if (inv) setInvoices(inv as unknown as Invoice[])
+
+    const { data: allClients } = await supabase.from('clients').select('*').order('name')
+    if (allClients) setClients(allClients as unknown as Client[])
   }, [id])
 
   useEffect(() => {
@@ -252,6 +258,12 @@ export default function ProjectDetailPage() {
           </div>
         </div>
         <div className="flex items-start gap-6">
+          <button
+            onClick={() => setEditOpen(true)}
+            className="px-3 py-1.5 text-sm bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg transition-colors"
+          >
+            Modifier le projet
+          </button>
           <div className="text-right">
             <div className="text-sm text-gray-400 mb-1">Responsable</div>
             <div className="flex items-center justify-end gap-2">
@@ -650,6 +662,28 @@ export default function ProjectDetailPage() {
           </div>
         </div>
       )}
+    
+      <ProjectModal
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        project={project}
+        clients={clients}
+        onSave={async (data) => {
+          const { error } = await supabase.from('projects').update(data).eq('id', id!)
+          if (error) { alert("Le projet n'a pas pu être modifié."); return }
+          fetchAll()
+        }}
+        onDelete={async (projectId) => {
+          const { error } = await supabase.from('projects').delete().eq('id', projectId)
+          if (error) { alert("Le projet n'a pas pu être supprimé."); return }
+          navigate('/dashboard/projects')
+        }}
+        onArchive={async (projectId, archived) => {
+          const { error } = await supabase.from('projects').update({ is_archived: archived }).eq('id', projectId)
+          if (error) { alert("Le projet n'a pas pu être archivé."); return }
+          fetchAll()
+        }}
+      />
     </div>
   )
 }
