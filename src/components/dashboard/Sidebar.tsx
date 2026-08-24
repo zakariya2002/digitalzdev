@@ -1,11 +1,15 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { useTeam } from '../../contexts/TeamContext'
+import Avatar from './Avatar'
 
 interface NavItem {
   to: string
   label: string
   icon: () => JSX.Element
   end?: boolean
+  /** Réservé à l'owner : données financières personnelles */
+  ownerOnly?: boolean
 }
 
 interface NavSection {
@@ -32,6 +36,7 @@ const navSections: NavSection[] = [
   {
     title: 'Production',
     items: [
+      { to: '/dashboard/projects', label: 'Projets', icon: ProjectsIcon },
       { to: '/dashboard/kanban', label: 'Kanban', icon: KanbanIcon },
       { to: '/dashboard/calendar', label: 'Calendrier', icon: CalendarIcon },
     ],
@@ -39,8 +44,8 @@ const navSections: NavSection[] = [
   {
     title: 'Finances',
     items: [
-      { to: '/dashboard/finances', label: 'Finances', icon: RevenuesIcon },
-      { to: '/dashboard/revenues', label: 'Revenus (ancien)', icon: RevenuesIcon },
+      { to: '/dashboard/finances', label: 'Finances', icon: RevenuesIcon, ownerOnly: true },
+      { to: '/dashboard/revenues', label: 'Revenus (ancien)', icon: RevenuesIcon, ownerOnly: true },
     ],
   },
   {
@@ -52,8 +57,22 @@ const navSections: NavSection[] = [
   },
 ]
 
+const ROLE_LABELS: Record<string, string> = {
+  owner: 'Propriétaire',
+  manager: 'Cheffe de projet',
+  member: 'Équipe',
+}
+
 export default function Sidebar({ open, onClose }: SidebarProps) {
   const { signOut, user } = useAuth()
+  const { profile, isOwner } = useTeam()
+
+  const sections = navSections
+    .map(section => ({
+      ...section,
+      items: section.items.filter(item => !item.ownerOnly || isOwner),
+    }))
+    .filter(section => section.items.length > 0)
 
   return (
     <>
@@ -81,7 +100,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
         {/* Navigation */}
         <nav className="flex-1 px-3 py-4 overflow-y-auto">
-          {navSections.map((section) => (
+          {sections.map((section) => (
             <div key={section.title} className="mb-4">
               <div className="px-3 py-2">
                 <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">{section.title}</p>
@@ -112,8 +131,16 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
         {/* User + Logout */}
         <div className="px-3 py-4 border-t border-gray-800">
-          <div className="px-3 mb-3">
-            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+          <div className="flex items-center gap-2.5 px-3 mb-3">
+            <Avatar profile={profile} size="md" />
+            <div className="min-w-0">
+              <p className="text-sm text-white font-medium truncate">
+                {profile?.full_name || user?.email}
+              </p>
+              <p className="text-xs text-gray-500 truncate">
+                {profile?.job_title || (profile ? ROLE_LABELS[profile.role] : '')}
+              </p>
+            </div>
           </div>
           <button
             onClick={signOut}
@@ -134,6 +161,14 @@ function DashboardIcon() {
   return (
     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+    </svg>
+  )
+}
+
+function ProjectsIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
     </svg>
   )
 }

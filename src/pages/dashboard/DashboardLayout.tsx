@@ -4,6 +4,7 @@ import Sidebar from '../../components/dashboard/Sidebar'
 import Header from '../../components/dashboard/Header'
 import Softphone from '../../components/dashboard/Softphone'
 import { TwilioProvider } from '../../contexts/TwilioContext'
+import { TeamProvider } from '../../contexts/TeamContext'
 import DashboardHome from './DashboardHome'
 import KanbanPage from './KanbanPage'
 import CalendarPage from './CalendarPage'
@@ -18,6 +19,7 @@ import InvoiceDetailPage from './InvoiceDetailPage'
 import FinancesPage from './FinancesPage'
 import ProposalsPage from './ProposalsPage'
 import ProposalDetailPage from './ProposalDetailPage'
+import ProjectsPage from './ProjectsPage'
 import ProjectDetailPage from './ProjectDetailPage'
 import AutomationPage from './AutomationPage'
 import { useEffect } from 'react'
@@ -32,7 +34,8 @@ export default function DashboardLayout() {
   }, [location.pathname])
 
   return (
-    <TwilioProvider>
+    <TeamProvider>
+      <TwilioProvider>
       <div className="min-h-screen bg-gray-950 text-white">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <div className="lg:ml-64">
@@ -56,6 +59,7 @@ export default function DashboardLayout() {
               <Route path="proposals" element={<ProposalsPage />} />
               <Route path="proposals/new" element={<ProposalDetailPage />} />
               <Route path="proposals/:id" element={<ProposalDetailPage />} />
+              <Route path="projects" element={<ProjectsPage />} />
               <Route path="projects/:id" element={<ProjectDetailPage />} />
               <Route path="automation" element={<AutomationPage />} />
             </Routes>
@@ -63,6 +67,7 @@ export default function DashboardLayout() {
         </div>
         <Softphone />
       </div>
-    </TwilioProvider>
+      </TwilioProvider>
+    </TeamProvider>
   )
 }

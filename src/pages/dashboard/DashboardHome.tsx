@@ -2,12 +2,15 @@ import { useState, useEffect, useCallback } from 'react'
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
+import { useTeam } from '../../contexts/TeamContext'
 import KPIWidgets from '../../components/dashboard/KPIWidgets'
+import MyWeek from '../../components/dashboard/MyWeek'
 import RevenueChart from '../../components/dashboard/RevenueChart'
 import TaskStats from '../../components/dashboard/TaskStats'
 import type { Task, Project, Revenue, Client, Quote, Invoice } from '../../types/database'
 
 export default function DashboardHome() {
+  const { isOwner } = useTeam()
   const [projects, setProjects] = useState<Project[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [revenues, setRevenues] = useState<Revenue[]>([])
@@ -99,7 +102,7 @@ export default function DashboardHome() {
     ? format(parseISO(nextDeadline.deadline!), 'd MMM', { locale: fr })
     : '—'
 
-  const widgets = [
+  const allWidgets = [
     {
       label: 'Revenu du mois',
       value: `${monthRevenue.toLocaleString('fr-FR')} €`,
@@ -159,18 +162,29 @@ export default function DashboardHome() {
     },
   ]
 
+  // Le revenu du mois relève de la comptabilité personnelle : réservé à l'owner
+  const widgets = isOwner ? allWidgets : allWidgets.filter(w => w.label !== 'Revenu du mois')
+
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <KPIWidgets widgets={widgets} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <RevenueChart revenues={revenues} projects={projects} />
+          {isOwner
+            ? <RevenueChart revenues={revenues} projects={projects} />
+            : <MyWeek tasks={tasks} projects={projects} />}
         </div>
         <div>
           <TaskStats tasks={tasks} projects={projects} />
         </div>
       </div>
+
+      {isOwner && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <MyWeek tasks={tasks} projects={projects} />
+        </div>
+      )}
     </div>
   )
 }

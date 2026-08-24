@@ -4,6 +4,9 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import { formatCurrency } from '../../lib/business'
+import { useTeam } from '../../contexts/TeamContext'
+import Avatar from '../../components/dashboard/Avatar'
+import CommentThread from '../../components/dashboard/CommentThread'
 import Modal from '../../components/dashboard/Modal'
 import type { Project, Task, TimeEntry, ProjectFile, Quote, Invoice, Client } from '../../types/database'
 
@@ -103,6 +106,7 @@ const inputClass = 'w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-
 export default function ProjectDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { memberById } = useTeam()
   const [project, setProject] = useState<Project | null>(null)
   const [client, setClient] = useState<Client | null>(null)
   const [tasks, setTasks] = useState<Task[]>([])
@@ -218,9 +222,12 @@ export default function ProjectDetailPage() {
   const tabs = [
     { key: 'overview', label: "Vue d'ensemble" },
     { key: 'tasks', label: 'Tâches' },
+    { key: 'discussion', label: 'Discussion' },
     { key: 'files', label: 'Fichiers' },
     { key: 'financial', label: 'Financier' },
   ]
+
+  const lead = memberById(project.lead_id)
 
   return (
     <div>
@@ -256,12 +263,21 @@ export default function ProjectDetailPage() {
             )}
           </div>
         </div>
-        {project.budget !== null && project.budget !== undefined && (
+        <div className="flex items-start gap-6">
           <div className="text-right">
-            <div className="text-sm text-gray-400">Budget</div>
-            <div className="text-xl font-bold text-white">{formatCurrency(project.budget)}</div>
+            <div className="text-sm text-gray-400 mb-1">Responsable</div>
+            <div className="flex items-center justify-end gap-2">
+              <Avatar profile={lead} size="sm" />
+              <span className="text-sm text-white">{lead?.full_name || 'Non assigné'}</span>
+            </div>
           </div>
-        )}
+          {project.budget !== null && project.budget !== undefined && (
+            <div className="text-right">
+              <div className="text-sm text-gray-400">Budget</div>
+              <div className="text-xl font-bold text-white">{formatCurrency(project.budget)}</div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Tabs */}
@@ -366,6 +382,7 @@ export default function ProjectDetailPage() {
                   <thead>
                     <tr className="border-b border-gray-800">
                       <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Titre</th>
+                      <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Responsable</th>
                       <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Statut</th>
                       <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Priorité</th>
                       <th className="text-left px-4 py-3 text-sm font-medium text-gray-400">Temps</th>
@@ -382,6 +399,9 @@ export default function ProjectDetailPage() {
                       return (
                         <tr key={task.id} className="border-b border-gray-800 last:border-0 hover:bg-gray-800/50">
                           <td className="px-4 py-3 text-sm text-white font-medium">{task.title}</td>
+                          <td className="px-4 py-3">
+                            <Avatar profile={memberById(task.assignee_id)} size="sm" showName />
+                          </td>
                           <td className="px-4 py-3">
                             <span className={`px-2 py-0.5 text-xs rounded-full ${TASK_STATUS_COLORS[task.status] || ''}`}>
                               {TASK_STATUS_LABELS[task.status] || task.status}
@@ -500,6 +520,11 @@ export default function ProjectDetailPage() {
       )}
 
       {/* ===== Files Tab ===== */}
+      {/* ===== Discussion Tab ===== */}
+      {activeTab === 'discussion' && id && (
+        <CommentThread entityType="project" entityId={id} title="Discussion du projet" />
+      )}
+
       {activeTab === 'files' && (
         <div>
           <div className="flex justify-end mb-4">

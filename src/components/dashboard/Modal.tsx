@@ -23,8 +23,8 @@ export default function Modal({ open, onClose, title, children, maxWidth = 'max-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-      <div className={`relative w-full ${maxWidth} bg-gray-900 border border-gray-800 rounded-xl shadow-2xl`}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
+      <div className={`relative w-full ${maxWidth} max-h-[90vh] flex flex-col bg-gray-900 border border-gray-800 rounded-xl shadow-2xl`}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800 flex-shrink-0">
           <h3 className="text-lg font-semibold text-white">{title}</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -32,7 +32,7 @@ export default function Modal({ open, onClose, title, children, maxWidth = 'max-
             </svg>
           </button>
         </div>
-        <div className="px-6 py-4">{children}</div>
+        <div className="px-6 py-4 overflow-y-auto">{children}</div>
       </div>
     </div>
   )

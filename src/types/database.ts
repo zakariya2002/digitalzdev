@@ -39,12 +39,44 @@ export interface Database {
   }
 }
 
+
+// === ÉQUIPE : PROFILS, RÔLES, COMMENTAIRES ===
+
+export type Role = 'owner' | 'manager' | 'member'
+
+export interface Profile {
+  id: string
+  full_name: string
+  email: string | null
+  role: Role
+  job_title: string | null
+  color: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export type CommentEntity = 'task' | 'project' | 'client' | 'quote' | 'invoice'
+
+export interface Comment {
+  id: string
+  entity_type: CommentEntity
+  entity_id: string
+  author_id: string | null
+  body: string
+  mentions: string[]
+  created_at: string
+  updated_at: string
+  author?: Profile
+}
+
 export type ProjectType = 'landing' | 'vitrine' | 'ecommerce' | 'custom' | 'mobile' | 'maintenance' | 'audit' | 'other'
 export type ProjectStatus = 'briefing' | 'design' | 'development' | 'review' | 'delivered' | 'active' | 'archived'
 
 export interface Project {
   id: string
   name: string
+  lead_id: string | null
   color: string
   icon: string | null
   is_archived: boolean
@@ -62,6 +94,7 @@ export interface Project {
 export interface ProjectInsert {
   id?: string
   name: string
+  lead_id?: string | null
   color?: string
   icon?: string | null
   is_archived?: boolean
@@ -82,6 +115,7 @@ export type TaskPriority = 'urgent' | 'high' | 'medium' | 'low'
 export interface Task {
   id: string
   project_id: string | null
+  assignee_id: string | null
   title: string
   description: string | null
   status: TaskStatus
@@ -99,6 +133,7 @@ export interface Task {
 export interface TaskInsert {
   id?: string
   project_id?: string | null
+  assignee_id?: string | null
   title: string
   description?: string | null
   status?: string
