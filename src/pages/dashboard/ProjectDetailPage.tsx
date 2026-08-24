@@ -11,6 +11,9 @@ import ActivityFeed from '../../components/dashboard/ActivityFeed'
 import MilestonesPanel from '../../components/dashboard/MilestonesPanel'
 import AcceptanceChecklist from '../../components/dashboard/AcceptanceChecklist'
 import ProfitabilityCard from '../../components/dashboard/ProfitabilityCard'
+import ProjectFilesPanel from '../../components/dashboard/ProjectFilesPanel'
+import EnvironmentsPanel from '../../components/dashboard/EnvironmentsPanel'
+import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
 import Modal from '../../components/dashboard/Modal'
 import type { Project, Task, TimeEntry, ProjectFile, Quote, Invoice, Client } from '../../types/database'
 
@@ -127,11 +130,6 @@ export default function ProjectDetailPage() {
   const [timeDescription, setTimeDescription] = useState('')
   const [timeDate, setTimeDate] = useState(format(new Date(), 'yyyy-MM-dd'))
 
-  // File modal
-  const [fileModalOpen, setFileModalOpen] = useState(false)
-  const [fileName, setFileName] = useState('')
-  const [fileUrl, setFileUrl] = useState('')
-  const [fileType, setFileType] = useState<string>('link')
 
   const fetchAll = useCallback(async () => {
     if (!id) return
@@ -189,24 +187,6 @@ export default function ProjectDetailPage() {
     fetchAll()
   }
 
-  const handleSaveFile = async () => {
-    if (!fileName.trim() || !fileUrl.trim()) return
-    await supabase.from('project_files').insert({
-      project_id: id,
-      name: fileName.trim(),
-      url: fileUrl.trim(),
-      file_type: fileType,
-    })
-    setFileModalOpen(false)
-    setFileName('')
-    setFileUrl('')
-    fetchAll()
-  }
-
-  const handleDeleteFile = async (fileId: string) => {
-    await supabase.from('project_files').delete().eq('id', fileId)
-    fetchAll()
-  }
 
   if (!project) {
     return (
@@ -231,6 +211,7 @@ export default function ProjectDetailPage() {
     { key: 'discussion', label: 'Discussion' },
     { key: 'activity', label: 'Activité' },
     { key: 'files', label: 'Fichiers' },
+    { key: 'access', label: 'Accès' },
     { key: 'financial', label: 'Financier' },
   ]
 
@@ -348,6 +329,11 @@ export default function ProjectDetailPage() {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Suivi client */}
+          <div className="mb-6">
+            <ShareLinkPanel entityType="project" entityId={id!} defaultAllowAccept={false} />
           </div>
 
           {/* Rentabilité */}
@@ -549,108 +535,10 @@ export default function ProjectDetailPage() {
         <ActivityFeed projectId={id} title="Journal du projet" limit={50} />
       )}
 
-      {activeTab === 'files' && (
-        <div>
-          <div className="flex justify-end mb-4">
-            <button
-              onClick={() => setFileModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Ajouter un lien
-            </button>
-          </div>
+      {activeTab === 'files' && id && <ProjectFilesPanel projectId={id} />}
 
-          {files.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">Aucun fichier ou lien pour ce projet.</div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {files.map(file => (
-                <div key={file.id} className="bg-gray-900 border border-gray-800 rounded-xl p-4 flex items-start gap-3">
-                  <div className="shrink-0">
-                    <FileTypeIcon type={file.file_type} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-white truncate">{file.name}</div>
-                    <a
-                      href={file.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-blue-400 hover:text-blue-300 truncate block mt-0.5 transition-colors"
-                    >
-                      Ouvrir le lien
-                    </a>
-                  </div>
-                  <button
-                    onClick={() => handleDeleteFile(file.id)}
-                    className="shrink-0 text-gray-500 hover:text-red-400 transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+      {activeTab === 'access' && id && <EnvironmentsPanel projectId={id} />}
 
-          {/* File Modal */}
-          <Modal open={fileModalOpen} onClose={() => setFileModalOpen(false)} title="Ajouter un lien">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">Nom</label>
-                <input
-                  type="text"
-                  value={fileName}
-                  onChange={e => setFileName(e.target.value)}
-                  placeholder="Ex: Maquette Figma"
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">URL</label>
-                <input
-                  type="url"
-                  value={fileUrl}
-                  onChange={e => setFileUrl(e.target.value)}
-                  placeholder="https://..."
-                  className={inputClass}
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">Type</label>
-                <select
-                  value={fileType}
-                  onChange={e => setFileType(e.target.value)}
-                  className={inputClass}
-                >
-                  {FILE_TYPE_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  onClick={() => setFileModalOpen(false)}
-                  className="px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  Annuler
-                </button>
-                <button
-                  onClick={handleSaveFile}
-                  className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                  Enregistrer
-                </button>
-              </div>
-            </div>
-          </Modal>
-        </div>
-      )}
-
-      {/* ===== Financial Tab ===== */}
       {activeTab === 'financial' && (
         <div>
           {/* Summary cards */}

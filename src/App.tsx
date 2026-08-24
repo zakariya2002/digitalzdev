@@ -11,12 +11,16 @@ import MentionsLegales from './pages/MentionsLegales'
 import PolitiqueConfidentialite from './pages/PolitiqueConfidentialite'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login'
+import ClientPortal from './pages/ClientPortal'
 import DashboardLayout from './pages/dashboard/DashboardLayout'
 import { projects } from './data/projects'
 
 export default function App() {
   const location = useLocation()
-  const isDashboard = location.pathname.startsWith('/dashboard') || location.pathname === '/login'
+  // Le back-office et l'espace client s'affichent sans la vitrine autour
+  const isDashboard = location.pathname.startsWith('/dashboard')
+    || location.pathname === '/login'
+    || location.pathname.startsWith('/espace/')
 
   if (isDashboard) {
     return (
@@ -24,6 +28,7 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/espace/:token" element={<ClientPortal />} />
           <Route
             path="/dashboard/*"
             element={

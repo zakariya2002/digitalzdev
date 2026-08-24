@@ -514,8 +514,26 @@ export interface ProjectFile {
   project_id: string
   name: string
   url: string
-  file_type: 'link' | 'figma' | 'drive' | 'github' | 'other'
+  file_type: 'link' | 'figma' | 'drive' | 'github' | 'upload' | 'other'
+  storage_path: string | null
+  size_bytes: number | null
+  mime_type: string | null
+  uploaded_by: string | null
   created_at: string
+}
+
+export type EnvironmentKind = 'production' | 'staging' | 'registrar' | 'dns' | 'hosting' | 'repository' | 'analytics' | 'other'
+
+export interface ProjectEnvironment {
+  id: string
+  project_id: string
+  kind: EnvironmentKind
+  label: string
+  url: string | null
+  username: string | null
+  notes: string | null
+  created_at: string
+  updated_at: string
 }
 
 // === MODULE 3 : PROPOSITIONS ===

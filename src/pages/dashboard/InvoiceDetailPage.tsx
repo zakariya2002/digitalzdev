@@ -4,6 +4,7 @@ import { format, addDays } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import CommentThread from '../../components/dashboard/CommentThread'
+import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
 import { formatCurrency, BUSINESS, PRICING_GRID, calculateCharges } from '../../lib/business'
 import Modal from '../../components/dashboard/Modal'
 import type { Invoice, InvoiceItem, InvoiceStatus, Payment, PaymentMethod, Client, Project } from '../../types/database'
@@ -67,6 +68,7 @@ export default function InvoiceDetailPage() {
 
   // Reference data
   const [clients, setClients] = useState<Client[]>([])
+  // Adresse pré-remplie dans l'envoi au client
   const [projects, setProjects] = useState<Project[]>([])
   const [saving, setSaving] = useState(false)
 
@@ -289,6 +291,8 @@ export default function InvoiceDetailPage() {
   }
 
   const badge = STATUS_BADGE[status]
+
+  const clientEmail = clients.find(c => c.id === clientId)?.email ?? null
 
   return (
     <div className="min-h-screen bg-gray-950 p-6">
@@ -738,6 +742,12 @@ export default function InvoiceDetailPage() {
         </div>
       </Modal>
     
+      {!isNew && id && (
+        <div className="print:hidden mt-6">
+          <ShareLinkPanel entityType="invoice" entityId={id} defaultAllowAccept={false} defaultEmail={clientEmail} />
+        </div>
+      )}
+
       {!isNew && id && (
         <div className="print:hidden mt-6">
           <CommentThread entityType="invoice" entityId={id} title="Discussion interne" />
