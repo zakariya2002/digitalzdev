@@ -2,7 +2,8 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { differenceInDays, parseISO, format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import type { Task, Project } from '../../types/database'
+import Avatar from './Avatar'
+import type { Task, Project, Profile } from '../../types/database'
 
 const PRIORITY_CONFIG = {
   urgent: { label: 'Urgent', bg: 'bg-red-500/20', text: 'text-red-400', dot: 'bg-red-500' },
@@ -14,10 +15,11 @@ const PRIORITY_CONFIG = {
 interface TaskCardProps {
   task: Task
   project?: Project
+  assignee?: Profile
   onClick: () => void
 }
 
-export default function TaskCard({ task, project, onClick }: TaskCardProps) {
+export default function TaskCard({ task, project, assignee, onClick }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task.id,
     data: { type: 'task', task },
@@ -40,13 +42,16 @@ export default function TaskCard({ task, project, onClick }: TaskCardProps) {
       onClick={onClick}
       className={`bg-gray-800 border border-gray-700 rounded-lg p-3 cursor-grab active:cursor-grabbing hover:border-gray-600 transition-colors ${isDragging ? 'opacity-50 shadow-xl' : ''}`}
     >
-      {/* Project indicator */}
-      {project && (
-        <div className="flex items-center gap-1.5 mb-2">
-          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: project.color }} />
-          <span className="text-xs text-gray-500">{project.name}</span>
-        </div>
-      )}
+      {/* Project + assignee */}
+      <div className="flex items-center justify-between gap-2 mb-2">
+        {project ? (
+          <div className="flex items-center gap-1.5 min-w-0">
+            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: project.color }} />
+            <span className="text-xs text-gray-500 truncate">{project.name}</span>
+          </div>
+        ) : <span />}
+        <Avatar profile={assignee} size="xs" />
+      </div>
 
       {/* Title */}
       <p className="text-sm font-medium text-white mb-2">{task.title}</p>

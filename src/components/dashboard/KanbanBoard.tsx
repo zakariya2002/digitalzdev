@@ -11,7 +11,7 @@ import {
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useDroppable } from '@dnd-kit/core'
 import TaskCard from './TaskCard'
-import type { Task, TaskStatus, Project } from '../../types/database'
+import type { Task, TaskStatus, Project, Profile } from '../../types/database'
 
 const COLUMNS: { id: TaskStatus; label: string }[] = [
   { id: 'todo', label: 'À faire' },
@@ -23,11 +23,12 @@ const COLUMNS: { id: TaskStatus; label: string }[] = [
 interface KanbanBoardProps {
   tasks: Task[]
   projects: Project[]
+  members?: Profile[]
   onMoveTask: (taskId: string, newStatus: TaskStatus) => void
   onClickTask: (task: Task) => void
 }
 
-export default function KanbanBoard({ tasks, projects, onMoveTask, onClickTask }: KanbanBoardProps) {
+export default function KanbanBoard({ tasks, projects, members = [], onMoveTask, onClickTask }: KanbanBoardProps) {
   const [activeTask, setActiveTask] = useState<Task | null>(null)
 
   const sensors = useSensors(
@@ -35,6 +36,7 @@ export default function KanbanBoard({ tasks, projects, onMoveTask, onClickTask }
   )
 
   const projectMap = Object.fromEntries(projects.map(p => [p.id, p]))
+  const memberMap = Object.fromEntries(members.map(m => [m.id, m]))
 
   const handleDragStart = (event: DragStartEvent) => {
     const task = event.active.data.current?.task as Task | undefined
@@ -80,6 +82,7 @@ export default function KanbanBoard({ tasks, projects, onMoveTask, onClickTask }
               count={columnTasks.length}
               tasks={columnTasks}
               projects={projectMap}
+              members={memberMap}
               onClickTask={onClickTask}
             />
           )
@@ -89,7 +92,12 @@ export default function KanbanBoard({ tasks, projects, onMoveTask, onClickTask }
       <DragOverlay>
         {activeTask && (
           <div className="w-64 opacity-90">
-            <TaskCard task={activeTask} project={projectMap[activeTask.project_id || '']} onClick={() => {}} />
+            <TaskCard
+              task={activeTask}
+              project={projectMap[activeTask.project_id || '']}
+              assignee={memberMap[activeTask.assignee_id || '']}
+              onClick={() => {}}
+            />
           </div>
         )}
       </DragOverlay>
@@ -103,6 +111,7 @@ function Column({
   count,
   tasks,
   projects,
+  members,
   onClickTask,
 }: {
   id: TaskStatus
@@ -110,6 +119,7 @@ function Column({
   count: number
   tasks: Task[]
   projects: Record<string, Project>
+  members: Record<string, Profile>
   onClickTask: (task: Task) => void
 }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -133,6 +143,7 @@ function Column({
               key={task.id}
               task={task}
               project={projects[task.project_id || '']}
+              assignee={members[task.assignee_id || '']}
               onClick={() => onClickTask(task)}
             />
           ))}

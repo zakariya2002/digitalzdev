@@ -4,6 +4,7 @@ import { useAutomation } from '../../hooks/useAutomation'
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
+  '/dashboard/projects': 'Projets',
   '/dashboard/kanban': 'Kanban',
   '/dashboard/calendar': 'Calendrier',
   '/dashboard/clients': 'Leads & Clients',

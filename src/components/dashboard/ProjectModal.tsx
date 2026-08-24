@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import Modal from './Modal'
+import AssigneeSelect from './AssigneeSelect'
 import type { Project, Client, ProjectType, ProjectStatus } from '../../types/database'
 
 const COLORS = [
@@ -38,6 +39,7 @@ interface ProjectModalProps {
     name: string
     color: string
     client_id: string | null
+    lead_id: string | null
     project_type: string | null
     status: string
     budget: number | null
@@ -53,6 +55,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
   const [name, setName] = useState('')
   const [color, setColor] = useState(COLORS[0])
   const [clientId, setClientId] = useState<string | null>(null)
+  const [leadId, setLeadId] = useState<string | null>(null)
   const [projectType, setProjectType] = useState<string>('')
   const [status, setStatus] = useState<string>('active')
   const [budget, setBudget] = useState('')
@@ -66,6 +69,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
       setName(project.name)
       setColor(project.color)
       setClientId(project.client_id)
+      setLeadId(project.lead_id)
       setProjectType(project.project_type || '')
       setStatus(project.status || 'active')
       setBudget(project.budget ? String(project.budget) : '')
@@ -76,6 +80,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
       setName('')
       setColor(COLORS[0])
       setClientId(null)
+      setLeadId(null)
       setProjectType('')
       setStatus('active')
       setBudget('')
@@ -93,6 +98,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
       name: name.trim(),
       color,
       client_id: clientId,
+      lead_id: leadId,
       project_type: projectType || null,
       status,
       budget: budget ? parseFloat(budget) : null,
@@ -124,6 +130,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <AssigneeSelect value={leadId} onChange={setLeadId} label="Responsable du projet" />
           <div>
             <label className="block text-sm text-gray-400 mb-1">Type de projet</label>
             <select value={projectType} onChange={(e) => setProjectType(e.target.value)} className={inputClass}>
@@ -131,15 +138,15 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
               {Object.entries(PROJECT_TYPE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Statut</label>
             <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputClass}>
               {Object.entries(PROJECT_STATUS_LABELS).filter(([k]) => k !== 'archived').map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm text-gray-400 mb-1">Budget</label>
             <input type="number" step="0.01" value={budget} onChange={(e) => setBudget(e.target.value)} className={inputClass} placeholder="0.00" />
