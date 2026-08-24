@@ -13,7 +13,6 @@ import KanbanPage from './KanbanPage'
 import CalendarPage from './CalendarPage'
 import ClientsPage from './ClientsPage'
 import ClientDetailPage from './ClientDetailPage'
-import RevenuesPage from './RevenuesPage'
 import SmsTemplatesPage from './SmsTemplatesPage'
 import QuotesPage from './QuotesPage'
 import QuoteDetailPage from './QuoteDetailPage'
@@ -21,6 +20,7 @@ import InvoicesPage from './InvoicesPage'
 import InvoiceDetailPage from './InvoiceDetailPage'
 import FinancesPage from './FinancesPage'
 import AccountingPage from './AccountingPage'
+import MessagesPage from './MessagesPage'
 import ProposalsPage from './ProposalsPage'
 import ProposalDetailPage from './ProposalDetailPage'
 import ProjectsPage from './ProjectsPage'
@@ -52,7 +52,6 @@ export default function DashboardLayout() {
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="clients" element={<ClientsPage />} />
               <Route path="clients/:id" element={<ClientDetailPage />} />
-              <Route path="revenues" element={<RequireOwner><RevenuesPage /></RequireOwner>} />
               <Route path="sms-templates" element={<SmsTemplatesPage />} />
               <Route path="quotes" element={<QuotesPage />} />
               <Route path="quotes/new" element={<QuoteDetailPage />} />
@@ -62,6 +61,8 @@ export default function DashboardLayout() {
               <Route path="invoices/:id" element={<InvoiceDetailPage />} />
               <Route path="finances" element={<RequireOwner><FinancesPage /></RequireOwner>} />
               <Route path="comptabilite" element={<AccountingPage />} />
+              <Route path="messages" element={<MessagesPage />} />
+              <Route path="messages/:id" element={<MessagesPage />} />
               <Route path="proposals" element={<ProposalsPage />} />
               <Route path="proposals/new" element={<ProposalDetailPage />} />
               <Route path="proposals/:id" element={<ProposalDetailPage />} />

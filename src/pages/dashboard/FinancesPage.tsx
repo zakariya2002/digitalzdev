@@ -3,6 +3,7 @@ import { format, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-f
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import { formatCurrency, calculateCharges, BUSINESS } from '../../lib/business'
+import ManualRevenuePanel from '../../components/dashboard/ManualRevenuePanel'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import type { Invoice, RevenueLedgerEntry } from '../../types/database'
 
@@ -300,6 +301,10 @@ export default function FinancesPage() {
             </tbody>
           </table>
         </div>
+      </div>
+    
+      <div className="mt-6">
+        <ManualRevenuePanel />
       </div>
     </div>
   )

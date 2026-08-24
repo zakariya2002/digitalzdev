@@ -10,7 +10,6 @@ const pageTitles: Record<string, string> = {
   '/dashboard/kanban': 'Kanban',
   '/dashboard/calendar': 'Calendrier',
   '/dashboard/clients': 'Leads & Clients',
-  '/dashboard/revenues': 'Revenus',
   '/dashboard/sms-templates': 'Templates SMS',
   '/dashboard/quotes': 'Devis',
   '/dashboard/quotes/new': 'Nouveau devis',
@@ -18,6 +17,7 @@ const pageTitles: Record<string, string> = {
   '/dashboard/invoices/new': 'Nouvelle facture',
   '/dashboard/finances': 'Finances',
   '/dashboard/comptabilite': 'Simulateur de statut',
+  '/dashboard/messages': 'Messagerie',
   '/dashboard/proposals': 'Propositions',
   '/dashboard/proposals/new': 'Nouvelle proposition',
   '/dashboard/automation': 'Automatisation',
@@ -70,6 +70,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
     || (location.pathname.startsWith('/dashboard/quotes/') ? 'Détail devis' : '')
     || (location.pathname.startsWith('/dashboard/invoices/') ? 'Détail facture' : '')
     || (location.pathname.startsWith('/dashboard/proposals/') ? 'Détail proposition' : '')
+    || (location.pathname.startsWith('/dashboard/messages/') ? 'Messagerie' : '')
     || (location.pathname.startsWith('/dashboard/projects/') ? 'Détail projet' : '')
     || 'Dashboard'
 
