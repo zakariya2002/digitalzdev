@@ -5,6 +5,7 @@ import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import CommentThread from '../../components/dashboard/CommentThread'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
+import TaxSimulator from '../../components/dashboard/TaxSimulator'
 import { formatCurrency, BUSINESS, PRICING_GRID } from '../../lib/business'
 import type { Database, Quote, QuoteItem, Client, Project, QuoteStatus } from '../../types/database'
 
@@ -610,6 +611,12 @@ export default function QuoteDetailPage() {
         </button>
       </div>
     
+      {!isNew && (
+        <div className="print:hidden mt-6">
+          <TaxSimulator defaultAmount={items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0)} compact />
+        </div>
+      )}
+
       {!isNew && id && (
         <div className="print:hidden mt-6">
           <ShareLinkPanel entityType="quote" entityId={id} defaultAllowAccept={true} defaultEmail={clientEmail} />

@@ -389,6 +389,62 @@ export type Database = {
           },
         ]
       }
+      company_settings: {
+        Row: {
+          active_regime_id: string | null
+          address: string | null
+          bic: string | null
+          email: string | null
+          eur_to_dzd: number | null
+          iban: string | null
+          id: boolean
+          legal_name: string | null
+          phone: string | null
+          siret: string | null
+          trade_name: string | null
+          updated_at: string
+          vat_number: string | null
+        }
+        Insert: {
+          active_regime_id?: string | null
+          address?: string | null
+          bic?: string | null
+          email?: string | null
+          eur_to_dzd?: number | null
+          iban?: string | null
+          id?: boolean
+          legal_name?: string | null
+          phone?: string | null
+          siret?: string | null
+          trade_name?: string | null
+          updated_at?: string
+          vat_number?: string | null
+        }
+        Update: {
+          active_regime_id?: string | null
+          address?: string | null
+          bic?: string | null
+          email?: string | null
+          eur_to_dzd?: number | null
+          iban?: string | null
+          id?: boolean
+          legal_name?: string | null
+          phone?: string | null
+          siret?: string | null
+          trade_name?: string | null
+          updated_at?: string
+          vat_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_settings_active_regime_id_fkey"
+            columns: ["active_regime_id"]
+            isOneToOne: false
+            referencedRelation: "tax_regimes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           all_day: boolean
@@ -1625,6 +1681,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tax_regimes: {
+        Row: {
+          country: string
+          created_at: string
+          currency: string
+          fiscal_year: number
+          id: string
+          is_active: boolean
+          label: string
+          notes: string | null
+          params: Json
+          position: number
+          source_note: string | null
+          updated_at: string
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          currency?: string
+          fiscal_year: number
+          id: string
+          is_active?: boolean
+          label: string
+          notes?: string | null
+          params?: Json
+          position?: number
+          source_note?: string | null
+          updated_at?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          currency?: string
+          fiscal_year?: number
+          id?: string
+          is_active?: boolean
+          label?: string
+          notes?: string | null
+          params?: Json
+          position?: number
+          source_note?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       time_entries: {
         Row: {

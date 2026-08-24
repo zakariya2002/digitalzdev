@@ -17,6 +17,7 @@ const pageTitles: Record<string, string> = {
   '/dashboard/invoices': 'Factures',
   '/dashboard/invoices/new': 'Nouvelle facture',
   '/dashboard/finances': 'Finances',
+  '/dashboard/comptabilite': 'Simulateur de statut',
   '/dashboard/proposals': 'Propositions',
   '/dashboard/proposals/new': 'Nouvelle proposition',
   '/dashboard/automation': 'Automatisation',

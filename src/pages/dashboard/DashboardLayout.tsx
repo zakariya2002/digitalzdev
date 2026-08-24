@@ -20,6 +20,7 @@ import QuoteDetailPage from './QuoteDetailPage'
 import InvoicesPage from './InvoicesPage'
 import InvoiceDetailPage from './InvoiceDetailPage'
 import FinancesPage from './FinancesPage'
+import AccountingPage from './AccountingPage'
 import ProposalsPage from './ProposalsPage'
 import ProposalDetailPage from './ProposalDetailPage'
 import ProjectsPage from './ProjectsPage'
@@ -60,6 +61,7 @@ export default function DashboardLayout() {
               <Route path="invoices/new" element={<InvoiceDetailPage />} />
               <Route path="invoices/:id" element={<InvoiceDetailPage />} />
               <Route path="finances" element={<RequireOwner><FinancesPage /></RequireOwner>} />
+              <Route path="comptabilite" element={<AccountingPage />} />
               <Route path="proposals" element={<ProposalsPage />} />
               <Route path="proposals/new" element={<ProposalDetailPage />} />
               <Route path="proposals/:id" element={<ProposalDetailPage />} />
