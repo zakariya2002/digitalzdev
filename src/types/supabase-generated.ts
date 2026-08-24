@@ -406,8 +406,10 @@ export type Database = {
       }
       company_settings: {
         Row: {
+          account_holder: string | null
           active_regime_id: string | null
           address: string | null
+          bank_name: string | null
           bic: string | null
           email: string | null
           eur_to_dzd: number | null
@@ -418,6 +420,7 @@ export type Database = {
           legal_form: string | null
           legal_name: string | null
           logo_url: string | null
+          payment_reference_note: string | null
           payment_terms: string | null
           phone: string | null
           siret: string | null
@@ -429,8 +432,10 @@ export type Database = {
           vat_rate: number
         }
         Insert: {
+          account_holder?: string | null
           active_regime_id?: string | null
           address?: string | null
+          bank_name?: string | null
           bic?: string | null
           email?: string | null
           eur_to_dzd?: number | null
@@ -441,6 +446,7 @@ export type Database = {
           legal_form?: string | null
           legal_name?: string | null
           logo_url?: string | null
+          payment_reference_note?: string | null
           payment_terms?: string | null
           phone?: string | null
           siret?: string | null
@@ -452,8 +458,10 @@ export type Database = {
           vat_rate?: number
         }
         Update: {
+          account_holder?: string | null
           active_regime_id?: string | null
           address?: string | null
+          bank_name?: string | null
           bic?: string | null
           email?: string | null
           eur_to_dzd?: number | null
@@ -464,6 +472,7 @@ export type Database = {
           legal_form?: string | null
           legal_name?: string | null
           logo_url?: string | null
+          payment_reference_note?: string | null
           payment_terms?: string | null
           phone?: string | null
           siret?: string | null

@@ -13,6 +13,9 @@ export interface CompanySettings {
   phone: string | null
   iban: string | null
   bic: string | null
+  bank_name: string | null
+  account_holder: string | null
+  payment_reference_note: string | null
   eur_to_dzd: number | null
 }
 

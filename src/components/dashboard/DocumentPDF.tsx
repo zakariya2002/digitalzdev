@@ -47,6 +47,11 @@ interface Company {
   vat_applicable: boolean
   vat_rate: number
   validity_days: number
+  iban: string | null
+  bic: string | null
+  bank_name: string | null
+  account_holder: string | null
+  payment_reference_note: string | null
   payment_terms: string | null
   late_penalty_terms: string | null
   ip_terms: string | null
@@ -245,6 +250,41 @@ export default function DocumentPDF({
           <p className="doc-total-note">
             Déjà réglé : {money(paidAmount)} · Reste à régler : {money(remaining)}
           </p>
+        )}
+
+        {!isQuote && (company?.iban || company?.bic) && (
+          <section className="doc-bank">
+            <p className="doc-label">Coordonnées bancaires</p>
+            <div className="doc-bank-grid">
+              {(company?.account_holder || emitterName) && (
+                <>
+                  <span className="doc-bank-key">Titulaire</span>
+                  <span className="doc-bank-value">{company?.account_holder || emitterName}</span>
+                </>
+              )}
+              {company?.bank_name && (
+                <>
+                  <span className="doc-bank-key">Banque</span>
+                  <span className="doc-bank-value">{company.bank_name}</span>
+                </>
+              )}
+              {company?.iban && (
+                <>
+                  <span className="doc-bank-key">IBAN</span>
+                  <span className="doc-bank-value doc-bank-iban">{company.iban}</span>
+                </>
+              )}
+              {company?.bic && (
+                <>
+                  <span className="doc-bank-key">BIC</span>
+                  <span className="doc-bank-value doc-bank-iban">{company.bic}</span>
+                </>
+              )}
+            </div>
+            {company?.payment_reference_note && (
+              <p className="doc-bank-note">{company.payment_reference_note}</p>
+            )}
+          </section>
         )}
 
         {notes && (
