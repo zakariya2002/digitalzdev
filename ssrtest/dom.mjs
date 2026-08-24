@@ -62,7 +62,27 @@ dom.window.addEventListener('error', (e) => errors.push('window error: ' + e.mes
 const origError = console.error
 console.error = (...a) => { errors.push('console.error: ' + a.map(String).join(' ').slice(0, 400)) }
 
+const SCENARIO = process.env.SCENARIO
 const routes = process.argv.slice(2).length ? process.argv.slice(2) : ['/dashboard/messages']
+
+/** Saisit une valeur dans un champ contrôlé par React */
+function typeInto(el, value) {
+  const proto = el.tagName === 'TEXTAREA'
+    ? dom.window.HTMLTextAreaElement.prototype
+    : dom.window.HTMLInputElement.prototype
+  Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, value)
+  el.dispatchEvent(new dom.window.Event('input', { bubbles: true }))
+}
+
+function click(el) {
+  el.dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true, cancelable: true }))
+}
+
+const wait = (ms) => new Promise(r => setTimeout(r, ms))
+
+function findByText(host, selector, text) {
+  return [...host.querySelectorAll(selector)].find(e => e.textContent.includes(text))
+}
 const { mount } = await import('./out/app.js')
 
 let failures = 0
@@ -84,6 +104,53 @@ for (const route of routes) {
   host.remove()
 }
 
+if (SCENARIO === 'send-message') {
+  errors.length = 0
+  dom.window.history.pushState({}, '', '/dashboard/messages')
+  const host = dom.window.document.createElement('div')
+  dom.window.document.body.appendChild(host)
+  mount(host, errors)
+  await wait(3500)
+
+  const step = (n, ok, d = '') => { console.log(`  ${ok ? '✓' : '✗'} ${n}${!ok && d ? ' — ' + d : ''}`); if (!ok) failures++ }
+
+  // 1. Ouvrir la conversation avec l'autre membre
+  const target = findByText(host, 'button', 'Zakariya')
+  step("le bouton d'ouverture de conversation est présent", !!target)
+  if (target) { click(target); await wait(2500) }
+
+  // 2. Le fil est ouvert et prêt à écrire
+  const textarea = host.querySelector('textarea')
+  step('le champ de saisie apparaît', !!textarea)
+
+  // 3. Écrire
+  const body = 'Test interface ' + process.env.STAMP
+  if (textarea) { typeInto(textarea, body); await wait(300) }
+  step('le texte est bien saisi', textarea?.value === body, `valeur : ${textarea?.value}`)
+
+  // 4. Le bouton Envoyer doit s'activer
+  const sendBtn = findByText(host, 'button', 'Envoyer')
+  step("le bouton Envoyer s'active", !!sendBtn && !sendBtn.disabled)
+
+  // 5. Envoyer
+  if (sendBtn) { click(sendBtn); await wait(3000) }
+
+  // 6. Le message apparaît dans le fil
+  const shown = host.textContent.includes(body)
+  step('le message apparaît dans la conversation', shown)
+
+  // 7. Le champ est vidé
+  const cleared = host.querySelector('textarea')?.value === ''
+  step('le champ se vide après envoi', cleared)
+
+  // 8. Aucune erreur
+  const crashed = errors.some(e => e.startsWith('REACT CRASH'))
+  step("aucune erreur d'affichage", !crashed, errors.find(e => e.startsWith('REACT CRASH'))?.split('\n')[0] || '')
+
+  console.log('\n  --- ce que voit l\'écran ---')
+  console.log('  ' + host.textContent.replace(/\s+/g, ' ').trim().slice(-260))
+}
+
 console.error = origError
-console.log(failures === 0 ? '\n  Toutes les pages s\'affichent.' : `\n  ${failures} page(s) en échec.`)
+console.log(failures === 0 ? '\n  Tout est passé.' : `\n  ${failures} échec(s).`)
 process.exit(failures ? 1 : 0)
