@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Modal from './Modal'
 import { supabase } from '../../lib/supabase'
 import { formatCurrency } from '../../lib/business'
-import { parseQuoteFile, parseQuoteText, type ParsedQuote, type ParsedItem } from '../../lib/quoteImport'
+import { parseQuoteFile, parseQuoteText, analyseWithClaude, type ParsedQuote, type ParsedItem, type SmartResult } from '../../lib/quoteImport'
 import type { Client, Project } from '../../types/database'
 
 interface QuoteImportModalProps {
@@ -23,6 +23,8 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [parsed, setParsed] = useState<ParsedQuote | null>(null)
+  const [smart, setSmart] = useState<SmartResult | null>(null)
+  const [fallbackNote, setFallbackNote] = useState<string | null>(null)
   const [clientId, setClientId] = useState('')
   const [projectId, setProjectId] = useState('')
   const [title, setTitle] = useState('')
@@ -31,7 +33,7 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
   const fileRef = useRef<HTMLInputElement>(null)
 
   const reset = () => {
-    setStep('source'); setPasted(''); setParsed(null); setItems([])
+    setStep('source'); setPasted(''); setParsed(null); setSmart(null); setFallbackNote(null); setItems([])
     setTitle(''); setValidUntil(''); setClientId(''); setProjectId(''); setError(null)
     if (fileRef.current) fileRef.current.value = ''
   }
@@ -55,26 +57,38 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
     setStep('review')
   }
 
-  const handleFile = async (file: File) => {
-    setParsing(true); setError(null)
+  /** Lecture assistée en priorité ; à défaut, lecture mécanique locale. */
+  const analyse = async (input: { file?: File; text?: string }) => {
+    setParsing(true); setError(null); setFallbackNote(null); setSmart(null)
+    const { data: session } = await supabase.auth.getSession()
+    const token = session.session?.access_token
+
+    if (token) {
+      try {
+        const result = await analyseWithClaude(input, token)
+        setSmart(result)
+        applyParsed(result)
+        setParsing(false)
+        return
+      } catch (e) {
+        setFallbackNote(
+          (e as Error).message.includes('configur')
+            ? "L'analyse assistée n'est pas configurée : lecture mécanique du document."
+            : "Le service d'analyse n'a pas répondu : lecture mécanique du document."
+        )
+      }
+    }
+
     try {
-      applyParsed(await parseQuoteFile(file))
+      applyParsed(input.file ? await parseQuoteFile(input.file) : parseQuoteText(input.text ?? ''))
     } catch {
-      setError("Ce fichier n'a pas pu être lu. Copie son contenu et colle-le ci-dessous.")
+      setError("Ce document n'a pas pu être lu. Copie son contenu et colle-le ci-dessous.")
     }
     setParsing(false)
   }
 
-  const handlePaste = () => {
-    if (!pasted.trim()) return
-    setParsing(true); setError(null)
-    try {
-      applyParsed(parseQuoteText(pasted))
-    } catch {
-      setError("Le texte n'a pas pu être analysé.")
-    }
-    setParsing(false)
-  }
+  const handleFile = (file: File) => analyse({ file })
+  const handlePaste = () => { if (pasted.trim()) analyse({ text: pasted }) }
 
   const total = items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0)
 
@@ -140,8 +154,8 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
           <div>
             <p className="text-sm text-gray-300 mb-1">Depuis un fichier</p>
             <p className="text-xs text-gray-500 mb-3">
-              PDF, tableur exporté en CSV, ou fichier texte. Le contenu est lu dans ton navigateur,
-              rien n'est envoyé ailleurs.
+              PDF, tableur exporté en CSV, ou fichier texte. Le document est lu et compris
+              automatiquement : lignes, quantités, prix unitaires et destinataire.
             </p>
             <input
               ref={fileRef}
@@ -174,18 +188,31 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
             </button>
           </div>
 
+          {parsing && <p className="text-sm text-blue-400">Lecture du document en cours…</p>}
+          {fallbackNote && <p className="text-xs text-amber-400">{fallbackNote}</p>}
           {error && <p className="text-sm text-red-400">{error}</p>}
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="px-3 py-2 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <p className="text-xs text-blue-300">
+          <div className={`px-3 py-2 rounded-lg border ${
+            smart ? 'bg-blue-500/10 border-blue-500/30' : 'bg-gray-800 border-gray-700'
+          }`}>
+            <p className={`text-xs ${smart ? 'text-blue-300' : 'text-gray-400'}`}>
+              {smart ? 'Lecture assistée' : 'Lecture mécanique'} ·{' '}
               {items.length} ligne{items.length > 1 ? 's' : ''} reconnue{items.length > 1 ? 's' : ''}
               {parsed?.number ? ` · devis d'origine ${parsed.number}` : ''}
+              {smart ? ` · fiabilité ${smart.confidence}` : ''}
               {parsed?.total && Math.abs(parsed.total - total) > 0.5
-                ? ` · le total lu était ${formatCurrency(parsed.total)}, vérifie les lignes`
+                ? ` · total lu ${formatCurrency(parsed.total)}`
                 : ''}
             </p>
+            {smart && smart.warnings.length > 0 && (
+              <ul className="mt-2 space-y-1">
+                {smart.warnings.map((w, i) => (
+                  <li key={i} className="text-[11px] text-amber-300">{w}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

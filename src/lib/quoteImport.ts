@@ -250,3 +250,73 @@ export async function parseQuoteFile(file: File): Promise<ParsedQuote> {
   if (name.endsWith('.csv') || name.endsWith('.tsv')) return parseQuoteTable(text)
   return parseQuoteText(text)
 }
+
+
+// --- Lecture assistée par Claude ---
+
+export interface SmartResult extends ParsedQuote {
+  confidence: 'haute' | 'moyenne' | 'basse'
+  warnings: string[]
+  smart: true
+}
+
+/** Lit le fichier en base64, sans le préfixe de type. */
+function toBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result).split(',')[1] ?? '')
+    reader.onerror = () => reject(new Error('lecture impossible'))
+    reader.readAsDataURL(file)
+  })
+}
+
+/**
+ * Envoie le document au service d'analyse. Un PDF part tel quel : sa mise en page
+ * porte le sens des colonnes, qu'une extraction de texte détruirait.
+ * Lève une erreur si le service est indisponible, pour laisser place au repli mécanique.
+ */
+export async function analyseWithClaude(
+  input: { file?: File; text?: string },
+  accessToken: string,
+): Promise<SmartResult> {
+  const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-quote`
+  const payload: Record<string, unknown> = {}
+
+  if (input.file && input.file.type === 'application/pdf') {
+    payload.fileBase64 = await toBase64(input.file)
+    payload.mediaType = 'application/pdf'
+    payload.fileName = input.file.name
+  } else if (input.file) {
+    payload.text = await input.file.text()
+    payload.fileName = input.file.name
+  } else {
+    payload.text = input.text ?? ''
+  }
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify(payload),
+  })
+  const data = await res.json()
+  if (!res.ok || !data.ok) throw new Error(data.error || "L'analyse a échoué.")
+
+  const r = data.result as Record<string, never>
+  return {
+    number: (r.number as string) ?? null,
+    title: (r.title as string) ?? null,
+    clientName: (r.clientName as string) ?? null,
+    clientEmail: (r.clientEmail as string) ?? null,
+    validUntil: (r.validUntil as string) ?? null,
+    items: ((r.items as unknown as ParsedItem[]) ?? []).map(i => ({
+      description: String(i.description ?? ''),
+      quantity: Number(i.quantity) || 1,
+      unit_price: Number(i.unit_price) || 0,
+    })),
+    total: (r.total as number) ?? null,
+    leftovers: [],
+    confidence: (r.confidence as 'haute' | 'moyenne' | 'basse') ?? 'moyenne',
+    warnings: (r.warnings as unknown as string[]) ?? [],
+    smart: true,
+  }
+}
