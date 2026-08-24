@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, type FormEvent } from 'react'
+import { useState, useEffect, useCallback, useRef, useId, type FormEvent } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
@@ -40,6 +40,7 @@ function renderBody(body: string, members: Profile[]) {
 
 export default function CommentThread({ entityType, entityId, title = 'Discussion', compact = false }: CommentThreadProps) {
   const { profile, members, memberById } = useTeam()
+  const instanceId = useId()
   const [comments, setComments] = useState<Comment[]>([])
   const [body, setBody] = useState('')
   const [sending, setSending] = useState(false)
@@ -62,7 +63,7 @@ export default function CommentThread({ entityType, entityId, title = 'Discussio
   // Mise à jour en direct : l'autre membre voit le message sans recharger
   useEffect(() => {
     const channel = supabase
-      .channel(`comments-${entityType}-${entityId}`)
+      .channel(`comments-${entityType}-${entityId}-${instanceId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'comments', filter: `entity_id=eq.${entityId}` },
@@ -70,7 +71,7 @@ export default function CommentThread({ entityType, entityId, title = 'Discussio
       )
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [entityType, entityId, fetchComments])
+  }, [entityType, entityId, fetchComments, instanceId])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()

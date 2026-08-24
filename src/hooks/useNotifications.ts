@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useId } from 'react'
 import { supabase } from '../lib/supabase'
 import { useTeam } from '../contexts/TeamContext'
 import type { AppNotification } from '../types/database'
@@ -8,6 +8,7 @@ const PAGE_SIZE = 40
 /** Notifications persistées du membre connecté, tenues à jour en direct. */
 export function useNotifications() {
   const { profile } = useTeam()
+  const instanceId = useId()
   const [notifications, setNotifications] = useState<AppNotification[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -29,7 +30,7 @@ export function useNotifications() {
   useEffect(() => {
     if (!profile) return
     const channel = supabase
-      .channel(`notifications-${profile.id}`)
+      .channel(`notifications-${profile.id}-${instanceId}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'notifications', filter: `recipient_id=eq.${profile.id}` },
@@ -37,7 +38,7 @@ export function useNotifications() {
       )
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [profile, fetchNotifications])
+  }, [profile, fetchNotifications, instanceId])
 
   const markRead = useCallback(async (id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read_at: new Date().toISOString() } : n))

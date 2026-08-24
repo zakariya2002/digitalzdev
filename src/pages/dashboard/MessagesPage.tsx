@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, type FormEvent } from 'react'
+import { useState, useEffect, useCallback, useRef, useId, type FormEvent } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { format, isToday, isYesterday, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -19,6 +19,7 @@ export default function MessagesPage() {
   const { id: activeId } = useParams()
   const navigate = useNavigate()
   const { profile, members, memberById } = useTeam()
+  const instanceId = useId()
   const { conversations, loading, error, openDirect, markRead, refresh } = useMessaging()
 
   const [messages, setMessages] = useState<Message[]>([])
@@ -53,13 +54,13 @@ export default function MessagesPage() {
   useEffect(() => {
     if (!activeId) return
     const channel = supabase
-      .channel(`messages-${activeId}`)
+      .channel(`messages-${activeId}-${instanceId}`)
       .on('postgres_changes',
         { event: '*', schema: 'public', table: 'messages', filter: `conversation_id=eq.${activeId}` },
         () => { fetchMessages() })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [activeId, fetchMessages])
+  }, [activeId, fetchMessages, instanceId])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: messages.length > 0 ? 'smooth' : 'auto' })

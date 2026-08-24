@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useId } from 'react'
 import { supabase } from '../lib/supabase'
 import { useTeam } from '../contexts/TeamContext'
 
@@ -26,6 +26,8 @@ export interface Message {
 /** Conversations du membre connecté, avec leur compteur de messages non lus. */
 export function useMessaging() {
   const { profile } = useTeam()
+  // Identifiant propre à cette instance : le hook peut être monté plusieurs fois
+  const instanceId = useId()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -81,11 +83,11 @@ export function useMessaging() {
   useEffect(() => {
     if (!profile) return
     const channel = supabase
-      .channel('messaging-overview')
+      .channel(`messaging-overview-${instanceId}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => { fetchConversations() })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [profile, fetchConversations])
+  }, [profile, fetchConversations, instanceId])
 
   const openDirect = useCallback(async (otherId: string) => {
     const { data, error: e } = await supabase.rpc('open_direct_conversation', { p_other: otherId })

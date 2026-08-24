@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useId } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
@@ -24,6 +24,7 @@ interface ActivityFeedProps {
 /** Qui a fait quoi, et quand. Alimenté par les déclencheurs de la base. */
 export default function ActivityFeed({ projectId, limit = 20, title = 'Activité', compact = false }: ActivityFeedProps) {
   const { memberById } = useTeam()
+  const instanceId = useId()
   const [entries, setEntries] = useState<ActivityEntry[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -45,11 +46,11 @@ export default function ActivityFeed({ projectId, limit = 20, title = 'Activité
 
   useEffect(() => {
     const channel = supabase
-      .channel(`activity-${projectId || 'all'}`)
+      .channel(`activity-${projectId || 'all'}-${instanceId}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'activity' }, () => { fetchActivity() })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [projectId, fetchActivity])
+  }, [projectId, fetchActivity, instanceId])
 
   const body = (
     <>

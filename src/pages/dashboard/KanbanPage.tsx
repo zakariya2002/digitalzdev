@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useId } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useTeam } from '../../contexts/TeamContext'
 import KanbanBoard from '../../components/dashboard/KanbanBoard'
@@ -11,6 +11,7 @@ type AssigneeFilter = 'all' | 'mine' | 'unassigned' | string
 
 export default function KanbanPage() {
   const { profile, members } = useTeam()
+  const instanceId = useId()
   const [projects, setProjects] = useState<Project[]>([])
   const [clients, setClients] = useState<Client[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
@@ -52,11 +53,11 @@ export default function KanbanPage() {
   // Synchronisation en direct : l'autre membre voit les cartes bouger
   useEffect(() => {
     const channel = supabase
-      .channel('kanban-tasks')
+      .channel(`kanban-tasks-${instanceId}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, () => { fetchTasks() })
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [fetchTasks])
+  }, [fetchTasks, instanceId])
 
   const filteredTasks = tasks
     .filter(t => !filterKind || (t.kind || 'task') === filterKind)
