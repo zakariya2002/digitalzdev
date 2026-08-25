@@ -15,6 +15,21 @@ export interface Profile {
   color: string
   is_active: boolean
   hourly_rate: number | null
+  /** Identité sous laquelle ce membre émet ses devis et factures */
+  issuer_name: string | null
+  issuer_brand: string | null
+  issuer_legal_form: string | null
+  issuer_siret: string | null
+  issuer_rm: string | null
+  issuer_address: string | null
+  issuer_email: string | null
+  issuer_phone: string | null
+  issuer_logo_url: string | null
+  iban: string | null
+  bic: string | null
+  bank_name: string | null
+  document_template: 'classic' | 'agency'
+  document_accent: string
   created_at: string
   updated_at: string
 }
@@ -423,6 +438,8 @@ export interface Quote {
   total_amount: number
   accepted_at: string | null
   sent_at: string | null
+  created_by: string | null
+  duration_note: string | null
   created_at: string
   updated_at: string
   items?: QuoteItem[]
@@ -434,6 +451,7 @@ export interface QuoteItem {
   id: string
   quote_id: string
   description: string
+  unit: string | null
   quantity: number
   unit_price: number
   total: number
@@ -458,6 +476,7 @@ export interface Invoice {
   paid_amount: number
   paid_at: string | null
   sent_at: string | null
+  created_by: string | null
   created_at: string
   updated_at: string
   items?: InvoiceItem[]
@@ -470,6 +489,7 @@ export interface InvoiceItem {
   id: string
   invoice_id: string
   description: string
+  unit: string | null
   quantity: number
   unit_price: number
   total: number

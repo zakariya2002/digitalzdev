@@ -30,7 +30,7 @@ export default function InvoicesPage() {
       .select('*, client:clients(id, name)')
       .order('created_at', { ascending: false })
     if (error) console.error('Fetch invoices error:', error)
-    if (data) setInvoices(data as Invoice[])
+    if (data) setInvoices(data as unknown as Invoice[])
   }, [])
 
   useEffect(() => { fetchAll() }, [fetchAll])

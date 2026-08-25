@@ -4,6 +4,9 @@ import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import { BUSINESS } from '../../lib/business'
+import { useTeam } from '../../contexts/TeamContext'
+import DocumentAgency from './DocumentAgency'
+import type { DocumentData, DocumentIssuer } from './documentTypes'
 
 interface Party {
   name: string
@@ -31,6 +34,9 @@ interface DocumentPDFProps {
   terms: string | null
   notes: string | null
   paidAmount?: number
+  projectName?: string | null
+  /** Membre au nom duquel le document est émis */
+  createdBy?: string | null
   onClose: () => void
 }
 
@@ -83,8 +89,9 @@ function splitDescription(raw: string) {
 
 export default function DocumentPDF({
   type, number, date, validUntil, dueDate, title, description, durationNote,
-  client, items, total, terms, notes, paidAmount, onClose,
+  client, items, total, terms, notes, paidAmount, projectName, createdBy, onClose,
 }: DocumentPDFProps) {
+  const { profile, memberById } = useTeam()
   const [company, setCompany] = useState<Company | null>(null)
 
   useEffect(() => {
@@ -106,6 +113,26 @@ export default function DocumentPDF({
 
   const isQuote = type === 'quote'
   const docTitle = isQuote ? 'DEVIS' : 'FACTURE'
+
+  // Le document porte l'identité de son émetteur, pas celle du lecteur
+  const author = memberById(createdBy) ?? profile ?? null
+  const issuer: DocumentIssuer = {
+    name: author?.issuer_name || company?.legal_name || BUSINESS.name,
+    brand: author?.issuer_brand || company?.trade_name || BUSINESS.tradeName,
+    legalForm: author?.issuer_legal_form || company?.legal_form || null,
+    siret: author?.issuer_siret || company?.siret || BUSINESS.siret,
+    rm: author?.issuer_rm || null,
+    address: author?.issuer_address || company?.address || null,
+    email: author?.issuer_email || company?.email || BUSINESS.email,
+    phone: author?.issuer_phone || company?.phone || null,
+    logoUrl: author?.issuer_logo_url || company?.logo_url || null,
+    iban: author?.iban || company?.iban || null,
+    bic: author?.bic || company?.bic || null,
+    bankName: author?.bank_name || company?.bank_name || null,
+    accountHolder: company?.account_holder || null,
+    accent: author?.document_accent || null,
+    template: (author?.document_template as 'classic' | 'agency') || 'classic',
+  }
 
   const emitterName = company?.legal_name || BUSINESS.name
   const emitterTrade = company?.trade_name || BUSINESS.tradeName
@@ -133,11 +160,24 @@ export default function DocumentPDF({
         <span className="doc-hint">Dans la fenêtre d'impression, décoche « En-têtes et pieds de page » et coche « Graphiques d'arrière-plan ».</span>
       </div>
 
+      {issuer.template === 'agency' ? (
+        <div className="doc-page doc-page-agency">
+          <DocumentAgency doc={{
+            isQuote, number, date, validUntil, dueDate, title, description, durationNote,
+            projectName, client, issuer, items, total,
+            vatApplicable, vatRate, paidAmount,
+            terms: company?.payment_terms || terms,
+            penaltyTerms: company?.late_penalty_terms ?? null,
+            ipTerms: company?.ip_terms ?? null,
+            notes,
+          } as DocumentData} />
+        </div>
+      ) : (
       <div className="doc-page">
         {/* En-tête */}
         <header className="doc-head">
           <div className="doc-head-left">
-            <img src={company?.logo_url || '/logo.png'} alt="" className="doc-logo" />
+            <img src={issuer.logoUrl || '/logo.png'} alt="" className="doc-logo" />
           </div>
           <div className="doc-head-right">
             <h1 className="doc-title">{docTitle}</h1>
@@ -160,13 +200,13 @@ export default function DocumentPDF({
         <section className="doc-parties">
           <p className="doc-label">Émetteur</p>
           <p className="doc-line doc-line-strong">
-            {emitterName}{emitterTrade ? ` / ${emitterTrade}` : ''}
+            {issuer.name}{issuer.brand ? ` / ${issuer.brand}` : ''}
           </p>
-          {company?.legal_form && <p className="doc-line">{company.legal_form}</p>}
-          {company?.address && <p className="doc-line">{company.address}</p>}
-          {emitterSiret && <p className="doc-line">SIRET : {emitterSiret}</p>}
+          {issuer.legalForm && <p className="doc-line">{issuer.legalForm}</p>}
+          {issuer.address && <p className="doc-line">{issuer.address}</p>}
+          {issuer.siret && <p className="doc-line">SIRET : {issuer.siret}</p>}
           {company?.vat_number && <p className="doc-line">TVA : {company.vat_number}</p>}
-          {emitterEmail && <p className="doc-line">{emitterEmail}</p>}
+          {issuer.email && <p className="doc-line">{issuer.email}</p>}
 
           {client && (
             <>
@@ -252,32 +292,32 @@ export default function DocumentPDF({
           </p>
         )}
 
-        {!isQuote && (company?.iban || company?.bic) && (
+        {!isQuote && (issuer.iban || issuer.bic) && (
           <section className="doc-bank">
             <p className="doc-label">Coordonnées bancaires</p>
             <div className="doc-bank-grid">
               {(company?.account_holder || emitterName) && (
                 <>
                   <span className="doc-bank-key">Titulaire</span>
-                  <span className="doc-bank-value">{company?.account_holder || emitterName}</span>
+                  <span className="doc-bank-value">{issuer.accountHolder || issuer.name}</span>
                 </>
               )}
-              {company?.bank_name && (
+              {issuer.bankName && (
                 <>
                   <span className="doc-bank-key">Banque</span>
-                  <span className="doc-bank-value">{company.bank_name}</span>
+                  <span className="doc-bank-value">{issuer.bankName}</span>
                 </>
               )}
-              {company?.iban && (
+              {issuer.iban && (
                 <>
                   <span className="doc-bank-key">IBAN</span>
-                  <span className="doc-bank-value doc-bank-iban">{company.iban}</span>
+                  <span className="doc-bank-value doc-bank-iban">{issuer.iban}</span>
                 </>
               )}
-              {company?.bic && (
+              {issuer.bic && (
                 <>
                   <span className="doc-bank-key">BIC</span>
-                  <span className="doc-bank-value doc-bank-iban">{company.bic}</span>
+                  <span className="doc-bank-value doc-bank-iban">{issuer.bic}</span>
                 </>
               )}
             </div>
@@ -315,7 +355,7 @@ export default function DocumentPDF({
               <div className="doc-sign">
                 <p className="doc-sign-title">Le prestataire</p>
                 <p className="doc-line doc-line-strong">
-                  {emitterName}{emitterTrade ? ` / ${emitterTrade}` : ''}
+                  {issuer.name}{issuer.brand ? ` / ${issuer.brand}` : ''}
                 </p>
                 <p className="doc-sign-hint">Date et signature :</p>
               </div>
@@ -328,6 +368,7 @@ export default function DocumentPDF({
           </>
         )}
       </div>
+      )}
     </div>,
     document.body,
   )

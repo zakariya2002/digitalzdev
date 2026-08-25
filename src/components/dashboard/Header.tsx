@@ -20,6 +20,7 @@ const pageTitles: Record<string, string> = {
   '/dashboard/comptabilite': 'Simulateur de statut',
   '/dashboard/messages': 'Messagerie',
   '/dashboard/pointage': 'Temps de travail',
+  '/dashboard/mes-documents': 'Mes documents',
   '/dashboard/proposals': 'Propositions',
   '/dashboard/proposals/new': 'Nouvelle proposition',
   '/dashboard/automation': 'Automatisation',

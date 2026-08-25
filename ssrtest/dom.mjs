@@ -129,13 +129,12 @@ if (SCENARIO === 'print-document') {
     for (const [label, needle] of [
       ['le type de document', /DEVIS|FACTURE/],
       ['le numéro', /(DEVIS|FACT)-\d{4}-\d+/],
-      ['l\'émetteur', /Zakariya|Digital/],
-      ['le bloc Émetteur', /Émetteur/],
-      ['l\'en-tête du tableau', /Désignation/],
+      ['l\'émetteur est nommé', /Zakariya|Digital|Anissa|BAN/],
+      ['l\'en-tête du tableau', /Désignation|Libellé/],
       ['le total', /Total HT/],
       ['un montant en euros', /\d\s?€/],
     ]) step(label, needle.test(t), t.slice(0, 120))
-    const lines = preview.querySelectorAll('.doc-row').length
+    const lines = preview.querySelectorAll('.doc-row, .ag-table tbody tr').length
     step('les lignes de prestation sont présentes', lines > 0, `${lines} ligne(s)`)
     console.log('\n  --- début du document ---')
     console.log('  ' + preview.textContent.replace(/\s+/g, ' ').trim().slice(0, 1400))

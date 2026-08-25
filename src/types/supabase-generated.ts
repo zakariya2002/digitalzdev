@@ -722,6 +722,7 @@ export type Database = {
           position: number
           quantity: number
           total: number | null
+          unit: string | null
           unit_price: number
         }
         Insert: {
@@ -732,6 +733,7 @@ export type Database = {
           position?: number
           quantity?: number
           total?: number | null
+          unit?: string | null
           unit_price: number
         }
         Update: {
@@ -742,6 +744,7 @@ export type Database = {
           position?: number
           quantity?: number
           total?: number | null
+          unit?: string | null
           unit_price?: number
         }
         Relationships: [
@@ -758,6 +761,7 @@ export type Database = {
         Row: {
           client_id: string | null
           created_at: string
+          created_by: string | null
           description: string | null
           due_date: string | null
           id: string
@@ -778,6 +782,7 @@ export type Database = {
         Insert: {
           client_id?: string | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           due_date?: string | null
           id?: string
@@ -798,6 +803,7 @@ export type Database = {
         Update: {
           client_id?: string | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           due_date?: string | null
           id?: string
@@ -821,6 +827,13 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1031,37 +1044,79 @@ export type Database = {
       }
       profiles: {
         Row: {
+          bank_name: string | null
+          bic: string | null
           color: string
           created_at: string
+          document_accent: string
+          document_template: string
           email: string | null
           full_name: string
           hourly_rate: number | null
+          iban: string | null
           id: string
           is_active: boolean
+          issuer_address: string | null
+          issuer_brand: string | null
+          issuer_email: string | null
+          issuer_legal_form: string | null
+          issuer_logo_url: string | null
+          issuer_name: string | null
+          issuer_phone: string | null
+          issuer_rm: string | null
+          issuer_siret: string | null
           job_title: string | null
           role: string
           updated_at: string
         }
         Insert: {
+          bank_name?: string | null
+          bic?: string | null
           color?: string
           created_at?: string
+          document_accent?: string
+          document_template?: string
           email?: string | null
           full_name: string
           hourly_rate?: number | null
+          iban?: string | null
           id: string
           is_active?: boolean
+          issuer_address?: string | null
+          issuer_brand?: string | null
+          issuer_email?: string | null
+          issuer_legal_form?: string | null
+          issuer_logo_url?: string | null
+          issuer_name?: string | null
+          issuer_phone?: string | null
+          issuer_rm?: string | null
+          issuer_siret?: string | null
           job_title?: string | null
           role?: string
           updated_at?: string
         }
         Update: {
+          bank_name?: string | null
+          bic?: string | null
           color?: string
           created_at?: string
+          document_accent?: string
+          document_template?: string
           email?: string | null
           full_name?: string
           hourly_rate?: number | null
+          iban?: string | null
           id?: string
           is_active?: boolean
+          issuer_address?: string | null
+          issuer_brand?: string | null
+          issuer_email?: string | null
+          issuer_legal_form?: string | null
+          issuer_logo_url?: string | null
+          issuer_name?: string | null
+          issuer_phone?: string | null
+          issuer_rm?: string | null
+          issuer_siret?: string | null
           job_title?: string | null
           role?: string
           updated_at?: string
@@ -1535,6 +1590,7 @@ export type Database = {
           quantity: number
           quote_id: string
           total: number | null
+          unit: string | null
           unit_price: number
         }
         Insert: {
@@ -1545,6 +1601,7 @@ export type Database = {
           quantity?: number
           quote_id: string
           total?: number | null
+          unit?: string | null
           unit_price: number
         }
         Update: {
@@ -1555,6 +1612,7 @@ export type Database = {
           quantity?: number
           quote_id?: string
           total?: number | null
+          unit?: string | null
           unit_price?: number
         }
         Relationships: [
@@ -1572,6 +1630,7 @@ export type Database = {
           accepted_at: string | null
           client_id: string | null
           created_at: string
+          created_by: string | null
           description: string | null
           duration_note: string | null
           id: string
@@ -1590,6 +1649,7 @@ export type Database = {
           accepted_at?: string | null
           client_id?: string | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           duration_note?: string | null
           id?: string
@@ -1608,6 +1668,7 @@ export type Database = {
           accepted_at?: string | null
           client_id?: string | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           duration_note?: string | null
           id?: string
@@ -1628,6 +1689,13 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {

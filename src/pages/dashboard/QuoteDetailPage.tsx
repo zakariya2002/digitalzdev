@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { format, addDays } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
+import { useTeam } from '../../contexts/TeamContext'
 import CommentThread from '../../components/dashboard/CommentThread'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
 import DocumentPDF from '../../components/dashboard/DocumentPDF'
@@ -52,7 +53,9 @@ export default function QuoteDetailPage() {
   // Adresse pré-remplie dans l'envoi au client
   const [projects, setProjects] = useState<Project[]>([])
   const [saving, setSaving] = useState(false)
+  const { profile } = useTeam()
   const [pdfOpen, setPdfOpen] = useState(false)
+  const [createdBy, setCreatedBy] = useState<string | null>(null)
 
   // Fetch quote data (for edit mode)
   const fetchQuote = useCallback(async () => {
@@ -74,6 +77,7 @@ export default function QuoteDetailPage() {
       setTitle(q.title)
       setDescription(q.description || '')
       setStatus(q.status)
+      setCreatedBy(q.created_by ?? null)
       setValidUntil(q.valid_until || '')
       setTerms(q.terms || '')
       setNotes(q.notes || '')
@@ -183,6 +187,7 @@ export default function QuoteDetailPage() {
     let quoteId = id
 
     if (isNew) {
+      quoteData.created_by = profile?.id ?? null
       const { data, error } = await supabase.from('quotes').insert(quoteData).select().single()
       if (error) {
         console.error('Insert quote error:', error)
@@ -644,6 +649,8 @@ export default function QuoteDetailPage() {
           total={items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0)}
           terms={terms || null}
           notes={notes || null}
+          projectName={projects.find(p => p.id === projectId)?.name ?? null}
+          createdBy={createdBy}
           onClose={() => setPdfOpen(false)}
         />
       )}
