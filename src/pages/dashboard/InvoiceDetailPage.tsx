@@ -36,6 +36,8 @@ const inputClass = 'w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-
 interface LineItem {
   id?: string
   description: string
+  /** Unité facturée : jour, heure, forfait… */
+  unit?: string | null
   quantity: number
   unit_price: number
   position: number
@@ -100,7 +102,8 @@ export default function InvoiceDetailPage() {
       setTitle(inv.title)
       setDescription(inv.description || '')
       setStatus(inv.status)
-      setCreatedBy(inv.created_by ?? null)
+      // L'émetteur du document est son propriétaire
+      setCreatedBy(inv.owner_id ?? inv.created_by ?? null)
       setIssueDate(inv.issue_date || format(new Date(), 'yyyy-MM-dd'))
       setDueDate(inv.due_date || '')
       setTerms(inv.terms || '')
@@ -120,6 +123,7 @@ export default function InvoiceDetailPage() {
         itemsData.map((i) => ({
           id: i.id,
           description: i.description,
+          unit: i.unit ?? null,
           quantity: i.quantity,
           unit_price: i.unit_price,
           position: i.position,
@@ -263,6 +267,7 @@ export default function InvoiceDetailPage() {
         items.map((item, index) => ({
           invoice_id: invoiceId!,
           description: item.description,
+          unit: item.unit || null,
           quantity: item.quantity,
           unit_price: item.unit_price,
           position: index,
@@ -452,6 +457,7 @@ export default function InvoiceDetailPage() {
                 <thead>
                   <tr className="border-b border-gray-700">
                     <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                    <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Unité</th>
                     <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Quantité</th>
                     <th className="text-left pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-28">Prix unitaire</th>
                     <th className="text-right pb-2 text-xs font-medium text-gray-500 uppercase tracking-wider w-28">Total</th>
@@ -462,11 +468,11 @@ export default function InvoiceDetailPage() {
                   {items.map((item, index) => (
                     <tr key={index}>
                       <td className="py-2 pr-2">
-                        <input
-                          type="text"
+                        <textarea
+                          rows={2}
                           value={item.description}
                           onChange={(e) => updateItem(index, 'description', e.target.value)}
-                          placeholder="Description de la ligne..."
+                          placeholder={"Intitulé de la prestation\n1.1 Sous-point : ce qu'il comprend"}
                           className={inputClass}
                         />
                       </td>
@@ -783,7 +789,7 @@ export default function InvoiceDetailPage() {
           title={title}
           description={description || null}
           client={clients.find(c => c.id === clientId) ?? null}
-          items={items.map(i => ({ description: i.description, quantity: i.quantity, unit_price: i.unit_price }))}
+          items={items.map(i => ({ description: i.description, unit: i.unit ?? null, quantity: i.quantity, unit_price: i.unit_price }))}
           total={items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0)}
           terms={terms || null}
           notes={notes || null}

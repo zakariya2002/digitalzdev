@@ -448,6 +448,7 @@ export interface Quote {
   accepted_at: string | null
   sent_at: string | null
   created_by: string | null
+  owner_id: string | null
   duration_note: string | null
   created_at: string
   updated_at: string
@@ -486,6 +487,7 @@ export interface Invoice {
   paid_at: string | null
   sent_at: string | null
   created_by: string | null
+  owner_id: string | null
   created_at: string
   updated_at: string
   items?: InvoiceItem[]
