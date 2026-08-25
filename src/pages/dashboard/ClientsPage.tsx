@@ -5,7 +5,7 @@ import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import { useTwilio } from '../../contexts/TwilioContext'
 import { toE164 } from '../../lib/phone'
-import ClientModal from '../../components/dashboard/ClientModal'
+import ClientModal, { type ClientFormData } from '../../components/dashboard/ClientModal'
 import ErrorBanner from '../../components/dashboard/ErrorBanner'
 import SmsComposer from '../../components/dashboard/SmsComposer'
 import type { Client, ClientStatus, ClientSource, Project } from '../../types/database'
@@ -62,15 +62,7 @@ export default function ClientsPage() {
     })
     .filter(c => !filterSource || c.source === filterSource)
 
-  const handleSave = async (data: {
-    name: string
-    email: string | null
-    phone: string | null
-    source: ClientSource
-    status: ClientStatus
-    notes: string | null
-    project_id: string | null
-  }) => {
+  const handleSave = async (data: ClientFormData) => {
     if (editingClient) {
       const { error } = await supabase.from('clients').update(data).eq('id', editingClient.id)
       if (error) setError("Le client n'a pas pu être modifié.")

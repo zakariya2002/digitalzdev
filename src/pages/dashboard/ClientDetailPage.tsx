@@ -5,7 +5,7 @@ import { fr } from 'date-fns/locale'
 import { supabase } from '../../lib/supabase'
 import { useTwilio } from '../../contexts/TwilioContext'
 import { formatPhone, toE164 } from '../../lib/phone'
-import ClientModal from '../../components/dashboard/ClientModal'
+import ClientModal, { type ClientFormData } from '../../components/dashboard/ClientModal'
 import SmsComposer from '../../components/dashboard/SmsComposer'
 import LeadTimeline from '../../components/dashboard/LeadTimeline'
 import CommentThread from '../../components/dashboard/CommentThread'
@@ -87,15 +87,7 @@ export default function ClientDetailPage() {
 
   useEffect(() => { fetchClient() }, [fetchClient])
 
-  const handleSaveClient = async (data: {
-    name: string
-    email: string | null
-    phone: string | null
-    source: ClientSource
-    status: ClientStatus
-    notes: string | null
-    project_id: string | null
-  }) => {
+  const handleSaveClient = async (data: ClientFormData) => {
     if (!client) return
     const { error } = await supabase.from('clients').update(data).eq('id', client.id)
     if (error) console.error('Update client error:', error)

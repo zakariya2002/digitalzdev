@@ -3,12 +3,8 @@ import Modal from './Modal'
 import { toE164, isValidPhone } from '../../lib/phone'
 import type { Client, ClientStatus, ClientSource, Project } from '../../types/database'
 
-interface ClientModalProps {
-  open: boolean
-  onClose: () => void
-  client: Client | null
-  projects: Project[]
-  onSave: (data: {
+/** Ce que le formulaire client renvoie, y compris les mentions légales. */
+export interface ClientFormData {
     name: string
     email: string | null
     phone: string | null
@@ -18,7 +14,19 @@ interface ClientModalProps {
     notes: string | null
     project_id: string | null
     next_follow_up_at?: string | null
-  }) => Promise<void>
+    address?: string | null
+    siren?: string | null
+    legal_form?: string | null
+    share_capital?: string | null
+    representative?: string | null
+  }
+
+interface ClientModalProps {
+  open: boolean
+  onClose: () => void
+  client: Client | null
+  projects: Project[]
+  onSave: (data: ClientFormData) => Promise<void>
   onDelete?: (id: string) => Promise<void>
 }
 
@@ -50,6 +58,12 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
   const [nextFollowUp, setNextFollowUp] = useState('')
   const [loading, setLoading] = useState(false)
   const [phoneError, setPhoneError] = useState('')
+  // Mentions reprises sur les devis et factures
+  const [address, setAddress] = useState('')
+  const [siren, setSiren] = useState('')
+  const [legalForm, setLegalForm] = useState('')
+  const [shareCapital, setShareCapital] = useState('')
+  const [representative, setRepresentative] = useState('')
 
   useEffect(() => {
     if (client) {
@@ -62,6 +76,11 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
       setNotes(client.notes || '')
       setProjectId(client.project_id || '')
       setNextFollowUp(client.next_follow_up_at ? client.next_follow_up_at.slice(0, 16) : '')
+      setAddress(client.address || '')
+      setSiren(client.siren || '')
+      setLegalForm(client.legal_form || '')
+      setShareCapital(client.share_capital || '')
+      setRepresentative(client.representative || '')
     } else {
       setName('')
       setEmail('')
@@ -72,6 +91,11 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
       setNotes('')
       setProjectId('')
       setNextFollowUp('')
+      setAddress('')
+      setSiren('')
+      setLegalForm('')
+      setShareCapital('')
+      setRepresentative('')
     }
     setPhoneError('')
   }, [client, open])
@@ -96,6 +120,11 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
     setLoading(true)
     await onSave({
       name: name.trim(),
+      address: address.trim() || null,
+      siren: siren.trim() || null,
+      legal_form: legalForm.trim() || null,
+      share_capital: shareCapital.trim() || null,
+      representative: representative.trim() || null,
       email: email.trim() || null,
       phone: trimmedPhone ? toE164(trimmedPhone) : null,
       phone_secondary: trimmedPhone2 ? toE164(trimmedPhone2) : null,
@@ -213,6 +242,50 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
             ))}
           </select>
         </div>
+
+        {/* Mentions reprises telles quelles sur les devis et factures */}
+        <details className="border border-gray-800 rounded-lg">
+          <summary className="px-3 py-2 text-sm text-gray-300 cursor-pointer hover:text-white select-none">
+            Mentions pour les devis et factures
+          </summary>
+          <div className="p-3 pt-1 space-y-3">
+            <p className="text-xs text-gray-500">
+              Ces informations figurent sur les documents adressés à ce client. Laisse vide ce qui ne s'applique pas.
+            </p>
+            <div>
+              <label className="block text-sm text-gray-400 mb-1">Adresse</label>
+              <textarea
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                rows={2}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 resize-none"
+                placeholder={"50 rue Marcelin Berthelot\n93700 Drancy, France"}
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">SIREN ou SIRET</label>
+                <input type="text" value={siren} onChange={(e) => setSiren(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="999 147 937" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Forme juridique</label>
+                <input type="text" value={legalForm} onChange={(e) => setLegalForm(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="SARL, SAS, association…" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Capital social</label>
+                <input type="text" value={shareCapital} onChange={(e) => setShareCapital(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="1 000 €" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Représenté par</label>
+                <input type="text" value={representative} onChange={(e) => setRepresentative(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="Prénom Nom" />
+              </div>
+            </div>
+          </div>
+        </details>
 
         <div>
           <label className="block text-sm text-gray-400 mb-1">Notes</label>
