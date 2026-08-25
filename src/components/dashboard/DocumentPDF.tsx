@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase'
 import { BUSINESS } from '../../lib/business'
 import { useTeam } from '../../contexts/TeamContext'
 import DocumentAgency from './DocumentAgency'
-import type { DocumentData, DocumentIssuer } from './documentTypes'
+import { companyIdLabel, type DocumentData, type DocumentIssuer } from './documentTypes'
 
 interface Party {
   name: string
@@ -219,7 +219,7 @@ export default function DocumentPDF({
                 </p>
               )}
               {client.address && <p className="doc-line">{client.address}</p>}
-              {client.siren && <p className="doc-line">SIREN : {client.siren}</p>}
+              {client.siren && <p className="doc-line">{companyIdLabel(client.siren)} : {client.siren}</p>}
               {client.representative && <p className="doc-line">Représentée par {client.representative}</p>}
               {client.email && <p className="doc-line">{client.email}</p>}
             </>

@@ -58,3 +58,9 @@ export interface DocumentData {
   notes?: string | null
   paymentNote?: string | null
 }
+
+/** Le libellé suit le numéro : neuf chiffres pour un SIREN, quatorze pour un SIRET. */
+export function companyIdLabel(value: string | null | undefined) {
+  const digits = (value ?? '').replace(/\D/g, '')
+  return digits.length >= 14 ? 'SIRET' : 'SIREN'
+}

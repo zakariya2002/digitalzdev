@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import type { DocumentData } from './documentTypes'
+import { companyIdLabel, type DocumentData } from './documentTypes'
 
 /** Montant avec deux décimales, comme sur un document commercial. */
 function money(amount: number) {
@@ -70,10 +70,16 @@ export default function DocumentAgency({ doc }: { doc: DocumentData }) {
             {client && (
               <>
                 <p className="ag-party-name">{client.name}</p>
+                {(client.legal_form || client.share_capital) && (
+                  <p className="ag-party-line">
+                    {[client.legal_form, client.share_capital ? `au capital de ${client.share_capital}` : null]
+                      .filter(Boolean).join(' ')}
+                  </p>
+                )}
                 {client.address?.split('\n').map((l, i) => <p key={i} className="ag-party-line">{l}</p>)}
                 {client.siren && (
                   <>
-                    <p className="ag-party-label">SIRET</p>
+                    <p className="ag-party-label">{companyIdLabel(client.siren)}</p>
                     <p className="ag-party-line">{client.siren}</p>
                   </>
                 )}

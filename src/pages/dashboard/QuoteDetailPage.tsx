@@ -58,6 +58,7 @@ export default function QuoteDetailPage() {
   const { profile } = useTeam()
   const [pdfOpen, setPdfOpen] = useState(false)
   const [createdBy, setCreatedBy] = useState<string | null>(null)
+  const [durationNote, setDurationNote] = useState<string | null>(null)
 
   // Fetch quote data (for edit mode)
   const fetchQuote = useCallback(async () => {
@@ -81,6 +82,7 @@ export default function QuoteDetailPage() {
       setStatus(q.status)
       // L'émetteur du document est son propriétaire
       setCreatedBy(q.owner_id ?? q.created_by ?? null)
+      setDurationNote(q.duration_note ?? null)
       setValidUntil(q.valid_until || '')
       setTerms(q.terms || '')
       setNotes(q.notes || '')
@@ -651,6 +653,7 @@ export default function QuoteDetailPage() {
           validUntil={validUntil || null}
           title={title}
           description={description || null}
+          durationNote={durationNote}
           client={clients.find(c => c.id === clientId) ?? null}
           items={items.map(i => ({ description: i.description, unit: i.unit ?? null, quantity: i.quantity, unit_price: i.unit_price }))}
           total={items.reduce((sum, i) => sum + i.quantity * i.unit_price, 0)}
