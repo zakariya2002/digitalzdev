@@ -210,6 +210,12 @@ export default function ProjectsPage() {
                       {p.name}
                     </h3>
                   </div>
+                  {p.visibility === 'team' && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-medium flex-shrink-0 bg-blue-500/20 text-blue-400"
+                          title="Projet partagé avec l'équipe">
+                      Équipe
+                    </span>
+                  )}
                   <span className={`px-2 py-0.5 rounded text-[10px] font-medium flex-shrink-0 mr-6 ${
                     p.is_archived ? STATUS_COLORS.archived : (STATUS_COLORS[p.status] || STATUS_COLORS.active)
                   }`}>
@@ -248,7 +254,7 @@ export default function ProjectsPage() {
                         {format(parseISO(p.end_date), 'd MMM', { locale: fr })}
                       </span>
                     )}
-                    <Avatar profile={lead} size="sm" />
+                    {p.visibility === 'team' ? <span className="text-[11px] text-blue-400">Équipe</span> : <Avatar profile={lead} size="sm" />}
                   </div>
                 </div>
                 </button>

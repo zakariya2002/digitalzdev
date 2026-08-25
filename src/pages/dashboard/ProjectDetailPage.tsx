@@ -257,11 +257,18 @@ export default function ProjectDetailPage() {
                 {client.name}
               </Link>
             )}
-            {/* Le responsable tient dans la ligne de badges plutôt que dans un bloc flottant */}
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-800 text-xs text-gray-300">
-              <Avatar profile={lead} size="xs" />
-              {lead?.full_name || 'Non assigné'}
-            </span>
+            {/* Responsable, ou mention de partage quand le projet est commun */}
+            {project.visibility === 'team' ? (
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-500/20 text-xs text-blue-400"
+                    title="Ce projet et tout ce qui s'y rattache sont visibles de l'équipe">
+                Projet d'équipe
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-gray-800 text-xs text-gray-300">
+                <Avatar profile={lead} size="xs" />
+                {lead?.full_name || 'Non assigné'}
+              </span>
+            )}
           </div>
         </div>
         <button

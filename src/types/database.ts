@@ -172,10 +172,15 @@ export interface ContentRequest {
 export type ProjectType = 'landing' | 'vitrine' | 'ecommerce' | 'custom' | 'mobile' | 'maintenance' | 'audit' | 'other'
 export type ProjectStatus = 'briefing' | 'design' | 'development' | 'review' | 'delivered' | 'active' | 'archived'
 
+export type Visibility = 'private' | 'team'
+
 export interface Project {
   id: string
   name: string
   lead_id: string | null
+  owner_id: string | null
+  /** « team » rend le projet et tout ce qui s'y rattache visible de l'équipe */
+  visibility: Visibility
   color: string
   icon: string | null
   is_archived: boolean
@@ -195,6 +200,8 @@ export interface ProjectInsert {
   id?: string
   name: string
   lead_id?: string | null
+  owner_id?: string | null
+  visibility?: string
   color?: string
   icon?: string | null
   is_archived?: boolean
@@ -312,6 +319,8 @@ export interface Client {
   next_follow_up_at: string | null
   call_count: number
   sms_count: number
+  owner_id: string | null
+  visibility: Visibility
   legal_form: string | null
   share_capital: string | null
   siren: string | null

@@ -209,6 +209,9 @@ export default function KanbanPage() {
               >
                 <span className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
                 {p.name}
+                {p.visibility === 'team' && (
+                  <span className="text-[9px] text-blue-400" title="Projet partagé">·</span>
+                )}
               </button>
               <button
                 onClick={() => { setEditingProject(p); setProjectModalOpen(true) }}

@@ -1,6 +1,7 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import Modal from './Modal'
-import AssigneeSelect from './AssigneeSelect'
+import { useTeam } from '../../contexts/TeamContext'
+import Avatar from './Avatar'
 import type { Project, Client, ProjectType, ProjectStatus } from '../../types/database'
 
 const COLORS = [
@@ -40,6 +41,7 @@ interface ProjectModalProps {
     color: string
     client_id: string | null
     lead_id: string | null
+    visibility: string
     project_type: string | null
     status: string
     budget: number | null
@@ -55,7 +57,9 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
   const [name, setName] = useState('')
   const [color, setColor] = useState(COLORS[0])
   const [clientId, setClientId] = useState<string | null>(null)
+  const { members, memberById } = useTeam()
   const [leadId, setLeadId] = useState<string | null>(null)
+  const [visibility, setVisibility] = useState<'private' | 'team'>('private')
   const [projectType, setProjectType] = useState<string>('')
   const [status, setStatus] = useState<string>('active')
   const [budget, setBudget] = useState('')
@@ -71,6 +75,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
       setColor(project.color)
       setClientId(project.client_id)
       setLeadId(project.lead_id)
+      setVisibility(project.visibility === 'team' ? 'team' : 'private')
       setProjectType(project.project_type || '')
       setStatus(project.status || 'active')
       setBudget(project.budget ? String(project.budget) : '')
@@ -82,6 +87,7 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
       setColor(COLORS[0])
       setClientId(null)
       setLeadId(null)
+      setVisibility('private')
       setProjectType('')
       setStatus('active')
       setBudget('')
@@ -100,7 +106,8 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
       name: name.trim(),
       color,
       client_id: clientId,
-      lead_id: leadId,
+      lead_id: visibility === 'team' ? null : leadId,
+      visibility,
       project_type: projectType || null,
       status,
       budget: budget ? parseFloat(budget) : null,
@@ -132,7 +139,30 @@ export default function ProjectModal({ open, onClose, project, clients = [], onS
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <AssigneeSelect value={leadId} onChange={setLeadId} label="Responsable du projet" />
+          <div>
+            <label className="block text-sm text-gray-400 mb-1">Responsable du projet</label>
+            <select
+              value={visibility === 'team' ? '__team__' : (leadId || '')}
+              onChange={(e) => {
+                if (e.target.value === '__team__') { setVisibility('team'); setLeadId(null) }
+                else { setVisibility('private'); setLeadId(e.target.value || null) }
+              }}
+              className={inputClass}
+            >
+              <option value="__team__">Équipe (projet partagé)</option>
+              <option value="">Personne pour l'instant</option>
+              {members.map(m => (
+                <option key={m.id} value={m.id}>{m.full_name}</option>
+              ))}
+            </select>
+            <p className="text-xs text-gray-500 mt-1.5">
+              {visibility === 'team'
+                ? "Toute l'équipe voit ce projet, ses tâches, ses devis et ses factures."
+                : leadId
+                  ? `Visible de ${memberById(leadId)?.full_name ?? 'son responsable'} seul, avec tout ce qui s'y rattache.`
+                  : 'Visible de toi seul, avec tout ce qui s\'y rattache.'}
+            </p>
+          </div>
           <div>
             <label className="block text-sm text-gray-400 mb-1">Type de projet</label>
             <select value={projectType} onChange={(e) => setProjectType(e.target.value)} className={inputClass}>
