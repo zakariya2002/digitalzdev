@@ -28,8 +28,26 @@ const SCHEMA = {
   properties: {
     number: { type: ["string", "null"], description: "Numéro du devis tel qu'il figure sur le document" },
     title: { type: ["string", "null"], description: "Objet du devis, en une phrase courte" },
-    clientName: { type: ["string", "null"], description: "Nom du client destinataire, pas celui de l'émetteur" },
+    clientName: { type: ["string", "null"], description: "Raison sociale du client destinataire, pas celle de l'émetteur" },
     clientEmail: { type: ["string", "null"], description: "Adresse électronique du client destinataire" },
+    client: {
+      type: ["object", "null"],
+      description: "Mentions complètes du destinataire, telles qu'elles figurent sur le document",
+      properties: {
+        tradeName: { type: ["string", "null"], description: "Enseigne ou nom commercial, souvent entre parenthèses" },
+        legalForm: { type: ["string", "null"], description: "Forme juridique : SARL, SAS, association…" },
+        shareCapital: { type: ["string", "null"], description: "Capital social avec sa monnaie" },
+        registrationNumber: { type: ["string", "null"], description: "SIREN ou SIRET, chiffres et espaces uniquement" },
+        rcs: { type: ["string", "null"], description: "Mention du registre du commerce telle qu'écrite, par exemple « RCS Paris 884 345 828 »" },
+        vatNumber: { type: ["string", "null"], description: "Numéro de TVA intracommunautaire" },
+        address: { type: ["string", "null"], description: "Adresse postale complète, les lignes séparées par des retours à la ligne" },
+        representative: { type: ["string", "null"], description: "Personne qui représente la société" },
+        contactName: { type: ["string", "null"], description: "Interlocuteur nommé, s'il diffère du représentant" },
+        phone: { type: ["string", "null"], description: "Téléphone du destinataire" },
+      },
+      required: [],
+      additionalProperties: false,
+    },
     validUntil: { type: ["string", "null"], description: "Date de validité au format AAAA-MM-JJ" },
     items: {
       type: "array",
@@ -69,6 +87,8 @@ Règles :
 - Les montants sont hors taxes. Les nombres français utilisent la virgule décimale et l'espace pour les milliers : « 1 200,50 » vaut 1200.5.
 - Ne prends pour lignes de prestation que ce qui est facturé. Ignore les totaux, sous-totaux, remises globales, mentions de TVA, conditions de paiement, coordonnées bancaires et numéros d'identification.
 - Le client est le destinataire du devis, jamais l'émetteur. Si les deux apparaissent, choisis celui à qui le devis est adressé.
+- Relève toutes ses mentions légales : enseigne, forme juridique, capital, SIREN ou SIRET, RCS, TVA, adresse, représentant, interlocuteur. Recopie-les telles quelles, sans les reformater. Laisse à null ce qui n'apparaît pas, et n'invente jamais un numéro d'immatriculation.
+- Un texte entre crochets comme « [Nom du contact] » est un emplacement à remplir, pas une valeur : renvoie null.
 - Quand une ligne porte une quantité et un prix unitaire, respecte-les. Quand seul un montant figure, mets la quantité à 1.
 - Signale dans warnings tout écart entre la somme des lignes et le total affiché, ainsi que toute ambiguïté.`;
 
@@ -124,17 +144,18 @@ Deno.serve(async (req) => {
   const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
 
   try {
-    const message = await anthropic.messages.create({
+    const stream = anthropic.messages.stream({
       model: "claude-opus-5",
       max_tokens: 8000,
       system: SYSTEM,
       thinking: { type: "adaptive" },
       output_config: {
-        effort: "medium",
+        effort: "low",
         format: { type: "json_schema", schema: SCHEMA },
       },
       messages: [{ role: "user", content: content as never }],
     });
+    const message = await stream.finalMessage();
 
     if (message.stop_reason === "refusal") {
       return json({ error: "Ce document n'a pas pu être analysé." }, 422);

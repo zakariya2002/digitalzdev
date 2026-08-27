@@ -6,18 +6,9 @@ import { supabase } from '../../lib/supabase'
 import { BUSINESS } from '../../lib/business'
 import { useTeam } from '../../contexts/TeamContext'
 import DocumentAgency from './DocumentAgency'
-import { companyIdLabel, type DocumentData, type DocumentIssuer } from './documentTypes'
+import { companyIdLabel, type DocumentData, type DocumentIssuer, type DocumentParty } from './documentTypes'
 
-interface Party {
-  name: string
-  email?: string | null
-  phone?: string | null
-  legal_form?: string | null
-  share_capital?: string | null
-  siren?: string | null
-  representative?: string | null
-  address?: string | null
-}
+
 
 interface DocumentPDFProps {
   type: 'quote' | 'invoice'
@@ -28,7 +19,7 @@ interface DocumentPDFProps {
   title?: string | null
   description?: string | null
   durationNote?: string | null
-  client: Party | null
+  client: DocumentParty | null
   items: Array<{ description: string; quantity: number; unit_price: number }>
   total: number
   terms: string | null
@@ -211,16 +202,23 @@ export default function DocumentPDF({
           {client && (
             <>
               <p className="doc-label doc-label-spaced">Client</p>
-              <p className="doc-line doc-line-strong">{client.name}</p>
+              <p className="doc-line doc-line-strong">
+                {client.name}{client.trade_name ? ` (${client.trade_name})` : ''}
+              </p>
               {(client.legal_form || client.share_capital) && (
                 <p className="doc-line">
                   {[client.legal_form, client.share_capital ? `au capital de ${client.share_capital}` : null]
                     .filter(Boolean).join(' ')}
                 </p>
               )}
-              {client.address && <p className="doc-line">{client.address}</p>}
+              {client.address?.split('\n').map((l, i) => <p key={i} className="doc-line">{l}</p>)}
+              {client.rcs && <p className="doc-line">{client.rcs}</p>}
               {client.siren && <p className="doc-line">{companyIdLabel(client.siren)} : {client.siren}</p>}
+              {client.vat_number && <p className="doc-line">TVA : {client.vat_number}</p>}
               {client.representative && <p className="doc-line">Représentée par {client.representative}</p>}
+              {client.contact_name && !client.representative && (
+                <p className="doc-line">Contact : {client.contact_name}</p>
+              )}
               {client.email && <p className="doc-line">{client.email}</p>}
             </>
           )}

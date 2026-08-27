@@ -69,7 +69,9 @@ export default function DocumentAgency({ doc }: { doc: DocumentData }) {
           <div className="ag-party ag-party-right">
             {client && (
               <>
-                <p className="ag-party-name">{client.name}</p>
+                <p className="ag-party-name">
+                  {client.name}{client.trade_name ? ` (${client.trade_name})` : ''}
+                </p>
                 {(client.legal_form || client.share_capital) && (
                   <p className="ag-party-line">
                     {[client.legal_form, client.share_capital ? `au capital de ${client.share_capital}` : null]
@@ -77,13 +79,22 @@ export default function DocumentAgency({ doc }: { doc: DocumentData }) {
                   </p>
                 )}
                 {client.address?.split('\n').map((l, i) => <p key={i} className="ag-party-line">{l}</p>)}
+                {client.rcs && <p className="ag-party-line">{client.rcs}</p>}
                 {client.siren && (
                   <>
                     <p className="ag-party-label">{companyIdLabel(client.siren)}</p>
                     <p className="ag-party-line">{client.siren}</p>
                   </>
                 )}
-                {!client.siren && client.email && <p className="ag-party-line">{client.email}</p>}
+                {client.vat_number && <p className="ag-party-line">TVA : {client.vat_number}</p>}
+                {(client.representative || client.contact_name) && (
+                  <p className="ag-party-line">
+                    {client.representative
+                      ? `Représentée par ${client.representative}`
+                      : `Contact : ${client.contact_name}`}
+                  </p>
+                )}
+                {client.email && <p className="ag-party-line">{client.email}</p>}
               </>
             )}
           </div>

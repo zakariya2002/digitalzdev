@@ -321,10 +321,15 @@ export interface Client {
   sms_count: number
   owner_id: string | null
   visibility: Visibility
+  /** Mentions du destinataire, reprises sur les devis et factures */
+  trade_name: string | null
   legal_form: string | null
   share_capital: string | null
   siren: string | null
+  rcs: string | null
+  vat_number: string | null
   representative: string | null
+  contact_name: string | null
   address: string | null
   created_at: string
 }

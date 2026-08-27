@@ -7,6 +7,7 @@ import { useTeam } from '../../contexts/TeamContext'
 import CommentThread from '../../components/dashboard/CommentThread'
 import ShareLinkPanel from '../../components/dashboard/ShareLinkPanel'
 import DocumentPDF from '../../components/dashboard/DocumentPDF'
+import ClientModal, { type ClientFormData } from '../../components/dashboard/ClientModal'
 import TaxSimulator from '../../components/dashboard/TaxSimulator'
 import { formatCurrency, BUSINESS, PRICING_GRID } from '../../lib/business'
 import type { Database, Quote, QuoteItem, Client, Project, QuoteStatus } from '../../types/database'
@@ -57,6 +58,7 @@ export default function QuoteDetailPage() {
   const [saving, setSaving] = useState(false)
   const { profile } = useTeam()
   const [pdfOpen, setPdfOpen] = useState(false)
+  const [clientModalOpen, setClientModalOpen] = useState(false)
   const [createdBy, setCreatedBy] = useState<string | null>(null)
   const [durationNote, setDurationNote] = useState<string | null>(null)
 
@@ -376,6 +378,23 @@ export default function QuoteDetailPage() {
                     </option>
                   ))}
                 </select>
+                {clientId && (() => {
+                  const picked = clients.find(c => c.id === clientId)
+                  const missing = picked && !picked.address && !picked.siren && !picked.rcs
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => setClientModalOpen(true)}
+                      className={`mt-1.5 text-xs transition-colors ${
+                        missing ? 'text-amber-400 hover:text-amber-300' : 'text-blue-400 hover:text-blue-300'
+                      }`}
+                    >
+                      {missing
+                        ? "Aucune mention légale sur cette fiche : la compléter"
+                        : 'Modifier les mentions de ce client'}
+                    </button>
+                  )
+                })()}
               </div>
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Projet</label>
@@ -662,6 +681,21 @@ export default function QuoteDetailPage() {
           projectName={projects.find(p => p.id === projectId)?.name ?? null}
           createdBy={createdBy}
           onClose={() => setPdfOpen(false)}
+        />
+      )}
+    
+      {clientModalOpen && (
+        <ClientModal
+          open={clientModalOpen}
+          onClose={() => setClientModalOpen(false)}
+          client={clients.find(c => c.id === clientId) ?? null}
+          projects={projects}
+          onSave={async (data: ClientFormData) => {
+            if (!clientId) return
+            const { error } = await supabase.from('clients').update(data).eq('id', clientId)
+            if (error) { alert("La fiche client n'a pas pu être enregistrée."); return }
+            fetchReferenceData()
+          }}
         />
       )}
     </div>

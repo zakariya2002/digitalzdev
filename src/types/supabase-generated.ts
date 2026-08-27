@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -293,6 +293,7 @@ export type Database = {
         Row: {
           address: string | null
           call_count: number
+          contact_name: string | null
           created_at: string
           email: string | null
           id: string
@@ -301,19 +302,25 @@ export type Database = {
           name: string
           next_follow_up_at: string | null
           notes: string | null
+          owner_id: string | null
           phone: string | null
           phone_secondary: string | null
           project_id: string | null
+          rcs: string | null
           representative: string | null
           share_capital: string | null
           siren: string | null
           sms_count: number
           source: string
           status: string
+          trade_name: string | null
+          vat_number: string | null
+          visibility: string
         }
         Insert: {
           address?: string | null
           call_count?: number
+          contact_name?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -322,19 +329,25 @@ export type Database = {
           name: string
           next_follow_up_at?: string | null
           notes?: string | null
+          owner_id?: string | null
           phone?: string | null
           phone_secondary?: string | null
           project_id?: string | null
+          rcs?: string | null
           representative?: string | null
           share_capital?: string | null
           siren?: string | null
           sms_count?: number
           source?: string
           status?: string
+          trade_name?: string | null
+          vat_number?: string | null
+          visibility?: string
         }
         Update: {
           address?: string | null
           call_count?: number
+          contact_name?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -343,17 +356,29 @@ export type Database = {
           name?: string
           next_follow_up_at?: string | null
           notes?: string | null
+          owner_id?: string | null
           phone?: string | null
           phone_secondary?: string | null
           project_id?: string | null
+          rcs?: string | null
           representative?: string | null
           share_capital?: string | null
           siren?: string | null
           sms_count?: number
           source?: string
           status?: string
+          trade_name?: string | null
+          vat_number?: string | null
+          visibility?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "clients_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "clients_project_id_fkey"
             columns: ["project_id"]
@@ -679,6 +704,7 @@ export type Database = {
           description: string | null
           end_time: string | null
           id: string
+          owner_id: string | null
           project_id: string | null
           start_time: string
           title: string
@@ -689,6 +715,7 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           id?: string
+          owner_id?: string | null
           project_id?: string | null
           start_time: string
           title: string
@@ -699,11 +726,19 @@ export type Database = {
           description?: string | null
           end_time?: string | null
           id?: string
+          owner_id?: string | null
           project_id?: string | null
           start_time?: string
           title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "events_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "events_project_id_fkey"
             columns: ["project_id"]
@@ -768,6 +803,7 @@ export type Database = {
           invoice_number: string
           issue_date: string
           notes: string | null
+          owner_id: string | null
           paid_amount: number
           paid_at: string | null
           project_id: string | null
@@ -789,6 +825,7 @@ export type Database = {
           invoice_number: string
           issue_date?: string
           notes?: string | null
+          owner_id?: string | null
           paid_amount?: number
           paid_at?: string | null
           project_id?: string | null
@@ -810,6 +847,7 @@ export type Database = {
           invoice_number?: string
           issue_date?: string
           notes?: string | null
+          owner_id?: string | null
           paid_amount?: number
           paid_at?: string | null
           project_id?: string | null
@@ -832,6 +870,13 @@ export type Database = {
           {
             foreignKeyName: "invoices_created_by_fkey"
             columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_owner_id_fkey"
+            columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1251,10 +1296,12 @@ export type Database = {
           is_archived: boolean
           lead_id: string | null
           name: string
+          owner_id: string | null
           project_type: string | null
           start_date: string | null
           status: string
           updated_at: string
+          visibility: string
         }
         Insert: {
           budget?: number | null
@@ -1269,10 +1316,12 @@ export type Database = {
           is_archived?: boolean
           lead_id?: string | null
           name: string
+          owner_id?: string | null
           project_type?: string | null
           start_date?: string | null
           status?: string
           updated_at?: string
+          visibility?: string
         }
         Update: {
           budget?: number | null
@@ -1287,10 +1336,12 @@ export type Database = {
           is_archived?: boolean
           lead_id?: string | null
           name?: string
+          owner_id?: string | null
           project_type?: string | null
           start_date?: string | null
           status?: string
           updated_at?: string
+          visibility?: string
         }
         Relationships: [
           {
@@ -1303,6 +1354,13 @@ export type Database = {
           {
             foreignKeyName: "projects_lead_id_fkey"
             columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_owner_id_fkey"
+            columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1328,6 +1386,7 @@ export type Database = {
           id: string
           inspirations: string | null
           objectives: string | null
+          owner_id: string | null
           project_description: string | null
           project_type: string | null
           quote_id: string | null
@@ -1357,6 +1416,7 @@ export type Database = {
           id?: string
           inspirations?: string | null
           objectives?: string | null
+          owner_id?: string | null
           project_description?: string | null
           project_type?: string | null
           quote_id?: string | null
@@ -1386,6 +1446,7 @@ export type Database = {
           id?: string
           inspirations?: string | null
           objectives?: string | null
+          owner_id?: string | null
           project_description?: string | null
           project_type?: string | null
           quote_id?: string | null
@@ -1403,6 +1464,13 @@ export type Database = {
             columns: ["client_id"]
             isOneToOne: false
             referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposals_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -1635,6 +1703,7 @@ export type Database = {
           duration_note: string | null
           id: string
           notes: string | null
+          owner_id: string | null
           project_id: string | null
           quote_number: string
           sent_at: string | null
@@ -1654,6 +1723,7 @@ export type Database = {
           duration_note?: string | null
           id?: string
           notes?: string | null
+          owner_id?: string | null
           project_id?: string | null
           quote_number: string
           sent_at?: string | null
@@ -1673,6 +1743,7 @@ export type Database = {
           duration_note?: string | null
           id?: string
           notes?: string | null
+          owner_id?: string | null
           project_id?: string | null
           quote_number?: string
           sent_at?: string | null
@@ -1699,6 +1770,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "quotes_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "quotes_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
@@ -1714,6 +1792,7 @@ export type Database = {
           description: string | null
           id: string
           month: string
+          owner_id: string | null
           project_id: string | null
         }
         Insert: {
@@ -1722,6 +1801,7 @@ export type Database = {
           description?: string | null
           id?: string
           month: string
+          owner_id?: string | null
           project_id?: string | null
         }
         Update: {
@@ -1730,9 +1810,17 @@ export type Database = {
           description?: string | null
           id?: string
           month?: string
+          owner_id?: string | null
           project_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "revenues_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "revenues_project_id_fkey"
             columns: ["project_id"]
@@ -1971,6 +2059,7 @@ export type Database = {
           estimated_hours: number | null
           id: string
           kind: string
+          owner_id: string | null
           position: number
           priority: string
           project_id: string | null
@@ -1991,6 +2080,7 @@ export type Database = {
           estimated_hours?: number | null
           id?: string
           kind?: string
+          owner_id?: string | null
           position?: number
           priority?: string
           project_id?: string | null
@@ -2011,6 +2101,7 @@ export type Database = {
           estimated_hours?: number | null
           id?: string
           kind?: string
+          owner_id?: string | null
           position?: number
           priority?: string
           project_id?: string | null
@@ -2025,6 +2116,13 @@ export type Database = {
           {
             foreignKeyName: "tasks_assignee_id_fkey"
             columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_owner_id_fkey"
+            columns: ["owner_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -2222,6 +2320,13 @@ export type Database = {
         Args: { p_hours: number; p_task_id: string }
         Returns: undefined
       }
+      can_see_client: { Args: { p_client: string }; Returns: boolean }
+      can_see_document: {
+        Args: { p_owner: string; p_project: string }
+        Returns: boolean
+      }
+      can_see_project: { Args: { p_project: string }; Returns: boolean }
+      client_in_team_project: { Args: { p_client: string }; Returns: boolean }
       close_stale_sessions: { Args: never; Returns: number }
       current_user_role: { Args: never; Returns: string }
       entity_label: { Args: { eid: string; etype: string }; Returns: string }

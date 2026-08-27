@@ -35,7 +35,7 @@ export default function ProposalsPage() {
       .select('*, client:clients(id, name)')
       .order('created_at', { ascending: false })
     if (error) console.error('Fetch proposals error:', error)
-    if (data) setProposals(data as Proposal[])
+    if (data) setProposals(data as unknown as Proposal[])
   }, [])
 
   useEffect(() => { fetchAll() }, [fetchAll])

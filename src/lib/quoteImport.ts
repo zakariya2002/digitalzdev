@@ -254,9 +254,24 @@ export async function parseQuoteFile(file: File): Promise<ParsedQuote> {
 
 // --- Lecture assistée par Claude ---
 
+/** Mentions du destinataire relevées sur le document. */
+export interface ParsedClient {
+  tradeName?: string | null
+  legalForm?: string | null
+  shareCapital?: string | null
+  registrationNumber?: string | null
+  rcs?: string | null
+  vatNumber?: string | null
+  address?: string | null
+  representative?: string | null
+  contactName?: string | null
+  phone?: string | null
+}
+
 export interface SmartResult extends ParsedQuote {
   confidence: 'haute' | 'moyenne' | 'basse'
   warnings: string[]
+  client?: ParsedClient | null
   smart: true
 }
 
@@ -315,6 +330,7 @@ export async function analyseWithClaude(
     })),
     total: (r.total as number) ?? null,
     leftovers: [],
+    client: (r.client as unknown as ParsedClient) ?? null,
     confidence: (r.confidence as 'haute' | 'moyenne' | 'basse') ?? 'moyenne',
     warnings: (r.warnings as unknown as string[]) ?? [],
     smart: true,

@@ -2,12 +2,17 @@
 
 export interface DocumentParty {
   name: string
+  trade_name?: string | null
   email?: string | null
+  phone?: string | null
   address?: string | null
   legal_form?: string | null
   share_capital?: string | null
   siren?: string | null
+  rcs?: string | null
+  vat_number?: string | null
   representative?: string | null
+  contact_name?: string | null
 }
 
 export interface DocumentIssuer {

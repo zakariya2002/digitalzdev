@@ -26,6 +26,8 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
   const [smart, setSmart] = useState<SmartResult | null>(null)
   const [fallbackNote, setFallbackNote] = useState<string | null>(null)
   const [clientId, setClientId] = useState('')
+  // Reprendre les mentions relevées sur le document dans la fiche client
+  const [applyClientDetails, setApplyClientDetails] = useState(true)
   const [projectId, setProjectId] = useState('')
   const [title, setTitle] = useState('')
   const [validUntil, setValidUntil] = useState('')
@@ -107,10 +109,49 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
       setError("Le numéro de devis n'a pas pu être généré."); setSaving(false); return
     }
 
+    // Les mentions relevées enrichissent la fiche client, sans écraser l'existant
+    let finalClientId = clientId || null
+    const details = smart?.client
+    if (applyClientDetails && (details || parsed?.clientName)) {
+      const mentions = {
+        trade_name: details?.tradeName ?? null,
+        legal_form: details?.legalForm ?? null,
+        share_capital: details?.shareCapital ?? null,
+        siren: details?.registrationNumber ?? null,
+        rcs: details?.rcs ?? null,
+        vat_number: details?.vatNumber ?? null,
+        address: details?.address ?? null,
+        representative: details?.representative ?? null,
+        contact_name: details?.contactName ?? null,
+      }
+      const filled = Object.fromEntries(Object.entries(mentions).filter(([, v]) => v))
+
+      if (finalClientId) {
+        // On ne remplace que ce qui est vide côté fiche
+        const { data: existing } = await supabase.from('clients').select('*').eq('id', finalClientId).maybeSingle()
+        const patch = Object.fromEntries(
+          Object.entries(filled).filter(([k]) => !(existing as Record<string, unknown> | null)?.[k])
+        )
+        if (Object.keys(patch).length > 0) {
+          await supabase.from('clients').update(patch).eq('id', finalClientId)
+        }
+      } else if (parsed?.clientName) {
+        const { data: created } = await supabase.from('clients').insert({
+          name: parsed.clientName,
+          email: parsed.clientEmail ?? null,
+          phone: details?.phone ?? null,
+          source: 'manual',
+          status: 'qualified',
+          ...filled,
+        }).select('id').single()
+        if (created) finalClientId = created.id
+      }
+    }
+
     const { data: quote, error: quoteError } = await supabase.from('quotes').insert({
       quote_number: number,
       title: title.trim(),
-      client_id: clientId || null,
+      client_id: finalClientId,
       project_id: projectId || null,
       valid_until: validUntil || null,
       total_amount: total,
@@ -285,6 +326,43 @@ export default function QuoteImportModal({ open, onClose, clients, projects, onI
               ))}
             </div>
           </div>
+
+          {/* Mentions du destinataire relevées sur le document */}
+          {smart?.client && Object.values(smart.client).some(Boolean) && (
+            <div className="p-3 bg-gray-800/60 rounded-lg">
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={applyClientDetails}
+                  onChange={(e) => setApplyClientDetails(e.target.checked)}
+                  className="mt-0.5 accent-blue-600"
+                />
+                <span>
+                  <span className="text-xs text-gray-300">
+                    Reprendre les informations du client dans sa fiche
+                  </span>
+                  <span className="block text-[11px] text-gray-500 mt-1">
+                    {[
+                      smart.client.tradeName && `enseigne ${smart.client.tradeName}`,
+                      smart.client.legalForm,
+                      smart.client.shareCapital && `capital ${smart.client.shareCapital}`,
+                      smart.client.registrationNumber,
+                      smart.client.rcs,
+                      smart.client.vatNumber && `TVA ${smart.client.vatNumber}`,
+                      smart.client.address?.replace(/\n/g, ', '),
+                      smart.client.representative && `représentée par ${smart.client.representative}`,
+                      smart.client.contactName && `contact ${smart.client.contactName}`,
+                    ].filter(Boolean).join(' · ')}
+                  </span>
+                  <span className="block text-[11px] text-gray-600 mt-1">
+                    {clientId
+                      ? 'Seuls les champs encore vides de la fiche seront complétés.'
+                      : 'Une fiche client sera créée avec ces mentions.'}
+                  </span>
+                </span>
+              </label>
+            </div>
+          )}
 
           {parsed && parsed.leftovers.length > 0 && (
             <details className="text-xs">

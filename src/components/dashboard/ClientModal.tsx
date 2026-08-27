@@ -15,6 +15,10 @@ export interface ClientFormData {
     project_id: string | null
     next_follow_up_at?: string | null
     address?: string | null
+    trade_name?: string | null
+    rcs?: string | null
+    vat_number?: string | null
+    contact_name?: string | null
     siren?: string | null
     legal_form?: string | null
     share_capital?: string | null
@@ -64,6 +68,10 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
   const [legalForm, setLegalForm] = useState('')
   const [shareCapital, setShareCapital] = useState('')
   const [representative, setRepresentative] = useState('')
+  const [tradeName, setTradeName] = useState('')
+  const [rcs, setRcs] = useState('')
+  const [vatNumber, setVatNumber] = useState('')
+  const [contactName, setContactName] = useState('')
 
   useEffect(() => {
     if (client) {
@@ -81,6 +89,10 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
       setLegalForm(client.legal_form || '')
       setShareCapital(client.share_capital || '')
       setRepresentative(client.representative || '')
+      setTradeName(client.trade_name || '')
+      setRcs(client.rcs || '')
+      setVatNumber(client.vat_number || '')
+      setContactName(client.contact_name || '')
     } else {
       setName('')
       setEmail('')
@@ -96,6 +108,10 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
       setLegalForm('')
       setShareCapital('')
       setRepresentative('')
+      setTradeName('')
+      setRcs('')
+      setVatNumber('')
+      setContactName('')
     }
     setPhoneError('')
   }, [client, open])
@@ -125,6 +141,10 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
       legal_form: legalForm.trim() || null,
       share_capital: shareCapital.trim() || null,
       representative: representative.trim() || null,
+      trade_name: tradeName.trim() || null,
+      rcs: rcs.trim() || null,
+      vat_number: vatNumber.trim() || null,
+      contact_name: contactName.trim() || null,
       email: email.trim() || null,
       phone: trimmedPhone ? toE164(trimmedPhone) : null,
       phone_secondary: trimmedPhone2 ? toE164(trimmedPhone2) : null,
@@ -264,6 +284,11 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
+                <label className="block text-sm text-gray-400 mb-1">Enseigne</label>
+                <input type="text" value={tradeName} onChange={(e) => setTradeName(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="Nom commercial, affiché entre parenthèses" />
+              </div>
+              <div>
                 <label className="block text-sm text-gray-400 mb-1">SIREN ou SIRET</label>
                 <input type="text" value={siren} onChange={(e) => setSiren(e.target.value)}
                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="999 147 937" />
@@ -277,6 +302,21 @@ export default function ClientModal({ open, onClose, client, projects, onSave, o
                 <label className="block text-sm text-gray-400 mb-1">Capital social</label>
                 <input type="text" value={shareCapital} onChange={(e) => setShareCapital(e.target.value)}
                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="1 000 €" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">RCS</label>
+                <input type="text" value={rcs} onChange={(e) => setRcs(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="RCS Paris 884 345 828" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">TVA intracommunautaire</label>
+                <input type="text" value={vatNumber} onChange={(e) => setVatNumber(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="FR12345678901" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Interlocuteur</label>
+                <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value)}
+                       className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" placeholder="S'il diffère du représentant" />
               </div>
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Représenté par</label>
