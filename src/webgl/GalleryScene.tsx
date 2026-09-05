@@ -48,7 +48,7 @@ interface Slide {
  * Les projets sont alignés sur un arc : le scroll vertical de la page fait
  * défiler l'arc horizontalement, le projet au centre revient face à la caméra
  * pendant que ses voisins reculent et se désaturent. Rien n'est stocké dans un
- * state React — seul le changement de projet actif remonte, pour l'habillage.
+ * state React : seul le changement de projet actif remonte, pour l'habillage.
  */
 export default function GalleryScene({
   projects,

@@ -14,7 +14,7 @@ interface Props {
   from?: Direction
   /** Amplitude du déplacement, en pixels */
   distance?: number
-  /** Ajoute une mise au point progressive — à réserver aux blocs isolés */
+  /** Ajoute une mise au point progressive, à réserver aux blocs isolés */
   blur?: boolean
   scale?: boolean
   once?: boolean

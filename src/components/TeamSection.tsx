@@ -34,7 +34,7 @@ const MEMBERS: Member[] = [
     name: 'Anissa Nebbache',
     role: 'Direction de projet, marketing & design',
     pitch:
-      "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison — puis ce qu'il produit une fois en ligne.",
+      "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison, puis ce qu'il produit une fois en ligne.",
     disciplines: [
       'Direction artistique',
       'UX / UI',
@@ -77,7 +77,7 @@ function MemberCard({ member, index }: { member: Member; index: number }) {
       onMouseLeave={() => setHovered(false)}
     >
       <div className="flex h-full flex-col rounded-2xl border border-surface-border bg-surface-card p-7 transition-colors duration-500 hover:border-accent/40 md:p-9">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-4">
           {/* Monogramme : pas de photo, mais une présence graphique assumée */}
           <motion.div
             className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-accent/30 md:h-20 md:w-20"
@@ -92,10 +92,6 @@ function MemberCard({ member, index }: { member: Member; index: number }) {
               {member.initials}
             </span>
           </motion.div>
-
-          <span className="font-mono text-xs tabular-nums text-text-muted">
-            {String(index + 1).padStart(2, '0')}
-          </span>
         </div>
 
         <h3 className="mt-6 font-display text-2xl font-bold tracking-tight text-text-primary md:text-3xl">
@@ -152,7 +148,7 @@ export default function TeamSection() {
           <div className="max-w-2xl">
             <Reveal>
               <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-                (02) L'agence
+                L'agence
               </span>
             </Reveal>
             <SplitText
@@ -180,7 +176,7 @@ export default function TeamSection() {
           ))}
         </div>
 
-        {/* Chiffres — tous vérifiables dans le portfolio ci-dessus */}
+        {/* Chiffres, tous vérifiables dans le portfolio ci-dessus */}
         <div className="mt-16 grid grid-cols-3 gap-4 border-t border-surface-border pt-12 md:mt-24">
           {FACTS.map((fact, index) => (
             <motion.div

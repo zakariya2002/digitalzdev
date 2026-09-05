@@ -41,7 +41,7 @@ export default function MissionSection() {
         <div className="mb-16 text-center md:mb-24">
           <Reveal>
             <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-[#5BA89D]">
-              (03) Notre mission
+              Notre mission
             </span>
           </Reveal>
 

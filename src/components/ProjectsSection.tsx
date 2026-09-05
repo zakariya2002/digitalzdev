@@ -105,7 +105,7 @@ export default function ProjectsSection() {
           <div>
             <Reveal>
               <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-                (01) Réalisations
+                Réalisations
               </span>
             </Reveal>
             <SplitText
@@ -169,13 +169,6 @@ export default function ProjectsSection() {
                       className="absolute inset-x-0 bottom-0 max-w-2xl"
                     >
                       <div className="mb-4 flex flex-wrap items-center gap-3">
-                        <span className="font-mono text-sm tabular-nums text-text-muted">
-                          <span className="text-text-primary">
-                            {String(active + 1).padStart(2, '0')}
-                          </span>
-                          {' / '}
-                          {String(projects.length).padStart(2, '0')}
-                        </span>
                         <span
                           className="h-2 w-2 rounded-full"
                           style={{ backgroundColor: project.color }}

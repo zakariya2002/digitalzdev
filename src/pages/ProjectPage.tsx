@@ -312,7 +312,7 @@ export default function ProjectPage({ project }: Props) {
       </section>
 
       {/* ---------------------------------------------------------- */}
-      {/* Brief & solution — l'intitulé reste collé pendant la lecture */}
+      {/* Brief et solution : l'intitulé reste collé pendant la lecture */}
       {/* ---------------------------------------------------------- */}
       <section className="bg-surface px-6 py-16 md:py-28">
         <div className="mx-auto max-w-5xl space-y-20 md:space-y-32">
@@ -373,15 +373,13 @@ export default function ProjectPage({ project }: Props) {
             {project.features.map((feature, index) => (
               <motion.li
                 key={feature}
-                className="group flex items-baseline gap-5 border-t border-surface-border py-5 last:border-b"
+                className="group flex items-baseline gap-4 border-t border-surface-border py-5 last:border-b"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VIEWPORT}
                 transition={{ duration: 0.55, delay: index * 0.06, ease: EASE_OUT }}
               >
-                <span className="font-mono text-xs tabular-nums text-text-muted">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
+                <span aria-hidden className="text-accent">·</span>
                 <span className="text-text-primary transition-transform duration-300 group-hover:translate-x-1 md:text-lg">
                   {feature}
                 </span>
@@ -392,7 +390,7 @@ export default function ProjectPage({ project }: Props) {
       </section>
 
       {/* ---------------------------------------------------------- */}
-      {/* Écrans clés — alternance décalée                            */}
+      {/* Écrans clés : alternance décalée                            */}
       {/* ---------------------------------------------------------- */}
       <section className="bg-surface px-6 py-16 md:py-28">
         <div className="mx-auto max-w-5xl">

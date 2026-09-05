@@ -12,7 +12,7 @@ interface Props {
  * Index des réalisations en liste.
  *
  * C'est la version servie quand le WebGL n'est pas disponible (mobile,
- * animations réduites, GPU absent) — et elle se tient toute seule : une ligne
+ * animations réduites, GPU absent). Elle se tient toute seule : une ligne
  * par projet, la vignette se déplie au survol.
  */
 export default function ProjectsIndex({ projects }: Props) {
@@ -36,12 +36,8 @@ export default function ProjectsIndex({ projects }: Props) {
           >
             <Link
               to={project.route}
-              className="group grid grid-cols-[auto_1fr] items-center gap-x-5 py-6 md:grid-cols-[auto_1fr_auto_auto] md:gap-x-10 md:py-8"
+              className="group grid grid-cols-1 items-center gap-x-5 py-6 md:grid-cols-[1fr_auto_auto] md:gap-x-10 md:py-8"
             >
-              <span className="font-mono text-xs text-text-muted tabular-nums">
-                {String(index + 1).padStart(2, '0')}
-              </span>
-
               <div className="min-w-0">
                 <h3 className="truncate font-display text-xl font-bold text-text-primary transition-colors group-hover:text-accent md:text-3xl">
                   {project.title}
@@ -52,7 +48,7 @@ export default function ProjectsIndex({ projects }: Props) {
               </div>
 
               {/* Vignette révélée au survol, réservée au pointeur fin */}
-              <div className="col-span-2 mt-4 md:col-span-1 md:mt-0">
+              <div className="mt-4 md:mt-0">
                 <div className="flex gap-2 md:hidden">
                   <img
                     src={project.heroImage}
@@ -84,7 +80,7 @@ export default function ProjectsIndex({ projects }: Props) {
                 </AnimatePresence>
               </div>
 
-              <div className="col-span-2 flex items-center gap-3 md:col-span-1">
+              <div className="flex items-center gap-3">
                 <div className="hidden gap-2 lg:flex">
                   {project.tags.slice(0, 2).map((tag) => (
                     <span

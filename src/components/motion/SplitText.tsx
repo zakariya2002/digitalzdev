@@ -33,7 +33,7 @@ const item: Variants = {
 
 /**
  * Révèle un titre unité par unité, chaque unité glissant depuis sous une
- * ligne de masque. C'est le geste signature des portfolios primés — il donne
+ * ligne de masque. C'est le geste signature des portfolios primés : il donne
  * du poids au titre sans recourir à une bibliothèque de découpage de texte.
  *
  * Le texte reste lisible par les lecteurs d'écran grâce à `aria-label` : les

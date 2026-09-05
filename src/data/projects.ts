@@ -44,14 +44,14 @@ export const projects: Project[] = [
     tags: ['E-commerce', 'Shopify', 'Direction artistique'],
     stack: ['Shopify', 'Liquid', 'JavaScript', 'Klaviyo'],
     description:
-      "Boutique Shopify pour la marque de soins capillaires Kalira. Un rituel en trois temps — Clean, Care, Protect — servi par une direction artistique éditoriale et un tunnel d'achat taillé pour la conversion.",
+      "Boutique Shopify pour la marque de soins capillaires Kalira. Un rituel en trois temps (Clean, Care, Protect), servi par une direction artistique éditoriale et un tunnel d'achat taillé pour la conversion.",
     url: 'https://kaliracare.com',
     route: '/kalira',
     color: '#7A6A55',
     gradient: 'from-[#F5F0E8] via-[#D8CEC0] to-[#7A6A55]',
     heroImage: '/screenshots/kalira-hero.webp',
     brief:
-      "Kalira est née de plusieurs années passées derrière un fauteuil de coiffure : des centaines de femmes, des cheveux et des attentes toutes différentes. La marque arrivait avec une gamme construite — kératine, acide hyaluronique, collagène — mais sans vitrine à sa hauteur. Il fallait un site qui rende lisible un rituel en trois étapes, qui donne envie de toucher le produit à travers l'écran, et qui transforme une visite Instagram en commande.",
+      "Kalira est née de plusieurs années passées derrière un fauteuil de coiffure : des centaines de femmes, des cheveux et des attentes toutes différentes. La marque arrivait avec une gamme construite (kératine, acide hyaluronique, collagène) mais sans vitrine à sa hauteur. Il fallait un site qui rende lisible un rituel en trois étapes, qui donne envie de toucher le produit à travers l'écran, et qui transforme une visite Instagram en commande.",
     solution:
       "Nous avons bâti un thème Shopify sur mesure autour d'une grille éditoriale : hero plein écran en diptyque, numérotation romaine des trois soins (I-Clean, II-Care, III-Protect) qui structure toute la navigation, et une section « Scroll & Shop » qui rejoue les codes du feed social directement dans la page. Le tunnel est réduit au strict nécessaire, la roue de fidélisation capte l'e-mail dès la première visite et Klaviyo prend le relais.",
     features: [
@@ -111,7 +111,7 @@ export const projects: Project[] = [
     brief:
       "The Sourcing accompagne des entrepreneurs et des marques dans la recherche de fabricants, le développement produit et la logistique internationale. Un métier de confiance, difficile à vendre en ligne : le visiteur doit comprendre en trente secondes ce qui est pris en charge, à quel moment il décide, et pourquoi il ne se retrouvera pas seul face à une usine à 9 000 km. Le tout en français et en anglais, sans dupliquer le travail.",
     solution:
-      "Un parti pris graphique radical : noir profond, photographie d'entrepôt en pleine page, typographie condensée à très grande échelle. La méthode devient un parcours numéroté en six étapes — Présenter, Étudier, Proposer, Rechercher, Sélectionner, Produire — révélé progressivement au scroll. L'architecture Next.js sert les deux langues depuis un même arbre de routes, avec des pages dédiées au sourcing en Chine et à la logistique.",
+      "Un parti pris graphique radical : noir profond, photographie d'entrepôt en pleine page, typographie condensée à très grande échelle. La méthode devient un parcours numéroté en six étapes (Présenter, Étudier, Proposer, Rechercher, Sélectionner, Produire) révélé progressivement au scroll. L'architecture Next.js sert les deux langues depuis un même arbre de routes, avec des pages dédiées au sourcing en Chine et à la logistique.",
     features: [
       'Architecture Next.js bilingue FR / EN',
       'Méthode en 6 étapes révélée au scroll',
@@ -170,7 +170,7 @@ export const projects: Project[] = [
     brief:
       "Quand une agence DRIVE ouvre, le franchisé doit équiper son point de vente à l'identique du reste du réseau : informatique, mobilier, signalétique, matériel de détailing. Jusqu'ici, chacun négociait dans son coin, avec des écarts de prix, de délais et de standard. La centrale voulait un catalogue fermé, réservé au réseau, où tout est déjà validé, chiffré et livrable.",
     solution:
-      "Une boutique Shopify privée, protégée par mot de passe, pensée comme un outil interne plus que comme un site marchand. Un « kit d'ouverture » regroupe tout ce qu'il faut pour démarrer une agence en une seule commande ; le reste du catalogue est rangé par zone du point de vente — surface de vente, back office, bureaux, détailing, informatique. Direction artistique sombre et sobre, alignée sur l'identité DRIVE, avec bascule jour / nuit.",
+      "Une boutique Shopify privée, protégée par mot de passe, pensée comme un outil interne plus que comme un site marchand. Un « kit d'ouverture » regroupe tout ce qu'il faut pour démarrer une agence en une seule commande ; le reste du catalogue est rangé par zone du point de vente : surface de vente, back office, bureaux, détailing, informatique. Direction artistique sombre et sobre, alignée sur l'identité DRIVE, avec bascule jour / nuit.",
     features: [
       'Boutique privée, accès réservé au réseau',
       "Kit d'ouverture : une agence équipée en une commande",
@@ -226,7 +226,7 @@ export const projects: Project[] = [
     gradient: 'from-[#5BA89D] via-[#2C7A70] to-[#134B45]',
     heroImage: '/screenshots/neurocare-hero.webp',
     brief:
-      "Trouver un orthophoniste, un psychomotricien ou un éducateur formé aux TND relève souvent du parcours du combattant : listes obsolètes, diplômes invérifiables, délais à rallonge. NeuroCare devait répondre à trois besoins d'un coup — trouver le bon professionnel, comprendre à quelles aides on a droit, et ne pas rester seul dans les démarches. Le tout gratuitement pour les familles, et conforme au RGPD sur des données de santé.",
+      "Trouver un orthophoniste, un psychomotricien ou un éducateur formé aux TND relève souvent du parcours du combattant : listes obsolètes, diplômes invérifiables, délais à rallonge. NeuroCare devait répondre à trois besoins d'un coup : trouver le bon professionnel, comprendre à quelles aides on a droit, et ne pas rester seul dans les démarches. Le tout gratuitement pour les familles, et conforme au RGPD sur des données de santé.",
     solution:
       "La plateforme s'est élargie bien au-delà de l'annuaire initial. Chaque professionnel passe désormais une vérification en quatre étapes, avec croisement du numéro RPPS / ADELI contre l'Annuaire Santé avant d'obtenir le badge « Vérifié ». Autour, nous avons ouvert un forum modéré, un simulateur d'aides financières (AEEH, PCH, CESU), une carte des lieux adaptés, un espace structures pour les cabinets et associations, un blog et des annonces. Hébergement en France, échanges chiffrés.",
     features: [

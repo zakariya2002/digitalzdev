@@ -1,9 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { isWebGLAvailable } from '../webgl/core'
-import { Magnetic, Marquee, SplitText } from './motion'
+import { Marquee, SplitText } from './motion'
 import { EASE_OUT } from './motion/config'
-import { scrollTo } from '../lib/scroll'
 
 // three.js ne part au réseau que si le décor est réellement affiché.
 const HeroScene = lazy(() => import('../webgl/HeroScene'))
@@ -74,22 +73,6 @@ export default function Hero() {
             className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center lg:items-start lg:text-left"
             style={{ opacity: contentOpacity, y: contentY }}
           >
-            <motion.div
-              className="mb-8 flex items-center gap-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: EASE_OUT }}
-            >
-              <img
-                src="/logo.png"
-                alt=""
-                className="h-14 w-14 rounded-full shadow-lg shadow-black/10 md:h-16 md:w-16"
-              />
-              <span className="font-display text-[11px] font-semibold uppercase tracking-[0.32em] text-text-secondary">
-                Agence web · France
-              </span>
-            </motion.div>
-
             <h1 className="max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[6.4vw]">
               <SplitText
                 as="span"
@@ -119,33 +102,6 @@ export default function Hero() {
               développés et suivis d'un bout à l'autre, par deux personnes.
             </motion.p>
 
-            <motion.div
-              className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 1.05, ease: EASE_OUT }}
-            >
-              <Magnetic strength={0.4}>
-                <button
-                  type="button"
-                  onClick={() => scrollTo('#projets', { duration: 1.4 })}
-                  className="group inline-flex items-center gap-3 rounded-full bg-text-primary px-8 py-4 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
-                >
-                  VOIR LES PROJETS
-                  <span className="transition-transform duration-300 group-hover:translate-y-0.5">
-                    ↓
-                  </span>
-                </button>
-              </Magnetic>
-
-              <button
-                type="button"
-                onClick={() => scrollTo('#agence', { duration: 1.4 })}
-                className="inline-flex items-center gap-2 border-b border-surface-border pb-1 font-display text-sm font-semibold text-text-secondary transition-colors hover:border-accent hover:text-accent"
-              >
-                Qui sommes-nous ?
-              </button>
-            </motion.div>
           </motion.div>
         </div>
 

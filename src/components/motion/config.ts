@@ -7,7 +7,7 @@ import type { Transition } from 'framer-motion'
  * réglé plutôt qu'assemblé.
  */
 
-/** Expo out — la courbe de référence, pour les entrées de contenu. */
+/** Expo out, la courbe de référence pour les entrées de contenu. */
 export const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
 /** Plus sec, pour les micro-interactions (survol, bascule). */

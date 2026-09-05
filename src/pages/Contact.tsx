@@ -90,15 +90,22 @@ export default function Contact() {
       <section className="pt-32 pb-16 md:pt-40 md:pb-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div
+            className="text-left"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-text-secondary hover:text-accent transition-colors text-sm mb-8"
+              className="group mb-8 inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-accent"
             >
-              <span>←</span> Retour à l'accueil
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:-translate-x-1"
+              >
+                ←
+              </span>
+              Retour à l'accueil
             </Link>
           </motion.div>
 

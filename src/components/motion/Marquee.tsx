@@ -12,7 +12,7 @@ interface Props {
 }
 
 /**
- * Bandeau défilant dont la vitesse — et le sens — suivent le scroll.
+ * Bandeau défilant dont la vitesse, et le sens, suivent le scroll.
  *
  * L'animation est écrite à la main plutôt qu'en CSS : c'est le couplage à la
  * vitesse de scroll qui donne l'effet, et une keyframe CSS ne sait pas le faire.
