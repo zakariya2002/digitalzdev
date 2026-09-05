@@ -181,7 +181,10 @@ export default function ProjectsSection() {
               ref={infoRef}
               className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-10 md:px-12 md:pb-14"
             >
-              <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              {/* La bande reste collée aux bords jusqu'à 1600 px ; au-delà,
+                  elle se recentre pour ne pas laisser la fiche seule dans le
+                  coin d'un écran 2560. */}
+              <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 md:flex-row md:items-end md:justify-between">
                 {/* La fiche est dans le flux, ancrée en bas : la hauteur du
                     bloc suit donc la longueur réelle de la description, et
                     c'est cette hauteur que la scène 3D mesure pour se cadrer. */}
