@@ -86,7 +86,7 @@ export default function SplitText({
                   </motion.span>
                 ))}
                 {wordIndex < words.length - 1 && (
-                  <span className="inline-block">&nbsp;</span>
+                  <span className="inline-block whitespace-pre"> </span>
                 )}
               </span>
             ) : (

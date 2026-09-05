@@ -1,4 +1,22 @@
 import { Link } from 'react-router-dom'
+import { projects } from '../data/projects'
+
+/**
+ * Le pied de page porte le maillage interne du site.
+ *
+ * Une application monopage n'offre presque aucun lien entre ses pages : le
+ * site n'en comptait qu'une douzaine, contre soixante à soixante-dix chez les
+ * agences bien positionnées. Lister les réalisations et les sections ici les
+ * rend atteignables depuis n'importe quelle page, pour un visiteur comme pour
+ * un robot.
+ */
+const RACCOURCIS = [
+  { to: '/#services', label: 'Nos services' },
+  { to: '/#projets', label: 'Nos réalisations' },
+  { to: '/#agence', label: "L'agence" },
+  { to: '/#faq', label: 'Questions fréquentes' },
+  { to: '/contact', label: 'Demander un devis' },
+]
 
 export default function Footer() {
   return (
@@ -64,6 +82,49 @@ export default function Footer() {
           </div>
 
         </div>
+
+        {/* Maillage interne : sections du site et toutes les réalisations */}
+        <nav
+          aria-label="Plan du site"
+          className="mt-12 grid gap-8 border-t border-surface-border pt-12 sm:grid-cols-2 md:grid-cols-3"
+        >
+          <div>
+            <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary">
+              Le site
+            </h2>
+            <ul className="mt-4 space-y-2">
+              {RACCOURCIS.map((lien) => (
+                <li key={lien.to}>
+                  <Link
+                    to={lien.to}
+                    className="text-sm text-text-secondary transition-colors hover:text-accent"
+                  >
+                    {lien.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="sm:col-span-2">
+            <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary">
+              Réalisations
+            </h2>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+              {projects.map((project) => (
+                <li key={project.id}>
+                  <Link
+                    to={project.route}
+                    className="text-sm text-text-secondary transition-colors hover:text-accent"
+                  >
+                    {project.title}
+                    <span className="text-text-muted"> · {project.subtitle}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
 
         <div className="mt-12 pt-8 border-t border-surface-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-text-muted text-sm">

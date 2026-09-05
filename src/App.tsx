@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import Seo from './components/Seo'
 import SmoothScroll from './components/SmoothScroll'
 import ScrollToTop from './components/ScrollToTop'
 import ScrollProgress from './components/ScrollProgress'
@@ -61,6 +62,7 @@ export default function App() {
 
   return (
     <SmoothScroll>
+      <Seo />
       <ScrollProgress />
       <Navbar />
       {/* `mode="wait"` : la page sortante s'efface avant que la suivante ne

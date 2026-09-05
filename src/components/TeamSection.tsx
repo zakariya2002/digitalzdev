@@ -123,7 +123,9 @@ function MemberCard({ member, index }: { member: Member; index: number }) {
             href={member.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="group/link inline-flex items-center gap-2 border-b border-transparent pb-0.5 font-display text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:text-accent"
+            // `min-h-[44px]` : cible tactile conforme sur mobile, le lien
+            // ne fait que 23 px de haut sans elle.
+            className="group/link inline-flex min-h-[44px] items-center gap-2 border-b border-transparent pb-0.5 font-display text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:text-accent"
           >
             <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -239,7 +241,10 @@ export default function TeamSection() {
           <Magnetic className="inline-block">
             <a
               href="mailto:zdigitalzdev@gmail.com"
-              className="inline-flex items-center gap-3 rounded-full bg-text-primary px-8 py-4 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
+              // Le libellé tient sur une ligne dès 320 px : sans la réduction
+              // de corps et d'espacement, il se casse en deux et la pastille
+              // perd son équilibre.
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-text-primary px-6 py-4 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:gap-3 sm:px-8 sm:text-sm sm:tracking-wider"
             >
               PARLONS DE VOTRE PROJET
               <span aria-hidden>→</span>

@@ -21,6 +21,12 @@ interface Props {
   onSelect: (index: number) => void
   /** Appelé si le contexte WebGL ne peut pas être créé : bascule vers la liste */
   onUnavailable: () => void
+  /**
+   * Fiche du projet, en bas du cadre. Sa hauteur réelle est mesurée pour que
+   * les plans s'arrêtent au-dessus : une description longue ou une fenêtre
+   * courte ne doit jamais laisser un plan la chevaucher.
+   */
+  infoRef?: React.RefObject<HTMLElement>
   className?: string
 }
 
@@ -31,7 +37,7 @@ const PLANE_HEIGHT = PLANE_WIDTH * (10 / 16)
 const SPACING = 3.25
 /** Champ vertical de la caméra, en degrés. */
 const FOV = 40
-/** Espace réservé en bas pour la fiche du projet, en pixels CSS. */
+/** Repli si la fiche du projet n'est pas mesurable, en pixels CSS. */
 const INFO_BAND = 250
 /** Espace réservé en haut pour la barre de navigation, en pixels CSS. */
 const TOP_BAND = 96
@@ -58,6 +64,7 @@ export default function GalleryScene({
   onHoverChange,
   onSelect,
   onUnavailable,
+  infoRef,
   className,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -183,30 +190,62 @@ export default function GalleryScene({
 
     // Remontée des plans dans le cadre, recalculée à chaque redimensionnement.
     let lift = 0
+    let frameWidth = 0
+    let frameHeight = 0
+    // Hauteur occupée par la fiche du projet, mesurée sur le DOM.
+    let infoBand = INFO_BAND
 
-    const stopResize = observeResize(container, (width, height) => {
-      renderer.setSize(width, height, false)
-      camera.aspect = width / height
+    const reframe = () => {
+      if (frameWidth <= 0 || frameHeight <= 0) return
+      renderer.setSize(frameWidth, frameHeight, false)
+      camera.aspect = frameWidth / frameHeight
 
       // Le cadrage se déduit de la place réellement disponible plutôt que
       // d'une distance fixe : sur un écran court, la fiche du projet doit
       // garder sa bande basse, et le plan se contenter du reste.
-      const usable = Math.max(height - INFO_BAND - TOP_BAND, height * 0.34)
+      const usable = Math.max(
+        frameHeight - infoBand - TOP_BAND,
+        frameHeight * 0.28
+      )
       const planePx = usable * 0.88
       const tan = Math.tan((FOV * Math.PI) / 360)
 
       // Distance telle que le plan occupe `planePx` à l'écran, sans jamais
       // déborder en largeur sur les formats étroits.
-      const fitHeight = (PLANE_HEIGHT * height) / (2 * tan * planePx)
+      const fitHeight = (PLANE_HEIGHT * frameHeight) / (2 * tan * planePx)
       const fitWidth = (PLANE_WIDTH * 1.3) / (2 * tan * camera.aspect)
-      camera.position.z = clamp(Math.max(fitHeight, fitWidth), 4.2, 11)
+      camera.position.z = clamp(Math.max(fitHeight, fitWidth), 4.2, 13)
       camera.updateProjectionMatrix()
 
       // Centre du plan placé au milieu de la zone utile, converti en monde.
       const centerPx = TOP_BAND + usable / 2
-      const ndc = 1 - (2 * centerPx) / height
+      const ndc = 1 - (2 * centerPx) / frameHeight
       lift = ndc * camera.position.z * tan
+    }
+
+    const stopResize = observeResize(container, (width, height) => {
+      frameWidth = width
+      frameHeight = height
+      reframe()
     })
+
+    // La fiche change de hauteur d'un projet à l'autre (les descriptions ne
+    // font pas la même longueur) et à chaque redimensionnement : on la suit.
+    let stopInfo = () => {}
+    const infoEl = infoRef?.current
+    if (infoEl) {
+      const readInfo = () => {
+        const next = infoEl.getBoundingClientRect().height
+        if (next > 0 && Math.abs(next - infoBand) > 1) {
+          infoBand = next
+          reframe()
+        }
+      }
+      const infoObserver = new ResizeObserver(readInfo)
+      infoObserver.observe(infoEl)
+      readInfo()
+      stopInfo = () => infoObserver.disconnect()
+    }
 
     /* --- Boucle ---------------------------------------------------- */
 
@@ -301,6 +340,7 @@ export default function GalleryScene({
     return () => {
       stopLoop()
       stopResize()
+      stopInfo()
       stopTheme()
       container.removeEventListener('pointermove', updatePointer)
       container.removeEventListener('pointerleave', clearPointer)
@@ -310,7 +350,7 @@ export default function GalleryScene({
       geometry.dispose()
       renderer.dispose()
     }
-  }, [projects, trackRef])
+  }, [projects, trackRef, infoRef])
 
   return (
     <div ref={containerRef} className={className}>

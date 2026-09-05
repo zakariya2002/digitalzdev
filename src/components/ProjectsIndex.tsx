@@ -36,10 +36,10 @@ export default function ProjectsIndex({ projects }: Props) {
           >
             <Link
               to={project.route}
-              className="group grid grid-cols-1 items-center gap-x-5 py-6 md:grid-cols-[1fr_auto_auto] md:gap-x-10 md:py-8"
+              className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 py-6 md:grid-cols-[1fr_auto_auto] md:gap-x-10 md:py-8"
             >
               <div className="min-w-0">
-                <h3 className="truncate font-display text-xl font-bold text-text-primary transition-colors group-hover:text-accent md:text-3xl">
+                <h3 className="truncate font-display text-lg font-bold text-text-primary transition-colors group-hover:text-accent sm:text-xl md:text-3xl">
                   {project.title}
                 </h3>
                 <p className="mt-1 truncate text-sm text-text-secondary">
@@ -47,8 +47,10 @@ export default function ProjectsIndex({ projects }: Props) {
                 </p>
               </div>
 
-              {/* Vignette révélée au survol, réservée au pointeur fin */}
-              <div className="mt-4 md:mt-0">
+              {/* Vignette révélée au survol, réservée au pointeur fin.
+                  En mobile elle passe sur une seconde ligne pleine largeur :
+                  la flèche reste ainsi alignée avec le titre. */}
+              <div className="col-span-2 row-start-2 mt-4 md:col-span-1 md:row-start-1 md:mt-0">
                 <div className="flex gap-2 md:hidden">
                   <img
                     src={project.heroImage}
@@ -80,7 +82,7 @@ export default function ProjectsIndex({ projects }: Props) {
                 </AnimatePresence>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="col-start-2 row-start-1 flex items-center gap-3 md:col-start-3">
                 <div className="hidden gap-2 lg:flex">
                   {project.tags.slice(0, 2).map((tag) => (
                     <span

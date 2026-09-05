@@ -57,14 +57,14 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+          <Link to="/" className="flex min-w-0 items-center gap-2 sm:gap-3 group">
             <img
               src="/logo.png"
               alt="Digitalz Dev"
               className="w-10 h-10 rounded-full"
             />
-            <span className="font-display font-semibold text-sm tracking-[0.15em] text-text-primary group-hover:text-accent transition-colors">
+            <span className="truncate font-display font-semibold text-[13px] sm:text-sm tracking-[0.12em] sm:tracking-[0.15em] text-text-primary group-hover:text-accent transition-colors">
               DIGITALZ DEV
             </span>
           </Link>
@@ -105,17 +105,17 @@ export default function Navbar() {
           </div>
 
           {/* Mobile */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex shrink-0 md:hidden items-center gap-1">
             <button
               onClick={toggleDark}
-              className="p-2 rounded-full text-text-secondary hover:text-text-primary transition-colors"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-text-secondary hover:text-text-primary transition-colors"
               aria-label="Basculer le thème"
             >
               <ThemeIcon />
             </button>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="flex flex-col gap-1.5 p-2"
+              className="flex h-11 w-11 flex-col items-center justify-center gap-1.5"
               aria-label="Menu"
             >
               <motion.span
@@ -138,7 +138,10 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-surface/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8"
+            // `md:hidden` : si la fenêtre s'élargit menu ouvert, le voile
+            // disparaît avec le bouton qui l'a ouvert. `overflow-y-auto` et le
+            // rembourrage haut laissent le contenu accessible en paysage court.
+            className="fixed inset-0 z-40 md:hidden overflow-y-auto overscroll-contain bg-surface/95 backdrop-blur-xl flex flex-col items-center justify-center gap-6 px-6 py-24 sm:gap-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

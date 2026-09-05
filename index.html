@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr-FR">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Digitalz Dev, agence web premium. Sites vitrines, e-commerce, dashboards et applications sur mesure, et pilotage de vos campagnes Meta Ads et Google Ads." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="Digitalz Dev" />
+    <meta name="description" content="Agence web en Île-de-France : création de site internet sur mesure, site vitrine, boutique Shopify et application métier. Devis sous 48 h." />
     <meta name="theme-color" content="#0A0A0A" />
     <link rel="canonical" href="https://digitalzdev.com/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Digitalz Dev, agence web professionnelle" />
-    <meta property="og:description" content="Sites vitrines, e-commerce, dashboards et applications sur mesure, et pilotage de vos campagnes Meta Ads et Google Ads." />
+    <meta property="og:title" content="Agence web et création de site internet | Digitalz Dev" />
+    <meta property="og:description" content="Création de site internet sur mesure, e-commerce Shopify, applications métier et campagnes Meta Ads et Google Ads." />
     <meta property="og:url" content="https://digitalzdev.com/" />
     <meta property="og:image" content="https://digitalzdev.com/logo.png" />
     <meta property="og:locale" content="fr_FR" />
@@ -20,47 +22,93 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Digitalz Dev, agence web professionnelle" />
-    <meta name="twitter:description" content="Sites vitrines, e-commerce, dashboards et applications sur mesure, et pilotage de vos campagnes Meta Ads et Google Ads." />
+    <meta name="twitter:title" content="Agence web et création de site internet | Digitalz Dev" />
+    <meta name="twitter:description" content="Création de site internet sur mesure, e-commerce Shopify, applications métier et campagnes Meta Ads et Google Ads." />
     <meta name="twitter:image" content="https://digitalzdev.com/logo.png" />
 
     <link rel="manifest" href="/manifest.json" />
-    <title>Digitalz Dev, agence web professionnelle</title>
+    <title>Agence web et création de site internet | Digitalz Dev</title>
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Digitalz Dev",
-      "url": "https://digitalzdev.com",
-      "logo": "https://digitalzdev.com/logo.png",
-      "description": "Agence web premium. Création de sites vitrines, e-commerce, dashboards et applications web sur mesure.",
-      "email": "zdigitalzdev@gmail.com",
-      "sameAs": [
-        "https://www.instagram.com/digitalzdev/",
-        "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/"
-      ],
-      "employee": [
+      "@graph": [
         {
-          "@type": "Person",
-          "name": "Zakariya Nebbache",
-          "jobTitle": "Développeur fullstack",
-          "sameAs": "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/"
+          "@type": "Organization",
+          "@id": "https://digitalzdev.com/#organization",
+          "name": "Digitalz Dev",
+          "url": "https://digitalzdev.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://digitalzdev.com/logo.png"
+          },
+          "email": "zdigitalzdev@gmail.com",
+          "sameAs": [
+            "https://www.instagram.com/digitalzdev/",
+            "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/"
+          ],
+          "employee": [
+            {
+              "@type": "Person",
+              "name": "Zakariya Nebbache",
+              "jobTitle": "Développeur fullstack",
+              "sameAs": "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/"
+            },
+            {
+              "@type": "Person",
+              "name": "Anissa Nebbache",
+              "jobTitle": "Cheffe de projet, directrice marketing et design",
+              "sameAs": "https://www.linkedin.com/in/anissa-nebbache-696bb9150/"
+            }
+          ]
         },
         {
-          "@type": "Person",
-          "name": "Anissa Nebbache",
-          "jobTitle": "Cheffe de projet, directrice marketing et design",
-          "sameAs": "https://www.linkedin.com/in/anissa-nebbache-696bb9150/"
+          "@type": "WebSite",
+          "@id": "https://digitalzdev.com/#website",
+          "url": "https://digitalzdev.com",
+          "name": "Digitalz Dev",
+          "inLanguage": "fr-FR",
+          "publisher": { "@id": "https://digitalzdev.com/#organization" }
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://digitalzdev.com/#service",
+          "name": "Digitalz Dev, agence web",
+          "url": "https://digitalzdev.com",
+          "image": "https://digitalzdev.com/logo.png",
+          "parentOrganization": { "@id": "https://digitalzdev.com/#organization" },
+          "description": "Agence web : création de site internet sur mesure, site vitrine, boutique e-commerce Shopify, application métier, et pilotage de campagnes Meta Ads et Google Ads.",
+          "email": "zdigitalzdev@gmail.com",
+          "priceRange": "€€",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "8 avenue Édouard Branly",
+            "postalCode": "93420",
+            "addressLocality": "Villepinte",
+            "addressRegion": "Île-de-France",
+            "addressCountry": "FR"
+          },
+          "areaServed": [
+            { "@type": "Country", "name": "France" },
+            { "@type": "AdministrativeArea", "name": "Île-de-France" }
+          ],
+          "knowsLanguage": ["fr", "en"],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Prestations",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Création de site internet sur mesure" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Site vitrine" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Boutique e-commerce Shopify" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Refonte de site internet" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Application web et dashboard métier" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Campagnes Meta Ads et Google Ads" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Référencement naturel SEO" } }
+            ]
+          }
         }
-      ],
-      "serviceType": ["Création de sites web", "E-commerce", "Dashboard", "Application web", "Application iOS", "Publicité Meta Ads", "Publicité Google Ads", "Acquisition digitale"],
-      "areaServed": {
-        "@type": "Country",
-        "name": "France"
-      },
-      "knowsLanguage": "fr"
+      ]
     }
     </script>
 
