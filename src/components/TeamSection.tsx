@@ -34,12 +34,14 @@ const MEMBERS: Member[] = [
     name: 'Anissa Nebbache',
     role: 'Direction de projet, marketing & design',
     pitch:
-      "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison, puis ce qu'il produit une fois en ligne.",
+      "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison, puis ce qu'il produit une fois en ligne : campagnes Meta Ads et Google Ads, suivi des conversions, itérations.",
     disciplines: [
       'Direction artistique',
       'UX / UI',
       'Stratégie de marque',
-      'Marketing & acquisition',
+      'Meta Ads',
+      'Google Ads',
+      'Tracking & conversions',
       'Gestion de projet',
       'Relation client',
     ],
@@ -61,6 +63,13 @@ const SECTORS = [
   'SANTÉ',
   'FRANCHISE B2B',
   'SOURCING INDUSTRIEL',
+]
+
+/** Ce que l'agence prend en charge, au-delà de la seule mise en ligne. */
+const SERVICES = [
+  { title: 'Conception et développement', body: "Sites vitrines, boutiques Shopify, plateformes métier et applications iOS. Du cadrage à la mise en ligne." },
+  { title: 'Meta Ads et Google Ads', body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
+  { title: 'Mesure et conversions', body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." },
 ]
 
 function MemberCard({ member, index }: { member: Member; index: number }) {
@@ -163,10 +172,32 @@ export default function TeamSection() {
           <Reveal delay={0.2} className="max-w-sm">
             <p className="leading-relaxed text-text-secondary">
               Pas de chaîne d'intermédiaires : vous parlez directement aux deux
-              personnes qui conçoivent et qui développent. Un cadrage, un
-              interlocuteur, un responsable technique.
+              personnes qui conçoivent et qui développent. Et le travail ne
+              s'arrête pas à la mise en ligne : nous mettons aussi en place et
+              pilotons vos campagnes Meta Ads et Google Ads.
             </p>
           </Reveal>
+        </div>
+
+        {/* Ce que nous prenons en charge */}
+        <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-surface-border bg-surface-border md:mt-20 md:grid-cols-3">
+          {SERVICES.map((service, index) => (
+            <motion.div
+              key={service.title}
+              className="bg-surface-light p-6 md:p-8"
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.6, delay: index * 0.1, ease: EASE_OUT }}
+            >
+              <h3 className="font-display text-base font-bold text-text-primary md:text-lg">
+                {service.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                {service.body}
+              </p>
+            </motion.div>
+          ))}
         </div>
 
         {/* Profils */}

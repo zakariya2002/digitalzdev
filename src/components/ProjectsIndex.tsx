@@ -91,9 +91,6 @@ export default function ProjectsIndex({ projects }: Props) {
                     </span>
                   ))}
                 </div>
-                <span className="font-mono text-xs text-text-muted tabular-nums">
-                  {project.year}
-                </span>
                 <span className="text-text-muted transition-transform duration-300 group-hover:translate-x-1 group-hover:text-accent">
                   →
                 </span>

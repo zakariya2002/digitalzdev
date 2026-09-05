@@ -194,9 +194,6 @@ export default function ProjectsSection() {
                         <span className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
                           {project.subtitle}
                         </span>
-                        <span className="font-mono text-xs text-text-muted">
-                          · {project.year}
-                        </span>
                       </div>
 
                       <h3
@@ -274,17 +271,6 @@ export default function ProjectsSection() {
         <ProjectsIndex projects={projects} />
       )}
 
-      {/* Rappel discret de la mécanique, seulement en version WebGL */}
-      {useWebGL && (
-        <motion.p
-          className="pb-20 pt-10 text-center font-mono text-xs uppercase tracking-[0.25em] text-text-muted"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={VIEWPORT}
-        >
-          Faites défiler · ← → pour naviguer
-        </motion.p>
-      )}
     </section>
   )
 }

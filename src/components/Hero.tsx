@@ -10,7 +10,9 @@ const HeroScene = lazy(() => import('../webgl/HeroScene'))
 const KEYWORDS = [
   'E-COMMERCE',
   'SHOPIFY',
+  'META ADS',
   'NEXT.JS',
+  'GOOGLE ADS',
   'DESIGN SYSTEM',
   'WEBGL',
   'DASHBOARD',
@@ -99,7 +101,7 @@ export default function Hero() {
               transition={{ duration: 0.9, delay: 0.9, ease: EASE_OUT }}
             >
               Sites vitrines, boutiques Shopify et plateformes métier. Conçus,
-              développés et suivis d'un bout à l'autre, par deux personnes.
+              développés, puis portés par vos campagnes Meta Ads et Google Ads.
             </motion.p>
 
           </motion.div>

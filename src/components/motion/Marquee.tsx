@@ -8,6 +8,7 @@ interface Props {
   /** Vitesse de croisière, en pixels par seconde */
   speed?: number
   direction?: 1 | -1
+  /** Glyphe entre deux entrées. Vide par défaut : l'espacement suffit. */
   separator?: string
 }
 
@@ -22,7 +23,7 @@ export default function Marquee({
   className = '',
   speed = 40,
   direction = 1,
-  separator = '✦',
+  separator = '',
 }: Props) {
   const trackRef = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
@@ -65,7 +66,7 @@ export default function Marquee({
         {sequence.map((item, index) => (
           <span key={`${item}-${index}`} className="flex items-center whitespace-nowrap">
             {item}
-            <span className="mx-6 md:mx-10 text-accent opacity-60">{separator}</span>
+            <span className="mx-8 text-accent opacity-60 md:mx-14">{separator}</span>
           </span>
         ))}
       </div>

@@ -209,9 +209,6 @@ export default function ProjectPage({ project }: Props) {
                   {project.subtitle}
                 </span>
               </span>
-              <span className="font-mono text-xs text-text-muted">
-                {project.year}
-              </span>
             </motion.div>
 
             <SplitText
