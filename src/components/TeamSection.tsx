@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Counter, Magnetic, Marquee, Reveal, SplitText } from './motion'
 import { EASE_OUT, VIEWPORT } from './motion/config'
@@ -73,8 +72,6 @@ const SERVICES = [
 ]
 
 function MemberCard({ member, index }: { member: Member; index: number }) {
-  const [hovered, setHovered] = useState(false)
-
   return (
     <motion.article
       className="group relative"
@@ -82,25 +79,19 @@ function MemberCard({ member, index }: { member: Member; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VIEWPORT}
       transition={{ duration: 0.8, delay: index * 0.12, ease: EASE_OUT }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
       <div className="flex h-full flex-col rounded-2xl border border-surface-border bg-surface-card p-7 transition-colors duration-500 hover:border-accent/40 md:p-9">
         <div className="flex items-start gap-4">
-          {/* Monogramme : pas de photo, mais une présence graphique assumée */}
-          <motion.div
-            className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-accent/30 md:h-20 md:w-20"
-            animate={{ scale: hovered ? 1.06 : 1 }}
-            transition={{ duration: 0.4, ease: EASE_OUT }}
+          {/* Monogramme purement décoratif : il ne réagit pas au survol, pour
+              ne pas laisser croire qu'il est cliquable. */}
+          <div
+            aria-hidden
+            className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 md:h-20 md:w-20"
           >
-            <span
-              aria-hidden
-              className="absolute inset-0 rounded-full bg-accent/10 transition-opacity duration-500 group-hover:bg-accent/20"
-            />
-            <span className="relative font-display text-lg font-bold tracking-widest text-accent md:text-xl">
+            <span className="font-display text-lg font-bold tracking-widest text-accent md:text-xl">
               {member.initials}
             </span>
-          </motion.div>
+          </div>
         </div>
 
         <h3 className="mt-6 font-display text-2xl font-bold tracking-tight text-text-primary md:text-3xl">
