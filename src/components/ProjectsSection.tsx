@@ -186,11 +186,7 @@ export default function ProjectsSection() {
                       transition={{ duration: 0.5, ease: EASE_OUT }}
                       className="absolute inset-x-0 bottom-0 max-w-2xl"
                     >
-                      <div className="mb-4 flex flex-wrap items-center gap-3">
-                        <span
-                          className="h-2 w-2 rounded-full"
-                          style={{ backgroundColor: project.color }}
-                        />
+                      <div className="mb-4">
                         <span className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
                           {project.subtitle}
                         </span>

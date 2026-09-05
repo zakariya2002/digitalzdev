@@ -194,30 +194,13 @@ export default function ProjectPage({ project }: Props) {
               </Link>
             </motion.div>
 
-            <motion.div
-              className="mt-6 flex flex-wrap items-center gap-3"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25 }}
-            >
-              <span className="inline-flex items-center gap-2 rounded-full border border-surface-border bg-surface-card/80 px-4 py-2 backdrop-blur-sm">
-                <span
-                  className="h-2 w-2 rounded-full"
-                  style={{ backgroundColor: project.color }}
-                />
-                <span className="font-display text-xs font-semibold uppercase tracking-[0.15em] text-text-secondary">
-                  {project.subtitle}
-                </span>
-              </span>
-            </motion.div>
-
             <SplitText
               as="h1"
               by="char"
               immediate
               text={project.title}
               delay={0.35}
-              className={`mt-5 block font-display font-black leading-[0.92] tracking-tight text-text-primary ${titleScale(
+              className={`mt-8 block font-display font-black leading-[0.92] tracking-tight text-text-primary ${titleScale(
                 project.title
               )}`}
             />
