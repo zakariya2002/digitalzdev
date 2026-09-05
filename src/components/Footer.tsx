@@ -1,10 +1,6 @@
 import { Link } from 'react-router-dom'
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
   return (
     <footer className="border-t border-surface-border bg-surface py-16 px-6">
       <div className="max-w-7xl mx-auto">
@@ -67,12 +63,6 @@ export default function Footer() {
             </a>
           </div>
 
-          <button
-            onClick={scrollToTop}
-            className="text-text-secondary hover:text-accent transition-colors text-sm flex items-center gap-2"
-          >
-            Retour en haut ↑
-          </button>
         </div>
 
         <div className="mt-12 pt-8 border-t border-surface-border flex flex-col md:flex-row items-center justify-between gap-4">

@@ -40,8 +40,19 @@ export default function PolitiqueConfidentialite() {
                 Responsable du traitement
               </h2>
               <p>
-                Digitalz Dev, entrepreneur individuel.<br />
-                Email : zdigitalzdev@gmail.com
+                NeuroCare, société par actions simplifiée à associé unique,
+                éditrice du site sous le nom commercial Digitalz Dev.
+                <br />
+                Siège social : 8 avenue Édouard Branly, 93420 Villepinte,
+                France
+                <br />
+                Email :{' '}
+                <a
+                  href="mailto:zdigitalzdev@gmail.com"
+                  className="text-accent underline underline-offset-2"
+                >
+                  zdigitalzdev@gmail.com
+                </a>
               </p>
             </div>
 
@@ -90,8 +101,8 @@ export default function PolitiqueConfidentialite() {
                 Destinataires
               </h2>
               <p>
-                Vos données sont transmises uniquement au responsable de
-                Digitalz Dev via email. Aucun sous-traitant ni tiers n'y a
+                Vos données sont transmises uniquement au responsable du
+                traitement, par email. Aucun sous-traitant ni tiers n'y a
                 accès.
               </p>
             </div>

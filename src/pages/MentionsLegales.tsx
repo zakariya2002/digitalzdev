@@ -40,10 +40,38 @@ export default function MentionsLegales() {
                 Éditeur du site
               </h2>
               <p>
-                Digitalz Dev<br />
-                Entrepreneur individuel<br />
-                Email : zdigitalzdev@gmail.com<br />
+                Digitalz Dev est le nom commercial de :
+              </p>
+              <p className="mt-3">
+                <strong className="text-text-primary">NeuroCare</strong>
+                <br />
+                Société par actions simplifiée à associé unique (SASU)
+                <br />
+                Capital social : 150 €
+                <br />
+                Siège social : 8 avenue Édouard Branly, 93420 Villepinte,
+                France
+                <br />
+                RCS Bobigny : immatriculation en cours
+                <br />
+                Email :{' '}
+                <a
+                  href="mailto:zdigitalzdev@gmail.com"
+                  className="text-accent underline underline-offset-2"
+                >
+                  zdigitalzdev@gmail.com
+                </a>
+                <br />
                 Site : digitalzdev.com
+              </p>
+            </div>
+
+            <div>
+              <h2 className="font-display font-bold text-xl text-text-primary mb-3">
+                Directeur de la publication
+              </h2>
+              <p>
+                Zakariya Nebbache, président de la société NeuroCare.
               </p>
             </div>
 
@@ -65,9 +93,11 @@ export default function MentionsLegales() {
               </h2>
               <p>
                 L'ensemble du contenu de ce site (textes, images, logos,
-                maquettes, code source) est la propriété exclusive de Digitalz
-                Dev, sauf mention contraire. Toute reproduction, même partielle,
-                est interdite sans autorisation préalable.
+                maquettes, code source) est la propriété exclusive de la société
+                NeuroCare, sauf mention contraire. Les captures d'écran des
+                réalisations restent la propriété de leurs marques respectives.
+                Toute reproduction, même partielle, est interdite sans
+                autorisation préalable.
               </p>
             </div>
 
