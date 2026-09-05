@@ -1,0 +1,7 @@
+export { default as Reveal } from './Reveal'
+export { default as SplitText } from './SplitText'
+export { default as Parallax } from './Parallax'
+export { default as Marquee } from './Marquee'
+export { default as Counter } from './Counter'
+export { default as Magnetic } from './Magnetic'
+export * from './config'

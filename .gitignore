@@ -6,3 +6,6 @@ dist
 .vercel
 
 ssrtest/out
+
+# Artefacts de compilation TypeScript incrémentale
+*.tsbuildinfo

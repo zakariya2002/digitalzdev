@@ -83,6 +83,12 @@ export default function Navbar() {
             >
               Projets
             </a>
+            <a
+              href="/#agence"
+              className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+            >
+              L'agence
+            </a>
             <button
               onClick={toggleDark}
               className="p-2 rounded-full text-text-secondary hover:text-text-primary hover:bg-surface-light transition-colors"
@@ -148,6 +154,12 @@ export default function Navbar() {
               className="text-2xl font-display font-semibold text-text-primary"
             >
               Projets
+            </a>
+            <a
+              href="/#agence"
+              className="text-2xl font-display font-semibold text-text-primary"
+            >
+              L'agence
             </a>
             <Link
               to="/contact"

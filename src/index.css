@@ -53,7 +53,10 @@
   }
 
   html, body {
-    overflow-x: hidden;
+    /* `clip` et non `hidden` : `overflow-x: hidden` force `overflow-y` à
+       `auto`, ce qui fait du body un conteneur de défilement et neutralise
+       tous les `position: sticky` de la page (hero, galerie de projets). */
+    overflow-x: clip;
     width: 100%;
     position: relative;
   }

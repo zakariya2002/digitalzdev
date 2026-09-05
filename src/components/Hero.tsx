@@ -1,205 +1,164 @@
-import { useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { isWebGLAvailable } from '../webgl/core'
+import { Magnetic, Marquee, SplitText } from './motion'
+import { EASE_OUT } from './motion/config'
+import { scrollTo } from '../lib/scroll'
 
-const WORDS = [
-  { text: 'E-COMMERCE', x: -32, y: -22, z: 400, size: '3rem', isGold: true },
-  { text: 'PRO', x: 28, y: 25, z: 300, size: '4rem', isGold: false },
-  { text: 'WEB', x: -25, y: 35, z: 350, size: '3.5rem', isGold: false },
-  { text: 'AGENCE', x: 38, y: -20, z: 250, size: '2.5rem', isGold: true },
-  { text: 'DESIGN', x: -42, y: -15, z: 0, size: '4rem', isGold: true },
-  { text: 'RESPONSIVE', x: 35, y: -30, z: -100, size: '2rem', isGold: false },
-  { text: 'CRÉATIF', x: -22, y: 40, z: -200, size: '2.5rem', isGold: false },
-  { text: 'UX/UI', x: 42, y: 18, z: -50, size: '3.5rem', isGold: true },
-  { text: 'PREMIUM', x: -38, y: 25, z: -150, size: '3rem', isGold: false },
-  { text: 'BRANDING', x: 30, y: 38, z: -400, size: '2rem', isGold: false },
-  { text: 'CONVERSION', x: -28, y: -38, z: -500, size: '2.5rem', isGold: true },
-  { text: 'PIXEL', x: 42, y: -22, z: -350, size: '1.75rem', isGold: false },
-  { text: 'IDENTITÉ', x: -44, y: 20, z: -450, size: '2rem', isGold: true },
-  { text: 'STRATÉGIE', x: 25, y: -40, z: -600, size: '2.5rem', isGold: false },
-  { text: 'MODERNE', x: -22, y: 44, z: -550, size: '2rem', isGold: true },
-  { text: 'TYPOGRAPHIE', x: -40, y: -30, z: -800, size: '1.75rem', isGold: false },
-  { text: 'INNOVATION', x: 38, y: 25, z: -900, size: '2rem', isGold: true },
-  { text: 'PERFORMANCE', x: -25, y: 38, z: -750, size: '1.75rem', isGold: false },
-  { text: 'MOBILE', x: 30, y: -35, z: -850, size: '2.5rem', isGold: true },
-  { text: 'REACT', x: -44, y: 18, z: -1000, size: '2rem', isGold: false },
-  { text: 'EXPÉRIENCE', x: 20, y: 42, z: -950, size: '1.75rem', isGold: true },
-  { text: 'SCALABLE', x: -32, y: -42, z: -1200, size: '1.5rem', isGold: false },
-  { text: 'AGILE', x: 40, y: 20, z: -1400, size: '1.75rem', isGold: true },
-  { text: 'INTERFACE', x: -38, y: 30, z: -1300, size: '1.5rem', isGold: false },
-  { text: 'ÉLÉGANT', x: 28, y: -38, z: -1500, size: '1.75rem', isGold: true },
-  { text: 'OPTIMISÉ', x: -30, y: -28, z: -1600, size: '1.5rem', isGold: false },
-  { text: 'RAPIDE', x: 35, y: -25, z: -1800, size: '2rem', isGold: true },
-  { text: 'DÉVELOPPEMENT', x: -40, y: 18, z: -2000, size: '1.25rem', isGold: false },
-  { text: 'FULL-STACK', x: 22, y: 40, z: -2200, size: '1.5rem', isGold: true },
-  { text: 'DIGITAL', x: -28, y: -35, z: -2400, size: '2rem', isGold: false },
+// three.js ne part au réseau que si le décor est réellement affiché.
+const HeroScene = lazy(() => import('../webgl/HeroScene'))
+
+const KEYWORDS = [
+  'E-COMMERCE',
+  'SHOPIFY',
+  'NEXT.JS',
+  'DESIGN SYSTEM',
+  'WEBGL',
+  'DASHBOARD',
+  'IDENTITÉ',
+  'PERFORMANCE',
+  'SEO',
+  'CONVERSION',
 ]
 
-// Fewer words for mobile (no 3D, just decorative)
-const WORDS_MOBILE = WORDS.slice(0, 14)
-
-const getOpacity = (z: number) => {
-  if (z > 200) return 0.13
-  if (z > -200) return 0.11
-  if (z > -600) return 0.09
-  if (z > -1000) return 0.07
-  if (z > -1500) return 0.05
-  return 0.04
-}
-
 export default function Hero() {
-  const containerRef = useRef(null)
+  const containerRef = useRef<HTMLElement>(null)
+  const [webgl, setWebgl] = useState(false)
+
+  useEffect(() => setWebgl(isWebGLAvailable()), [])
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end end'],
+    offset: ['start start', 'end start'],
   })
 
-  const z = useTransform(scrollYProgress, [0, 0.9], [0, 3500])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.15, 0.35], [1, 1, 0])
-  const contentScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.92])
-  const mobileWordsOpacity = useTransform(scrollYProgress, [0, 0.3, 0.6], [1, 0.5, 0])
-  const mobileWordsScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.3])
-
-  const scrollToProjects = () => {
-    document.getElementById('projets')?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.35, 0.6], [1, 1, 0])
+  const contentY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-18%'])
+  const marqueeOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
 
   return (
-    <section ref={containerRef} className="h-[200vh] relative bg-surface">
-      <div className="sticky top-0 h-screen bg-surface">
+    <section ref={containerRef} className="relative h-[190vh] bg-surface">
+      <div className="sticky top-0 h-screen overflow-hidden bg-surface">
+        {/* Décor : sphère WebGL. Sur desktop elle occupe la moitié droite pour
+            laisser la typographie respirer ; en dessous, elle passe derrière le
+            texte et le voile prend le relais pour le contraste. */}
+        {webgl ? (
+          <Suspense fallback={null}>
+            <HeroScene className="absolute inset-0 opacity-40 lg:left-[42%] lg:right-[-6%] lg:opacity-100" />
+          </Suspense>
+        ) : (
+          <div
+            aria-hidden
+            className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 lg:left-[72%]"
+            style={{
+              background:
+                'radial-gradient(circle at 35% 30%, rgb(var(--accent)), transparent 68%)',
+              filter: 'blur(40px)',
+            }}
+          />
+        )}
 
-        {/* 3D Word Cloud: DESKTOP ONLY (GPU-heavy) */}
+        {/* Voile de contraste, inutile en desktop où le texte a sa propre colonne */}
         <div
-          className="absolute inset-0 hidden md:block"
-          style={{ perspective: 800, perspectiveOrigin: '50% 50%' }}
-        >
+          aria-hidden
+          className="pointer-events-none absolute inset-0 lg:hidden"
+          style={{
+            background:
+              'radial-gradient(ellipse 78% 52% at 50% 48%, rgb(var(--surface) / 0.94) 0%, rgb(var(--surface) / 0.74) 55%, rgb(var(--surface) / 0.25) 85%)',
+          }}
+        />
+
+        {/* Contenu */}
+        <div className="relative z-10 flex h-full items-center">
           <motion.div
-            className="absolute inset-0"
-            style={{ z, transformStyle: 'preserve-3d' }}
+            className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center lg:items-start lg:text-left"
+            style={{ opacity: contentOpacity, y: contentY }}
           >
-            {WORDS.map((word, i) => (
-              <div
-                key={i}
-                className="absolute font-display font-bold whitespace-nowrap select-none"
-                style={{
-                  left: `${50 + word.x}%`,
-                  top: `${50 + word.y}%`,
-                  transform: `translate(-50%, -50%) translateZ(${word.z}px)`,
-                  fontSize: word.size,
-                  color: word.isGold
-                    ? 'rgb(var(--accent))'
-                    : 'rgb(var(--text-primary))',
-                  opacity: getOpacity(word.z),
-                  backfaceVisibility: 'hidden',
-                }}
-              >
-                {word.text}
-              </div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Simple 2D words: MOBILE ONLY (lightweight) */}
-        <motion.div
-          className="absolute inset-0 md:hidden overflow-hidden"
-          style={{ opacity: mobileWordsOpacity, scale: mobileWordsScale }}
-        >
-          {WORDS_MOBILE.map((word, i) => (
-            <div
-              key={i}
-              className="absolute font-display font-bold whitespace-nowrap select-none"
-              style={{
-                left: `${50 + word.x}%`,
-                top: `${50 + word.y}%`,
-                transform: 'translate(-50%, -50%)',
-                fontSize: `calc(${word.size} * 0.7)`,
-                color: word.isGold
-                  ? 'rgb(var(--accent))'
-                  : 'rgb(var(--text-primary))',
-                opacity: getOpacity(word.z),
-              }}
-            >
-              {word.text}
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Center Hero Content */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none"
-          style={{ opacity: contentOpacity, scale: contentScale }}
-        >
-          {/* Glow - separate for mobile/desktop */}
-          <div
-            className="absolute w-[350px] h-[350px] rounded-full bg-surface md:hidden"
-            style={{ filter: 'blur(50px)', opacity: 0.95 }}
-          />
-          <div
-            className="absolute hidden md:block w-[800px] h-[800px] rounded-full bg-surface"
-            style={{ filter: 'blur(100px)', opacity: 0.95 }}
-          />
-
-          <div className="relative text-center px-6 pointer-events-auto">
             <motion.div
-              className="flex justify-center mb-8"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              className="mb-8 flex items-center gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE_OUT }}
             >
               <img
                 src="/logo.png"
-                alt="Digitalz Dev"
-                className="w-28 h-28 md:w-36 md:h-36 rounded-full shadow-lg shadow-black/10"
+                alt=""
+                className="h-14 w-14 rounded-full shadow-lg shadow-black/10 md:h-16 md:w-16"
               />
+              <span className="font-display text-[11px] font-semibold uppercase tracking-[0.32em] text-text-secondary">
+                Agence web · France
+              </span>
             </motion.div>
 
-            <motion.h1
-              className="font-display font-bold text-4xl md:text-6xl lg:text-7xl mb-6 leading-tight"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <span className="text-text-primary">Digitalz Dev</span>
-              <br />
-              <span className="text-accent">Agence Web professionnelle</span>
-            </motion.h1>
+            <h1 className="max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[6.4vw]">
+              <SplitText
+                as="span"
+                by="char"
+                immediate
+                text="Digitalz Dev"
+                delay={0.15}
+                className="block text-text-primary"
+              />
+              <SplitText
+                as="span"
+                by="char"
+                immediate
+                text="agence web"
+                delay={0.45}
+                className="block text-accent"
+              />
+            </h1>
 
             <motion.p
-              className="text-text-secondary text-lg md:text-xl max-w-2xl mx-auto mb-10"
-              initial={{ opacity: 0, y: 30 }}
+              className="mt-8 max-w-md text-base leading-relaxed text-text-secondary md:text-lg"
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.9, delay: 0.9, ease: EASE_OUT }}
             >
-              E-commerce, dashboards santé, portfolios premium
+              Sites vitrines, boutiques Shopify et plateformes métier. Conçus,
+              développés et suivis d'un bout à l'autre, par deux personnes.
             </motion.p>
 
-            <motion.button
-              onClick={scrollToProjects}
-              className="px-8 py-4 bg-text-primary text-surface rounded-full font-display font-semibold tracking-wider text-sm hover:opacity-90 transition-all duration-300"
+            <motion.div
+              className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.7 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.9, delay: 1.05, ease: EASE_OUT }}
             >
-              VOIR LES PROJETS
-            </motion.button>
-          </div>
-        </motion.div>
+              <Magnetic strength={0.4}>
+                <button
+                  type="button"
+                  onClick={() => scrollTo('#projets', { duration: 1.4 })}
+                  className="group inline-flex items-center gap-3 rounded-full bg-text-primary px-8 py-4 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
+                >
+                  VOIR LES PROJETS
+                  <span className="transition-transform duration-300 group-hover:translate-y-0.5">
+                    ↓
+                  </span>
+                </button>
+              </Magnetic>
 
-        {/* Scroll indicator */}
+              <button
+                type="button"
+                onClick={() => scrollTo('#agence', { duration: 1.4 })}
+                className="inline-flex items-center gap-2 border-b border-surface-border pb-1 font-display text-sm font-semibold text-text-secondary transition-colors hover:border-accent hover:text-accent"
+              >
+                Qui sommes-nous ?
+              </button>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Bandeau de mots-clés, dont la vitesse suit le scroll */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-          style={{ opacity: contentOpacity }}
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          className="absolute bottom-8 left-0 right-0 z-10"
+          style={{ opacity: marqueeOpacity }}
         >
-          <div className="w-6 h-10 border-2 border-text-muted rounded-full flex justify-center pt-2">
-            <motion.div
-              className="w-1 h-2 bg-text-secondary rounded-full"
-              animate={{ opacity: [1, 0], y: [0, 12] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            />
-          </div>
+          <Marquee
+            items={KEYWORDS}
+            speed={28}
+            className="border-y border-surface-border/60 bg-surface/40 py-3 font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-muted backdrop-blur-sm"
+          />
         </motion.div>
       </div>
     </section>

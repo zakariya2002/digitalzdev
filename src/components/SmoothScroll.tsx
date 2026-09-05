@@ -1,36 +1,16 @@
 import { useEffect } from 'react'
-import Lenis from 'lenis'
+import { initSmoothScroll } from '../lib/scroll'
 
 interface Props {
   children: React.ReactNode
 }
 
+/**
+ * Monte le scroll lissé pour toute la vitrine et alimente l'état de scroll
+ * partagé que lisent les scènes WebGL et les bandeaux défilants.
+ */
 export default function SmoothScroll({ children }: Props) {
-  useEffect(() => {
-    // Disable smooth scroll on mobile/touch devices for native feel
-    const isMobile = window.matchMedia('(max-width: 768px)').matches
-      || 'ontouchstart' in window
-    if (isMobile) return
-
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    })
-
-    ;(window as unknown as Record<string, unknown>).__lenis = lenis
-
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-    requestAnimationFrame(raf)
-
-    return () => {
-      ;(window as unknown as Record<string, unknown>).__lenis = null
-      lenis.destroy()
-    }
-  }, [])
+  useEffect(() => initSmoothScroll(), [])
 
   return <>{children}</>
 }
