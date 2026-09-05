@@ -17,16 +17,18 @@ import { EASE_OUT, VIEWPORT } from '../components/motion/config'
  * « lissage-sur-mesure.com » ne peuvent pas partager la même échelle sans que
  * le second déborde ou que le premier paraisse timide.
  *
- * Les valeurs en vw sont calées pour qu'à 320 px chaque titre tienne sur une
- * ligne, et plafonnées en pixels pour qu'au-delà de ~2000 px de large elles ne
- * dépassent pas la colonne de texte (`max-w-5xl`) : sans ce plafond, le titre
- * se coupait en plein milieu d'un mot sur un écran 2560.
+ * Les valeurs en vw sont mesurées sur le rendu réel : à 320 px chaque titre
+ * tient sur une ligne, sauf le plus long qui se coupe proprement après un
+ * trait d'union. Le plafond en pixels évite qu'au-delà de ~1700 px de large le
+ * titre ne dépasse la colonne de texte (`max-w-5xl`) et se casse en deux, ce
+ * qui arrivait sur un écran 2560.
  */
 function titleScale(title: string) {
-  if (title.length > 19) return 'text-[9.5vw] md:text-[min(5.4vw,93px)]'
-  if (title.length > 15) return 'text-[10.2vw] md:text-[min(6.6vw,128px)]'
-  if (title.length > 10) return 'text-[12.2vw] md:text-[min(7.6vw,150px)]'
-  return 'text-[14vw] md:text-[min(9vw,200px)]'
+  if (title.length > 19) return 'text-[9.5vw] md:text-[min(5.4vw,78px)]'
+  if (title.length > 15) return 'text-[9vw] md:text-[min(6.6vw,108px)]'
+  if (title.length > 12) return 'text-[10.8vw] md:text-[min(7.6vw,128px)]'
+  if (title.length > 10) return 'text-[12.8vw] md:text-[min(8.4vw,150px)]'
+  return 'text-[15.5vw] md:text-[min(9vw,188px)]'
 }
 
 function BrowserFrame({
@@ -96,8 +98,8 @@ function NextProject({ current }: { current: Project }) {
               text={next.title}
               className={`block font-display font-bold tracking-tight text-text-primary transition-colors group-hover:text-accent ${
                 next.title.length > 19
-                  ? 'text-3xl md:text-5xl'
-                  : 'text-4xl md:text-7xl'
+                  ? 'text-2xl sm:text-3xl md:text-5xl'
+                  : 'text-2xl sm:text-4xl md:text-7xl'
               }`}
             />
 
@@ -158,7 +160,7 @@ export default function ProjectPage({ project }: Props) {
       {/* ---------------------------------------------------------- */}
       <section
         ref={heroRef}
-        className="relative h-[88vh] min-h-[600px] overflow-hidden bg-surface md:h-screen md:min-h-[680px]"
+        className="relative h-[88vh] min-h-[560px] overflow-hidden bg-surface md:h-screen md:min-h-[620px]"
       >
         <motion.div
           className="absolute inset-x-0 -top-[8%] h-[118%]"

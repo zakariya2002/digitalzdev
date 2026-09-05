@@ -1,6 +1,7 @@
 import Hero from '../components/Hero'
 import ProjectsSection from '../components/ProjectsSection'
 import ServicesSection from '../components/ServicesSection'
+import TestimonialsSection from '../components/TestimonialsSection'
 import TeamSection from '../components/TeamSection'
 import FaqSection from '../components/FaqSection'
 import MissionSection from '../components/MissionSection'
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <ProjectsSection />
       <ServicesSection />
+      <TestimonialsSection />
       <TeamSection />
       <FaqSection />
       <MissionSection />
