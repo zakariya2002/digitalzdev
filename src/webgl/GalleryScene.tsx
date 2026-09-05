@@ -19,6 +19,8 @@ interface Props {
   onActiveChange: (index: number) => void
   onHoverChange: (hovering: boolean) => void
   onSelect: (index: number) => void
+  /** Appelé si le contexte WebGL ne peut pas être créé : bascule vers la liste */
+  onUnavailable: () => void
   className?: string
 }
 
@@ -27,13 +29,12 @@ const PLANE_WIDTH = 2.8
 const PLANE_HEIGHT = PLANE_WIDTH * (10 / 16)
 /** Écart entre deux projets, centre à centre. */
 const SPACING = 3.25
-/**
- * Remontée des plans dans le cadre : le tiers bas de l'écran est réservé à la
- * fiche du projet, qui doit se lire sur un fond propre.
- */
-const LIFT = 0.54
-/** Distance caméra minimale : fixe la taille du plan actif à l'écran. */
-const MIN_CAMERA_Z = 5.15
+/** Champ vertical de la caméra, en degrés. */
+const FOV = 40
+/** Espace réservé en bas pour la fiche du projet, en pixels CSS. */
+const INFO_BAND = 250
+/** Espace réservé en haut pour la barre de navigation, en pixels CSS. */
+const TOP_BAND = 96
 
 interface Slide {
   group: THREE.Group
@@ -56,6 +57,7 @@ export default function GalleryScene({
   onActiveChange,
   onHoverChange,
   onSelect,
+  onUnavailable,
   className,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -63,18 +65,35 @@ export default function GalleryScene({
 
   // Les callbacks changent d'identité à chaque rendu du parent : on les lit
   // via une ref pour ne pas reconstruire toute la scène WebGL.
-  const handlers = useRef({ onActiveChange, onHoverChange, onSelect })
-  handlers.current = { onActiveChange, onHoverChange, onSelect }
+  const handlers = useRef({ onActiveChange, onHoverChange, onSelect, onUnavailable })
+  handlers.current = { onActiveChange, onHoverChange, onSelect, onUnavailable }
 
   useEffect(() => {
     const container = containerRef.current
     const canvas = canvasRef.current
     if (!container || !canvas) return
 
-    const renderer = createRenderer(canvas)
+    // Le navigateur plafonne le nombre de contextes WebGL simultanés. Si la
+    // création échoue, on le dit au parent plutôt que de laisser un cadre vide.
+    let renderer: THREE.WebGLRenderer
+    try {
+      renderer = createRenderer(canvas)
+    } catch {
+      handlers.current.onUnavailable()
+      return
+    }
+
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100)
     camera.position.set(0, 0, 5.2)
+
+    // Le navigateur peut reprendre un contexte sous pression mémoire. Sans
+    // ça, le canvas resterait figé sur sa dernière image.
+    const onContextLost = (event: Event) => {
+      event.preventDefault()
+      handlers.current.onUnavailable()
+    }
+    canvas.addEventListener('webglcontextlost', onContextLost)
 
     const stage = new THREE.Group()
     scene.add(stage)
@@ -162,20 +181,31 @@ export default function GalleryScene({
 
     /* --- Redimensionnement ----------------------------------------- */
 
+    // Remontée des plans dans le cadre, recalculée à chaque redimensionnement.
+    let lift = 0
+
     const stopResize = observeResize(container, (width, height) => {
       renderer.setSize(width, height, false)
       camera.aspect = width / height
-      // Sur écran étroit ou court, on recule pour que le plan actif tienne
-      // entièrement dans le cadre avec ses marges.
-      const fitWidth = (PLANE_WIDTH * 1.35) / (2 * Math.tan((40 * Math.PI) / 360))
-      const fitHeight =
-        (PLANE_HEIGHT * 2.1) / (2 * Math.tan((40 * Math.PI) / 360) * camera.aspect)
-      camera.position.z = clamp(
-        Math.max(fitWidth / camera.aspect, fitHeight),
-        MIN_CAMERA_Z,
-        9
-      )
+
+      // Le cadrage se déduit de la place réellement disponible plutôt que
+      // d'une distance fixe : sur un écran court, la fiche du projet doit
+      // garder sa bande basse, et le plan se contenter du reste.
+      const usable = Math.max(height - INFO_BAND - TOP_BAND, height * 0.34)
+      const planePx = usable * 0.88
+      const tan = Math.tan((FOV * Math.PI) / 360)
+
+      // Distance telle que le plan occupe `planePx` à l'écran, sans jamais
+      // déborder en largeur sur les formats étroits.
+      const fitHeight = (PLANE_HEIGHT * height) / (2 * tan * planePx)
+      const fitWidth = (PLANE_WIDTH * 1.3) / (2 * tan * camera.aspect)
+      camera.position.z = clamp(Math.max(fitHeight, fitWidth), 4.2, 11)
       camera.updateProjectionMatrix()
+
+      // Centre du plan placé au milieu de la zone utile, converti en monde.
+      const centerPx = TOP_BAND + usable / 2
+      const ndc = 1 - (2 * centerPx) / height
+      lift = ndc * camera.position.z * tan
     })
 
     /* --- Boucle ---------------------------------------------------- */
@@ -243,7 +273,7 @@ export default function GalleryScene({
         // L'arc : plus un projet s'éloigne du centre, plus il recule et pivote.
         slide.group.position.z = -Math.pow(absOffset, 1.55) * 0.62
         slide.group.rotation.y = -offset * 0.16
-        slide.group.position.y = Math.sin(offset * 0.9) * 0.06 + LIFT
+        slide.group.position.y = Math.sin(offset * 0.9) * 0.06 + lift
 
         const scale = (1 - Math.min(absOffset, 3) * 0.045) * (0.9 + intro * 0.1)
         slide.group.scale.setScalar(scale)
@@ -275,6 +305,7 @@ export default function GalleryScene({
       container.removeEventListener('pointermove', updatePointer)
       container.removeEventListener('pointerleave', clearPointer)
       container.removeEventListener('click', onClick)
+      canvas.removeEventListener('webglcontextlost', onContextLost)
       disposeScene(scene)
       geometry.dispose()
       renderer.dispose()

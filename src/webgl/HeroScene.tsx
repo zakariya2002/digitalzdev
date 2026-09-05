@@ -48,7 +48,21 @@ export default function HeroScene({ className }: Props) {
     const canvas = canvasRef.current
     if (!container || !canvas || !isWebGLAvailable()) return
 
-    const renderer = createRenderer(canvas)
+    let renderer: THREE.WebGLRenderer
+    try {
+      renderer = createRenderer(canvas)
+    } catch {
+      return
+    }
+
+    // Si le navigateur reprend le contexte, on efface le canvas plutôt que de
+    // laisser une image figée derrière le titre.
+    const onContextLost = (event: Event) => {
+      event.preventDefault()
+      canvas.style.visibility = 'hidden'
+    }
+    canvas.addEventListener('webglcontextlost', onContextLost)
+
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100)
     camera.position.set(0, 0, 3.4)
@@ -213,6 +227,7 @@ export default function HeroScene({ className }: Props) {
       stopResize()
       stopTheme()
       window.removeEventListener('pointermove', onPointerMove)
+      canvas.removeEventListener('webglcontextlost', onContextLost)
       disposeScene(scene)
       renderer.dispose()
     }

@@ -23,19 +23,36 @@ const GalleryScene = lazy(() => import('../webgl/GalleryScene'))
 /** Hauteur de scroll allouée à chaque projet dans la section épinglée. */
 const VH_PER_PROJECT = 85
 
+/**
+ * Largeur minimale pour la galerie 3D. En dessous, l'arc de projets n'a plus
+ * la place de se déployer et l'index en liste passe devant. Le seuil est bas
+ * pour qu'une fenêtre non maximisée y ait droit.
+ */
+const MIN_GALLERY_WIDTH = 900
+
 export default function ProjectsSection() {
   const navigate = useNavigate()
   const trackRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
   const [hovering, setHovering] = useState(false)
 
-  // La décision se prend une fois au montage : `isWebGLAvailable` interroge le
-  // GPU et le réglage d'animations réduites, ce n'est pas gratuit.
-  const [useWebGL, setUseWebGL] = useState(false)
+  // La galerie 3D demande de la largeur et un contexte WebGL. `failed` retient
+  // un échec réel de création du rendu : dans ce cas on ne retente pas, l'index
+  // en liste devient définitif pour la session.
+  const [wide, setWide] = useState(false)
+  const [failed, setFailed] = useState(false)
+
   useEffect(() => {
-    const wide = window.matchMedia('(min-width: 1024px)').matches
-    setUseWebGL(wide && isWebGLAvailable())
+    const query = window.matchMedia(`(min-width: ${MIN_GALLERY_WIDTH}px)`)
+    // Suivre le redimensionnement : sans ça, une fenêtre agrandie après le
+    // chargement resterait bloquée sur la liste jusqu'au prochain rechargement.
+    const sync = () => setWide(query.matches)
+    sync()
+    query.addEventListener('change', sync)
+    return () => query.removeEventListener('change', sync)
   }, [])
+
+  const useWebGL = wide && !failed && isWebGLAvailable()
 
   const project = projects[clamp(active, 0, projects.length - 1)]
 
@@ -149,6 +166,7 @@ export default function ProjectsSection() {
                 onActiveChange={setActive}
                 onHoverChange={setHovering}
                 onSelect={openProject}
+                onUnavailable={() => setFailed(true)}
                 className="absolute inset-0"
               />
             </Suspense>

@@ -18,19 +18,35 @@ export interface SceneContext {
   size: { width: number; height: number }
 }
 
+/**
+ * Le résultat du test est mémorisé : la capacité WebGL ne change pas en cours
+ * de session, et chaque test consomme un contexte.
+ */
+let webglSupport: boolean | null = null
+
 /** WebGL peut être absent (vieux navigateur, GPU blacklisté, mode économie). */
 export function isWebGLAvailable(): boolean {
   if (typeof window === 'undefined') return false
+  // Volontairement hors du cache : le réglage peut changer en cours de session.
   if (prefersReducedMotion()) return false
+  if (webglSupport !== null) return webglSupport
+
   try {
     const canvas = document.createElement('canvas')
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext('webgl2') || canvas.getContext('webgl'))
-    )
+    const gl = (canvas.getContext('webgl2') ||
+      canvas.getContext('webgl')) as WebGLRenderingContext | null
+
+    // Le contexte de test doit être rendu immédiatement. Un navigateur n'en
+    // accorde qu'une quinzaine par processus : les laisser fuiter finit par
+    // faire échouer les vraies scènes, d'abord la dernière montée, la galerie.
+    gl?.getExtension('WEBGL_lose_context')?.loseContext()
+
+    webglSupport = !!gl
   } catch {
-    return false
+    webglSupport = false
   }
+
+  return webglSupport
 }
 
 /**
