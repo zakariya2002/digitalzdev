@@ -32,6 +32,15 @@ const item: Variants = {
 }
 
 /**
+ * Découpe un mot en fragments insécables, la coupure ne pouvant intervenir
+ * qu'après un trait d'union ou un point. « lissage-sur-mesure.com » donne
+ * ainsi « lissage- », « sur- », « mesure. » et « com ».
+ */
+function segmentsOf(word: string): string[] {
+  return word.match(/[^-.]*[-.]+|[^-.]+/g) ?? [word]
+}
+
+/**
  * Révèle un titre unité par unité, chaque unité glissant depuis sous une
  * ligne de masque. C'est le geste signature des portfolios primés : il donne
  * du poids au titre sans recourir à une bibliothèque de découpage de texte.
@@ -76,14 +85,25 @@ export default function SplitText({
           >
             {by === 'char' ? (
               <span className="inline-block">
-                {[...word].map((char, charIndex) => (
-                  <motion.span
-                    key={`${char}-${charIndex}`}
-                    className="inline-block"
-                    variants={item}
+                {segmentsOf(word).map((segment, segmentIndex) => (
+                  // Chaque fragment est insécable : le retour à la ligne ne
+                  // peut tomber qu'après un trait d'union ou un point. Sans
+                  // ça, un nom de domaine long se coupe en plein milieu d'un
+                  // mot, les lettres étant des blocs indépendants.
+                  <span
+                    key={`${segment}-${segmentIndex}`}
+                    className="inline-block whitespace-nowrap"
                   >
-                    {char}
-                  </motion.span>
+                    {[...segment].map((char, charIndex) => (
+                      <motion.span
+                        key={`${char}-${charIndex}`}
+                        className="inline-block"
+                        variants={item}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </span>
                 ))}
                 {wordIndex < words.length - 1 && (
                   <span className="inline-block whitespace-pre"> </span>

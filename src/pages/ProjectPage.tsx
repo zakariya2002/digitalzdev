@@ -16,12 +16,17 @@ import { EASE_OUT, VIEWPORT } from '../components/motion/config'
  * Les titres sont des noms de domaine : « DRIVE » et
  * « lissage-sur-mesure.com » ne peuvent pas partager la même échelle sans que
  * le second déborde ou que le premier paraisse timide.
+ *
+ * Les valeurs en vw sont calées pour qu'à 320 px chaque titre tienne sur une
+ * ligne, et plafonnées en pixels pour qu'au-delà de ~2000 px de large elles ne
+ * dépassent pas la colonne de texte (`max-w-5xl`) : sans ce plafond, le titre
+ * se coupait en plein milieu d'un mot sur un écran 2560.
  */
 function titleScale(title: string) {
-  if (title.length > 19) return 'text-[9.5vw] md:text-[5.4vw]'
-  if (title.length > 15) return 'text-[11vw] md:text-[6.6vw]'
-  if (title.length > 10) return 'text-[12.5vw] md:text-[7.6vw]'
-  return 'text-[14vw] md:text-[9vw]'
+  if (title.length > 19) return 'text-[9.5vw] md:text-[min(5.4vw,93px)]'
+  if (title.length > 15) return 'text-[10.2vw] md:text-[min(6.6vw,128px)]'
+  if (title.length > 10) return 'text-[12.2vw] md:text-[min(7.6vw,150px)]'
+  return 'text-[14vw] md:text-[min(9vw,200px)]'
 }
 
 function BrowserFrame({
@@ -153,7 +158,7 @@ export default function ProjectPage({ project }: Props) {
       {/* ---------------------------------------------------------- */}
       <section
         ref={heroRef}
-        className="relative h-[88vh] overflow-hidden bg-surface md:h-screen"
+        className="relative h-[88vh] min-h-[600px] overflow-hidden bg-surface md:h-screen md:min-h-[680px]"
       >
         <motion.div
           className="absolute inset-x-0 -top-[8%] h-[118%]"
@@ -169,7 +174,7 @@ export default function ProjectPage({ project }: Props) {
 
         <motion.div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-surface from-20% via-surface/85 via-58% to-surface/20"
+          className="absolute inset-0 bg-gradient-to-t from-surface from-38% via-surface/90 via-72% to-surface/25 md:from-20% md:via-surface/85 md:via-58% md:to-surface/20"
           style={{ opacity: overlayOpacity }}
         />
 
@@ -177,7 +182,7 @@ export default function ProjectPage({ project }: Props) {
           className="absolute inset-x-0 bottom-0 z-10 px-6 pb-14 md:px-14 md:pb-20"
           style={{ y: contentY, opacity: contentOpacity }}
         >
-          <div className="max-w-5xl">
+          <div className="mx-auto w-full max-w-5xl">
             <motion.div
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
@@ -185,7 +190,7 @@ export default function ProjectPage({ project }: Props) {
             >
               <Link
                 to="/#projets"
-                className="group inline-flex items-center gap-2 text-sm font-semibold text-text-primary transition-colors hover:text-accent"
+                className="group -my-2 inline-flex min-h-[44px] items-center gap-2 py-2 text-sm font-semibold text-text-primary transition-colors hover:text-accent"
               >
                 <span className="transition-transform duration-300 group-hover:-translate-x-1">
                   ←
@@ -206,7 +211,7 @@ export default function ProjectPage({ project }: Props) {
             />
 
             <motion.p
-              className="mt-5 max-w-2xl text-lg font-medium text-text-secondary md:text-xl"
+              className="mt-5 max-w-2xl text-base font-medium text-text-secondary sm:text-lg md:text-xl"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6, ease: EASE_OUT }}
@@ -225,7 +230,7 @@ export default function ProjectPage({ project }: Props) {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-text-primary px-7 py-3 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-text-primary px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm sm:tracking-wider"
                 >
                   VOIR LE SITE EN LIGNE
                   <span aria-hidden>↗</span>

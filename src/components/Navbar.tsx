@@ -98,7 +98,7 @@ export default function Navbar() {
             </button>
             <Link
               to="/contact"
-              className="text-sm px-5 py-2 bg-accent/10 text-accent border border-accent/20 rounded-full hover:bg-accent/20 transition-all"
+              className="text-sm text-accent transition-opacity hover:opacity-80"
             >
               Contact
             </Link>
@@ -166,7 +166,7 @@ export default function Navbar() {
             </a>
             <Link
               to="/contact"
-              className="text-lg px-8 py-3 bg-accent text-white rounded-full font-semibold"
+              className="font-display text-2xl font-semibold text-accent"
             >
               Contact
             </Link>
