@@ -33,6 +33,8 @@ const MIN_GALLERY_WIDTH = 900
 export default function ProjectsSection() {
   const navigate = useNavigate()
   const trackRef = useRef<HTMLDivElement>(null)
+  // Bande basse de la galerie : sa hauteur pilote le cadrage de la scène 3D.
+  const infoRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
   const [hovering, setHovering] = useState(false)
 
@@ -167,6 +169,7 @@ export default function ProjectsSection() {
                 onHoverChange={setHovering}
                 onSelect={openProject}
                 onUnavailable={() => setFailed(true)}
+                infoRef={infoRef}
                 className="absolute inset-0"
               />
             </Suspense>
@@ -174,9 +177,15 @@ export default function ProjectsSection() {
             {/* Habillage : tout est en pointer-events-none pour laisser le
                 canvas recevoir le survol, sauf les commandes explicites.
                 Tout est logé dans la bande basse, laissée libre par les plans. */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-10 md:px-12 md:pb-14">
+            <div
+              ref={infoRef}
+              className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-10 md:px-12 md:pb-14"
+            >
               <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                <div className="relative min-h-[14rem] flex-1 md:min-h-[15rem]">
+                {/* La fiche est dans le flux, ancrée en bas : la hauteur du
+                    bloc suit donc la longueur réelle de la description, et
+                    c'est cette hauteur que la scène 3D mesure pour se cadrer. */}
+                <div className="flex min-h-[13rem] flex-1 flex-col justify-end md:min-h-[14rem]">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={project.id}
@@ -184,7 +193,7 @@ export default function ProjectsSection() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -18 }}
                       transition={{ duration: 0.5, ease: EASE_OUT }}
-                      className="absolute inset-x-0 bottom-0 max-w-2xl"
+                      className="max-w-2xl"
                     >
                       <div className="mb-4">
                         <span className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">

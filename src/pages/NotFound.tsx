@@ -2,11 +2,13 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 export default function NotFound() {
+  // `pt-28` : la barre de navigation est fixe, sans ce dégagement le chiffre
+  // passe dessous en paysage mobile.
   return (
-    <main className="bg-surface min-h-screen flex items-center justify-center px-6">
+    <main className="bg-surface min-h-screen flex items-center justify-center px-6 pb-16 pt-28">
       <div className="text-center">
         <motion.h1
-          className="font-display font-black text-8xl md:text-[12rem] text-text-primary leading-none"
+          className="font-display font-black text-7xl sm:text-8xl md:text-[12rem] text-text-primary leading-none"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
@@ -28,7 +30,7 @@ export default function NotFound() {
         >
           <Link
             to="/"
-            className="px-8 py-3 bg-text-primary text-surface rounded-full font-display font-semibold inline-block hover:opacity-90 transition-all"
+            className="inline-flex min-h-[44px] items-center px-8 py-3 bg-text-primary text-surface rounded-full font-display font-semibold hover:opacity-90 transition-all"
           >
             Retour à l'accueil
           </Link>

@@ -75,7 +75,10 @@ export default function Hero() {
             className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center lg:items-start lg:text-left"
             style={{ opacity: contentOpacity, y: contentY }}
           >
-            <h1 className="max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[6.4vw]">
+            {/* Le corps suit la largeur de fenêtre, mais il est plafonné :
+                au-delà de ~2100 px, 6.4vw dépasserait `max-w-3xl` et le titre
+                se couperait en deux lignes. */}
+            <h1 className="max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[min(6.4vw,132px)]">
               <SplitText
                 as="span"
                 by="char"

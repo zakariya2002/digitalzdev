@@ -4,7 +4,6 @@ import { AnimatePresence } from 'framer-motion'
 import Seo from './components/Seo'
 import SmoothScroll from './components/SmoothScroll'
 import ScrollToTop from './components/ScrollToTop'
-import ScrollProgress from './components/ScrollProgress'
 import PageTransition from './components/PageTransition'
 import Navbar from './components/Navbar'
 import CookieBanner from './components/CookieBanner'
@@ -63,7 +62,6 @@ export default function App() {
   return (
     <SmoothScroll>
       <Seo />
-      <ScrollProgress />
       <Navbar />
       {/* `mode="wait"` : la page sortante s'efface avant que la suivante ne
           se monte, ce qui laisse `PageTransition` remonter le scroll sans

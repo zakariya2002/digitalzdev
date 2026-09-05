@@ -106,11 +106,11 @@ export default function MissionSection() {
               </Reveal>
             </div>
 
-            <div className="mt-10 grid grid-cols-3 gap-3">
+            <div className="mt-10 grid grid-cols-3 gap-2 sm:gap-3">
               {STATS.map((stat, index) => (
                 <motion.div
                   key={stat.label}
-                  className="rounded-xl border border-surface-border bg-surface-card p-4"
+                  className="rounded-xl border border-surface-border bg-surface-card p-3 sm:p-4"
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={VIEWPORT}
@@ -118,7 +118,7 @@ export default function MissionSection() {
                 >
                   <Counter
                     value={stat.value}
-                    className="block font-display text-2xl font-bold text-[#5BA89D]"
+                    className="block font-display text-xl font-bold text-[#5BA89D] sm:text-2xl"
                   />
                   <div className="mt-1 text-xs leading-snug text-text-muted">
                     {stat.label}
@@ -133,7 +133,7 @@ export default function MissionSection() {
                   href="https://neuro-care.fr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#5BA89D] px-8 py-3 font-display text-sm font-semibold tracking-wider text-white transition-colors hover:bg-[#4A9488]"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-[#5BA89D] px-6 py-3 font-display text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#4A9488] sm:px-8 sm:text-sm sm:tracking-wider"
                 >
                   DÉCOUVRIR NEUROCARE
                   <svg
