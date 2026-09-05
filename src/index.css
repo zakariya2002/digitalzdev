@@ -59,6 +59,11 @@
     overflow-x: clip;
     width: 100%;
     position: relative;
+    /* Le fond est posé sur <html> et pas seulement sur <body> : sans ça, le
+       dépassement élastique du scroll laisse voir un aplat blanc en thème
+       sombre. La variable suit la classe `dark`, appliquée avant le premier
+       rendu par le script inline du <head>. */
+    background-color: rgb(var(--surface));
   }
 
   body {
