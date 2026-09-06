@@ -14,14 +14,14 @@ export default function PolitiqueConfidentialite() {
           >
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-text-secondary hover:text-accent transition-colors text-sm mb-8"
+              className="-mt-3 mb-5 inline-flex min-h-[44px] items-center gap-2 py-3 text-sm text-text-secondary transition-colors hover:text-accent"
             >
               <span>←</span> Retour
             </Link>
           </motion.div>
 
           <motion.h1
-            className="font-display font-black text-4xl md:text-5xl text-text-primary mb-12"
+            className="mb-12 font-display text-3xl font-black text-text-primary [hyphens:auto] sm:text-4xl md:text-5xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}

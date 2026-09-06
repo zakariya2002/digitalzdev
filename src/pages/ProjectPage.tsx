@@ -97,15 +97,18 @@ function NextProject({ current }: { current: Project }) {
               by="char"
               text={next.title}
               className={`block font-display font-bold tracking-tight text-text-primary transition-colors group-hover:text-accent ${
+                // La vignette de survol occupe 224 px de la ligne à partir
+                // de `md` : le corps ne repasse au maximum qu'à `lg`, sinon
+                // le nom de domaine se cassait en trois lignes à 768 px.
                 next.title.length > 19
-                  ? 'text-2xl sm:text-3xl md:text-5xl'
-                  : 'text-2xl sm:text-4xl md:text-7xl'
+                  ? 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl'
+                  : 'text-2xl sm:text-4xl md:text-5xl lg:text-7xl'
               }`}
             />
 
             <Reveal from="right" delay={0.15}>
               {/* Vignette qui se dévoile au survol du bloc entier */}
-              <div className="h-28 w-44 overflow-hidden rounded-xl opacity-0 transition-all duration-500 group-hover:opacity-100 md:h-32 md:w-56 md:translate-x-4 md:group-hover:translate-x-0">
+              <div className="hidden h-28 w-44 overflow-hidden rounded-xl opacity-0 transition-all duration-500 group-hover:opacity-100 md:block md:h-32 md:w-56 md:translate-x-4 md:group-hover:translate-x-0">
                 <img
                   src={next.heroImage}
                   alt=""

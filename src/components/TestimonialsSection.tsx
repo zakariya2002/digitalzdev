@@ -123,8 +123,16 @@ function Card({
 
           <Link
             to={item.route}
-            // `before` : la zone tactile est portée à 47 px de haut sans
-            // décoller le soulignement du texte.
+            // `before` : zone tactile de 47 px de haut sans décoller le
+            // soulignement du texte.
+            //
+            // Limite connue, antérieure : la piste est un contexte 3D
+            // (`transform-style: preserve-3d` sur la liste, `perspective` sur
+            // le cadre) et Chrome n'y résout pas le test de pointage jusqu'aux
+            // descendants d'une carte tournée. Ce lien n'est donc pas encore
+            // cliquable au pointeur ; les flèches, les repères et le
+            // glissement le sont. Corriger demande de revoir le montage 3D du
+            // carrousel, pas la mise en page.
             className="relative mt-7 inline-flex w-fit items-center gap-2 border-b border-accent/40 pb-0.5 font-display text-sm font-semibold text-accent transition-colors before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:border-accent"
           >
             Voir le projet <span aria-hidden>→</span>

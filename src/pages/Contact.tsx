@@ -97,7 +97,7 @@ export default function Contact() {
           >
             <Link
               to="/"
-              className="group mb-8 inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-accent"
+              className="group -mt-3 mb-5 inline-flex min-h-[44px] items-center gap-2 py-3 text-sm text-text-secondary transition-colors hover:text-accent"
             >
               <span
                 aria-hidden
@@ -233,7 +233,7 @@ export default function Contact() {
                           key={type}
                           type="button"
                           onClick={() => update('projectType', type)}
-                          className={`px-4 py-2 rounded-full text-sm font-display transition-all border ${
+                          className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.projectType === type
                               ? 'bg-text-primary text-surface border-text-primary'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
@@ -276,7 +276,7 @@ export default function Contact() {
                           key={opt}
                           type="button"
                           onClick={() => update('hasDesign', opt)}
-                          className={`px-4 py-2 rounded-full text-sm font-display transition-all border ${
+                          className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.hasDesign === opt
                               ? 'bg-text-primary text-surface border-text-primary'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
@@ -307,7 +307,7 @@ export default function Contact() {
                           key={b}
                           type="button"
                           onClick={() => update('budget', b)}
-                          className={`px-4 py-2 rounded-full text-sm font-display transition-all border ${
+                          className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.budget === b
                               ? 'bg-text-primary text-surface border-text-primary'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
@@ -328,7 +328,7 @@ export default function Contact() {
                           key={t}
                           type="button"
                           onClick={() => update('timeline', t)}
-                          className={`px-4 py-2 rounded-full text-sm font-display transition-all border ${
+                          className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.timeline === t
                               ? 'bg-text-primary text-surface border-text-primary'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
@@ -365,7 +365,7 @@ export default function Contact() {
                     type="checkbox"
                     id="consent"
                     required
-                    className="mt-1 w-4 h-4 accent-accent flex-shrink-0"
+                    className="mt-0.5 h-5 w-5 flex-shrink-0 accent-accent"
                   />
                   <label
                     htmlFor="consent"

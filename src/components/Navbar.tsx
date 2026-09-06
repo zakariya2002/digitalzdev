@@ -76,31 +76,31 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-6">
             <Link
               to="/"
-              className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+              className="-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary"
             >
               Accueil
             </Link>
             <a
               href="/#projets"
-              className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+              className="-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary"
             >
               Projets
             </a>
             <a
               href="/#agence"
-              className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+              className="-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary"
             >
               L'agence
             </a>
             <Link
               to="/contact"
-              className="text-sm text-accent transition-opacity hover:opacity-80"
+              className="-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-accent transition-opacity hover:opacity-80"
             >
               Contact
             </Link>
             <button
               onClick={toggleDark}
-              className="p-2 rounded-full text-text-secondary hover:text-text-primary hover:bg-surface-light transition-colors"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-surface-light hover:text-text-primary"
               aria-label="Basculer le thème"
             >
               <ThemeIcon />
@@ -109,7 +109,7 @@ export default function Navbar() {
                 une route interne du routeur. */}
             <a
               href="https://quiz.digitalzdev.com"
-              className="rounded-full bg-accent px-5 py-2.5 font-display text-sm font-semibold text-surface transition-colors hover:bg-accent-hover"
+              className="inline-flex min-h-[44px] items-center rounded-full bg-accent px-5 font-display text-sm font-semibold text-surface transition-colors hover:bg-accent-hover"
             >
               Commencer
             </a>
