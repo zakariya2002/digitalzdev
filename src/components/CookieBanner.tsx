@@ -27,10 +27,15 @@ export default function CookieBanner() {
           transition={{ duration: 0.4 }}
         >
           <div className="max-w-3xl mx-auto bg-surface-card border border-surface-border rounded-xl p-5 md:p-6 shadow-lg flex flex-col md:flex-row items-start md:items-center gap-4">
+            {/* Le texte doit décrire ce que le site fait vraiment. Il
+                mentionnait une préférence de thème qui n'existe plus, et
+                annonçait l'absence de tiers alors que le calendrier de prise
+                de rendez-vous est fourni par Calendly. */}
             <p className="text-text-secondary text-sm leading-relaxed flex-1">
-              Ce site utilise uniquement le stockage local pour mémoriser votre
-              préférence de thème (clair/sombre). Aucun cookie tiers, aucun
-              tracking.{' '}
+              Ce site ne dépose aucun cookie publicitaire et ne vous suit pas.
+              Le stockage local retient seulement que vous avez lu ce message.
+              Le calendrier de prise de rendez-vous est fourni par Calendly, et
+              ne se charge que si vous l&apos;ouvrez.{' '}
               <Link
                 to="/politique-confidentialite"
                 className="text-accent underline"

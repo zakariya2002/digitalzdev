@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Counter, Magnetic, Marquee, Reveal, SplitText } from './motion'
+import CalendlyModal from './CalendlyModal'
 import { EASE_OUT, VIEWPORT } from './motion/config'
 
 interface Member {
@@ -145,6 +147,8 @@ function MemberCard({ member, index }: { member: Member; index: number }) {
 }
 
 export default function TeamSection() {
+  const [rdvOuvert, setRdvOuvert] = useState(false)
+
   return (
     <section id="agence" className="relative overflow-hidden bg-surface-light py-24 md:py-36">
       <div className="mx-auto max-w-6xl px-6">
@@ -241,18 +245,21 @@ export default function TeamSection() {
       <div className="mx-auto mt-16 max-w-6xl px-6 text-center md:mt-20">
         <Reveal>
           <Magnetic className="inline-block">
-            <a
-              href="mailto:zdigitalzdev@gmail.com"
+            <button
+              type="button"
+              onClick={() => setRdvOuvert(true)}
               // Le libellé tient sur une ligne dès 320 px : sans la réduction
               // de corps et d'espacement, il se casse en deux et la pastille
               // perd son équilibre.
               className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-4 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:gap-3 sm:px-8 sm:text-sm sm:tracking-wider"
             >
               PARLONS DE VOTRE PROJET
-            </a>
+            </button>
           </Magnetic>
         </Reveal>
       </div>
+
+      <CalendlyModal open={rdvOuvert} onClose={() => setRdvOuvert(false)} />
     </section>
   )
 }
