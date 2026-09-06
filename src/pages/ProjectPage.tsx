@@ -235,7 +235,7 @@ export default function ProjectPage({ project }: Props) {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-text-primary px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm sm:tracking-wider"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm sm:tracking-wider"
                 >
                   VOIR LE SITE EN LIGNE
                   <span aria-hidden>↗</span>
@@ -279,7 +279,7 @@ export default function ProjectPage({ project }: Props) {
             >
               <Counter
                 value={metric.value}
-                className="block font-display text-4xl font-bold text-text-primary md:text-6xl"
+                className="block font-display text-4xl font-bold text-accent md:text-6xl"
               />
               <div className="mt-2 text-sm text-text-secondary">{metric.label}</div>
             </motion.div>

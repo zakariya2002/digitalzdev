@@ -30,7 +30,7 @@ export default function NotFound() {
         >
           <Link
             to="/"
-            className="inline-flex min-h-[44px] items-center px-8 py-3 bg-text-primary text-surface rounded-full font-display font-semibold hover:opacity-90 transition-all"
+            className="inline-flex min-h-[44px] items-center px-8 py-3 bg-accent text-surface rounded-full font-display font-semibold hover:opacity-90 transition-all"
           >
             Retour à l'accueil
           </Link>

@@ -235,7 +235,7 @@ export default function Contact() {
                           onClick={() => update('projectType', type)}
                           className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.projectType === type
-                              ? 'bg-text-primary text-surface border-text-primary'
+                              ? 'bg-accent text-surface border-accent'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
                           }`}
                         >
@@ -278,7 +278,7 @@ export default function Contact() {
                           onClick={() => update('hasDesign', opt)}
                           className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.hasDesign === opt
-                              ? 'bg-text-primary text-surface border-text-primary'
+                              ? 'bg-accent text-surface border-accent'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
                           }`}
                         >
@@ -309,7 +309,7 @@ export default function Contact() {
                           onClick={() => update('budget', b)}
                           className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.budget === b
-                              ? 'bg-text-primary text-surface border-text-primary'
+                              ? 'bg-accent text-surface border-accent'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
                           }`}
                         >
@@ -330,7 +330,7 @@ export default function Contact() {
                           onClick={() => update('timeline', t)}
                           className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2 font-display text-sm transition-all ${
                             form.timeline === t
-                              ? 'bg-text-primary text-surface border-text-primary'
+                              ? 'bg-accent text-surface border-accent'
                               : 'bg-surface-card text-text-secondary border-surface-border hover:border-accent/30'
                           }`}
                         >
@@ -394,7 +394,7 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={sending}
-                  className="w-full py-4 bg-text-primary text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full py-4 bg-accent text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all text-lg disabled:opacity-60 disabled:cursor-not-allowed"
                   whileHover={sending ? {} : { scale: 1.01 }}
                   whileTap={sending ? {} : { scale: 0.98 }}
                 >
@@ -437,7 +437,7 @@ export default function Contact() {
                 </p>
                 <Link
                   to="/"
-                  className="px-8 py-3 bg-text-primary text-surface rounded-full font-display font-semibold inline-block hover:opacity-90 transition-all"
+                  className="px-8 py-3 bg-accent text-surface rounded-full font-display font-semibold inline-block hover:opacity-90 transition-all"
                 >
                   Retour à l'accueil
                 </Link>

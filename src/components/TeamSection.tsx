@@ -218,7 +218,7 @@ export default function TeamSection() {
             >
               <Counter
                 value={fact.value}
-                className="block font-display text-4xl font-bold text-text-primary md:text-6xl"
+                className="block font-display text-4xl font-bold text-accent md:text-6xl"
               />
               <div className="mt-2 text-xs uppercase tracking-wider text-text-muted md:text-sm">
                 {fact.label}
@@ -246,10 +246,9 @@ export default function TeamSection() {
               // Le libellé tient sur une ligne dès 320 px : sans la réduction
               // de corps et d'espacement, il se casse en deux et la pastille
               // perd son équilibre.
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-text-primary px-6 py-4 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:gap-3 sm:px-8 sm:text-sm sm:tracking-wider"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-4 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:gap-3 sm:px-8 sm:text-sm sm:tracking-wider"
             >
               PARLONS DE VOTRE PROJET
-              <span aria-hidden>→</span>
             </a>
           </Magnetic>
         </Reveal>

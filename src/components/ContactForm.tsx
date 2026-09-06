@@ -22,7 +22,7 @@ export default function ContactForm() {
         </p>
         <a
           href="https://quiz.digitalzdev.com"
-          className="inline-block px-8 py-4 bg-text-primary text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all"
+          className="inline-block px-8 py-4 bg-accent text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all"
         >
           GÉNÉRER MA DÉMO GRATUITE
         </a>

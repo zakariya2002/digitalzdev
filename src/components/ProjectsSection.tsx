@@ -145,10 +145,9 @@ export default function ProjectsSection() {
             <Magnetic className="mt-6 inline-block">
               <a
                 href="https://quiz.digitalzdev.com"
-                className="inline-flex items-center gap-2 rounded-full bg-text-primary px-7 py-3 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
               >
                 GÉNÉRER MA DÉMO GRATUITE
-                <span aria-hidden>→</span>
               </a>
             </Magnetic>
           </Reveal>

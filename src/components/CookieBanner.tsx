@@ -40,7 +40,7 @@ export default function CookieBanner() {
             </p>
             <button
               onClick={accept}
-              className="px-6 py-2.5 bg-text-primary text-surface text-sm font-display font-semibold rounded-lg hover:opacity-90 transition-all whitespace-nowrap"
+              className="px-6 py-2.5 bg-accent text-surface text-sm font-display font-semibold rounded-lg hover:opacity-90 transition-all whitespace-nowrap"
             >
               Compris
             </button>
