@@ -138,7 +138,7 @@ export default function FaqSection() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.35, ease: EASE_OUT }}
                     >
-                      <p className="pb-6 pr-10 leading-relaxed text-text-secondary">
+                      <p className="pb-6 leading-relaxed text-text-secondary sm:pr-10">
                         {item.reponse}
                       </p>
                     </motion.dd>

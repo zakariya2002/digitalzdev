@@ -179,7 +179,7 @@ export default function ProjectsSection() {
                 Tout est logé dans la bande basse, laissée libre par les plans. */}
             <div
               ref={infoRef}
-              className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-10 md:px-12 md:pb-14"
+              className="pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-10 [@media(max-height:700px)]:pb-5 md:px-12 md:pb-14"
             >
               {/* La bande reste collée aux bords jusqu'à 1600 px ; au-delà,
                   elle se recentre pour ne pas laisser la fiche seule dans le
@@ -188,7 +188,7 @@ export default function ProjectsSection() {
                 {/* La fiche est dans le flux, ancrée en bas : la hauteur du
                     bloc suit donc la longueur réelle de la description, et
                     c'est cette hauteur que la scène 3D mesure pour se cadrer. */}
-                <div className="flex min-h-[13rem] flex-1 flex-col justify-end md:min-h-[14rem]">
+                <div className="flex min-h-[13rem] flex-1 flex-col justify-end [@media(max-height:700px)]:min-h-0 md:min-h-[14rem]">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={project.id}
@@ -198,7 +198,7 @@ export default function ProjectsSection() {
                       transition={{ duration: 0.5, ease: EASE_OUT }}
                       className="max-w-2xl"
                     >
-                      <div className="mb-4">
+                      <div className="mb-4 [@media(max-height:700px)]:mb-2">
                         <span className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary">
                           {project.subtitle}
                         </span>
@@ -214,11 +214,11 @@ export default function ProjectsSection() {
                         {project.title}
                       </h3>
 
-                      <p className="mt-4 max-w-xl text-text-secondary">
+                      <p className="mt-4 max-w-xl text-text-secondary [@media(max-height:700px)]:mt-2">
                         {project.description}
                       </p>
 
-                      <div className="mt-6 flex flex-wrap items-center gap-3">
+                      <div className="mt-6 flex flex-wrap items-center gap-3 [@media(max-height:700px)]:mt-3">
                         {project.tags.map((tag) => (
                           <span
                             key={tag}

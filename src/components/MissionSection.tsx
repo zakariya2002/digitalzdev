@@ -33,14 +33,14 @@ export default function MissionSection() {
     >
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#5BA89D] blur-[130px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent blur-[130px]"
         style={{ scale: auraScale, opacity: auraOpacity }}
       />
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mb-16 text-center md:mb-24">
           <Reveal>
-            <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-[#5BA89D]">
+            <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
               Notre mission
             </span>
           </Reveal>
@@ -60,7 +60,7 @@ export default function MissionSection() {
                 href="https://neuro-care.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-[#5BA89D] underline-offset-4 hover:underline"
+                className="font-semibold text-accent underline-offset-4 hover:underline"
               >
                 NeuroCare
               </a>
@@ -118,7 +118,7 @@ export default function MissionSection() {
                 >
                   <Counter
                     value={stat.value}
-                    className="block font-display text-xl font-bold text-[#5BA89D] sm:text-2xl"
+                    className="block font-display text-xl font-bold text-accent sm:text-2xl"
                   />
                   <div className="mt-1 text-xs leading-snug text-text-muted">
                     {stat.label}
@@ -133,7 +133,7 @@ export default function MissionSection() {
                   href="https://neuro-care.fr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-[#5BA89D] px-6 py-3 font-display text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#4A9488] sm:px-8 sm:text-sm sm:tracking-wider"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm sm:tracking-wider"
                 >
                   DÉCOUVRIR NEUROCARE
                   <svg

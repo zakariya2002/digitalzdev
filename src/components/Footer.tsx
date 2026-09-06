@@ -23,7 +23,7 @@ export default function Footer() {
     <footer className="border-t border-surface-border bg-surface py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex min-h-[44px] items-center gap-3">
             <img
               src="/logo.png"
               alt="Digitalz Dev"
@@ -34,13 +34,13 @@ export default function Footer() {
             </span>
           </Link>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Instagram */}
             <a
               href="https://www.instagram.com/digitalzdev/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-secondary hover:text-accent transition-colors"
+              className="flex h-11 w-11 items-center justify-center text-text-secondary transition-colors hover:text-accent"
               aria-label="Instagram"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@ export default function Footer() {
               href="https://www.linkedin.com/in/zakariya-nebbache-7b0644214/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-secondary hover:text-accent transition-colors"
+              className="flex h-11 w-11 items-center justify-center text-text-secondary transition-colors hover:text-accent"
               aria-label="LinkedIn"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@ export default function Footer() {
             {/* Email */}
             <a
               href="mailto:zdigitalzdev@gmail.com"
-              className="text-text-secondary hover:text-accent transition-colors"
+              className="flex h-11 w-11 items-center justify-center text-text-secondary transition-colors hover:text-accent"
               aria-label="Email"
             >
               <svg
@@ -92,12 +92,12 @@ export default function Footer() {
             <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary">
               Le site
             </h2>
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-4 lg:space-y-2">
               {RACCOURCIS.map((lien) => (
                 <li key={lien.to}>
                   <Link
                     to={lien.to}
-                    className="text-sm text-text-secondary transition-colors hover:text-accent"
+                    className="inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0"
                   >
                     {lien.label}
                   </Link>
@@ -110,12 +110,12 @@ export default function Footer() {
             <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary">
               Réalisations
             </h2>
-            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            <ul className="mt-4 grid gap-x-6 sm:grid-cols-2 lg:gap-y-2">
               {projects.map((project) => (
                 <li key={project.id}>
                   <Link
                     to={project.route}
-                    className="text-sm text-text-secondary transition-colors hover:text-accent"
+                    className="inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0"
                   >
                     {project.title}
                     <span className="text-text-muted"> · {project.subtitle}</span>
@@ -134,13 +134,13 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link
               to="/mentions-legales"
-              className="text-text-muted text-sm hover:text-accent transition-colors"
+              className="inline-block py-3.5 text-sm text-text-muted transition-colors hover:text-accent lg:py-0"
             >
               Mentions légales
             </Link>
             <Link
               to="/politique-confidentialite"
-              className="text-text-muted text-sm hover:text-accent transition-colors"
+              className="inline-block py-3.5 text-sm text-text-muted transition-colors hover:text-accent lg:py-0"
             >
               Politique de confidentialité
             </Link>

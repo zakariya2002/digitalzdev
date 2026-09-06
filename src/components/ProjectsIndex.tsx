@@ -38,7 +38,11 @@ export default function ProjectsIndex({ projects }: Props) {
               to={project.route}
               className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 py-6 md:grid-cols-[1fr_auto_auto] md:gap-x-10 md:py-8"
             >
-              <div className="min-w-0">
+              {/* Placement explicite : sans `col-start`, l'algorithme de
+                  grille place d'abord la vignette (qui a un `row-start`
+                  défini) en colonne 1, et le titre se retrouvait rejeté dans
+                  la colonne `auto` entre 768 et 899 px. */}
+              <div className="min-w-0 md:col-start-1 md:row-start-1">
                 <h3 className="truncate font-display text-lg font-bold text-text-primary transition-colors group-hover:text-accent sm:text-xl md:text-3xl">
                   {project.title}
                 </h3>
@@ -50,7 +54,7 @@ export default function ProjectsIndex({ projects }: Props) {
               {/* Vignette révélée au survol, réservée au pointeur fin.
                   En mobile elle passe sur une seconde ligne pleine largeur :
                   la flèche reste ainsi alignée avec le titre. */}
-              <div className="col-span-2 row-start-2 mt-4 md:col-span-1 md:row-start-1 md:mt-0">
+              <div className="col-span-2 row-start-2 mt-4 md:col-span-1 md:col-start-2 md:row-start-1 md:mt-0">
                 <div className="flex gap-2 md:hidden">
                   <img
                     src={project.heroImage}

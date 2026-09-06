@@ -359,11 +359,15 @@ export default function HeroScene({ className }: Props) {
 
       // La caméra recule juste ce qu'il faut pour que la pile entière tienne
       // dans le cadre. Une échelle fixe débordait sur les formats étroits.
+      // La borne haute doit rester au-dessus du recul exigé par les formats
+      // les plus étroits (colonne de 543 px sur 1366 px de haut en 1024x1366,
+      // fenêtre mobile 320x900) : plafonnée à 14, la pile était tranchée sur
+      // le bord droit.
       const tan = Math.tan((38 * Math.PI) / 360)
       const fill = 0.82
       const fitH = extentH / (fill * 2 * tan)
       const fitW = extentW / (fill * 2 * tan * camera.aspect)
-      camera.position.z = clamp(Math.max(fitH, fitW), 4.5, 14)
+      camera.position.z = clamp(Math.max(fitH, fitW), 4.5, 20)
       camera.updateProjectionMatrix()
     })
 

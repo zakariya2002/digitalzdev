@@ -91,7 +91,10 @@ export default function ServicesSection() {
   return (
     <section id="services" className="relative bg-surface py-24 md:py-36">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        {/* L'en-tête ne passe sur deux colonnes qu'à partir de `lg` : à
+            768 px, `max-w-2xl` et `max-w-sm` côte à côte laissaient au titre
+            une colonne de 343 px, où il se cassait en six lignes. */}
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <Reveal>
               <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
@@ -103,11 +106,11 @@ export default function ServicesSection() {
               by="word"
               text="Une agence web qui conçoit, développe et fait connaître votre site"
               delay={0.1}
-              className="mt-5 block font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-5xl"
+              className="mt-5 block font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-4xl lg:text-5xl"
             />
           </div>
 
-          <Reveal delay={0.2} className="max-w-sm">
+          <Reveal delay={0.2} className="max-w-sm lg:shrink-0">
             <p className="leading-relaxed text-text-secondary">
               Création de site internet, boutique en ligne, refonte, outil
               métier et campagnes publicitaires. Un projet de site web se juge

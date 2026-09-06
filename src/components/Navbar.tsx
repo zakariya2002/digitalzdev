@@ -58,7 +58,10 @@ export default function Navbar() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
-          <Link to="/" className="flex min-w-0 items-center gap-2 sm:gap-3 group">
+          <Link
+            to="/"
+            className="group flex min-h-[44px] min-w-0 items-center gap-2 sm:gap-3"
+          >
             <img
               src="/logo.png"
               alt="Digitalz Dev"
@@ -89,6 +92,12 @@ export default function Navbar() {
             >
               L'agence
             </a>
+            <Link
+              to="/contact"
+              className="text-sm text-accent transition-opacity hover:opacity-80"
+            >
+              Contact
+            </Link>
             <button
               onClick={toggleDark}
               className="p-2 rounded-full text-text-secondary hover:text-text-primary hover:bg-surface-light transition-colors"
@@ -96,12 +105,14 @@ export default function Navbar() {
             >
               <ThemeIcon />
             </button>
-            <Link
-              to="/contact"
-              className="text-sm text-accent transition-opacity hover:opacity-80"
+            {/* Le quiz est hébergé sur un sous-domaine : lien externe, pas
+                une route interne du routeur. */}
+            <a
+              href="https://quiz.digitalzdev.com"
+              className="rounded-full bg-accent px-5 py-2.5 font-display text-sm font-semibold text-surface transition-colors hover:bg-accent-hover"
             >
-              Contact
-            </Link>
+              Commencer
+            </a>
           </div>
 
           {/* Mobile */}
@@ -141,35 +152,43 @@ export default function Navbar() {
             // `md:hidden` : si la fenêtre s'élargit menu ouvert, le voile
             // disparaît avec le bouton qui l'a ouvert. `overflow-y-auto` et le
             // rembourrage haut laissent le contenu accessible en paysage court.
-            className="fixed inset-0 z-40 md:hidden overflow-y-auto overscroll-contain bg-surface/95 backdrop-blur-xl flex flex-col items-center justify-center gap-6 px-6 py-24 sm:gap-8"
+            className="fixed inset-0 z-40 md:hidden overflow-y-auto overscroll-contain bg-surface/95 backdrop-blur-xl flex flex-col items-center justify-center gap-2 px-6 py-24 sm:gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            {/* `min-h-[44px]` et le rembourrage horizontal : cible tactile
+                conforme sur mobile, sans changer l'apparence du texte. */}
             <Link
               to="/"
-              className="text-2xl font-display font-semibold text-text-primary"
+              className="flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-text-primary"
             >
               Accueil
             </Link>
             <a
               href="/#projets"
-              className="text-2xl font-display font-semibold text-text-primary"
+              className="flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-text-primary"
             >
               Projets
             </a>
             <a
               href="/#agence"
-              className="text-2xl font-display font-semibold text-text-primary"
+              className="flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-text-primary"
             >
               L'agence
             </a>
             <Link
               to="/contact"
-              className="font-display text-2xl font-semibold text-accent"
+              className="flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-accent"
             >
               Contact
             </Link>
+            <a
+              href="https://quiz.digitalzdev.com"
+              className="mt-4 flex min-h-[44px] items-center rounded-full bg-accent px-8 font-display text-lg font-semibold text-surface"
+            >
+              Commencer
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

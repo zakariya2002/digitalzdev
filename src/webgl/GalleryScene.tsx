@@ -203,9 +203,12 @@ export default function GalleryScene({
       // Le cadrage se déduit de la place réellement disponible plutôt que
       // d'une distance fixe : sur un écran court, la fiche du projet doit
       // garder sa bande basse, et le plan se contenter du reste.
+      // Le plancher garde un plan visible quand la fiche mange tout l'écran,
+      // mais il doit rester bas : à 0,28 le plan repassait par-dessus la fiche
+      // sur une fenêtre de 560 px de haut.
       const usable = Math.max(
         frameHeight - infoBand - TOP_BAND,
-        frameHeight * 0.28
+        frameHeight * 0.2
       )
       const planePx = usable * 0.88
       const tan = Math.tan((FOV * Math.PI) / 360)

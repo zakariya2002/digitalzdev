@@ -14,10 +14,17 @@ import { clamp } from '../lib/scroll'
 import { testimonials } from '../data/testimonials'
 import type { Testimonial } from '../data/testimonials'
 
-/** Largeur d'une carte et écart entre deux cartes, en pixels. */
-const CARD = 380
+/** Largeur maximale d'une carte et écart entre deux cartes, en pixels. */
+const CARD_MAX = 380
 const GAP = 24
-const STEP = CARD + GAP
+
+/**
+ * Largeur réelle d'une carte : plafonnée à 380 px, mais toujours plus étroite
+ * que le cadre. En dur à 380, la carte débordait des deux côtés dès 320 px de
+ * large et le texte se retrouvait tronqué.
+ */
+const largeurCarte = (cadre: number) =>
+  cadre ? Math.max(220, Math.min(CARD_MAX, cadre - 48)) : CARD_MAX
 
 /** Durée d'un palier de lecture automatique, en millisecondes. */
 const AUTOPLAY = 6000
@@ -29,17 +36,21 @@ function Card({
   index,
   trackX,
   viewport,
+  card,
+  step,
 }: {
   item: Testimonial
   index: number
   trackX: ReturnType<typeof useMotionValue<number>>
   viewport: number
+  card: number
+  step: number
 }) {
   // Distance entre le centre de la carte et le centre du cadre. Tout le
   // relief de la carte en découle : rotation, échelle, opacité, profondeur.
   const distance = useTransform(trackX, (x) => {
     if (!viewport) return 0
-    return index * STEP + x + CARD / 2 - viewport / 2
+    return index * step + x + card / 2 - viewport / 2
   })
 
   const normalized = useTransform(distance, (d) =>
@@ -57,7 +68,7 @@ function Card({
     <motion.li
       className="shrink-0"
       style={{
-        width: CARD,
+        width: card,
         rotateY,
         scale,
         opacity,
@@ -84,7 +95,7 @@ function Card({
           />
         </div>
 
-        <div className="flex flex-1 flex-col p-7">
+        <div className="flex flex-1 flex-col p-5 sm:p-7">
           <h3 className="font-display text-xl font-bold text-text-primary">
             {item.company}
           </h3>
@@ -112,7 +123,9 @@ function Card({
 
           <Link
             to={item.route}
-            className="mt-7 inline-flex w-fit items-center gap-2 border-b border-accent/40 pb-0.5 font-display text-sm font-semibold text-accent transition-colors hover:border-accent"
+            // `before` : la zone tactile est portée à 47 px de haut sans
+            // décoller le soulignement du texte.
+            className="relative mt-7 inline-flex w-fit items-center gap-2 border-b border-accent/40 pb-0.5 font-display text-sm font-semibold text-accent transition-colors before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:border-accent"
           >
             Voir le projet <span aria-hidden>→</span>
           </Link>
@@ -134,7 +147,9 @@ export default function TestimonialsSection() {
   const trackX = useMotionValue(0)
   const doux = useSpring(trackX, { stiffness: 120, damping: 26, mass: 0.6 })
 
-  const largeurTotale = testimonials.length * STEP - GAP
+  const card = largeurCarte(viewport)
+  const step = card + GAP
+  const largeurTotale = testimonials.length * step - GAP
   const minX = Math.min(0, viewport - largeurTotale)
 
   useEffect(() => {
@@ -151,8 +166,8 @@ export default function TestimonialsSection() {
   // Position de repos d'une carte : centrée dans le cadre, bornée aux limites.
   const positionDe = useCallback(
     (index: number) =>
-      clamp(viewport / 2 - index * STEP - CARD / 2, minX, 0),
-    [viewport, minX]
+      clamp(viewport / 2 - index * step - card / 2, minX, 0),
+    [viewport, minX, step, card]
   )
 
   const allerA = useCallback(
@@ -167,7 +182,7 @@ export default function TestimonialsSection() {
   // L'indice actif suit la position réelle, y compris pendant un glissement.
   useMotionValueEvent(doux, 'change', (x) => {
     if (!viewport) return
-    const index = Math.round((viewport / 2 - x - CARD / 2) / STEP)
+    const index = Math.round((viewport / 2 - x - card / 2) / step)
     const borne = clamp(index, 0, testimonials.length - 1)
     setActif((precedent) => (precedent === borne ? precedent : borne))
   })
@@ -252,14 +267,19 @@ export default function TestimonialsSection() {
                 index={index}
                 trackX={doux}
                 viewport={viewport}
+                card={card}
+                step={step}
               />
             ))}
           </motion.ul>
         </div>
 
         {/* Repères et commandes */}
-        <div className="mx-auto mt-10 flex max-w-6xl items-center justify-between gap-6 px-6">
-          <div className="flex items-center gap-2">
+        {/* Sous 640 px, les huit repères et les deux flèches ne tiennent pas
+            sur une ligne : les flèches sortaient du cadre `overflow-hidden`
+            de la section et devenaient inatteignables. */}
+        <div className="mx-auto mt-10 flex max-w-6xl flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <div className="flex flex-wrap items-center gap-1 sm:gap-2">
             {testimonials.map((item, index) => (
               <button
                 key={item.projectId}
@@ -267,7 +287,7 @@ export default function TestimonialsSection() {
                 onClick={() => allerA(index)}
                 aria-label={`Voir ${item.company}`}
                 aria-current={index === actif}
-                className="group flex h-8 items-center px-1"
+                className="group flex h-11 items-center px-1"
               >
                 <span
                   className={`block h-px transition-all duration-500 ${
