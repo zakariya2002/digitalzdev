@@ -112,7 +112,10 @@
     }
     </script>
 
-    <script>if(localStorage.getItem('theme')!=='light')document.documentElement.classList.add('dark')</script>
+    <!-- Le site n'a plus qu'un thème, clair. Le script qui posait la classe
+         « dark » selon le stockage local est retiré, et la classe est purgée
+         pour les visiteurs qui l'avaient choisie avant. -->
+    <script>document.documentElement.classList.remove('dark');try{localStorage.removeItem('theme')}catch(e){}</script>
   </head>
   <body class="bg-surface text-text-primary">
     <div id="root"></div>
