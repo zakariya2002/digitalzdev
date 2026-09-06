@@ -123,7 +123,7 @@ export default function ServicesSection() {
           {SERVICES.map((service, index) => (
             <motion.article
               key={service.title}
-              className="rounded-2xl border border-surface-border bg-surface-card p-7 md:p-9"
+              className="flex flex-col rounded-2xl border border-surface-border bg-surface-card p-7 md:h-[22rem] md:p-9"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}
@@ -135,22 +135,40 @@ export default function ServicesSection() {
               <p className="mt-2 font-display text-sm font-semibold text-accent">
                 {service.lead}
               </p>
-              <p className="mt-4 leading-relaxed text-text-secondary">
-                {service.body}
-              </p>
-              <ul className="mt-6 space-y-2">
-                {service.points.map((point) => (
-                  <li
-                    key={point}
-                    className="flex items-baseline gap-3 text-sm text-text-secondary"
-                  >
-                    <span aria-hidden className="text-accent">
-                      ·
-                    </span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
+
+              {/* Corps défilant.
+                  Les quatre services n'ont pas la même longueur de texte, ce
+                  qui donnait une grille en escalier et une section
+                  interminable. La carte est bornée en hauteur à partir de md
+                  et le détail défile à l'intérieur, sous un titre qui reste
+                  visible. Sur téléphone la carte s'étire au contraire : un
+                  défilement dans un défilement est pénible au doigt. */}
+              <div className="relative mt-4 min-h-0 flex-1 md:overflow-hidden">
+                <div className="h-full md:overflow-y-auto md:pr-3">
+                  <p className="leading-relaxed text-text-secondary">
+                    {service.body}
+                  </p>
+                  <ul className="mt-6 space-y-2 md:pb-6">
+                    {service.points.map((point) => (
+                      <li
+                        key={point}
+                        className="flex items-baseline gap-3 text-sm text-text-secondary"
+                      >
+                        <span aria-hidden className="text-accent">
+                          ·
+                        </span>
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {/* Voile de bas de carte : sans lui, le texte se coupe net sur
+                    une ligne pleine et rien ne dit qu'il en reste. */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-10 bg-gradient-to-t from-surface-card to-transparent md:block"
+                />
+              </div>
             </motion.article>
           ))}
         </div>
