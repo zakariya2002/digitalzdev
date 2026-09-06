@@ -45,7 +45,7 @@ export default function Hero() {
             texte et le voile prend le relais pour le contraste. */}
         {webgl ? (
           <Suspense fallback={null}>
-            <HeroScene className="absolute inset-0 opacity-40 lg:left-[42%] lg:right-[-6%] lg:opacity-100" />
+            <HeroScene className="absolute inset-0 opacity-40 lg:left-[45%] lg:right-[2%] lg:opacity-100" />
           </Suspense>
         ) : (
           <div
