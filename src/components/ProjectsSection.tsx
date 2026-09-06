@@ -204,7 +204,7 @@ export default function ProjectsSection() {
                       </div>
 
                       <h3
-                        className={`font-display font-bold tracking-tight text-text-primary ${
+                        className={`font-display font-bold tracking-tight text-accent ${
                           project.title.length > 19
                             ? 'text-3xl md:text-5xl'
                             : 'text-4xl md:text-6xl'

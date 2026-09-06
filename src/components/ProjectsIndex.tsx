@@ -43,7 +43,7 @@ export default function ProjectsIndex({ projects }: Props) {
                   défini) en colonne 1, et le titre se retrouvait rejeté dans
                   la colonne `auto` entre 768 et 899 px. */}
               <div className="min-w-0 md:col-start-1 md:row-start-1">
-                <h3 className="truncate font-display text-lg font-bold text-text-primary transition-colors group-hover:text-accent sm:text-xl md:text-3xl">
+                <h3 className="truncate font-display text-lg font-bold text-accent transition-colors group-hover:text-accent-hover sm:text-xl md:text-3xl">
                   {project.title}
                 </h3>
                 <p className="mt-1 truncate text-sm text-text-secondary">
