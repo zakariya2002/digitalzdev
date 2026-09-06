@@ -243,7 +243,7 @@ export default function TestimonialsSection() {
     navigate(testimonials[index].route)
   }
 
-  const teinte = testimonials[actif]?.color ?? '#9A7B4A'
+  const teinte = testimonials[actif]?.color ?? '#64768A'
 
   return (
     <section
