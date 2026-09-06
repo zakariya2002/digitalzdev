@@ -21,11 +21,12 @@
     --surface-light: 240 235 227;
     --surface-card: 255 255 255;
     --surface-border: 229 221 211;
-    /* Gris acier. En thème clair, l'accent porte du texte sur fond crème :
-       il doit rester foncé, sinon il tombe sous le seuil de contraste. */
-    --accent: 74 90 107;
-    --accent-hover: 59 72 87;
-    --accent-muted: 142 162 182;
+    /* Marron repris du logo. En thème clair, l'accent porte du texte sur
+       fond crème : il doit rester foncé, sinon il tombe sous le seuil de
+       contraste. */
+    --accent: 107 83 64;
+    --accent-hover: 84 64 47;
+    --accent-muted: 176 141 110;
     --text-primary: 26 26 26;
     --text-secondary: 107 107 107;
     --text-muted: 170 170 170;
@@ -36,11 +37,12 @@
     --surface-light: 20 20 20;
     --surface-card: 26 26 26;
     --surface-border: 42 42 42;
-    /* Même acier que le quiz, #8ea2b6. Les scènes WebGL lisent cette
-       variable : le hero et la galerie suivent sans rien changer d'autre. */
-    --accent: 142 162 182;
-    --accent-hover: 166 183 200;
-    --accent-muted: 100 118 138;
+    /* Même marron que le quiz, #b08d6e, tiré de la chaleur du logo. Les
+       scènes WebGL lisent cette variable : le hero et la galerie suivent sans
+       rien changer d'autre. */
+    --accent: 176 141 110;
+    --accent-hover: 195 160 132;
+    --accent-muted: 122 96 71;
     --text-primary: 245 245 240;
     --text-secondary: 139 139 139;
     --text-muted: 85 85 85;
