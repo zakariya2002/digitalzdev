@@ -7,7 +7,7 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Reveal, SplitText } from './motion'
 import { EASE_OUT } from './motion/config'
 import { clamp } from '../lib/scroll'
@@ -146,7 +146,11 @@ function Card({
 /* ------------------------------------------------------------------ */
 
 export default function TestimonialsSection() {
+  const navigate = useNavigate()
   const cadreRef = useRef<HTMLDivElement>(null)
+  // Un glissement se termine par un événement de clic : sans ce drapeau,
+  // relâcher la souris après avoir fait défiler ouvrirait un projet.
+  const glissementRef = useRef(false)
   const [viewport, setViewport] = useState(0)
   const [actif, setActif] = useState(0)
   const [enPause, setEnPause] = useState(false)
@@ -215,6 +219,30 @@ export default function TestimonialsSection() {
     return () => window.clearInterval(id)
   }, [reduced, enPause, viewport, positionDe, trackX])
 
+  /**
+   * Ouvre le projet situé sous le curseur.
+   *
+   * La piste est un contexte 3D : les cartes portent une rotation, et Chrome
+   * ne résout pas le test de pointage jusqu'à leurs descendants. Un lien placé
+   * dans une carte reste donc inatteignable à la souris, alors qu'il fonctionne
+   * au clavier. Le clic est intercepté au niveau de la piste, qui le reçoit
+   * bien, et la carte visée est déduite de la géométrie déjà connue.
+   */
+  const ouvrirDepuisClic = (event: React.MouseEvent) => {
+    if (glissementRef.current || !viewport) return
+
+    const cadre = cadreRef.current
+    if (!cadre) return
+
+    const x = event.clientX - cadre.getBoundingClientRect().left - doux.get()
+    const index = Math.floor(x / step)
+    // Un clic tombé dans l'écart entre deux cartes n'ouvre rien.
+    if (x - index * step > card) return
+    if (index < 0 || index >= testimonials.length) return
+
+    navigate(testimonials[index].route)
+  }
+
   const teinte = testimonials[actif]?.color ?? '#9A7B4A'
 
   return (
@@ -253,7 +281,7 @@ export default function TestimonialsSection() {
         {/* Piste glissante */}
         <div
           ref={cadreRef}
-          className="cursor-grab overflow-hidden active:cursor-grabbing"
+          className="cursor-pointer overflow-hidden active:cursor-grabbing"
           style={{ perspective: 1400 }}
         >
           <motion.ul
@@ -262,8 +290,19 @@ export default function TestimonialsSection() {
             drag={reduced ? false : 'x'}
             dragConstraints={{ left: minX, right: 0 }}
             dragElastic={0.08}
-            onDragStart={() => setEnPause(true)}
-            onDragEnd={() => setEnPause(false)}
+            onDragStart={() => {
+              glissementRef.current = true
+              setEnPause(true)
+            }}
+            onDragEnd={() => {
+              setEnPause(false)
+              // Le clic suit immédiatement le relâchement : on ne lève le
+              // drapeau qu'au tour de boucle suivant.
+              window.setTimeout(() => {
+                glissementRef.current = false
+              }, 0)
+            }}
+            onClick={ouvrirDepuisClic}
             // La piste commence après une marge, pour que la première carte
             // arrive au centre plutôt que collée au bord gauche.
             initial={false}
