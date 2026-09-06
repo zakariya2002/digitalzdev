@@ -143,13 +143,13 @@ export default function ProjectsSection() {
               ligne.
             </p>
             <Magnetic className="mt-6 inline-block">
-              <Link
-                to="/contact"
+              <a
+                href="https://quiz.digitalzdev.com"
                 className="inline-flex items-center gap-2 rounded-full bg-text-primary px-7 py-3 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
               >
-                DEMANDER UN DEVIS
+                GÉNÉRER MA DÉMO GRATUITE
                 <span aria-hidden>→</span>
-              </Link>
+              </a>
             </Magnetic>
           </Reveal>
         </div>

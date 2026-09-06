@@ -15,7 +15,10 @@ const RACCOURCIS = [
   { to: '/#projets', label: 'Nos réalisations' },
   { to: '/#agence', label: "L'agence" },
   { to: '/#faq', label: 'Questions fréquentes' },
-  { to: '/contact', label: 'Demander un devis' },
+  { to: '/contact', label: 'Nous contacter' },
+  // Point d'entrée principal : plutôt qu'un formulaire de devis, le visiteur
+  // repart avec un aperçu de son site en une minute.
+  { to: 'https://quiz.digitalzdev.com', label: 'Générer ma démo gratuite', externe: true },
 ]
 
 export default function Footer() {
@@ -95,12 +98,21 @@ export default function Footer() {
             <ul className="mt-4 lg:space-y-2">
               {RACCOURCIS.map((lien) => (
                 <li key={lien.to}>
-                  <Link
-                    to={lien.to}
-                    className="inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0"
-                  >
-                    {lien.label}
-                  </Link>
+                  {lien.externe ? (
+                    <a
+                      href={lien.to}
+                      className="inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0"
+                    >
+                      {lien.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={lien.to}
+                      className="inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0"
+                    >
+                      {lien.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

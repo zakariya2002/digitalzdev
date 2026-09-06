@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 
 export default function ContactForm() {
   return (
@@ -18,14 +17,15 @@ export default function ContactForm() {
           Un projet en tête ?
         </h2>
         <p className="text-text-secondary mb-8">
-          Remplissez notre formulaire de devis pour recevoir une proposition adaptée sous 24 à 48h.
+          Répondez à huit questions et repartez avec un aperçu de votre site,
+          généré pour votre marque. Gratuit, en moins d'une minute.
         </p>
-        <Link
-          to="/contact"
+        <a
+          href="https://quiz.digitalzdev.com"
           className="inline-block px-8 py-4 bg-text-primary text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all"
         >
-          DEMANDER UN DEVIS
-        </Link>
+          GÉNÉRER MA DÉMO GRATUITE
+        </a>
       </motion.div>
     </section>
   )
