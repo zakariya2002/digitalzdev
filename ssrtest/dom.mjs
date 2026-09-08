@@ -98,7 +98,7 @@ for (const route of routes) {
   const empty = text.length < 30
   const ok = !crashed && !empty
   if (!ok) failures++
-  console.log(`${ok ? '  ✓' : '  ✗'} ${route}${ok ? '' : ' — ' + (crashed ? errors.find(e => e.startsWith('REACT CRASH')).split('\n')[0] : 'page vide')}`)
+  console.log(`${ok ? '  ✓' : '  ✗'} ${route}${ok ? '' : ' : ' + (crashed ? errors.find(e => e.startsWith('REACT CRASH')).split('\n')[0] : 'page vide')}`)
   if (ok) console.log(`      ${text.slice(0, 110)}…`)
   unmount?.()
   host.remove()
@@ -113,7 +113,7 @@ if (SCENARIO === 'print-document') {
   mount(host, errors)
   await wait(4000)
 
-  const step = (n, ok, d = '') => { console.log(`  ${ok ? '✓' : '✗'} ${n}${!ok && d ? ' — ' + d : ''}`); if (!ok) failures++ }
+  const step = (n, ok, d = '') => { console.log(`  ${ok ? '✓' : '✗'} ${n}${!ok && d ? ' : ' + d : ''}`); if (!ok) failures++ }
 
   const btn = findByText(host, 'button', 'Imprimer')
   step('le bouton d\'impression est présent', !!btn)
@@ -150,7 +150,7 @@ if (SCENARIO === 'send-message') {
   mount(host, errors)
   await wait(3500)
 
-  const step = (n, ok, d = '') => { console.log(`  ${ok ? '✓' : '✗'} ${n}${!ok && d ? ' — ' + d : ''}`); if (!ok) failures++ }
+  const step = (n, ok, d = '') => { console.log(`  ${ok ? '✓' : '✗'} ${n}${!ok && d ? ' : ' + d : ''}`); if (!ok) failures++ }
 
   // 1. Ouvrir la conversation avec l'autre membre
   const target = findByText(host, 'button', 'Zakariya')

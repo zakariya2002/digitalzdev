@@ -31,7 +31,7 @@ const pages = [
 ]
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<!-- Généré par scripts/generate-sitemap.mjs — ne pas éditer à la main. -->
+<!-- Généré par scripts/generate-sitemap.mjs, ne pas éditer à la main. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${pages
   .map(

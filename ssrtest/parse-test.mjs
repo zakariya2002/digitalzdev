@@ -12,7 +12,7 @@ execSync(`npx tsc ${join(dir,'q.ts')} --module esnext --target es2020 --moduleRe
 const { parseQuoteText, parseQuoteTable, parseAmount } = await import(join(dir, 'q.js'))
 
 let ok = 0, ko = 0
-const check = (n, c, d = '') => { console.log(`  ${c ? '✓' : '✗'} ${n}${!c && d ? ' — ' + d : ''}`); c ? ok++ : ko++ }
+const check = (n, c, d = '') => { console.log(`  ${c ? '✓' : '✗'} ${n}${!c && d ? ' : ' + d : ''}`); c ? ok++ : ko++ }
 
 console.log('Lecture des montants')
 check('format français « 1 234,56 »', parseAmount('1 234,56') === 1234.56, String(parseAmount('1 234,56')))
