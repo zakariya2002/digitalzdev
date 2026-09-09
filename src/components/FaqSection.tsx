@@ -30,9 +30,9 @@ const FAQ: QuestionReponse[] = [
       "Oui. Selon le projet, vous administrez vos contenus depuis Shopify, depuis un back-office sur mesure ou depuis un espace d'administration dédié. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite.",
   },
   {
-    question: 'Travaillez-vous avec des clients hors Île-de-France ?',
+    question: 'Travaillez-vous partout en France ?',
     reponse:
-      "Oui, partout en France et à l'international. Nos réalisations vont d'une marque de mode australienne à un cabinet de sourcing entre la France et la Chine. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
+      "Oui, dans toute la France et à l'international. Nos réalisations vont d'une marque de mode australienne à un cabinet de sourcing entre la France et la Chine. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
   },
   {
     question: 'Que se passe-t-il après la mise en ligne ?',

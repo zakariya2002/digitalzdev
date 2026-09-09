@@ -25,7 +25,7 @@ const HOME: PageSeo = {
   path: '/',
   title: 'Agence web et création de site internet | Digitalz Dev',
   description:
-    "Agence web en Île-de-France : création de site internet sur mesure, site vitrine, boutique Shopify et application métier. Devis sous 48 h.",
+    "Agence web en France : création de site internet sur mesure, site vitrine, boutique Shopify et application métier. Devis sous 48 h.",
 }
 
 const STATIC_PAGES: PageSeo[] = [
