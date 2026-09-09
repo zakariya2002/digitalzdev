@@ -1,6 +1,6 @@
 /**
  * Écrit un fichier HTML par page dans dist/, avec ses propres balises de
- * référencement.
+ * référencement et son contenu déjà rendu.
  *
  * Le site est une application monopage : sans ce passage, toutes les URL
  * renvoient le même index.html, donc le même titre et la même description
@@ -11,6 +11,12 @@
  * Vercel sert un fichier statique existant avant d'appliquer la réécriture
  * vers index.html : déposer dist/contact/index.html suffit à ce que /contact
  * réponde avec son propre HTML.
+ *
+ * Depuis le rendu serveur, le corps de la page est écrit lui aussi. Auparavant
+ * seules les balises du `<head>` l'étaient, et le HTML servi ne contenait
+ * qu'une cinquantaine de caractères de texte : Google n'avait rien à indexer
+ * tant qu'il n'avait pas exécuté le JavaScript, ce qu'il fait tard et sans
+ * garantie. Une seule page sur douze était indexée.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -82,6 +88,32 @@ if (pages.length < 5) {
 
 const template = readFileSync(join(dist, 'index.html'), 'utf8')
 
+// Le paquet serveur est construit juste avant par `vite build --ssr`. Son
+// absence n'interrompt pas le pré-rendu : on retombe sur l'ancien
+// comportement, des balises correctes et un corps vide, plutôt que de casser
+// la mise en ligne.
+/** Longueur du texte visible d'un fragment HTML, balises retirées. */
+function texteBrut(html) {
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+/** Volume rendu par page, pour le contrôle de sortie. */
+const mesures = []
+
+let rendre = null
+try {
+  ;({ render: rendre } = await import(
+    new URL('../dist-ssr/entry-server.js', import.meta.url).href
+  ))
+} catch (err) {
+  console.warn(
+    `pré-rendu : paquet serveur introuvable (${err.message}), le corps des pages restera vide.`
+  )
+}
+
 for (const page of pages) {
   const url = page.path === '/' ? `${SITE_URL}/` : `${SITE_URL}${page.path}`
   let html = template
@@ -116,6 +148,15 @@ for (const page of pages) {
     `<meta name="twitter:description" content="${escape(page.description)}" />`
   )
 
+  if (rendre) {
+    const corps = rendre(page.path)
+    mesures.push({ path: page.path, taille: texteBrut(corps).length })
+    // On remplace le conteneur vide par le même conteneur, rempli. La chaîne
+    // recherchée est celle qu'écrit Vite, sans espace : si elle changeait, le
+    // contrôle plus bas s'en apercevrait.
+    html = html.replace('<div id="root"></div>', `<div id="root">${corps}</div>`)
+  }
+
   if (page.path === '/') {
     writeFileSync(join(dist, 'index.html'), html)
   } else {
@@ -123,6 +164,24 @@ for (const page of pages) {
     mkdirSync(dir, { recursive: true })
     writeFileSync(join(dir, 'index.html'), html)
   }
+}
+
+// Contrôle de sortie : une page dont le corps n'a pas été injecté est une
+// régression silencieuse, exactement le défaut qu'on vient de corriger. On
+// mesure pendant le rendu plutôt qu'en relisant le fichier.
+if (rendre) {
+  // La page d'erreur tient en trois lignes, c'est sa nature.
+  const maigres = mesures.filter((m) => m.path !== '/404' && m.taille < 500)
+  if (maigres.length > 0) {
+    throw new Error(
+      `Pré-rendu : ${maigres.length} page(s) rendues presque vides : ` +
+        maigres.map((m) => `${m.path} (${m.taille} car.)`).join(', ')
+    )
+  }
+  const total = mesures.reduce((n, m) => n + m.taille, 0)
+  console.log(
+    `pré-rendu : corps injecté sur ${mesures.length} pages, ${total} caractères au total`
+  )
 }
 
 console.log(`pré-rendu : ${pages.length} pages écrites dans dist/`)
