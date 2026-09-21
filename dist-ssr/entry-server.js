@@ -751,6 +751,19 @@ function PageTransition({ children }) {
     }
   );
 }
+const LIENS = [
+  { libelle: "Accueil", vers: "/", interne: true, appui: false },
+  { libelle: "Projets", vers: "/#projets", interne: false, appui: false },
+  { libelle: "L'agence", vers: "/#agence", interne: false, appui: false },
+  // Contact est mis en couleur dans la barre du haut : c'est la sortie qu'on
+  // veut voir en premier quand on cherche à joindre quelqu'un.
+  { libelle: "Contact", vers: "/contact", interne: true, appui: true }
+];
+function estCourant(lien, chemin) {
+  if (lien.vers === "/") return chemin === "/";
+  if (lien.vers.startsWith("/#")) return false;
+  return chemin === lien.vers;
+}
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -763,11 +776,24 @@ function Navbar() {
   useEffect(() => {
     setMenuOpen(false);
   }, [location]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    const auClavier = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", auClavier);
+    return () => {
+      document.body.style.overflow = overflow;
+      window.removeEventListener("keydown", auClavier);
+    };
+  }, [menuOpen]);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(
       motion.nav,
       {
-        className: `fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-surface/80 backdrop-blur-xl border-b border-surface-border" : ""}`,
+        className: `fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-surface/80 backdrop-blur-xl" : ""}`,
         initial: { y: -100 },
         animate: { y: 0 },
         transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
@@ -791,38 +817,10 @@ function Navbar() {
             }
           ),
           /* @__PURE__ */ jsxs("div", { className: "hidden md:flex items-center gap-6", children: [
-            /* @__PURE__ */ jsx(
-              Link,
-              {
-                to: "/",
-                className: "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary",
-                children: "Accueil"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              "a",
-              {
-                href: "/#projets",
-                className: "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary",
-                children: "Projets"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              "a",
-              {
-                href: "/#agence",
-                className: "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary",
-                children: "L'agence"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              Link,
-              {
-                to: "/contact",
-                className: "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-accent transition-opacity hover:opacity-80",
-                children: "Contact"
-              }
-            ),
+            LIENS.map((lien) => {
+              const classe = lien.appui ? "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-accent transition-opacity hover:opacity-80" : "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary";
+              return lien.interne ? /* @__PURE__ */ jsx(Link, { to: lien.vers, className: classe, children: lien.libelle }, lien.libelle) : /* @__PURE__ */ jsx("a", { href: lien.vers, className: classe, children: lien.libelle }, lien.libelle);
+            }),
             /* @__PURE__ */ jsx(
               "a",
               {
@@ -837,7 +835,9 @@ function Navbar() {
             {
               onClick: () => setMenuOpen(!menuOpen),
               className: "flex h-11 w-11 flex-col items-center justify-center gap-1.5",
-              "aria-label": "Menu",
+              "aria-label": menuOpen ? "Fermer le menu" : "Ouvrir le menu",
+              "aria-expanded": menuOpen,
+              "aria-controls": "menu-mobile",
               children: [
                 /* @__PURE__ */ jsx(
                   motion.span,
@@ -869,49 +869,63 @@ function Navbar() {
     /* @__PURE__ */ jsx(AnimatePresence, { children: menuOpen && /* @__PURE__ */ jsxs(
       motion.div,
       {
-        className: "fixed inset-0 z-40 md:hidden overflow-y-auto overscroll-contain bg-surface/95 backdrop-blur-xl flex flex-col items-center justify-center gap-2 px-6 py-24 sm:gap-4",
+        id: "menu-mobile",
+        className: "fixed inset-0 z-40 flex flex-col bg-surface/95 backdrop-blur-xl md:hidden",
         initial: { opacity: 0 },
         animate: { opacity: 1 },
         exit: { opacity: 0 },
+        transition: { duration: 0.2 },
         children: [
-          /* @__PURE__ */ jsx(
-            Link,
+          /* @__PURE__ */ jsx("nav", { className: "flex-1 overflow-y-auto overscroll-contain px-6 pb-6 pt-28", children: LIENS.map((lien, i) => {
+            const courant = estCourant(lien, location.pathname);
+            const contenu = /* @__PURE__ */ jsxs("span", { className: "relative inline-block", children: [
+              lien.libelle,
+              courant && /* @__PURE__ */ jsx(
+                motion.span,
+                {
+                  layoutId: "menu-courant",
+                  className: "absolute -bottom-1 left-0 h-[2px] w-full bg-accent"
+                }
+              )
+            ] });
+            const classe = "flex min-h-[56px] items-center font-display text-[2rem] font-semibold leading-none tracking-tight text-text-primary transition-opacity active:opacity-60";
+            return /* @__PURE__ */ jsx(
+              motion.div,
+              {
+                initial: { opacity: 0, y: 10 },
+                animate: { opacity: 1, y: 0 },
+                transition: {
+                  duration: 0.28,
+                  delay: 0.04 + i * 0.045,
+                  ease: [0.32, 0.72, 0, 1]
+                },
+                children: lien.interne ? /* @__PURE__ */ jsx(Link, { to: lien.vers, className: classe, children: contenu }) : /* @__PURE__ */ jsx("a", { href: lien.vers, className: classe, children: contenu })
+              },
+              lien.libelle
+            );
+          }) }),
+          /* @__PURE__ */ jsxs(
+            motion.div,
             {
-              to: "/",
-              className: "flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-text-primary",
-              children: "Accueil"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: "/#projets",
-              className: "flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-text-primary",
-              children: "Projets"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: "/#agence",
-              className: "flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-text-primary",
-              children: "L'agence"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            Link,
-            {
-              to: "/contact",
-              className: "flex min-h-[44px] items-center px-4 font-display text-2xl font-semibold text-accent",
-              children: "Contact"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: "https://quiz.digitalzdev.com",
-              className: "mt-4 flex min-h-[44px] items-center rounded-full bg-accent px-8 font-display text-lg font-semibold text-surface",
-              children: "Démarrer"
+              className: "px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2",
+              initial: { opacity: 0, y: 10 },
+              animate: { opacity: 1, y: 0 },
+              transition: {
+                duration: 0.28,
+                delay: 0.04 + LIENS.length * 0.045,
+                ease: [0.32, 0.72, 0, 1]
+              },
+              children: [
+                /* @__PURE__ */ jsx(
+                  "a",
+                  {
+                    href: "https://quiz.digitalzdev.com",
+                    className: "flex min-h-[56px] w-full items-center justify-center rounded-full bg-accent font-display text-lg font-semibold text-surface transition-colors active:bg-accent-hover",
+                    children: "Démarrer"
+                  }
+                ),
+                /* @__PURE__ */ jsx("p", { className: "mt-3 text-center text-xs text-text-secondary", children: "Un aperçu de votre site en 60 secondes" })
+              ]
             }
           )
         ]
