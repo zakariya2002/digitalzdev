@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
-Disallow:
+Disallow: /espace/
+Disallow: /dashboard
+Disallow: /login
 
 Sitemap: https://digitalzdev.com/sitemap.xml
