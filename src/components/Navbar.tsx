@@ -225,7 +225,7 @@ export default function Navbar() {
                 Démarrer
               </a>
               <p className="mt-3 text-center text-xs text-text-secondary">
-                Un aperçu de votre site en 60 secondes
+                Un aperçu de votre site en huit questions
               </p>
             </motion.div>
           </motion.div>

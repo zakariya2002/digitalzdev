@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { isWebGLAvailable } from '../webgl/core'
-import { Marquee, SplitText } from './motion'
+import { Magnetic, Marquee, SplitText } from './motion'
 import { EASE_OUT } from './motion/config'
 
 // three.js ne part au réseau que si le décor est réellement affiché.
@@ -108,6 +108,29 @@ export default function Hero() {
               développés, puis portés par vos campagnes Meta Ads et Google Ads.
             </motion.p>
 
+            {/* Seule sortie au-dessus de la ligne de flottaison.
+                Le haut de page n'en avait aucune : il fallait viser le
+                « Démarrer » de la barre, dont le libellé ne promet rien, ou
+                défiler deux écrans avant de croiser un lien. Le libellé est
+                celui du pied de page, qui dit ce qu'on obtient. */}
+            <motion.div
+              className="mt-10"
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 1.1, ease: EASE_OUT }}
+            >
+              <Magnetic className="inline-block">
+                <a
+                  href="https://quiz.digitalzdev.com"
+                  className="inline-flex min-h-[56px] items-center gap-2 rounded-full bg-accent px-8 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
+                >
+                  GÉNÉRER MA DÉMO GRATUITE
+                </a>
+              </Magnetic>
+              <p className="mt-3 text-sm text-text-muted">
+                Huit questions, un aperçu de votre site en ligne. Gratuit.
+              </p>
+            </motion.div>
           </motion.div>
         </div>
 

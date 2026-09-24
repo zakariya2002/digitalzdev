@@ -87,6 +87,284 @@ class ErrorBoundary extends Component {
 }
 const projects = [
   {
+    id: "neurocare",
+    title: "neuro-care.fr",
+    subtitle: "Santé & neurodéveloppement",
+    year: "2026",
+    tags: ["Plateforme", "Annuaire vérifié", "Communauté"],
+    stack: ["Next.js", "React", "PostgreSQL", "RGPD"],
+    description: "Plateforme d'orientation pour les familles concernées par les troubles du neurodéveloppement : annuaire de professionnels vérifiés, forum d'entraide, simulateur d'aides et carte des lieux adaptés. Gratuit, sans inscription.",
+    url: "https://neuro-care.fr",
+    route: "/neurocare",
+    color: "#5BA89D",
+    gradient: "from-[#5BA89D] via-[#2C7A70] to-[#134B45]",
+    heroImage: "/screenshots/neurocare-hero.webp",
+    brief: "Trouver un orthophoniste, un psychomotricien ou un éducateur formé aux TND relève souvent du parcours du combattant : listes obsolètes, diplômes invérifiables, délais à rallonge. NeuroCare devait répondre à trois besoins d'un coup : trouver le bon professionnel, comprendre à quelles aides on a droit, et ne pas rester seul dans les démarches. Le tout gratuitement pour les familles, et conforme au RGPD sur des données de santé.",
+    solution: "La plateforme s'est élargie bien au-delà de l'annuaire initial. Chaque professionnel passe désormais une vérification en quatre étapes, avec croisement du numéro RPPS / ADELI contre l'Annuaire Santé avant d'obtenir le badge « Vérifié ». Autour, nous avons ouvert un forum modéré, un simulateur d'aides financières (AEEH, PCH, CESU), une carte des lieux adaptés, un espace structures pour les cabinets et associations, un blog et des annonces. Hébergement en France, échanges chiffrés.",
+    features: [
+      "Vérification en 4 étapes, RPPS / ADELI contrôlés",
+      "Recherche par spécialité, trouble ou ville",
+      "Forum communautaire modéré, lecture libre",
+      "Simulateur d’aides : AEEH, PCH, CESU",
+      "Carte des lieux adaptés et annonces familles",
+      "Espace structures : cabinets et associations",
+      "Espace pro avec agenda et demandes de RDV",
+      "Hébergé en France, RGPD, échanges chiffrés"
+    ],
+    metrics: [
+      { value: "100%", label: "gratuit pour les familles" },
+      { value: "4", label: "étapes de vérification" },
+      { value: "30+", label: "villes couvertes" }
+    ],
+    mockups: [
+      {
+        title: "Page d'accueil",
+        gradient: "from-[#134B45] to-[#2C7A70]",
+        content: "Recherche en trois étapes, sans inscription",
+        image: "/screenshots/neurocare-hero.webp"
+      },
+      {
+        title: "Recherche",
+        gradient: "from-[#2C7A70] to-[#5BA89D]",
+        content: "Filtres par spécialité, trouble et ville",
+        image: "/screenshots/neurocare-2.webp"
+      },
+      {
+        title: "Forum",
+        gradient: "from-[#5BA89D] to-[#2C7A70]",
+        content: "Conseils, témoignages, questions, ressources",
+        image: "/screenshots/neurocare-3.webp"
+      },
+      {
+        title: "Simulateur d’aides",
+        gradient: "from-[#2C7A70] to-[#134B45]",
+        content: "AEEH, PCH et CESU en deux minutes",
+        image: "/screenshots/neurocare-4.webp"
+      }
+    ]
+  },
+  {
+    id: "st-agni",
+    title: "st-agni.com",
+    subtitle: "Minimalisme premium",
+    year: "2025",
+    tags: ["E-commerce", "Luxe", "Headless"],
+    stack: ["Shopify Plus", "Headless CMS", "React"],
+    description: "Boutique en ligne luxe minimaliste pour la marque St. Agni. Focus sur l'expérience produit avec une navigation épurée et des visuels immersifs.",
+    url: "https://st-agni.com",
+    route: "/st-agni",
+    color: "#8A8580",
+    gradient: "from-[#E8E3DC] via-[#D8D3CC] to-[#C8C3BC]",
+    heroImage: "/screenshots/st-agni-hero.webp",
+    brief: "St. Agni recherchait un écrin digital à la hauteur de son positionnement luxe. La marque souhaitait une expérience immersive où le produit est roi, avec un minimalisme radical qui laisse respirer les visuels. L'enjeu : traduire le toucher et la qualité des matières à travers un écran.",
+    solution: 'Une approche "content-first" avec des visuels plein écran, des transitions cinématiques et une architecture headless pour des performances maximales. Chaque interaction a été pensée pour renforcer le positionnement premium.',
+    features: [
+      "Architecture headless CMS",
+      "Transitions de page cinématiques",
+      "Galerie produits plein écran",
+      "Navigation gestuelle mobile",
+      "Lazy loading intelligent des images",
+      "Intégration Shopify Plus"
+    ],
+    metrics: [
+      { value: "360°", label: "vue produit" },
+      { value: "Plus", label: "Shopify Plus" },
+      { value: "100%", label: "headless" }
+    ],
+    mockups: [
+      {
+        title: "Homepage",
+        gradient: "from-[#F0EDE8] to-[#E0DDD8]",
+        content: "Diaporama plein écran haute couture",
+        image: "/screenshots/st-agni-hero.webp"
+      },
+      {
+        title: "Collection",
+        gradient: "from-[#E0DDD8] to-[#D0CDC8]",
+        content: "Grille asymétrique, visuels lifestyle",
+        image: "/screenshots/stagni-2.webp"
+      },
+      {
+        title: "Produit",
+        gradient: "from-[#D0CDC8] to-[#C0BDB8]",
+        content: "Vue 360° + zoom matière",
+        image: "/screenshots/stagni-3.webp"
+      },
+      {
+        title: "Panier",
+        gradient: "from-[#C0BDB8] to-[#B0ADA8]",
+        content: "Slide-over cart minimaliste",
+        image: "/screenshots/stagni-4.webp"
+      }
+    ]
+  },
+  {
+    id: "reuni",
+    title: "reuni.com",
+    subtitle: "Mode éthique française",
+    year: "2025",
+    tags: ["E-commerce", "Mode", "Éco-responsable"],
+    stack: ["React", "Design system", "Headless"],
+    description: "Plateforme e-commerce pour une marque de mode éthique et responsable. Design épuré à la française avec une expérience d'achat premium.",
+    url: "https://reuni.com",
+    route: "/reuni",
+    color: "#C4A882",
+    gradient: "from-[#C4A882] via-[#D4B892] to-[#E8D5B8]",
+    heroImage: "/screenshots/reuni-hero.webp",
+    brief: "Reuni avait besoin d'une plateforme e-commerce qui reflète ses valeurs : éthique, transparence et élégance. Le challenge était de créer une expérience d'achat haut de gamme tout en mettant en avant l'engagement éco-responsable de la marque. Chaque détail devait respirer l'authenticité et le savoir-faire français.",
+    solution: "Nous avons conçu une architecture front-end performante avec un design system sur mesure. L'accent a été mis sur la vitesse de chargement, l'expérience mobile et les micro-interactions qui guident l'utilisateur vers la conversion.",
+    features: [
+      "Design responsive mobile-first",
+      "Temps de chargement < 1.5s",
+      "Catalogue produits avec filtres dynamiques",
+      "Panier et checkout optimisés conversion",
+      "Animations scroll fluides",
+      "Score Lighthouse 98/100"
+    ],
+    metrics: [
+      { value: "98", label: "score Lighthouse" },
+      { value: "<1.5s", label: "temps de chargement" },
+      { value: "100%", label: "mobile-first" }
+    ],
+    mockups: [
+      {
+        title: "Page d'accueil",
+        gradient: "from-[#F5EDE3] to-[#E8D5B8]",
+        content: "Hero immersif avec vidéo de la collection",
+        image: "/screenshots/reuni-hero.webp"
+      },
+      {
+        title: "Catalogue produits",
+        gradient: "from-[#E8D5B8] to-[#D4C4A8]",
+        content: "Grille produits avec filtres latéraux",
+        image: "/screenshots/reuni-2.webp"
+      },
+      {
+        title: "Fiche produit",
+        gradient: "from-[#D4C4A8] to-[#C4B498]",
+        content: "Galerie zoom + sélecteur taille/couleur",
+        image: "/screenshots/reuni-3.webp"
+      },
+      {
+        title: "Checkout",
+        gradient: "from-[#C4B498] to-[#B4A488]",
+        content: "Tunnel d'achat en 3 étapes",
+        image: "/screenshots/reuni-4.webp"
+      }
+    ]
+  },
+  {
+    id: "copaine",
+    title: "copaine.com",
+    subtitle: "Mode parisienne en précommande",
+    year: "2026",
+    tags: ["E-commerce", "Shopify", "Mode responsable"],
+    stack: ["Shopify", "Liquid", "JavaScript", "Klaviyo"],
+    description: "Boutique Shopify de la maison parisienne Copain.e : des capsules en série limitée, taillées dans des stocks dormants de maisons de luxe et vendues uniquement en précommande.",
+    url: "https://copaine.com",
+    route: "/copaine",
+    color: "#B8463A",
+    gradient: "from-[#F4F1EC] via-[#B8463A] to-[#1A1A1A]",
+    heroImage: "/screenshots/copaine-hero.webp",
+    brief: "Copain.e fabrique à Paris, en série limitée, à partir de tissus dormants de maisons de luxe : des matières déjà tissées, en quantité finie, qui dessinent la pièce au lieu de l'inverse. Le modèle impose sa contrainte au site : rien n'est en stock, tout se vend en précommande, et la livraison arrive quatre à huit semaines après la clôture de la campagne. Il fallait donc un site capable de faire payer 390 € un corset qui n'existe pas encore, sans que l'attente passe pour un défaut.",
+    solution: "Nous avons fait de la précommande l'argument plutôt que la réserve. Le thème Shopify est construit sur une grille éditoriale, titres en serif et photographie plein cadre, et chaque fiche produit annonce ce qu'un site classique cache : le nombre de pièces restantes, la date de livraison, le remboursement en cas de changement d'avis, avec une FAQ dédiée à la mécanique. La page d'accueil rend les visuels achetables directement, et la boutique sert cinq pays en deux langues depuis une seule administration.",
+    features: [
+      "Thème Shopify sur mesure, direction artistique éditoriale",
+      "Précommande : pièces restantes et date de livraison annoncées",
+      "FAQ dédiée et remboursement garanti avant production",
+      "Images shoppables, ajout au panier depuis le visuel",
+      "Boutique bilingue FR / EN, cinq pays et leurs devises",
+      "Capture e-mail Klaviyo et avantages réservés aux membres"
+    ],
+    metrics: [
+      { value: "100%", label: "vendu en précommande" },
+      { value: "5", label: "pièces en série limitée" },
+      { value: "5", label: "pays livrés, FR et EN" }
+    ],
+    mockups: [
+      {
+        title: "Page d'accueil",
+        gradient: "from-[#F4F1EC] to-[#E2DCD3]",
+        content: "Hero éditorial, « Revenir à soi »",
+        image: "/screenshots/copaine-hero.webp"
+      },
+      {
+        title: "Capsule",
+        gradient: "from-[#E2DCD3] to-[#CFC4B6]",
+        content: "La collection complète et ses prix",
+        image: "/screenshots/copaine-2.webp"
+      },
+      {
+        title: "Fiche produit",
+        gradient: "from-[#CFC4B6] to-[#B8463A]",
+        content: "Précommande, pièces restantes, livraison",
+        image: "/screenshots/copaine-3.webp"
+      },
+      {
+        title: "Images shoppables",
+        gradient: "from-[#B8463A] to-[#1A1A1A]",
+        content: "Achat depuis le visuel et réassurance",
+        image: "/screenshots/copaine-4.webp"
+      }
+    ]
+  },
+  {
+    id: "drive",
+    title: "DRIVE",
+    subtitle: "Portail B2B franchisés",
+    year: "2026",
+    tags: ["E-commerce B2B", "Shopify", "Réseau"],
+    stack: ["Shopify", "Liquid", "Thème sur mesure"],
+    description: "Portail d'équipement réservé aux franchisés du réseau DRIVE. Un catalogue cadré par la centrale : chaque agence s'équipe au standard de la marque, en une commande.",
+    url: "https://drive-12398.myshopify.com/",
+    access: "Accès réservé aux franchisés",
+    route: "/drive",
+    color: "#8A93A0",
+    gradient: "from-[#101214] via-[#1C1F24] to-[#05070A]",
+    heroImage: "/screenshots/drive-hero.webp",
+    brief: "Quand une agence DRIVE ouvre, le franchisé doit équiper son point de vente à l'identique du reste du réseau : informatique, mobilier, signalétique, matériel de détailing. Jusqu'ici, chacun négociait dans son coin, avec des écarts de prix, de délais et de standard. La centrale voulait un catalogue fermé, réservé au réseau, où tout est déjà validé, chiffré et livrable.",
+    solution: "Une boutique Shopify privée, protégée par mot de passe, pensée comme un outil interne plus que comme un site marchand. Un « kit d'ouverture » regroupe tout ce qu'il faut pour démarrer une agence en une seule commande ; le reste du catalogue est rangé par zone du point de vente : surface de vente, back office, bureaux, détailing, informatique. Direction artistique sombre et sobre, alignée sur l'identité DRIVE, avec bascule jour / nuit.",
+    features: [
+      "Boutique privée, accès réservé au réseau",
+      "Kit d'ouverture : une agence équipée en une commande",
+      "Catalogue rangé par zone du point de vente",
+      "Tarifs cadrés HT validés par la centrale",
+      "Livraison directe fournisseur, suivi consolidé",
+      "Thème sombre avec bascule jour / nuit"
+    ],
+    metrics: [
+      { value: "10", label: "agences du réseau" },
+      { value: "7", label: "catégories catalogue" },
+      { value: "1", label: "commande pour ouvrir" }
+    ],
+    mockups: [
+      {
+        title: "Page d'accueil",
+        gradient: "from-[#05070A] to-[#101214]",
+        content: "Promesse réseau et double entrée catalogue",
+        image: "/screenshots/drive-hero.webp"
+      },
+      {
+        title: "Kit d'ouverture",
+        gradient: "from-[#101214] to-[#1C1F24]",
+        content: "Tout l'équipement d'une nouvelle agence",
+        image: "/screenshots/drive-2.webp"
+      },
+      {
+        title: "Catalogue informatique",
+        gradient: "from-[#1C1F24] to-[#101214]",
+        content: "Matériel validé, tarifs cadrés HT",
+        image: "/screenshots/drive-3.webp"
+      },
+      {
+        title: "Le réseau",
+        gradient: "from-[#101214] to-[#05070A]",
+        content: "Standard de marque et implantations",
+        image: "/screenshots/drive-4.webp"
+      }
+    ]
+  },
+  {
     id: "kalira",
     title: "kaliracare.com",
     subtitle: "Soins capillaires premium",
@@ -197,119 +475,6 @@ const projects = [
     ]
   },
   {
-    id: "drive",
-    title: "DRIVE",
-    subtitle: "Portail B2B franchisés",
-    year: "2026",
-    tags: ["E-commerce B2B", "Shopify", "Réseau"],
-    stack: ["Shopify", "Liquid", "Thème sur mesure"],
-    description: "Portail d'équipement réservé aux franchisés du réseau DRIVE. Un catalogue cadré par la centrale : chaque agence s'équipe au standard de la marque, en une commande.",
-    url: "https://drive-12398.myshopify.com/",
-    access: "Accès réservé aux franchisés",
-    route: "/drive",
-    color: "#8A93A0",
-    gradient: "from-[#101214] via-[#1C1F24] to-[#05070A]",
-    heroImage: "/screenshots/drive-hero.webp",
-    brief: "Quand une agence DRIVE ouvre, le franchisé doit équiper son point de vente à l'identique du reste du réseau : informatique, mobilier, signalétique, matériel de détailing. Jusqu'ici, chacun négociait dans son coin, avec des écarts de prix, de délais et de standard. La centrale voulait un catalogue fermé, réservé au réseau, où tout est déjà validé, chiffré et livrable.",
-    solution: "Une boutique Shopify privée, protégée par mot de passe, pensée comme un outil interne plus que comme un site marchand. Un « kit d'ouverture » regroupe tout ce qu'il faut pour démarrer une agence en une seule commande ; le reste du catalogue est rangé par zone du point de vente : surface de vente, back office, bureaux, détailing, informatique. Direction artistique sombre et sobre, alignée sur l'identité DRIVE, avec bascule jour / nuit.",
-    features: [
-      "Boutique privée, accès réservé au réseau",
-      "Kit d'ouverture : une agence équipée en une commande",
-      "Catalogue rangé par zone du point de vente",
-      "Tarifs cadrés HT validés par la centrale",
-      "Livraison directe fournisseur, suivi consolidé",
-      "Thème sombre avec bascule jour / nuit"
-    ],
-    metrics: [
-      { value: "10", label: "agences du réseau" },
-      { value: "7", label: "catégories catalogue" },
-      { value: "1", label: "commande pour ouvrir" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#05070A] to-[#101214]",
-        content: "Promesse réseau et double entrée catalogue",
-        image: "/screenshots/drive-hero.webp"
-      },
-      {
-        title: "Kit d'ouverture",
-        gradient: "from-[#101214] to-[#1C1F24]",
-        content: "Tout l'équipement d'une nouvelle agence",
-        image: "/screenshots/drive-2.webp"
-      },
-      {
-        title: "Catalogue informatique",
-        gradient: "from-[#1C1F24] to-[#101214]",
-        content: "Matériel validé, tarifs cadrés HT",
-        image: "/screenshots/drive-3.webp"
-      },
-      {
-        title: "Le réseau",
-        gradient: "from-[#101214] to-[#05070A]",
-        content: "Standard de marque et implantations",
-        image: "/screenshots/drive-4.webp"
-      }
-    ]
-  },
-  {
-    id: "neurocare",
-    title: "neuro-care.fr",
-    subtitle: "Santé & neurodéveloppement",
-    year: "2026",
-    tags: ["Plateforme", "Annuaire vérifié", "Communauté"],
-    stack: ["Next.js", "React", "PostgreSQL", "RGPD"],
-    description: "Plateforme d'orientation pour les familles concernées par les troubles du neurodéveloppement : annuaire de professionnels vérifiés, forum d'entraide, simulateur d'aides et carte des lieux adaptés. Gratuit, sans inscription.",
-    url: "https://neuro-care.fr",
-    route: "/neurocare",
-    color: "#5BA89D",
-    gradient: "from-[#5BA89D] via-[#2C7A70] to-[#134B45]",
-    heroImage: "/screenshots/neurocare-hero.webp",
-    brief: "Trouver un orthophoniste, un psychomotricien ou un éducateur formé aux TND relève souvent du parcours du combattant : listes obsolètes, diplômes invérifiables, délais à rallonge. NeuroCare devait répondre à trois besoins d'un coup : trouver le bon professionnel, comprendre à quelles aides on a droit, et ne pas rester seul dans les démarches. Le tout gratuitement pour les familles, et conforme au RGPD sur des données de santé.",
-    solution: "La plateforme s'est élargie bien au-delà de l'annuaire initial. Chaque professionnel passe désormais une vérification en quatre étapes, avec croisement du numéro RPPS / ADELI contre l'Annuaire Santé avant d'obtenir le badge « Vérifié ». Autour, nous avons ouvert un forum modéré, un simulateur d'aides financières (AEEH, PCH, CESU), une carte des lieux adaptés, un espace structures pour les cabinets et associations, un blog et des annonces. Hébergement en France, échanges chiffrés.",
-    features: [
-      "Vérification en 4 étapes, RPPS / ADELI contrôlés",
-      "Recherche par spécialité, trouble ou ville",
-      "Forum communautaire modéré, lecture libre",
-      "Simulateur d’aides : AEEH, PCH, CESU",
-      "Carte des lieux adaptés et annonces familles",
-      "Espace structures : cabinets et associations",
-      "Espace pro avec agenda et demandes de RDV",
-      "Hébergé en France, RGPD, échanges chiffrés"
-    ],
-    metrics: [
-      { value: "100%", label: "gratuit pour les familles" },
-      { value: "4", label: "étapes de vérification" },
-      { value: "30+", label: "villes couvertes" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#134B45] to-[#2C7A70]",
-        content: "Recherche en trois étapes, sans inscription",
-        image: "/screenshots/neurocare-hero.webp"
-      },
-      {
-        title: "Recherche",
-        gradient: "from-[#2C7A70] to-[#5BA89D]",
-        content: "Filtres par spécialité, trouble et ville",
-        image: "/screenshots/neurocare-2.webp"
-      },
-      {
-        title: "Forum",
-        gradient: "from-[#5BA89D] to-[#2C7A70]",
-        content: "Conseils, témoignages, questions, ressources",
-        image: "/screenshots/neurocare-3.webp"
-      },
-      {
-        title: "Simulateur d’aides",
-        gradient: "from-[#2C7A70] to-[#134B45]",
-        content: "AEEH, PCH et CESU en deux minutes",
-        image: "/screenshots/neurocare-4.webp"
-      }
-    ]
-  },
-  {
     id: "lissage",
     title: "lissage-sur-mesure.com",
     subtitle: "Beauté & soins capillaires",
@@ -416,116 +581,6 @@ const projects = [
         gradient: "from-[#C5F0DC] to-[#7ECDB5]",
         content: "Collection vinyles et CD album Nonante-Cinq",
         image: "/screenshots/angele-4.webp"
-      }
-    ]
-  },
-  {
-    id: "reuni",
-    title: "reuni.com",
-    subtitle: "Mode éthique française",
-    year: "2025",
-    tags: ["E-commerce", "Mode", "Éco-responsable"],
-    stack: ["React", "Design system", "Headless"],
-    description: "Plateforme e-commerce pour une marque de mode éthique et responsable. Design épuré à la française avec une expérience d'achat premium.",
-    url: "https://reuni.com",
-    route: "/reuni",
-    color: "#C4A882",
-    gradient: "from-[#C4A882] via-[#D4B892] to-[#E8D5B8]",
-    heroImage: "/screenshots/reuni-hero.webp",
-    brief: "Reuni avait besoin d'une plateforme e-commerce qui reflète ses valeurs : éthique, transparence et élégance. Le challenge était de créer une expérience d'achat haut de gamme tout en mettant en avant l'engagement éco-responsable de la marque. Chaque détail devait respirer l'authenticité et le savoir-faire français.",
-    solution: "Nous avons conçu une architecture front-end performante avec un design system sur mesure. L'accent a été mis sur la vitesse de chargement, l'expérience mobile et les micro-interactions qui guident l'utilisateur vers la conversion.",
-    features: [
-      "Design responsive mobile-first",
-      "Temps de chargement < 1.5s",
-      "Catalogue produits avec filtres dynamiques",
-      "Panier et checkout optimisés conversion",
-      "Animations scroll fluides",
-      "Score Lighthouse 98/100"
-    ],
-    metrics: [
-      { value: "98", label: "score Lighthouse" },
-      { value: "<1.5s", label: "temps de chargement" },
-      { value: "100%", label: "mobile-first" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#F5EDE3] to-[#E8D5B8]",
-        content: "Hero immersif avec vidéo de la collection",
-        image: "/screenshots/reuni-hero.webp"
-      },
-      {
-        title: "Catalogue produits",
-        gradient: "from-[#E8D5B8] to-[#D4C4A8]",
-        content: "Grille produits avec filtres latéraux",
-        image: "/screenshots/reuni-2.webp"
-      },
-      {
-        title: "Fiche produit",
-        gradient: "from-[#D4C4A8] to-[#C4B498]",
-        content: "Galerie zoom + sélecteur taille/couleur",
-        image: "/screenshots/reuni-3.webp"
-      },
-      {
-        title: "Checkout",
-        gradient: "from-[#C4B498] to-[#B4A488]",
-        content: "Tunnel d'achat en 3 étapes",
-        image: "/screenshots/reuni-4.webp"
-      }
-    ]
-  },
-  {
-    id: "st-agni",
-    title: "st-agni.com",
-    subtitle: "Minimalisme premium",
-    year: "2025",
-    tags: ["E-commerce", "Luxe", "Headless"],
-    stack: ["Shopify Plus", "Headless CMS", "React"],
-    description: "Boutique en ligne luxe minimaliste pour la marque St. Agni. Focus sur l'expérience produit avec une navigation épurée et des visuels immersifs.",
-    url: "https://st-agni.com",
-    route: "/st-agni",
-    color: "#8A8580",
-    gradient: "from-[#E8E3DC] via-[#D8D3CC] to-[#C8C3BC]",
-    heroImage: "/screenshots/st-agni-hero.webp",
-    brief: "St. Agni recherchait un écrin digital à la hauteur de son positionnement luxe. La marque souhaitait une expérience immersive où le produit est roi, avec un minimalisme radical qui laisse respirer les visuels. L'enjeu : traduire le toucher et la qualité des matières à travers un écran.",
-    solution: 'Une approche "content-first" avec des visuels plein écran, des transitions cinématiques et une architecture headless pour des performances maximales. Chaque interaction a été pensée pour renforcer le positionnement premium.',
-    features: [
-      "Architecture headless CMS",
-      "Transitions de page cinématiques",
-      "Galerie produits plein écran",
-      "Navigation gestuelle mobile",
-      "Lazy loading intelligent des images",
-      "Intégration Shopify Plus"
-    ],
-    metrics: [
-      { value: "360°", label: "vue produit" },
-      { value: "Plus", label: "Shopify Plus" },
-      { value: "100%", label: "headless" }
-    ],
-    mockups: [
-      {
-        title: "Homepage",
-        gradient: "from-[#F0EDE8] to-[#E0DDD8]",
-        content: "Diaporama plein écran haute couture",
-        image: "/screenshots/st-agni-hero.webp"
-      },
-      {
-        title: "Collection",
-        gradient: "from-[#E0DDD8] to-[#D0CDC8]",
-        content: "Grille asymétrique, visuels lifestyle",
-        image: "/screenshots/stagni-2.webp"
-      },
-      {
-        title: "Produit",
-        gradient: "from-[#D0CDC8] to-[#C0BDB8]",
-        content: "Vue 360° + zoom matière",
-        image: "/screenshots/stagni-3.webp"
-      },
-      {
-        title: "Panier",
-        gradient: "from-[#C0BDB8] to-[#B0ADA8]",
-        content: "Slide-over cart minimaliste",
-        image: "/screenshots/stagni-4.webp"
       }
     ]
   }
@@ -924,7 +979,7 @@ function Navbar() {
                     children: "Démarrer"
                   }
                 ),
-                /* @__PURE__ */ jsx("p", { className: "mt-3 text-center text-xs text-text-secondary", children: "Un aperçu de votre site en 60 secondes" })
+                /* @__PURE__ */ jsx("p", { className: "mt-3 text-center text-xs text-text-secondary", children: "Un aperçu de votre site en huit questions" })
               ]
             }
           )
@@ -1448,6 +1503,26 @@ function Hero() {
               animate: { opacity: 1, y: 0 },
               transition: { duration: 0.9, delay: 0.9, ease: EASE_OUT },
               children: "Sites vitrines, boutiques Shopify et plateformes métier. Conçus, développés, puis portés par vos campagnes Meta Ads et Google Ads."
+            }
+          ),
+          /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              className: "mt-10",
+              initial: { opacity: 0, y: 24 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.9, delay: 1.1, ease: EASE_OUT },
+              children: [
+                /* @__PURE__ */ jsx(Magnetic, { className: "inline-block", children: /* @__PURE__ */ jsx(
+                  "a",
+                  {
+                    href: "https://quiz.digitalzdev.com",
+                    className: "inline-flex min-h-[56px] items-center gap-2 rounded-full bg-accent px-8 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90",
+                    children: "GÉNÉRER MA DÉMO GRATUITE"
+                  }
+                ) }),
+                /* @__PURE__ */ jsx("p", { className: "mt-3 text-sm text-text-muted", children: "Huit questions, un aperçu de votre site en ligne. Gratuit." })
+              ]
             }
           )
         ]
@@ -2977,9 +3052,9 @@ function Home() {
   return /* @__PURE__ */ jsxs("main", { children: [
     /* @__PURE__ */ jsx(Hero, {}),
     /* @__PURE__ */ jsx(ProjectsSection, {}),
+    /* @__PURE__ */ jsx(ServicesSection, {}),
     /* @__PURE__ */ jsx(TestimonialsSection, {}),
     /* @__PURE__ */ jsx(TeamSection, {}),
-    /* @__PURE__ */ jsx(ServicesSection, {}),
     /* @__PURE__ */ jsx(FaqSection, {}),
     /* @__PURE__ */ jsx(MissionSection, {}),
     /* @__PURE__ */ jsx(Footer, {})

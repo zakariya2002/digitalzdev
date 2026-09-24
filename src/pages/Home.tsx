@@ -12,9 +12,13 @@ export default function Home() {
     <main>
       <Hero />
       <ProjectsSection />
+      {/* Les services remontent juste après les réalisations : ils arrivaient
+          en cinquième, après l'équipe, si bien qu'on savait qui nous sommes
+          avant de savoir ce que nous vendons. La preuve d'abord, l'offre
+          ensuite, la maison et les objections après. */}
+      <ServicesSection />
       <TestimonialsSection />
       <TeamSection />
-      <ServicesSection />
       <FaqSection />
       <MissionSection />
       <Footer />
