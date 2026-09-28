@@ -144,6 +144,61 @@ const projects = [
     ]
   },
   {
+    id: "nouvelle-garde",
+    title: "lanouvellegarde.com",
+    subtitle: "Groupe de brasseries",
+    year: "2026",
+    tags: ["Site vitrine", "Bilingue", "Restauration"],
+    stack: ["WordPress", "Elementor", "PHP", "SEO technique"],
+    description: "Vitrine bilingue de la Nouvelle Garde, douze brasseries et un bar entre Paris, la province et Londres. Une page d'accueil en grille d'objets, une adresse par page, et sa propre couleur à chacune.",
+    url: "https://lanouvellegarde.com/fr/",
+    route: "/la-nouvelle-garde",
+    color: "#C8961F",
+    gradient: "from-[#FBF8F1] via-[#C8961F] to-[#3F5D33]",
+    heroImage: "/screenshots/nouvelle-garde-hero.webp",
+    brief: "La Nouvelle Garde tient douze brasseries et un bar, de la Gare du Nord à Sloane Square, en passant par Lille, Marseille, Lyon, Bordeaux et Neuilly. Un groupe de cette taille a un problème que n'ont pas les autres restaurants : chaque adresse a sa salle, sa carte, sa clientèle et son caractère, et pourtant elles appartiennent toutes à la même maison. Un site unique aplatit les différences, douze sites séparés dissolvent le groupe. Il fallait tenir les deux.",
+    solution: "La page d'accueil ne liste rien : elle pose douze objets sur du blanc, une assiette, une chaise de terrasse, un moulin à poivre, un pichet en forme de coq, chacun portant le nom d'une brasserie en lettrage dessiné. On choisit une adresse comme on choisirait une table. Derrière, chaque brasserie a sa page et sa couleur, son logo, son quartier, son équipe en photo. La réservation se sépare de la privatisation au seuil de vingt-cinq couverts, là où le métier change vraiment, et les capacités assises et cocktail sont annoncées adresse par adresse. Le tout en français et en anglais.",
+    features: [
+      "Page d'accueil en grille d'objets, une par adresse",
+      "Une page par brasserie, avec sa couleur et son lettrage",
+      "Réservation et privatisation séparées au seuil de 25 couverts",
+      "Capacités assises et cocktail, devis et brochure par adresse",
+      "Site intégralement bilingue français et anglais",
+      "FAQ, charte maison et lettre d’information"
+    ],
+    metrics: [
+      { value: "12", label: "brasseries et un bar" },
+      { value: "2", label: "pays, France et Royaume-Uni" },
+      { value: "FR / EN", label: "entièrement bilingue" }
+    ],
+    mockups: [
+      {
+        title: "Page d'accueil",
+        gradient: "from-[#FBF8F1] to-[#F2E9D6]",
+        content: "Douze objets sur fond blanc, une par adresse",
+        image: "/screenshots/nouvelle-garde-hero.webp"
+      },
+      {
+        title: "Une brasserie",
+        gradient: "from-[#F2E9D6] to-[#C8961F]",
+        content: "Son lettrage, son adresse, sa couleur",
+        image: "/screenshots/nouvelle-garde-2.webp"
+      },
+      {
+        title: "Réserver ou privatiser",
+        gradient: "from-[#C8961F] to-[#6F7F4A]",
+        content: "L'équipe en photo, et le choix à 25 couverts",
+        image: "/screenshots/nouvelle-garde-3.webp"
+      },
+      {
+        title: "Groupes et privatisation",
+        gradient: "from-[#6F7F4A] to-[#3F5D33]",
+        content: "Capacités, devis et brochure par adresse",
+        image: "/screenshots/nouvelle-garde-4.webp"
+      }
+    ]
+  },
+  {
     id: "st-agni",
     title: "st-agni.com",
     subtitle: "Minimalisme premium",
