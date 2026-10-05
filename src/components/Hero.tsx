@@ -1,17 +1,11 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { isWebGLAvailable } from '../webgl/core'
 import { Magnetic, SplitText } from './motion'
 import { EASE_OUT } from './motion/config'
-
-// three.js ne part au réseau que si le décor est réellement affiché.
-const HeroScene = lazy(() => import('../webgl/HeroScene'))
+import HeroVideo from './HeroVideo'
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null)
-  const [webgl, setWebgl] = useState(false)
-
-  useEffect(() => setWebgl(isWebGLAvailable()), [])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -35,48 +29,20 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={containerRef} className="relative h-[100svh] bg-surface lg:h-[190vh]">
-      <div className="sticky top-0 h-[100svh] overflow-hidden bg-surface lg:h-screen">
-        {/* Décor : sphère WebGL. Sur desktop elle occupe la moitié droite pour
-            laisser la typographie respirer ; en dessous, elle passe derrière le
-            texte et le voile prend le relais pour le contraste. */}
-        {webgl ? (
-          <Suspense fallback={null}>
-            <HeroScene className="absolute inset-0 opacity-40 lg:left-[45%] lg:right-[2%] lg:opacity-100" />
-          </Suspense>
-        ) : (
-          <div
-            aria-hidden
-            className="absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 lg:left-[72%]"
-            style={{
-              background:
-                'radial-gradient(circle at 35% 30%, rgb(var(--accent)), transparent 68%)',
-              filter: 'blur(40px)',
-            }}
-          />
-        )}
-
-        {/* Voile de contraste, inutile en desktop où le texte a sa propre colonne */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 lg:hidden"
-          style={{
-            background:
-              'radial-gradient(ellipse 78% 52% at 50% 48%, rgb(var(--surface) / 0.94) 0%, rgb(var(--surface) / 0.74) 55%, rgb(var(--surface) / 0.25) 85%)',
-          }}
-        />
-
-        {/* Contenu */}
-        <div className="relative z-10 flex h-full items-center">
-          <motion.div
-            className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center lg:items-start lg:text-left"
-            style={grandEcran ? { opacity: contentOpacity, y: contentY } : undefined}
-          >
+    <section ref={containerRef} className="relative bg-surface lg:h-[190vh]">
+      {/* Sur ordinateur, la section reste épinglée et s'efface au défilement ;
+          sur mobile, elle suit le flux : le texte, puis la vidéo dessous. */}
+      <div className="pb-14 pt-28 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:overflow-hidden lg:py-0">
+        <motion.div
+          className="mx-auto grid w-full max-w-7xl items-center gap-10 px-6 lg:grid-cols-[1fr_1.15fr] lg:gap-14"
+          style={grandEcran ? { opacity: contentOpacity, y: contentY } : undefined}
+        >
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             {/* Le corps suit la largeur de fenêtre, mais il est plafonné :
                 « Digitalz Dev » mesure environ 6,15 fois le corps ; au-delà de
                 118 px il dépasserait `max-w-3xl` (768 px) et se couperait en
                 quatre lignes au lieu de deux (constaté à 2560 px). */}
-            <h1 className="max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[min(6.4vw,118px)]">
+            <h1 className="max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[min(5.2vw,100px)]">
               <SplitText
                 as="span"
                 by="char"
@@ -125,8 +91,16 @@ export default function Hero() {
                 </a>
               </Magnetic>
             </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 32, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1, delay: 0.7, ease: EASE_OUT }}
+          >
+            <HeroVideo />
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
