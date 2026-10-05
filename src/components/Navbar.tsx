@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, type ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import {
   motion,
@@ -78,31 +78,19 @@ function LienNav({
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [cachee, setCachee] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [survol, setSurvol] = useState<string | null>(null)
   const location = useLocation()
   const { scrollY } = useScroll()
-  const dernierY = useRef(0)
 
   /**
-   * La barre se fait discrète pendant la lecture et revient au premier geste
-   * vers le haut.
+   * La barre reste accrochée en haut de l'écran en permanence.
    *
    * En haut de page, elle est transparente et se fond dans le haut de page ;
-   * dès qu'on descend, elle devient une pastille flottante sur fond flouté.
-   * Elle se cache quand on descend franchement, pour rendre l'écran au
-   * contenu, et réapparaît dès qu'on remonte, là où l'on cherche à naviguer.
+   * dès qu'on descend, elle devient une pastille flottante sur fond flouté,
+   * lisible par-dessus n'importe quelle section.
    */
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    const ecart = y - dernierY.current
-    dernierY.current = y
-    setScrolled(y > 24)
-    if (menuOpen) return
-    if (y < 160) setCachee(false)
-    else if (ecart > 6) setCachee(true)
-    else if (ecart < -6) setCachee(false)
-  })
+  useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 24))
 
   useEffect(() => {
     setMenuOpen(false)
@@ -145,7 +133,7 @@ export default function Navbar() {
       <motion.header
         className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4"
         initial={{ y: -100 }}
-        animate={{ y: cachee ? -110 : 0 }}
+        animate={{ y: 0 }}
         transition={{ duration: 0.45, ease: EASE }}
       >
         <nav

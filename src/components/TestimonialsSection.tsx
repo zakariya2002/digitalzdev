@@ -133,7 +133,7 @@ function Card({
             // cliquable au pointeur ; les flèches, les repères et le
             // glissement le sont. Corriger demande de revoir le montage 3D du
             // carrousel, pas la mise en page.
-            className="relative mt-7 inline-flex w-fit items-center gap-2 border-b border-accent/40 pb-0.5 font-display text-sm font-semibold text-accent transition-colors before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:border-accent"
+            className="relative mt-7 inline-flex w-fit items-center gap-2 font-display text-sm font-semibold text-accent transition-colors before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:text-accent-hover"
           >
             Voir le projet <span aria-hidden>→</span>
           </Link>
@@ -337,7 +337,7 @@ export default function TestimonialsSection() {
                 className="group flex h-11 items-center px-1"
               >
                 <span
-                  className={`block h-px transition-all duration-500 ${
+                  className={`block h-1.5 rounded-full transition-all duration-500 ${
                     index === actif
                       ? 'w-10 bg-accent'
                       : 'w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary'

@@ -21,9 +21,22 @@ export default function Hero() {
   const contentOpacity = useTransform(scrollYProgress, [0, 0.35, 0.6], [1, 1, 0])
   const contentY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-18%'])
 
+  // L'épinglage et le fondu au défilement sont réservés à l'ordinateur. Sur
+  // mobile, la section faisait presque deux écrans de haut et son contenu
+  // s'effaçait dès le premier geste : on faisait défiler un écran entier de
+  // vide avant d'atteindre les réalisations.
+  const [grandEcran, setGrandEcran] = useState(false)
+  useEffect(() => {
+    const requete = window.matchMedia('(min-width: 1024px)')
+    const suivre = () => setGrandEcran(requete.matches)
+    suivre()
+    requete.addEventListener('change', suivre)
+    return () => requete.removeEventListener('change', suivre)
+  }, [])
+
   return (
-    <section ref={containerRef} className="relative h-[190vh] bg-surface">
-      <div className="sticky top-0 h-screen overflow-hidden bg-surface">
+    <section ref={containerRef} className="relative h-[100svh] bg-surface lg:h-[190vh]">
+      <div className="sticky top-0 h-[100svh] overflow-hidden bg-surface lg:h-screen">
         {/* Décor : sphère WebGL. Sur desktop elle occupe la moitié droite pour
             laisser la typographie respirer ; en dessous, elle passe derrière le
             texte et le voile prend le relais pour le contraste. */}
@@ -57,7 +70,7 @@ export default function Hero() {
         <div className="relative z-10 flex h-full items-center">
           <motion.div
             className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center lg:items-start lg:text-left"
-            style={{ opacity: contentOpacity, y: contentY }}
+            style={grandEcran ? { opacity: contentOpacity, y: contentY } : undefined}
           >
             {/* Le corps suit la largeur de fenêtre, mais il est plafonné :
                 « Digitalz Dev » mesure environ 6,15 fois le corps ; au-delà de

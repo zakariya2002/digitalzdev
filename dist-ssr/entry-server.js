@@ -902,21 +902,11 @@ function LienNav({
 function Navbar() {
   var _a;
   const [scrolled, setScrolled] = useState(false);
-  const [cachee, setCachee] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [survol, setSurvol] = useState(null);
   const location = useLocation();
   const { scrollY } = useScroll();
-  const dernierY = useRef(0);
-  useMotionValueEvent(scrollY, "change", (y) => {
-    const ecart = y - dernierY.current;
-    dernierY.current = y;
-    setScrolled(y > 24);
-    if (menuOpen) return;
-    if (y < 160) setCachee(false);
-    else if (ecart > 6) setCachee(true);
-    else if (ecart < -6) setCachee(false);
-  });
+  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 24));
   useEffect(() => {
     setMenuOpen(false);
   }, [location]);
@@ -942,7 +932,7 @@ function Navbar() {
       {
         className: "fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4",
         initial: { y: -100 },
-        animate: { y: cachee ? -110 : 0 },
+        animate: { y: 0 },
         transition: { duration: 0.45, ease: EASE },
         children: /* @__PURE__ */ jsxs(
           "nav",
@@ -1571,7 +1561,15 @@ function Hero() {
   });
   const contentOpacity = useTransform(scrollYProgress, [0, 0.35, 0.6], [1, 1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.6], ["0%", "-18%"]);
-  return /* @__PURE__ */ jsx("section", { ref: containerRef, className: "relative h-[190vh] bg-surface", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-screen overflow-hidden bg-surface", children: [
+  const [grandEcran, setGrandEcran] = useState(false);
+  useEffect(() => {
+    const requete = window.matchMedia("(min-width: 1024px)");
+    const suivre = () => setGrandEcran(requete.matches);
+    suivre();
+    requete.addEventListener("change", suivre);
+    return () => requete.removeEventListener("change", suivre);
+  }, []);
+  return /* @__PURE__ */ jsx("section", { ref: containerRef, className: "relative h-[100svh] bg-surface lg:h-[190vh]", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-[100svh] overflow-hidden bg-surface lg:h-screen", children: [
     webgl ? /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(HeroScene, { className: "absolute inset-0 opacity-40 lg:left-[45%] lg:right-[2%] lg:opacity-100" }) }) : /* @__PURE__ */ jsx(
       "div",
       {
@@ -1597,7 +1595,7 @@ function Hero() {
       motion.div,
       {
         className: "mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center lg:items-start lg:text-left",
-        style: { opacity: contentOpacity, y: contentY },
+        style: grandEcran ? { opacity: contentOpacity, y: contentY } : void 0,
         children: [
           /* @__PURE__ */ jsxs("h1", { className: "max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[min(6.4vw,118px)]", children: [
             /* @__PURE__ */ jsx(
@@ -1662,7 +1660,6 @@ function ProjectsIndex({ projects: projects2 }) {
     return /* @__PURE__ */ jsx(
       motion.li,
       {
-        className: "border-t border-surface-border last:border-b",
         initial: { opacity: 0, y: 24 },
         whileInView: { opacity: 1, y: 0 },
         viewport: VIEWPORT,
@@ -1807,17 +1804,7 @@ function ProjectsSection() {
           className: "block font-display text-4xl font-bold leading-[0.95] tracking-tight text-text-primary md:text-7xl"
         }
       ) }),
-      /* @__PURE__ */ jsxs(Reveal, { delay: 0.2, className: "max-w-sm", children: [
-        /* @__PURE__ */ jsx("p", { className: "text-text-secondary", children: "Des boutiques Shopify aux plateformes métier. Chaque projet part d'un problème concret et se juge sur ce qu'il change une fois en ligne." }),
-        /* @__PURE__ */ jsx(Magnetic, { className: "mt-6 inline-block", children: /* @__PURE__ */ jsx(
-          "a",
-          {
-            href: "https://quiz.digitalzdev.com",
-            className: "inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90",
-            children: "GÉNÉRER MA DÉMO GRATUITE"
-          }
-        ) })
-      ] })
+      /* @__PURE__ */ jsx(Reveal, { delay: 0.2, className: "max-w-sm", children: /* @__PURE__ */ jsx("p", { className: "text-text-secondary", children: "Des boutiques Shopify aux plateformes métier. Chaque projet part d'un problème concret et se juge sur ce qu'il change une fois en ligne." }) })
     ] }) }),
     useWebGL ? /* @__PURE__ */ jsx("div", { ref: trackRef, className: "relative", style: { height: trackHeight }, children: /* @__PURE__ */ jsxs(
       "div",
@@ -1875,7 +1862,7 @@ function ProjectsSection() {
                           Link,
                           {
                             to: project.route,
-                            className: "pointer-events-auto ml-1 inline-flex items-center gap-2 border-b border-accent/40 pb-0.5 font-display text-sm font-semibold text-accent transition-colors hover:border-accent",
+                            className: "pointer-events-auto ml-1 inline-flex items-center gap-2 font-display text-sm font-semibold text-accent transition-colors hover:text-accent-hover",
                             children: [
                               "Voir le projet ",
                               /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "→" })
@@ -1898,7 +1885,7 @@ function ProjectsSection() {
                     children: /* @__PURE__ */ jsx(
                       "span",
                       {
-                        className: `block h-px transition-all duration-500 ${index === active ? "w-10 bg-accent" : "w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary"}`
+                        className: `block h-1.5 rounded-full transition-all duration-500 ${index === active ? "w-10 bg-accent" : "w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary"}`
                       }
                     )
                   },
@@ -2230,7 +2217,7 @@ function Card({
             Link,
             {
               to: item2.route,
-              className: "relative mt-7 inline-flex w-fit items-center gap-2 border-b border-accent/40 pb-0.5 font-display text-sm font-semibold text-accent transition-colors before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:border-accent",
+              className: "relative mt-7 inline-flex w-fit items-center gap-2 font-display text-sm font-semibold text-accent transition-colors before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:text-accent-hover",
               children: [
                 "Voir le projet ",
                 /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "→" })
@@ -2397,7 +2384,7 @@ function TestimonialsSection() {
                 children: /* @__PURE__ */ jsx(
                   "span",
                   {
-                    className: `block h-px transition-all duration-500 ${index === actif ? "w-10 bg-accent" : "w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary"}`
+                    className: `block h-1.5 rounded-full transition-all duration-500 ${index === actif ? "w-10 bg-accent" : "w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary"}`
                   }
                 )
               },
@@ -2649,7 +2636,7 @@ function MemberCard({ member, index }) {
             href: member.linkedin,
             target: "_blank",
             rel: "noopener noreferrer",
-            className: "group/link inline-flex min-h-[44px] items-center gap-2 border-b border-transparent pb-0.5 font-display text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:text-accent",
+            className: "group/link inline-flex min-h-[44px] items-center gap-2 font-display text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:text-accent",
             children: [
               /* @__PURE__ */ jsx("svg", { className: "h-4 w-4", fill: "currentColor", viewBox: "0 0 24 24", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" }) }),
               "Profil LinkedIn",
@@ -2688,10 +2675,10 @@ function TeamSection() {
         ] }),
         /* @__PURE__ */ jsx(Reveal, { delay: 0.2, className: "max-w-sm lg:shrink-0", children: /* @__PURE__ */ jsx("p", { className: "leading-relaxed text-text-secondary", children: "Pas de chaîne d'intermédiaires : vous parlez directement aux deux personnes qui conçoivent et qui développent. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." }) })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "mt-14 grid gap-px overflow-hidden rounded-2xl border border-surface-border bg-surface-border md:mt-20 md:grid-cols-3", children: SERVICES.map((service, index) => /* @__PURE__ */ jsxs(
+      /* @__PURE__ */ jsx("div", { className: "mt-14 grid gap-3 md:mt-20 md:grid-cols-3", children: SERVICES.map((service, index) => /* @__PURE__ */ jsxs(
         motion.div,
         {
-          className: "bg-surface-light p-6 md:p-8",
+          className: "rounded-2xl bg-surface-light p-6 md:p-8",
           initial: { opacity: 0, y: 28 },
           whileInView: { opacity: 1, y: 0 },
           viewport: VIEWPORT,
@@ -2806,7 +2793,7 @@ function FaqSection() {
       return /* @__PURE__ */ jsxs(
         motion.div,
         {
-          className: "border-t border-surface-border last:border-b",
+          className: "mb-3 rounded-2xl bg-surface-card px-5 md:px-7",
           initial: { opacity: 0, y: 20 },
           whileInView: { opacity: 1, y: 0 },
           viewport: VIEWPORT,
@@ -3003,7 +2990,7 @@ const RACCOURCIS = [
   { to: "https://quiz.digitalzdev.com", label: "Générer ma démo gratuite", externe: true }
 ];
 function Footer() {
-  return /* @__PURE__ */ jsx("footer", { className: "border-t border-surface-border bg-surface py-16 px-6", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto", children: [
+  return /* @__PURE__ */ jsx("footer", { className: "bg-surface py-16 px-6", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto", children: [
     /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row items-center justify-between gap-8", children: [
       /* @__PURE__ */ jsxs(Link, { to: "/", className: "flex min-h-[44px] items-center gap-3", children: [
         /* @__PURE__ */ jsx(
@@ -3071,7 +3058,7 @@ function Footer() {
       "nav",
       {
         "aria-label": "Plan du site",
-        className: "mt-12 grid gap-8 border-t border-surface-border pt-12 sm:grid-cols-2 md:grid-cols-3",
+        className: "mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3",
         children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("h2", { className: "font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary", children: "Le site" }),
@@ -3111,7 +3098,7 @@ function Footer() {
         ]
       }
     ),
-    /* @__PURE__ */ jsxs("div", { className: "mt-12 pt-8 border-t border-surface-border flex flex-col md:flex-row items-center justify-between gap-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col md:flex-row items-center justify-between gap-4", children: [
       /* @__PURE__ */ jsxs("p", { className: "text-text-muted text-sm", children: [
         "Digitalz Dev © ",
         (/* @__PURE__ */ new Date()).getFullYear(),
@@ -3190,7 +3177,7 @@ function BrowserFrame({
   label
 }) {
   return /* @__PURE__ */ jsxs("div", { className: "overflow-hidden rounded-xl border border-surface-border bg-surface-card shadow-xl shadow-black/5 md:rounded-2xl", children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 border-b border-surface-border bg-surface-light px-4 py-3", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 bg-surface-light px-4 py-3", children: [
       /* @__PURE__ */ jsx("span", { className: "h-3 w-3 rounded-full bg-[#FF6058]" }),
       /* @__PURE__ */ jsx("span", { className: "h-3 w-3 rounded-full bg-[#FFBF2E]" }),
       /* @__PURE__ */ jsx("span", { className: "h-3 w-3 rounded-full bg-[#28CA42]" }),
@@ -3216,7 +3203,7 @@ function BrowserFrame({
 function NextProject({ current }) {
   const index = projects.findIndex((p) => p.id === current.id);
   const next = projects[(index + 1) % projects.length];
-  return /* @__PURE__ */ jsx("section", { className: "border-t border-surface-border bg-surface", children: /* @__PURE__ */ jsx(Link, { to: next.route, className: "group block", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-6xl px-6 py-20 md:py-28", children: [
+  return /* @__PURE__ */ jsx("section", { className: "bg-surface", children: /* @__PURE__ */ jsx(Link, { to: next.route, className: "group block", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-6xl px-6 py-20 md:py-28", children: [
     /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-text-muted", children: "Projet suivant" }) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col gap-8 md:flex-row md:items-center md:justify-between", children: [
       /* @__PURE__ */ jsx(
@@ -3448,7 +3435,7 @@ function ProjectPage({ project }) {
       /* @__PURE__ */ jsx("ul", { children: project.features.map((feature, index) => /* @__PURE__ */ jsxs(
         motion.li,
         {
-          className: "group flex items-baseline gap-4 border-t border-surface-border py-5 last:border-b",
+          className: "group flex items-baseline gap-4 py-4",
           initial: { opacity: 0, y: 18 },
           whileInView: { opacity: 1, y: 0 },
           viewport: VIEWPORT,

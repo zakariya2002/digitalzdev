@@ -23,7 +23,7 @@ const RACCOURCIS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-surface-border bg-surface py-16 px-6">
+    <footer className="bg-surface py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <Link to="/" className="flex min-h-[44px] items-center gap-3">
@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Maillage interne : sections du site et toutes les réalisations */}
         <nav
           aria-label="Plan du site"
-          className="mt-12 grid gap-8 border-t border-surface-border pt-12 sm:grid-cols-2 md:grid-cols-3"
+          className="mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3"
         >
           <div>
             <h2 className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary">
@@ -138,7 +138,7 @@ export default function Footer() {
           </div>
         </nav>
 
-        <div className="mt-12 pt-8 border-t border-surface-border flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-12 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-text-muted text-sm">
             Digitalz Dev &copy; {new Date().getFullYear()} &middot; Tous droits
             réservés

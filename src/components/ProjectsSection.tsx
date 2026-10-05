@@ -10,7 +10,7 @@ import {
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
 import ProjectsIndex from './ProjectsIndex'
-import { Magnetic, Reveal, SplitText } from './motion'
+import { Reveal, SplitText } from './motion'
 import { EASE_OUT, VIEWPORT } from './motion/config'
 import { isWebGLAvailable } from '../webgl/core'
 import { clamp, scrollTo } from '../lib/scroll'
@@ -137,14 +137,6 @@ export default function ProjectsSection() {
               d'un problème concret et se juge sur ce qu'il change une fois en
               ligne.
             </p>
-            <Magnetic className="mt-6 inline-block">
-              <a
-                href="https://quiz.digitalzdev.com"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
-              >
-                GÉNÉRER MA DÉMO GRATUITE
-              </a>
-            </Magnetic>
           </Reveal>
         </div>
       </div>
@@ -223,7 +215,7 @@ export default function ProjectsSection() {
                         ))}
                         <Link
                           to={project.route}
-                          className="pointer-events-auto ml-1 inline-flex items-center gap-2 border-b border-accent/40 pb-0.5 font-display text-sm font-semibold text-accent transition-colors hover:border-accent"
+                          className="pointer-events-auto ml-1 inline-flex items-center gap-2 font-display text-sm font-semibold text-accent transition-colors hover:text-accent-hover"
                         >
                           Voir le projet <span aria-hidden>→</span>
                         </Link>
@@ -244,7 +236,7 @@ export default function ProjectsSection() {
                       className="pointer-events-auto group flex h-8 items-center px-1"
                     >
                       <span
-                        className={`block h-px transition-all duration-500 ${
+                        className={`block h-1.5 rounded-full transition-all duration-500 ${
                           index === active
                             ? 'w-10 bg-accent'
                             : 'w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary'

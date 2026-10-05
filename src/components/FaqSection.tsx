@@ -100,7 +100,7 @@ export default function FaqSection() {
             return (
               <motion.div
                 key={item.question}
-                className="border-t border-surface-border last:border-b"
+                className="mb-3 rounded-2xl bg-surface-card px-5 md:px-7"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VIEWPORT}

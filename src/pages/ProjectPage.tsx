@@ -46,7 +46,7 @@ function BrowserFrame({
 }) {
   return (
     <div className="overflow-hidden rounded-xl border border-surface-border bg-surface-card shadow-xl shadow-black/5 md:rounded-2xl">
-      <div className="flex items-center gap-1.5 border-b border-surface-border bg-surface-light px-4 py-3">
+      <div className="flex items-center gap-1.5 bg-surface-light px-4 py-3">
         <span className="h-3 w-3 rounded-full bg-[#FF6058]" />
         <span className="h-3 w-3 rounded-full bg-[#FFBF2E]" />
         <span className="h-3 w-3 rounded-full bg-[#28CA42]" />
@@ -82,7 +82,7 @@ function NextProject({ current }: { current: Project }) {
   const next = projects[(index + 1) % projects.length]
 
   return (
-    <section className="border-t border-surface-border bg-surface">
+    <section className="bg-surface">
       <Link to={next.route} className="group block">
         <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
           <Reveal>
@@ -362,7 +362,7 @@ export default function ProjectPage({ project }: Props) {
             {project.features.map((feature, index) => (
               <motion.li
                 key={feature}
-                className="group flex items-baseline gap-4 border-t border-surface-border py-5 last:border-b"
+                className="group flex items-baseline gap-4 py-4"
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VIEWPORT}

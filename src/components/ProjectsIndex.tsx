@@ -26,7 +26,6 @@ export default function ProjectsIndex({ projects }: Props) {
         return (
           <motion.li
             key={project.id}
-            className="border-t border-surface-border last:border-b"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={VIEWPORT}
