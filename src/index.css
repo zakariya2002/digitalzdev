@@ -8,6 +8,10 @@
 @font-face { font-family: 'Nunito'; font-style: normal; font-weight: 200 1000; font-display: swap; src: url('/fonts/nunito-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: 'Nunito'; font-style: normal; font-weight: 200 1000; font-display: swap; src: url('/fonts/nunito-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
+/* Inter Tight, la grotesque serrée du thème « punchy ». Police variable. */
+@font-face { font-family: 'Inter Tight'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/inter-tight-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Inter Tight'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/inter-tight-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
 @layer base {
   :root {
     --surface: 250 247 242;
@@ -39,6 +43,62 @@
     --text-primary: 245 245 240;
     --text-secondary: 139 139 139;
     --text-muted: 85 85 85;
+  }
+
+  /* Thème « punchy » du site public : bleu électrique, jaune citron.
+     La classe est posée sur <html> par App, uniquement hors de l'espace
+     client et du tableau de bord, qui gardent la charte d'origine. Les
+     fenêtres rattachées au <body> en héritent aussi. */
+  html.punchy {
+    --surface: 54 84 244;
+    --surface-light: 46 74 228;
+    --surface-card: 40 66 212;
+    --surface-border: 98 124 248;
+    --accent: 227 244 92;
+    --accent-hover: 240 250 150;
+    --accent-muted: 186 202 88;
+    --text-primary: 255 255 255;
+    --text-secondary: 222 229 255;
+    --text-muted: 176 190 255;
+  }
+
+  html.punchy body,
+  html.punchy .font-sans,
+  html.punchy .font-display {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+  }
+
+  /* Les grands titres en capitales, très gras et serrés, comme l'affiche. */
+  html.punchy h1,
+  html.punchy h2 {
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    /* Pas en dessous de 0,98 : les capitales accentuées (É, À) mordraient sur
+       la ligne du dessus. */
+    line-height: 0.98;
+  }
+
+  html.punchy h3 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  html.punchy ::selection {
+    background-color: rgb(var(--accent));
+    color: rgb(var(--surface));
+  }
+
+  /* Grain léger, celui de l'affiche : il casse l'aplat numérique du bleu. */
+  html.punchy body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.09;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   * {

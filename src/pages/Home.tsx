@@ -1,4 +1,5 @@
 import Hero from '../components/Hero'
+import StatementSection from '../components/StatementSection'
 import ProjectsSection from '../components/ProjectsSection'
 import ServicesSection from '../components/ServicesSection'
 import TestimonialsSection from '../components/TestimonialsSection'
@@ -11,6 +12,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      <StatementSection />
       <ProjectsSection />
       {/* Les services remontent juste après les réalisations : ils arrivaient
           en cinquième, après l'équipe, si bien qu'on savait qui nous sommes

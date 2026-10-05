@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Seo from './components/Seo'
@@ -36,6 +36,11 @@ export default function App() {
   const isDashboard = location.pathname.startsWith('/dashboard')
     || location.pathname === '/login'
     || location.pathname.startsWith('/espace/')
+
+  // Le thème « punchy » ne vaut que pour la vitrine.
+  useEffect(() => {
+    document.documentElement.classList.toggle('punchy', !isDashboard)
+  }, [isDashboard])
 
   if (isDashboard) {
     return (

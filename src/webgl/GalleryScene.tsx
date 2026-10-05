@@ -110,7 +110,9 @@ export default function GalleryScene({
     const maxAnisotropy = renderer.capabilities.getMaxAnisotropy()
 
     const slides: Slide[] = projects.map((project, index) => {
-      const tint = new THREE.Color(project.color)
+      // Les plans inactifs se teintent de la couleur de fond du thème : la
+      // couleur propre à chaque projet donnait un voile marron sur le bleu.
+      const tint = readPalette().surface
 
       const uniforms: Record<string, THREE.IUniform> = {
         uTexture: { value: null as THREE.Texture | null },

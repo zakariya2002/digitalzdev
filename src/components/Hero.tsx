@@ -89,7 +89,7 @@ export default function Hero() {
                 as="span"
                 by="char"
                 immediate
-                text="agence web"
+                text="agence web."
                 delay={0.45}
                 className="block text-accent"
               />
