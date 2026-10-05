@@ -150,41 +150,21 @@ export default function ProjectPage({ project }: Props) {
     restDelta: 0.001,
   })
 
-  const imageY = useTransform(smooth, [0, 1], ['0%', '22%'])
-  const imageScale = useTransform(smooth, [0, 1], [1, 1.15])
-  const contentY = useTransform(smooth, [0, 1], ['0%', '-40%'])
-  const contentOpacity = useTransform(smooth, [0, 0.75], [1, 0])
-  const overlayOpacity = useTransform(smooth, [0, 1], [1, 1.4])
+  const contentY = useTransform(smooth, [0, 1], ['0%', '-30%'])
+  const contentOpacity = useTransform(smooth, [0, 0.85], [1, 0])
 
   return (
     <main className="bg-surface">
       {/* ---------------------------------------------------------- */}
-      {/* Hero parallaxe                                              */}
+      {/* Hero typographique : plus de photo derrière le titre, l'écran   */}
+      {/* complet arrive juste en dessous                              */}
       {/* ---------------------------------------------------------- */}
       <section
         ref={heroRef}
-        className="relative h-[88vh] min-h-[560px] overflow-hidden bg-surface md:h-screen md:min-h-[620px]"
+        className="relative overflow-hidden bg-surface pt-32 md:pt-44"
       >
         <motion.div
-          className="absolute inset-x-0 -top-[8%] h-[118%]"
-          style={{ y: imageY, scale: imageScale }}
-        >
-          <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient}`} />
-          <img
-            src={project.heroImage}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover object-top"
-          />
-        </motion.div>
-
-        <motion.div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-surface from-38% via-surface/90 via-72% to-surface/25 md:from-20% md:via-surface/85 md:via-58% md:to-surface/20"
-          style={{ opacity: overlayOpacity }}
-        />
-
-        <motion.div
-          className="absolute inset-x-0 bottom-0 z-10 px-6 pb-14 md:px-14 md:pb-20"
+          className="relative z-10 px-6 pb-14 md:px-14 md:pb-20"
           style={{ y: contentY, opacity: contentOpacity }}
         >
           <div className="mx-auto w-full max-w-5xl">
