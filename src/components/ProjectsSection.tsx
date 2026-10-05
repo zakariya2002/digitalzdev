@@ -122,17 +122,12 @@ export default function ProjectsSection() {
       <div className="mx-auto max-w-6xl px-6 pb-16 pt-24 md:pb-24 md:pt-32">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <Reveal>
-              <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-                Réalisations
-              </span>
-            </Reveal>
             <SplitText
               as="h2"
               by="char"
               text="Nos réalisations"
               delay={0.1}
-              className="mt-5 block font-display text-4xl font-bold leading-[0.95] tracking-tight text-text-primary md:text-7xl"
+              className="block font-display text-4xl font-bold leading-[0.95] tracking-tight text-text-primary md:text-7xl"
             />
           </div>
 

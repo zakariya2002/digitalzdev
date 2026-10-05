@@ -1,26 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { isWebGLAvailable } from '../webgl/core'
-import { Magnetic, Marquee, SplitText } from './motion'
+import { Magnetic, SplitText } from './motion'
 import { EASE_OUT } from './motion/config'
 
 // three.js ne part au réseau que si le décor est réellement affiché.
 const HeroScene = lazy(() => import('../webgl/HeroScene'))
-
-const KEYWORDS = [
-  'E-COMMERCE',
-  'SHOPIFY',
-  'META ADS',
-  'NEXT.JS',
-  'GOOGLE ADS',
-  'DESIGN SYSTEM',
-  'WEBGL',
-  'DASHBOARD',
-  'IDENTITÉ',
-  'PERFORMANCE',
-  'SEO',
-  'CONVERSION',
-]
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null)
@@ -35,7 +20,6 @@ export default function Hero() {
 
   const contentOpacity = useTransform(scrollYProgress, [0, 0.35, 0.6], [1, 1, 0])
   const contentY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-18%'])
-  const marqueeOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0])
 
   return (
     <section ref={containerRef} className="relative h-[190vh] bg-surface">
@@ -127,24 +111,9 @@ export default function Hero() {
                   GÉNÉRER MA DÉMO GRATUITE
                 </a>
               </Magnetic>
-              <p className="mt-3 text-sm text-text-muted">
-                Huit questions, un aperçu de votre site en ligne. Gratuit.
-              </p>
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Bandeau de mots-clés, dont la vitesse suit le scroll */}
-        <motion.div
-          className="absolute bottom-8 left-0 right-0 z-10"
-          style={{ opacity: marqueeOpacity }}
-        >
-          <Marquee
-            items={KEYWORDS}
-            speed={28}
-            className="border-y border-surface-border/60 bg-surface/40 py-3 font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-muted backdrop-blur-sm"
-          />
-        </motion.div>
       </div>
     </section>
   )

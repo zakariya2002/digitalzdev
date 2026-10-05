@@ -1,6 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import {
+  motion,
+  AnimatePresence,
+  useMotionValueEvent,
+  useScroll,
+} from 'framer-motion'
 
 /**
  * Les entrées de navigation, écrites une seule fois.
@@ -10,15 +15,16 @@ import { motion, AnimatePresence } from 'framer-motion'
  * divergé.
  */
 const LIENS = [
-  { libelle: 'Accueil', vers: '/', interne: true, appui: false },
-  { libelle: 'Projets', vers: '/#projets', interne: false, appui: false },
-  { libelle: "L'agence", vers: '/#agence', interne: false, appui: false },
-  // Contact est mis en couleur dans la barre du haut : c'est la sortie qu'on
-  // veut voir en premier quand on cherche à joindre quelqu'un.
-  { libelle: 'Contact', vers: '/contact', interne: true, appui: true },
+  { libelle: 'Accueil', vers: '/', interne: true },
+  { libelle: 'Projets', vers: '/#projets', interne: false },
+  { libelle: "L'agence", vers: '/#agence', interne: false },
+  { libelle: 'Contact', vers: '/contact', interne: true },
 ] as const
 
 type Lien = (typeof LIENS)[number]
+
+const QUIZ = 'https://quiz.digitalzdev.com'
+const EASE = [0.32, 0.72, 0, 1] as const
 
 /** Vrai pour la page affichée. Les ancres appartiennent toutes à l'accueil. */
 function estCourant(lien: Lien, chemin: string): boolean {
@@ -27,16 +33,76 @@ function estCourant(lien: Lien, chemin: string): boolean {
   return chemin === lien.vers
 }
 
+function Fleche({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M3 8h10M9 4l4 4-4 4" />
+    </svg>
+  )
+}
+
+/** Lien du routeur ou ancre de l'accueil, selon l'entrée. */
+function LienNav({
+  lien,
+  className,
+  onClick,
+  children,
+  ...reste
+}: {
+  lien: Lien
+  className: string
+  onClick?: () => void
+  children: ReactNode
+  onMouseEnter?: () => void
+  'aria-current'?: 'page'
+}) {
+  return lien.interne ? (
+    <Link to={lien.vers} className={className} onClick={onClick} {...reste}>
+      {children}
+    </Link>
+  ) : (
+    <a href={lien.vers} className={className} onClick={onClick} {...reste}>
+      {children}
+    </a>
+  )
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [cachee, setCachee] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [survol, setSurvol] = useState<string | null>(null)
   const location = useLocation()
+  const { scrollY } = useScroll()
+  const dernierY = useRef(0)
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  /**
+   * La barre se fait discrète pendant la lecture et revient au premier geste
+   * vers le haut.
+   *
+   * En haut de page, elle est transparente et se fond dans le haut de page ;
+   * dès qu'on descend, elle devient une pastille flottante sur fond flouté.
+   * Elle se cache quand on descend franchement, pour rendre l'écran au
+   * contenu, et réapparaît dès qu'on remonte, là où l'on cherche à naviguer.
+   */
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    const ecart = y - dernierY.current
+    dernierY.current = y
+    setScrolled(y > 24)
+    if (menuOpen) return
+    if (y < 160) setCachee(false)
+    else if (ecart > 6) setCachee(true)
+    else if (ecart < -6) setCachee(false)
+  })
 
   useEffect(() => {
     setMenuOpen(false)
@@ -67,166 +133,222 @@ export default function Navbar() {
     }
   }, [menuOpen])
 
+  // Les ancres de l'accueil ne changent pas la route : sans cette fermeture
+  // explicite, le menu resterait ouvert par-dessus la section visée.
+  const fermer = () => setMenuOpen(false)
+
+  const pastille = scrolled || menuOpen
+  const lienSurvole = survol ?? LIENS.find((l) => estCourant(l, location.pathname))?.libelle
+
   return (
     <>
-      <motion.nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'bg-surface/80 backdrop-blur-xl' : ''
-        }`}
+      <motion.header
+        className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4"
         initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        animate={{ y: cachee ? -110 : 0 }}
+        transition={{ duration: 0.45, ease: EASE }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+        <nav
+          aria-label="Navigation principale"
+          className={`mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-full py-2 pl-2 pr-2 transition-[background-color,box-shadow,backdrop-filter] duration-500 sm:pl-3 ${
+            pastille
+              ? 'bg-surface/75 shadow-[0_10px_40px_-12px_rgba(40,28,18,0.18)] backdrop-blur-xl'
+              : 'bg-transparent'
+          }`}
+        >
           <Link
             to="/"
-            className="group flex min-h-[44px] min-w-0 items-center gap-2 sm:gap-3"
+            onClick={fermer}
+            className="group flex min-h-[44px] min-w-0 items-center gap-2.5 rounded-full pr-3"
           >
             <img
               src="/logo.png"
-              alt="Digitalz Dev"
-              className="w-10 h-10 rounded-full"
+              alt=""
+              className="h-10 w-10 shrink-0 rounded-full transition-transform duration-500 group-hover:rotate-[-8deg]"
             />
-            <span className="truncate font-display font-semibold text-[13px] sm:text-sm tracking-[0.12em] sm:tracking-[0.15em] text-text-primary group-hover:text-accent transition-colors">
-              DIGITALZ DEV
+            <span className="truncate font-display text-[17px] font-extrabold tracking-tight text-text-primary">
+              Digitalz <span className="font-semibold text-accent">Dev</span>
             </span>
           </Link>
 
-          {/* Desktop */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Ordinateur : la pastille de survol glisse d'un lien à l'autre et
+              revient se poser sur la page courante. */}
+          <div
+            className="hidden items-center gap-1 md:flex"
+            onMouseLeave={() => setSurvol(null)}
+          >
             {LIENS.map((lien) => {
-              const classe = lien.appui
-                ? '-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-accent transition-opacity hover:opacity-80'
-                : '-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary'
-              return lien.interne ? (
-                <Link key={lien.libelle} to={lien.vers} className={classe}>
+              const courant = estCourant(lien, location.pathname)
+              return (
+                <LienNav
+                  key={lien.libelle}
+                  lien={lien}
+                  onMouseEnter={() => setSurvol(lien.libelle)}
+                  aria-current={courant ? 'page' : undefined}
+                  className={`relative isolate inline-flex min-h-[44px] items-center rounded-full px-4 text-[15px] font-semibold transition-colors ${
+                    courant ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
+                  }`}
+                >
+                  {lienSurvole === lien.libelle && (
+                    <motion.span
+                      layoutId="nav-pastille"
+                      className="absolute inset-0 -z-10 rounded-full bg-surface-light"
+                      transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                    />
+                  )}
                   {lien.libelle}
-                </Link>
-              ) : (
-                <a key={lien.libelle} href={lien.vers} className={classe}>
-                  {lien.libelle}
-                </a>
+                </LienNav>
               )
             })}
+          </div>
+
+          <div className="flex shrink-0 items-center gap-2">
             {/* Le quiz est hébergé sur un sous-domaine : lien externe, pas
                 une route interne du routeur. */}
             <a
-              href="https://quiz.digitalzdev.com"
-              className="inline-flex min-h-[44px] items-center rounded-full bg-accent px-5 font-display text-sm font-semibold text-surface transition-colors hover:bg-accent-hover"
+              href={QUIZ}
+              className="group hidden min-h-[44px] items-center gap-2 rounded-full bg-accent pl-5 pr-4 font-display text-[15px] font-bold text-surface transition-colors hover:bg-accent-hover md:inline-flex"
             >
-              Démarrer
+              Ma démo gratuite
+              <Fleche className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </a>
-          </div>
 
-          {/* Mobile */}
-          <div className="flex shrink-0 md:hidden items-center gap-1">
+            {/* Mobile : un bouton rond, deux traits qui se croisent en X. */}
             <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="flex h-11 w-11 flex-col items-center justify-center gap-1.5"
+              type="button"
+              onClick={() => setMenuOpen((o) => !o)}
+              className={`relative flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-300 md:hidden ${
+                menuOpen ? 'bg-accent text-surface' : 'bg-surface-card text-text-primary shadow-[0_4px_16px_-6px_rgba(40,28,18,0.25)]'
+              }`}
               aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               aria-expanded={menuOpen}
               aria-controls="menu-mobile"
             >
               <motion.span
-                className="w-6 h-0.5 bg-text-primary block"
-                animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }}
+                className="absolute h-[2px] w-[18px] rounded-full bg-current"
+                animate={menuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -4 }}
+                transition={{ duration: 0.3, ease: EASE }}
               />
               <motion.span
-                className="w-6 h-0.5 bg-text-primary block"
-                animate={{ opacity: menuOpen ? 0 : 1 }}
-              />
-              <motion.span
-                className="w-6 h-0.5 bg-text-primary block"
-                animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }}
+                className="absolute h-[2px] rounded-full bg-current"
+                animate={
+                  menuOpen
+                    ? { rotate: -45, y: 0, width: 18, x: 0 }
+                    : { rotate: 0, y: 4, width: 12, x: 3 }
+                }
+                transition={{ duration: 0.3, ease: EASE }}
               />
             </button>
           </div>
-        </div>
-      </motion.nav>
+        </nav>
+      </motion.header>
 
       <AnimatePresence>
         {menuOpen && (
           <motion.div
             id="menu-mobile"
-            // `md:hidden` : si la fenêtre s'élargit menu ouvert, le voile
+            // `md:hidden` : si la fenêtre s'élargit menu ouvert, le panneau
             // disparaît avec le bouton qui l'a ouvert.
-            className="fixed inset-0 z-40 flex flex-col bg-surface/95 backdrop-blur-xl md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 flex flex-col bg-surface md:hidden"
+            // Le panneau s'ouvre en cercle depuis le bouton : on voit d'où il
+            // vient, et donc où le refermer.
+            initial={{ clipPath: 'circle(0px at calc(100% - 42px) 38px)' }}
+            animate={{ clipPath: 'circle(150% at calc(100% - 42px) 38px)' }}
+            exit={{ clipPath: 'circle(0px at calc(100% - 42px) 38px)' }}
+            transition={{ duration: 0.55, ease: EASE }}
           >
-            {/* Les liens commencent haut et l'appel à l'action tient le bas.
-                Centrés, quatre liens flottaient au milieu d'un écran vide, avec
-                autant de vide au-dessus qu'en dessous : le menu paraissait
-                inachevé. Alignés à gauche, ils reprennent l'aplomb du logo et
-                tombent sous le pouce. */}
-            <nav className="flex-1 overflow-y-auto overscroll-contain px-6 pb-6 pt-28">
-              {LIENS.map((lien, i) => {
-                const courant = estCourant(lien, location.pathname)
-                const contenu = (
-                  <span className="relative inline-block">
-                    {lien.libelle}
-                    {/* Le soulignement dit où l'on se trouve. C'est la seule
-                        chose qui distingue la page courante une fois le menu
-                        ouvert, la barre de navigation étant cachée dessous. */}
-                    {courant && (
-                      <motion.span
-                        layoutId="menu-courant"
-                        className="absolute -bottom-1 left-0 h-[2px] w-full bg-accent"
-                      />
-                    )}
-                  </span>
-                )
-                const classe =
-                  'flex min-h-[56px] items-center font-display text-[2rem] font-semibold leading-none tracking-tight text-text-primary transition-opacity active:opacity-60'
-
-                return (
-                  <motion.div
-                    key={lien.libelle}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.28,
-                      delay: 0.04 + i * 0.045,
-                      ease: [0.32, 0.72, 0, 1],
-                    }}
-                  >
-                    {lien.interne ? (
-                      <Link to={lien.vers} className={classe}>
-                        {contenu}
-                      </Link>
-                    ) : (
-                      <a href={lien.vers} className={classe}>
-                        {contenu}
-                      </a>
-                    )}
-                  </motion.div>
-                )
-              })}
+            <nav
+              aria-label="Menu"
+              className="flex flex-1 flex-col justify-center overflow-y-auto overscroll-contain px-7 pb-6 pt-24"
+            >
+              <ul className="space-y-1">
+                {LIENS.map((lien, i) => {
+                  const courant = estCourant(lien, location.pathname)
+                  return (
+                    <motion.li
+                      key={lien.libelle}
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                      transition={{ duration: 0.45, delay: 0.12 + i * 0.06, ease: EASE }}
+                    >
+                      <LienNav
+                        lien={lien}
+                        onClick={fermer}
+                        aria-current={courant ? 'page' : undefined}
+                        className="group flex min-h-[64px] items-center gap-4 active:opacity-60"
+                      >
+                        <span className="w-6 font-display text-xs font-bold tabular-nums text-text-muted">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span
+                          className={`font-display text-[2.6rem] font-extrabold leading-none tracking-tight ${
+                            courant ? 'text-accent' : 'text-text-primary'
+                          }`}
+                        >
+                          {lien.libelle}
+                        </span>
+                        {courant ? (
+                          <span className="ml-1 h-2 w-2 rounded-full bg-accent" aria-hidden />
+                        ) : (
+                          <Fleche className="ml-auto h-5 w-5 text-text-muted" />
+                        )}
+                      </LienNav>
+                    </motion.li>
+                  )
+                })}
+              </ul>
             </nav>
 
-            {/* Le quiz est hébergé sur un sous-domaine : lien externe, pas une
-                route interne du routeur. */}
             <motion.div
-              className="px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2"
-              initial={{ opacity: 0, y: 10 }}
+              className="px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.28,
-                delay: 0.04 + LIENS.length * 0.045,
-                ease: [0.32, 0.72, 0, 1],
-              }}
+              exit={{ opacity: 0, transition: { duration: 0.12 } }}
+              transition={{ duration: 0.45, delay: 0.12 + LIENS.length * 0.06, ease: EASE }}
             >
               <a
-                href="https://quiz.digitalzdev.com"
-                className="flex min-h-[56px] w-full items-center justify-center rounded-full bg-accent font-display text-lg font-semibold text-surface transition-colors active:bg-accent-hover"
+                href={QUIZ}
+                className="flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-accent font-display text-lg font-bold text-surface transition-colors active:bg-accent-hover"
               >
-                Démarrer
+                Générer ma démo gratuite
+                <Fleche className="h-5 w-5" />
               </a>
-              <p className="mt-3 text-center text-xs text-text-secondary">
-                Un aperçu de votre site en huit questions
-              </p>
+
+              <div className="mt-5 flex items-center justify-between rounded-3xl bg-surface-light px-5 py-4">
+                <a
+                  href="mailto:zdigitalzdev@gmail.com"
+                  className="min-w-0 truncate text-sm font-semibold text-text-secondary"
+                >
+                  zdigitalzdev@gmail.com
+                </a>
+                <div className="flex shrink-0 items-center">
+                  <a
+                    href="https://www.instagram.com/digitalzdev/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="flex h-10 w-10 items-center justify-center text-text-secondary"
+                  >
+                    <svg className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24" aria-hidden>
+                      <rect x="3" y="3" width="18" height="18" rx="5" />
+                      <circle cx="12" cy="12" r="4" />
+                      <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/zakariya-nebbache-7b0644214/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    className="flex h-10 w-10 items-center justify-center text-text-secondary"
+                  >
+                    <svg className="h-[18px] w-[18px]" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}

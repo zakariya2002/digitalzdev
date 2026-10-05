@@ -5,7 +5,7 @@ import type { Project } from '../data/projects'
 import { projects } from '../data/projects'
 import ContactForm from '../components/ContactForm'
 import Footer from '../components/Footer'
-import { Counter, Magnetic, Marquee, Parallax, Reveal, SplitText } from '../components/motion'
+import { Counter, Magnetic, Parallax, Reveal, SplitText } from '../components/motion'
 import { EASE_OUT, VIEWPORT } from '../components/motion/config'
 
 /* ------------------------------------------------------------------ */
@@ -252,15 +252,14 @@ export default function ProjectPage({ project }: Props) {
       </section>
 
       {/* ---------------------------------------------------------- */}
-      {/* Stack                                                       */}
+      {/* Stack, en ligne fixe : plus de bandeau défilant             */}
       {/* ---------------------------------------------------------- */}
-      <div className="border-y border-surface-border bg-surface-light py-4">
-        <Marquee
-          items={project.stack}
-          speed={22}
-          separator="/"
-          className="font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary"
-        />
+      <div className="bg-surface-light px-6 py-6">
+        <ul className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-2 font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary">
+          {project.stack.map((techno) => (
+            <li key={techno}>{techno}</li>
+          ))}
+        </ul>
       </div>
 
       {/* ---------------------------------------------------------- */}

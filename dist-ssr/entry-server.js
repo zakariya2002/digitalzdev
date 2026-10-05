@@ -7,7 +7,7 @@ import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
 import { createClient } from "@supabase/supabase-js";
 import { useLocation, Link, Navigate, useNavigate, Routes, Route } from "react-router-dom";
-import { useReducedMotion, motion, AnimatePresence, useScroll, useSpring, useTransform, useInView, useMotionValue, useMotionValueEvent } from "framer-motion";
+import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useTransform, useInView, useMotionValue } from "framer-motion";
 import Lenis from "lenis";
 import * as THREE from "three";
 import emailjs from "@emailjs/browser";
@@ -862,27 +862,61 @@ function PageTransition({ children }) {
   );
 }
 const LIENS = [
-  { libelle: "Accueil", vers: "/", interne: true, appui: false },
-  { libelle: "Projets", vers: "/#projets", interne: false, appui: false },
-  { libelle: "L'agence", vers: "/#agence", interne: false, appui: false },
-  // Contact est mis en couleur dans la barre du haut : c'est la sortie qu'on
-  // veut voir en premier quand on cherche à joindre quelqu'un.
-  { libelle: "Contact", vers: "/contact", interne: true, appui: true }
+  { libelle: "Accueil", vers: "/", interne: true },
+  { libelle: "Projets", vers: "/#projets", interne: false },
+  { libelle: "L'agence", vers: "/#agence", interne: false },
+  { libelle: "Contact", vers: "/contact", interne: true }
 ];
+const QUIZ = "https://quiz.digitalzdev.com";
+const EASE = [0.32, 0.72, 0, 1];
 function estCourant(lien, chemin) {
   if (lien.vers === "/") return chemin === "/";
   if (lien.vers.startsWith("/#")) return false;
   return chemin === lien.vers;
 }
+function Fleche({ className = "" }) {
+  return /* @__PURE__ */ jsx(
+    "svg",
+    {
+      className,
+      viewBox: "0 0 16 16",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: 1.8,
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      "aria-hidden": true,
+      children: /* @__PURE__ */ jsx("path", { d: "M3 8h10M9 4l4 4-4 4" })
+    }
+  );
+}
+function LienNav({
+  lien,
+  className,
+  onClick,
+  children,
+  ...reste
+}) {
+  return lien.interne ? /* @__PURE__ */ jsx(Link, { to: lien.vers, className, onClick, ...reste, children }) : /* @__PURE__ */ jsx("a", { href: lien.vers, className, onClick, ...reste, children });
+}
 function Navbar() {
+  var _a;
   const [scrolled, setScrolled] = useState(false);
+  const [cachee, setCachee] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [survol, setSurvol] = useState(null);
   const location = useLocation();
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const { scrollY } = useScroll();
+  const dernierY = useRef(0);
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const ecart = y - dernierY.current;
+    dernierY.current = y;
+    setScrolled(y > 24);
+    if (menuOpen) return;
+    if (y < 160) setCachee(false);
+    else if (ecart > 6) setCachee(true);
+    else if (ecart < -6) setCachee(false);
+  });
   useEffect(() => {
     setMenuOpen(false);
   }, [location]);
@@ -899,142 +933,231 @@ function Navbar() {
       window.removeEventListener("keydown", auClavier);
     };
   }, [menuOpen]);
+  const fermer = () => setMenuOpen(false);
+  const pastille = scrolled || menuOpen;
+  const lienSurvole = survol ?? ((_a = LIENS.find((l) => estCourant(l, location.pathname))) == null ? void 0 : _a.libelle);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(
-      motion.nav,
+      motion.header,
       {
-        className: `fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-surface/80 backdrop-blur-xl" : ""}`,
+        className: "fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4",
         initial: { y: -100 },
-        animate: { y: 0 },
-        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-        children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3", children: [
-          /* @__PURE__ */ jsxs(
-            Link,
-            {
-              to: "/",
-              className: "group flex min-h-[44px] min-w-0 items-center gap-2 sm:gap-3",
-              children: [
-                /* @__PURE__ */ jsx(
-                  "img",
+        animate: { y: cachee ? -110 : 0 },
+        transition: { duration: 0.45, ease: EASE },
+        children: /* @__PURE__ */ jsxs(
+          "nav",
+          {
+            "aria-label": "Navigation principale",
+            className: `mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-full py-2 pl-2 pr-2 transition-[background-color,box-shadow,backdrop-filter] duration-500 sm:pl-3 ${pastille ? "bg-surface/75 shadow-[0_10px_40px_-12px_rgba(40,28,18,0.18)] backdrop-blur-xl" : "bg-transparent"}`,
+            children: [
+              /* @__PURE__ */ jsxs(
+                Link,
+                {
+                  to: "/",
+                  onClick: fermer,
+                  className: "group flex min-h-[44px] min-w-0 items-center gap-2.5 rounded-full pr-3",
+                  children: [
+                    /* @__PURE__ */ jsx(
+                      "img",
+                      {
+                        src: "/logo.png",
+                        alt: "",
+                        className: "h-10 w-10 shrink-0 rounded-full transition-transform duration-500 group-hover:rotate-[-8deg]"
+                      }
+                    ),
+                    /* @__PURE__ */ jsxs("span", { className: "truncate font-display text-[17px] font-extrabold tracking-tight text-text-primary", children: [
+                      "Digitalz ",
+                      /* @__PURE__ */ jsx("span", { className: "font-semibold text-accent", children: "Dev" })
+                    ] })
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                "div",
+                {
+                  className: "hidden items-center gap-1 md:flex",
+                  onMouseLeave: () => setSurvol(null),
+                  children: LIENS.map((lien) => {
+                    const courant = estCourant(lien, location.pathname);
+                    return /* @__PURE__ */ jsxs(
+                      LienNav,
+                      {
+                        lien,
+                        onMouseEnter: () => setSurvol(lien.libelle),
+                        "aria-current": courant ? "page" : void 0,
+                        className: `relative isolate inline-flex min-h-[44px] items-center rounded-full px-4 text-[15px] font-semibold transition-colors ${courant ? "text-text-primary" : "text-text-secondary hover:text-text-primary"}`,
+                        children: [
+                          lienSurvole === lien.libelle && /* @__PURE__ */ jsx(
+                            motion.span,
+                            {
+                              layoutId: "nav-pastille",
+                              className: "absolute inset-0 -z-10 rounded-full bg-surface-light",
+                              transition: { type: "spring", stiffness: 420, damping: 36 }
+                            }
+                          ),
+                          lien.libelle
+                        ]
+                      },
+                      lien.libelle
+                    );
+                  })
+                }
+              ),
+              /* @__PURE__ */ jsxs("div", { className: "flex shrink-0 items-center gap-2", children: [
+                /* @__PURE__ */ jsxs(
+                  "a",
                   {
-                    src: "/logo.png",
-                    alt: "Digitalz Dev",
-                    className: "w-10 h-10 rounded-full"
+                    href: QUIZ,
+                    className: "group hidden min-h-[44px] items-center gap-2 rounded-full bg-accent pl-5 pr-4 font-display text-[15px] font-bold text-surface transition-colors hover:bg-accent-hover md:inline-flex",
+                    children: [
+                      "Ma démo gratuite",
+                      /* @__PURE__ */ jsx(Fleche, { className: "h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" })
+                    ]
                   }
                 ),
-                /* @__PURE__ */ jsx("span", { className: "truncate font-display font-semibold text-[13px] sm:text-sm tracking-[0.12em] sm:tracking-[0.15em] text-text-primary group-hover:text-accent transition-colors", children: "DIGITALZ DEV" })
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsxs("div", { className: "hidden md:flex items-center gap-6", children: [
-            LIENS.map((lien) => {
-              const classe = lien.appui ? "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-accent transition-opacity hover:opacity-80" : "-my-3 inline-flex min-h-[44px] items-center py-3 text-sm text-text-secondary transition-colors hover:text-text-primary";
-              return lien.interne ? /* @__PURE__ */ jsx(Link, { to: lien.vers, className: classe, children: lien.libelle }, lien.libelle) : /* @__PURE__ */ jsx("a", { href: lien.vers, className: classe, children: lien.libelle }, lien.libelle);
-            }),
-            /* @__PURE__ */ jsx(
-              "a",
-              {
-                href: "https://quiz.digitalzdev.com",
-                className: "inline-flex min-h-[44px] items-center rounded-full bg-accent px-5 font-display text-sm font-semibold text-surface transition-colors hover:bg-accent-hover",
-                children: "Démarrer"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsx("div", { className: "flex shrink-0 md:hidden items-center gap-1", children: /* @__PURE__ */ jsxs(
-            "button",
-            {
-              onClick: () => setMenuOpen(!menuOpen),
-              className: "flex h-11 w-11 flex-col items-center justify-center gap-1.5",
-              "aria-label": menuOpen ? "Fermer le menu" : "Ouvrir le menu",
-              "aria-expanded": menuOpen,
-              "aria-controls": "menu-mobile",
-              children: [
-                /* @__PURE__ */ jsx(
-                  motion.span,
+                /* @__PURE__ */ jsxs(
+                  "button",
                   {
-                    className: "w-6 h-0.5 bg-text-primary block",
-                    animate: { rotate: menuOpen ? 45 : 0, y: menuOpen ? 8 : 0 }
-                  }
-                ),
-                /* @__PURE__ */ jsx(
-                  motion.span,
-                  {
-                    className: "w-6 h-0.5 bg-text-primary block",
-                    animate: { opacity: menuOpen ? 0 : 1 }
-                  }
-                ),
-                /* @__PURE__ */ jsx(
-                  motion.span,
-                  {
-                    className: "w-6 h-0.5 bg-text-primary block",
-                    animate: { rotate: menuOpen ? -45 : 0, y: menuOpen ? -8 : 0 }
+                    type: "button",
+                    onClick: () => setMenuOpen((o) => !o),
+                    className: `relative flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-300 md:hidden ${menuOpen ? "bg-accent text-surface" : "bg-surface-card text-text-primary shadow-[0_4px_16px_-6px_rgba(40,28,18,0.25)]"}`,
+                    "aria-label": menuOpen ? "Fermer le menu" : "Ouvrir le menu",
+                    "aria-expanded": menuOpen,
+                    "aria-controls": "menu-mobile",
+                    children: [
+                      /* @__PURE__ */ jsx(
+                        motion.span,
+                        {
+                          className: "absolute h-[2px] w-[18px] rounded-full bg-current",
+                          animate: menuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -4 },
+                          transition: { duration: 0.3, ease: EASE }
+                        }
+                      ),
+                      /* @__PURE__ */ jsx(
+                        motion.span,
+                        {
+                          className: "absolute h-[2px] rounded-full bg-current",
+                          animate: menuOpen ? { rotate: -45, y: 0, width: 18, x: 0 } : { rotate: 0, y: 4, width: 12, x: 3 },
+                          transition: { duration: 0.3, ease: EASE }
+                        }
+                      )
+                    ]
                   }
                 )
-              ]
-            }
-          ) })
-        ] })
+              ] })
+            ]
+          }
+        )
       }
     ),
     /* @__PURE__ */ jsx(AnimatePresence, { children: menuOpen && /* @__PURE__ */ jsxs(
       motion.div,
       {
         id: "menu-mobile",
-        className: "fixed inset-0 z-40 flex flex-col bg-surface/95 backdrop-blur-xl md:hidden",
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-        transition: { duration: 0.2 },
+        className: "fixed inset-0 z-40 flex flex-col bg-surface md:hidden",
+        initial: { clipPath: "circle(0px at calc(100% - 42px) 38px)" },
+        animate: { clipPath: "circle(150% at calc(100% - 42px) 38px)" },
+        exit: { clipPath: "circle(0px at calc(100% - 42px) 38px)" },
+        transition: { duration: 0.55, ease: EASE },
         children: [
-          /* @__PURE__ */ jsx("nav", { className: "flex-1 overflow-y-auto overscroll-contain px-6 pb-6 pt-28", children: LIENS.map((lien, i) => {
-            const courant = estCourant(lien, location.pathname);
-            const contenu = /* @__PURE__ */ jsxs("span", { className: "relative inline-block", children: [
-              lien.libelle,
-              courant && /* @__PURE__ */ jsx(
-                motion.span,
-                {
-                  layoutId: "menu-courant",
-                  className: "absolute -bottom-1 left-0 h-[2px] w-full bg-accent"
-                }
-              )
-            ] });
-            const classe = "flex min-h-[56px] items-center font-display text-[2rem] font-semibold leading-none tracking-tight text-text-primary transition-opacity active:opacity-60";
-            return /* @__PURE__ */ jsx(
-              motion.div,
-              {
-                initial: { opacity: 0, y: 10 },
-                animate: { opacity: 1, y: 0 },
-                transition: {
-                  duration: 0.28,
-                  delay: 0.04 + i * 0.045,
-                  ease: [0.32, 0.72, 0, 1]
-                },
-                children: lien.interne ? /* @__PURE__ */ jsx(Link, { to: lien.vers, className: classe, children: contenu }) : /* @__PURE__ */ jsx("a", { href: lien.vers, className: classe, children: contenu })
-              },
-              lien.libelle
-            );
-          }) }),
+          /* @__PURE__ */ jsx(
+            "nav",
+            {
+              "aria-label": "Menu",
+              className: "flex flex-1 flex-col justify-center overflow-y-auto overscroll-contain px-7 pb-6 pt-24",
+              children: /* @__PURE__ */ jsx("ul", { className: "space-y-1", children: LIENS.map((lien, i) => {
+                const courant = estCourant(lien, location.pathname);
+                return /* @__PURE__ */ jsx(
+                  motion.li,
+                  {
+                    initial: { opacity: 0, y: 24 },
+                    animate: { opacity: 1, y: 0 },
+                    exit: { opacity: 0, transition: { duration: 0.12 } },
+                    transition: { duration: 0.45, delay: 0.12 + i * 0.06, ease: EASE },
+                    children: /* @__PURE__ */ jsxs(
+                      LienNav,
+                      {
+                        lien,
+                        onClick: fermer,
+                        "aria-current": courant ? "page" : void 0,
+                        className: "group flex min-h-[64px] items-center gap-4 active:opacity-60",
+                        children: [
+                          /* @__PURE__ */ jsx("span", { className: "w-6 font-display text-xs font-bold tabular-nums text-text-muted", children: String(i + 1).padStart(2, "0") }),
+                          /* @__PURE__ */ jsx(
+                            "span",
+                            {
+                              className: `font-display text-[2.6rem] font-extrabold leading-none tracking-tight ${courant ? "text-accent" : "text-text-primary"}`,
+                              children: lien.libelle
+                            }
+                          ),
+                          courant ? /* @__PURE__ */ jsx("span", { className: "ml-1 h-2 w-2 rounded-full bg-accent", "aria-hidden": true }) : /* @__PURE__ */ jsx(Fleche, { className: "ml-auto h-5 w-5 text-text-muted" })
+                        ]
+                      }
+                    )
+                  },
+                  lien.libelle
+                );
+              }) })
+            }
+          ),
           /* @__PURE__ */ jsxs(
             motion.div,
             {
-              className: "px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2",
-              initial: { opacity: 0, y: 10 },
+              className: "px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]",
+              initial: { opacity: 0, y: 24 },
               animate: { opacity: 1, y: 0 },
-              transition: {
-                duration: 0.28,
-                delay: 0.04 + LIENS.length * 0.045,
-                ease: [0.32, 0.72, 0, 1]
-              },
+              exit: { opacity: 0, transition: { duration: 0.12 } },
+              transition: { duration: 0.45, delay: 0.12 + LIENS.length * 0.06, ease: EASE },
               children: [
-                /* @__PURE__ */ jsx(
+                /* @__PURE__ */ jsxs(
                   "a",
                   {
-                    href: "https://quiz.digitalzdev.com",
-                    className: "flex min-h-[56px] w-full items-center justify-center rounded-full bg-accent font-display text-lg font-semibold text-surface transition-colors active:bg-accent-hover",
-                    children: "Démarrer"
+                    href: QUIZ,
+                    className: "flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-accent font-display text-lg font-bold text-surface transition-colors active:bg-accent-hover",
+                    children: [
+                      "Générer ma démo gratuite",
+                      /* @__PURE__ */ jsx(Fleche, { className: "h-5 w-5" })
+                    ]
                   }
                 ),
-                /* @__PURE__ */ jsx("p", { className: "mt-3 text-center text-xs text-text-secondary", children: "Un aperçu de votre site en huit questions" })
+                /* @__PURE__ */ jsxs("div", { className: "mt-5 flex items-center justify-between rounded-3xl bg-surface-light px-5 py-4", children: [
+                  /* @__PURE__ */ jsx(
+                    "a",
+                    {
+                      href: "mailto:zdigitalzdev@gmail.com",
+                      className: "min-w-0 truncate text-sm font-semibold text-text-secondary",
+                      children: "zdigitalzdev@gmail.com"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxs("div", { className: "flex shrink-0 items-center", children: [
+                    /* @__PURE__ */ jsx(
+                      "a",
+                      {
+                        href: "https://www.instagram.com/digitalzdev/",
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "aria-label": "Instagram",
+                        className: "flex h-10 w-10 items-center justify-center text-text-secondary",
+                        children: /* @__PURE__ */ jsxs("svg", { className: "h-[18px] w-[18px]", fill: "none", stroke: "currentColor", strokeWidth: 1.8, viewBox: "0 0 24 24", "aria-hidden": true, children: [
+                          /* @__PURE__ */ jsx("rect", { x: "3", y: "3", width: "18", height: "18", rx: "5" }),
+                          /* @__PURE__ */ jsx("circle", { cx: "12", cy: "12", r: "4" }),
+                          /* @__PURE__ */ jsx("circle", { cx: "17.5", cy: "6.5", r: "0.6", fill: "currentColor" })
+                        ] })
+                      }
+                    ),
+                    /* @__PURE__ */ jsx(
+                      "a",
+                      {
+                        href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/",
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "aria-label": "LinkedIn",
+                        className: "flex h-10 w-10 items-center justify-center text-text-secondary",
+                        children: /* @__PURE__ */ jsx("svg", { className: "h-[18px] w-[18px]", fill: "currentColor", viewBox: "0 0 24 24", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z" }) })
+                      }
+                    )
+                  ] })
+                ] })
               ]
             }
           )
@@ -1374,41 +1497,6 @@ function Parallax({
     }
   );
 }
-function Marquee({
-  items,
-  className = "",
-  speed = 40,
-  direction = 1,
-  separator = ""
-}) {
-  const trackRef = useRef(null);
-  const reduced = useReducedMotion();
-  useEffect(() => {
-    if (reduced) return;
-    const track = trackRef.current;
-    if (!track) return;
-    let offset = 0;
-    let raf = 0;
-    let last = performance.now();
-    const tick = (now) => {
-      raf = requestAnimationFrame(tick);
-      const delta = Math.min((now - last) / 1e3, 0.05);
-      last = now;
-      const boost = scrollState.smoothVelocity * 340;
-      offset += (speed * direction + boost) * delta;
-      const half = track.scrollWidth / 2;
-      if (half > 0) offset = (offset % half + half) % half;
-      track.style.transform = `translate3d(${-offset}px, 0, 0)`;
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [speed, direction, reduced]);
-  const sequence = [...items, ...items];
-  return /* @__PURE__ */ jsx("div", { className: `overflow-hidden ${className}`, "aria-hidden": true, children: /* @__PURE__ */ jsx("div", { ref: trackRef, className: "flex w-max items-center will-change-transform", children: sequence.map((item2, index) => /* @__PURE__ */ jsxs("span", { className: "flex items-center whitespace-nowrap", children: [
-    item2,
-    /* @__PURE__ */ jsx("span", { className: "mx-8 text-accent opacity-60 md:mx-14", children: separator })
-  ] }, `${item2}-${index}`)) }) });
-}
 function Counter({ value, className, duration = 1.6 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-15%" });
@@ -1473,20 +1561,6 @@ function Magnetic({ children, className, strength = 0.35 }) {
   );
 }
 const HeroScene = lazy(() => import("./assets/HeroScene-CwDnVrpC.js"));
-const KEYWORDS = [
-  "E-COMMERCE",
-  "SHOPIFY",
-  "META ADS",
-  "NEXT.JS",
-  "GOOGLE ADS",
-  "DESIGN SYSTEM",
-  "WEBGL",
-  "DASHBOARD",
-  "IDENTITÉ",
-  "PERFORMANCE",
-  "SEO",
-  "CONVERSION"
-];
 function Hero() {
   const containerRef = useRef(null);
   const [webgl, setWebgl] = useState(false);
@@ -1497,7 +1571,6 @@ function Hero() {
   });
   const contentOpacity = useTransform(scrollYProgress, [0, 0.35, 0.6], [1, 1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.6], ["0%", "-18%"]);
-  const marqueeOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
   return /* @__PURE__ */ jsx("section", { ref: containerRef, className: "relative h-[190vh] bg-surface", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-screen overflow-hidden bg-surface", children: [
     webgl ? /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(HeroScene, { className: "absolute inset-0 opacity-40 lg:left-[45%] lg:right-[2%] lg:opacity-100" }) }) : /* @__PURE__ */ jsx(
       "div",
@@ -1560,44 +1633,26 @@ function Hero() {
               children: "Sites vitrines, boutiques Shopify et plateformes métier. Conçus, développés, puis portés par vos campagnes Meta Ads et Google Ads."
             }
           ),
-          /* @__PURE__ */ jsxs(
+          /* @__PURE__ */ jsx(
             motion.div,
             {
               className: "mt-10",
               initial: { opacity: 0, y: 24 },
               animate: { opacity: 1, y: 0 },
               transition: { duration: 0.9, delay: 1.1, ease: EASE_OUT },
-              children: [
-                /* @__PURE__ */ jsx(Magnetic, { className: "inline-block", children: /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: "https://quiz.digitalzdev.com",
-                    className: "inline-flex min-h-[56px] items-center gap-2 rounded-full bg-accent px-8 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90",
-                    children: "GÉNÉRER MA DÉMO GRATUITE"
-                  }
-                ) }),
-                /* @__PURE__ */ jsx("p", { className: "mt-3 text-sm text-text-muted", children: "Huit questions, un aperçu de votre site en ligne. Gratuit." })
-              ]
+              children: /* @__PURE__ */ jsx(Magnetic, { className: "inline-block", children: /* @__PURE__ */ jsx(
+                "a",
+                {
+                  href: "https://quiz.digitalzdev.com",
+                  className: "inline-flex min-h-[56px] items-center gap-2 rounded-full bg-accent px-8 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90",
+                  children: "GÉNÉRER MA DÉMO GRATUITE"
+                }
+              ) })
             }
           )
         ]
       }
-    ) }),
-    /* @__PURE__ */ jsx(
-      motion.div,
-      {
-        className: "absolute bottom-8 left-0 right-0 z-10",
-        style: { opacity: marqueeOpacity },
-        children: /* @__PURE__ */ jsx(
-          Marquee,
-          {
-            items: KEYWORDS,
-            speed: 28,
-            className: "border-y border-surface-border/60 bg-surface/40 py-3 font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-muted backdrop-blur-sm"
-          }
-        )
-      }
-    )
+    ) })
   ] }) });
 }
 function ProjectsIndex({ projects: projects2 }) {
@@ -1742,19 +1797,16 @@ function ProjectsSection() {
   );
   return /* @__PURE__ */ jsxs("section", { id: "projets", className: "relative bg-surface", children: [
     /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-6xl px-6 pb-16 pt-24 md:pb-24 md:pt-32", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-8 md:flex-row md:items-end md:justify-between", children: [
-      /* @__PURE__ */ jsxs("div", { children: [
-        /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "Réalisations" }) }),
-        /* @__PURE__ */ jsx(
-          SplitText,
-          {
-            as: "h2",
-            by: "char",
-            text: "Nos réalisations",
-            delay: 0.1,
-            className: "mt-5 block font-display text-4xl font-bold leading-[0.95] tracking-tight text-text-primary md:text-7xl"
-          }
-        )
-      ] }),
+      /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(
+        SplitText,
+        {
+          as: "h2",
+          by: "char",
+          text: "Nos réalisations",
+          delay: 0.1,
+          className: "block font-display text-4xl font-bold leading-[0.95] tracking-tight text-text-primary md:text-7xl"
+        }
+      ) }),
       /* @__PURE__ */ jsxs(Reveal, { delay: 0.2, className: "max-w-sm", children: [
         /* @__PURE__ */ jsx("p", { className: "text-text-secondary", children: "Des boutiques Shopify aux plateformes métier. Chaque projet part d'un problème concret et se juge sur ce qu'il change une fois en ligne." }),
         /* @__PURE__ */ jsx(Magnetic, { className: "mt-6 inline-block", children: /* @__PURE__ */ jsx(
@@ -2553,14 +2605,6 @@ const FACTS = [
   { value: "6", label: "secteurs couverts" },
   { value: "2", label: "métiers réunis" }
 ];
-const SECTORS = [
-  "MODE",
-  "BEAUTÉ",
-  "MUSIQUE",
-  "SANTÉ",
-  "FRANCHISE B2B",
-  "SOURCING INDUSTRIEL"
-];
 const SERVICES = [
   { title: "Conception et développement", body: "Sites vitrines, boutiques Shopify, plateformes métier et applications iOS. Du cadrage à la mise en ligne." },
   { title: "Meta Ads et Google Ads", body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
@@ -2660,7 +2704,7 @@ function TeamSection() {
         service.title
       )) }),
       /* @__PURE__ */ jsx("div", { className: "mt-14 grid gap-6 md:mt-20 md:grid-cols-2 md:gap-8", children: MEMBERS.map((member, index) => /* @__PURE__ */ jsx(MemberCard, { member, index }, member.name)) }),
-      /* @__PURE__ */ jsx("div", { className: "mt-16 grid grid-cols-3 gap-4 border-t border-surface-border pt-12 md:mt-24", children: FACTS.map((fact, index) => /* @__PURE__ */ jsxs(
+      /* @__PURE__ */ jsx("div", { className: "mt-16 grid grid-cols-3 gap-4 md:mt-24", children: FACTS.map((fact, index) => /* @__PURE__ */ jsxs(
         motion.div,
         {
           className: "text-center md:text-left",
@@ -2682,15 +2726,6 @@ function TeamSection() {
         fact.label
       )) })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "mt-16 border-y border-surface-border py-4 md:mt-24", children: /* @__PURE__ */ jsx(
-      Marquee,
-      {
-        items: SECTORS,
-        speed: 26,
-        direction: -1,
-        className: "font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary"
-      }
-    ) }),
     /* @__PURE__ */ jsx("div", { className: "mx-auto mt-16 max-w-6xl px-6 text-center md:mt-20", children: /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx(Magnetic, { className: "inline-block", children: /* @__PURE__ */ jsx(
       "button",
       {
@@ -3340,15 +3375,7 @@ function ProjectPage({ project }) {
         ]
       }
     ),
-    /* @__PURE__ */ jsx("div", { className: "border-y border-surface-border bg-surface-light py-4", children: /* @__PURE__ */ jsx(
-      Marquee,
-      {
-        items: project.stack,
-        speed: 22,
-        separator: "/",
-        className: "font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary"
-      }
-    ) }),
+    /* @__PURE__ */ jsx("div", { className: "bg-surface-light px-6 py-6", children: /* @__PURE__ */ jsx("ul", { className: "mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-2 font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary", children: project.stack.map((techno) => /* @__PURE__ */ jsx("li", { children: techno }, techno)) }) }),
     /* @__PURE__ */ jsx("section", { className: "bg-surface px-6 py-16 md:py-20", children: /* @__PURE__ */ jsx("div", { className: "mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3", children: project.metrics.map((metric, index) => /* @__PURE__ */ jsxs(
       motion.div,
       {

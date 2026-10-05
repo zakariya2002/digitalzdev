@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Counter, Magnetic, Marquee, Reveal, SplitText } from './motion'
+import { Counter, Magnetic, Reveal, SplitText } from './motion'
 import CalendlyModal from './CalendlyModal'
 import { EASE_OUT, VIEWPORT } from './motion/config'
 
@@ -55,15 +55,6 @@ const FACTS = [
   { value: '8', label: 'projets en ligne' },
   { value: '6', label: 'secteurs couverts' },
   { value: '2', label: 'métiers réunis' },
-]
-
-const SECTORS = [
-  'MODE',
-  'BEAUTÉ',
-  'MUSIQUE',
-  'SANTÉ',
-  'FRANCHISE B2B',
-  'SOURCING INDUSTRIEL',
 ]
 
 /** Ce que l'agence prend en charge, au-delà de la seule mise en ligne. */
@@ -210,7 +201,7 @@ export default function TeamSection() {
         </div>
 
         {/* Chiffres, tous vérifiables dans le portfolio ci-dessus */}
-        <div className="mt-16 grid grid-cols-3 gap-4 border-t border-surface-border pt-12 md:mt-24">
+        <div className="mt-16 grid grid-cols-3 gap-4 md:mt-24">
           {FACTS.map((fact, index) => (
             <motion.div
               key={fact.label}
@@ -230,16 +221,6 @@ export default function TeamSection() {
             </motion.div>
           ))}
         </div>
-      </div>
-
-      {/* Secteurs traversés, en bandeau */}
-      <div className="mt-16 border-y border-surface-border py-4 md:mt-24">
-        <Marquee
-          items={SECTORS}
-          speed={26}
-          direction={-1}
-          className="font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary"
-        />
       </div>
 
       <div className="mx-auto mt-16 max-w-6xl px-6 text-center md:mt-20">
