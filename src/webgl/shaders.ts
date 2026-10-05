@@ -69,18 +69,10 @@ void main() {
   // Zoom léger au survol, appliqué depuis le haut de l'image.
   uv = (uv - vec2(0.5, 1.0)) / (1.0 + uHover * 0.06) + vec2(0.5, 1.0);
 
-  // Aberration chromatique proportionnelle à la vitesse de scroll.
-  float shift = uVelocity * 0.012 + vWave * 0.02;
-  vec3 color;
-  color.r = texture2D(uTexture, uv + vec2(shift, 0.0)).r;
-  color.g = texture2D(uTexture, uv).g;
-  color.b = texture2D(uTexture, uv - vec2(shift, 0.0)).b;
-
-  // Hors du centre, le projet se désature et s'assombrit : l'œil sait où aller.
-  float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
-  vec3 desaturated = mix(vec3(luma), uTint * luma * 1.15, 0.35);
-  color = mix(desaturated, color, clamp(uActive + uHover * 0.6, 0.0, 1.0));
-  color *= mix(0.52, 1.0, clamp(uActive + uHover * 0.5, 0.0, 1.0));
+  // Les captures s'affichent telles quelles : plus d'aberration chromatique
+  // au défilement, plus de désaturation ni d'assombrissement hors du centre.
+  // Le rendu filtré brouillait les sites clients au lieu de les montrer.
+  vec3 color = texture2D(uTexture, uv).rgb;
 
   // Masque à coins arrondis, adouci sur un pixel pour éviter l'escalier.
   vec2 halfSize = uPlaneSize * 0.5;

@@ -205,7 +205,7 @@ export default function TeamSection() {
           {FACTS.map((fact, index) => (
             <motion.div
               key={fact.label}
-              className="text-center md:text-left"
+              className="text-center"
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={VIEWPORT}

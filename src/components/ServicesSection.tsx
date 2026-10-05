@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Magnetic, Reveal, SplitText } from './motion'
 import { EASE_OUT, VIEWPORT } from './motion/config'
+
+/** Conversation WhatsApp avec Zakariya, message d'ouverture prérempli. */
+const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
+  "Bonjour Digitalz Dev, j'aimerais vous parler de mon projet de site : "
+)}`
 
 interface Service {
   title: string
@@ -176,16 +180,20 @@ export default function ServicesSection() {
         <Reveal delay={0.1} className="mt-14 text-center md:mt-20">
           <p className="mx-auto max-w-2xl leading-relaxed text-text-secondary">
             Vous avez un projet de site internet, une boutique à ouvrir ou un
-            site à refondre ? Décrivez-le en deux minutes, nous revenons vers
-            vous sous 24 à 48 heures avec un devis adapté.
+            site à refondre ? Décrivez-le-nous directement sur WhatsApp, nous
+            revenons vers vous avec un devis adapté.
           </p>
           <Magnetic className="mt-8 inline-block">
-            <Link
-              to="/contact"
+            {/* Ouvre une conversation WhatsApp avec un premier message déjà
+                écrit : le prospect n'a plus qu'à compléter et envoyer. */}
+            <a
+              href={WHATSAPP_PROJET}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
             >
               DÉCRIRE MON PROJET
-            </Link>
+            </a>
           </Magnetic>
         </Reveal>
       </div>
