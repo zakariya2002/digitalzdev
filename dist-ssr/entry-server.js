@@ -1055,7 +1055,7 @@ function Navbar() {
             {
               "aria-label": "Menu",
               className: "flex flex-1 flex-col justify-center overflow-y-auto overscroll-contain px-7 pb-6 pt-24",
-              children: /* @__PURE__ */ jsx("ul", { className: "space-y-1", children: LIENS.map((lien, i) => {
+              children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien, i) => {
                 const courant = estCourant(lien, location.pathname);
                 return /* @__PURE__ */ jsx(
                   motion.li,
@@ -1070,17 +1070,16 @@ function Navbar() {
                         lien,
                         onClick: fermer,
                         "aria-current": courant ? "page" : void 0,
-                        className: "group flex min-h-[64px] items-center gap-4 active:opacity-60",
+                        className: "group flex min-h-[52px] items-center gap-3 active:opacity-60",
                         children: [
-                          /* @__PURE__ */ jsx("span", { className: "w-6 font-display text-xs font-bold tabular-nums text-text-muted", children: String(i + 1).padStart(2, "0") }),
                           /* @__PURE__ */ jsx(
                             "span",
                             {
-                              className: `font-display text-[2.6rem] font-extrabold leading-none tracking-tight ${courant ? "text-accent" : "text-text-primary"}`,
+                              className: `font-display text-2xl font-bold leading-none tracking-tight ${courant ? "text-accent" : "text-text-primary"}`,
                               children: lien.libelle
                             }
                           ),
-                          courant ? /* @__PURE__ */ jsx("span", { className: "ml-1 h-2 w-2 rounded-full bg-accent", "aria-hidden": true }) : /* @__PURE__ */ jsx(Fleche, { className: "ml-auto h-5 w-5 text-text-muted" })
+                          courant ? /* @__PURE__ */ jsx("span", { className: "ml-1 h-2 w-2 rounded-full bg-accent", "aria-hidden": true }) : /* @__PURE__ */ jsx(Fleche, { className: "ml-auto h-4 w-4 text-text-muted" })
                         ]
                       }
                     )
