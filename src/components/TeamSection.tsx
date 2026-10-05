@@ -141,7 +141,7 @@ export default function TeamSection() {
   const [rdvOuvert, setRdvOuvert] = useState(false)
 
   return (
-    <section id="agence" className="relative overflow-hidden bg-surface-light py-24 md:py-36">
+    <section id="agence" className="relative overflow-hidden bg-surface-light py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
         {/* En-tête */}
         {/* Deux colonnes seulement à partir de `lg` : à 768 px le titre

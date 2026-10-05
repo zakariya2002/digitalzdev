@@ -1,13 +1,18 @@
 import { useRef } from 'react'
-import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
+import {
+  motion,
+  useMotionTemplate,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from 'framer-motion'
 
 /**
  * La phrase manifeste, qui s'allume mot à mot au défilement.
  *
- * La section est épinglée le temps de la lecture : chaque mot passe du voilé
- * au plein à mesure qu'on descend, la première phrase en blanc, la seconde en
- * citron. Les mots restent lisibles dès le départ, à faible opacité : l'écran
- * n'est jamais vide, même sur mobile où l'on défile vite.
+ * Chaque mot passe du voilé au plein pendant que la phrase traverse l'écran,
+ * la première en blanc, la seconde en citron. La section n'est plus épinglée :
+ * figée sur deux écrans, elle laissait un écran vide avant et après le texte.
  */
 const PHRASES = [
   { mots: ['Pas', 'seulement', 'esthétique.'], accent: false },
@@ -29,11 +34,15 @@ function Mot({
   debut: number
   fin: number
 }) {
-  const opacite = useTransform(progression, [debut, fin], [0.16, 1])
-  const decalage = useTransform(progression, [debut, fin], [18, 0])
+  // Chaque mot part de rien : invisible, plus bas et flou, il n'apparaît
+  // qu'à son tour, après le précédent.
+  const opacite = useTransform(progression, [debut, fin], [0, 1])
+  const decalage = useTransform(progression, [debut, fin], [48, 0])
+  const flou = useTransform(progression, [debut, fin], [12, 0])
+  const filtre = useMotionTemplate`blur(${flou}px)`
   return (
     <motion.span
-      style={{ opacity: opacite, y: decalage }}
+      style={{ opacity: opacite, y: decalage, filter: filtre }}
       className={`inline-block ${accent ? 'text-accent' : 'text-text-primary'}`}
     >
       {mot}
@@ -45,16 +54,16 @@ export default function StatementSection() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start start', 'end end'],
+    // De l'entrée par le bas jusqu'au milieu de l'écran : la phrase est
+    // entièrement allumée quand on la lit au centre.
+    offset: ['start 0.85', 'end 0.55'],
   })
 
-  // La lecture occupe les trois quarts de la traversée ; le dernier quart
-  // laisse la phrase entière à l'écran avant de passer à la suite.
-  const pas = 0.75 / MOTS.length
+  const pas = 1 / MOTS.length
 
   return (
-    <section ref={ref} aria-label="Notre approche" className="relative h-[220vh] bg-surface">
-      <div className="sticky top-0 flex h-[100svh] items-center justify-center overflow-hidden px-5">
+    <section ref={ref} aria-label="Notre approche" className="relative bg-surface py-12 md:py-20">
+      <div className="flex items-center justify-center px-5">
         <h2 className="mx-auto max-w-6xl text-center text-[9.2vw] !leading-[1.04] sm:text-[8.6vw] lg:text-[min(7.4vw,136px)]">
           {PHRASES.map((phrase, iPhrase) => (
             <span key={iPhrase} className="block">

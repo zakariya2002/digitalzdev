@@ -77,7 +77,7 @@ export default function FaqSection() {
   }, [])
 
   return (
-    <section id="faq" className="relative bg-surface-light py-24 md:py-36">
+    <section id="faq" className="relative bg-surface-light py-16 md:py-24">
       <div className="mx-auto max-w-3xl px-6">
         <div className="mb-14 text-center md:mb-20">
           <Reveal>

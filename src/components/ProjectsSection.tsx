@@ -119,7 +119,7 @@ export default function ProjectsSection() {
   return (
     <section id="projets" className="relative bg-surface">
       {/* En-tête */}
-      <div className="mx-auto max-w-6xl px-6 pb-16 pt-24 md:pb-24 md:pt-32">
+      <div className="mx-auto max-w-6xl px-6 pb-10 pt-16 md:pb-16 md:pt-24">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <SplitText

@@ -29,7 +29,7 @@ export default function MissionSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-surface py-24 md:py-36"
+      className="relative overflow-hidden bg-surface py-16 md:py-24"
     >
       <motion.div
         aria-hidden

@@ -93,7 +93,7 @@ const SERVICES: Service[] = [
  */
 export default function ServicesSection() {
   return (
-    <section id="services" className="relative bg-surface py-24 md:py-36">
+    <section id="services" className="relative bg-surface py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
         {/* L'en-tête ne passe sur deux colonnes qu'à partir de `lg` : à
             768 px, `max-w-2xl` et `max-w-sm` côte à côte laissaient au titre

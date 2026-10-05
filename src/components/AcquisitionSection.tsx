@@ -58,7 +58,7 @@ export default function AcquisitionSection() {
   const [rdvOuvert, setRdvOuvert] = useState(false)
 
   return (
-    <section id="acquisition" className="relative overflow-hidden bg-surface-light py-24 md:py-36">
+    <section id="acquisition" className="relative overflow-hidden bg-surface-light py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
@@ -105,7 +105,7 @@ export default function AcquisitionSection() {
         </div>
 
         {/* La promesse, puis le rendez-vous */}
-        <div className="mt-24 text-center md:mt-36">
+        <div className="mt-20 text-center md:mt-28">
           <h2 className="mx-auto max-w-5xl font-display text-[2.6rem] sm:text-6xl md:text-8xl">
             <SplitText
               as="span"

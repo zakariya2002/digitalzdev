@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import { Magnetic, SplitText } from './motion'
 import { EASE_OUT } from './motion/config'
 import HeroVideo from './HeroVideo'
@@ -7,35 +7,15 @@ import HeroVideo from './HeroVideo'
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null)
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  })
-
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.35, 0.6], [1, 1, 0])
-  const contentY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-18%'])
-
-  // L'épinglage et le fondu au défilement sont réservés à l'ordinateur. Sur
-  // mobile, la section faisait presque deux écrans de haut et son contenu
-  // s'effaçait dès le premier geste : on faisait défiler un écran entier de
-  // vide avant d'atteindre les réalisations.
-  const [grandEcran, setGrandEcran] = useState(false)
-  useEffect(() => {
-    const requete = window.matchMedia('(min-width: 1024px)')
-    const suivre = () => setGrandEcran(requete.matches)
-    suivre()
-    requete.addEventListener('change', suivre)
-    return () => requete.removeEventListener('change', suivre)
-  }, [])
-
   return (
-    <section ref={containerRef} className="relative bg-surface lg:h-[190vh]">
-      {/* Sur ordinateur, la section reste épinglée et s'efface au défilement ;
-          sur mobile, elle suit le flux : le texte, puis la vidéo dessous. */}
-      <div className="pb-14 pt-28 lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center lg:overflow-hidden lg:py-0">
+    <section ref={containerRef} className="relative bg-surface">
+      {/* La section suit le flux sur tous les écrans : épinglée sur deux
+          hauteurs d'écran, elle s'effaçait et laissait un grand vide bleu
+          avant la suite. Sur ordinateur elle occupe un écran, sur mobile le
+          texte puis la vidéo dessous. */}
+      <div className="pb-14 pt-28 lg:flex lg:min-h-screen lg:items-center lg:py-28">
         <motion.div
           className="mx-auto grid w-full max-w-7xl items-center gap-10 px-6 lg:grid-cols-[1fr_1.15fr] lg:gap-14"
-          style={grandEcran ? { opacity: contentOpacity, y: contentY } : undefined}
         >
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
             {/* Le corps suit la largeur de fenêtre, mais il est plafonné :

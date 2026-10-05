@@ -248,7 +248,7 @@ export default function TestimonialsSection() {
   return (
     <section
       id="avis"
-      className="relative overflow-hidden bg-surface py-24 md:py-36"
+      className="relative overflow-hidden bg-surface py-16 md:py-24"
       onMouseEnter={() => setEnPause(true)}
       onMouseLeave={() => setEnPause(false)}
       onFocusCapture={() => setEnPause(true)}

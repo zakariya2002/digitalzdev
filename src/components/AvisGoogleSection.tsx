@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Reveal, SplitText } from './motion'
 import { EASE_OUT, VIEWPORT } from './motion/config'
-import { avisGoogle, ficheGoogle } from '../data/avisGoogle'
+import { avisGoogle, ficheGoogle, type AvisGoogle } from '../data/avisGoogle'
 
 function Etoiles({ note }: { note: number }) {
   return (
@@ -39,28 +39,31 @@ function LogoGoogle({ className = '' }: { className?: string }) {
  * ne s'affiche pas en ligne ; en local, un encart rappelle qu'elle attend les
  * vrais avis, pour qu'on voie où elle se placera.
  */
+/**
+ * Gabarits de mise en page, affichés en local seulement tant que la fiche
+ * n'a pas fourni ses vrais avis. Ils ne partent jamais en ligne : la
+ * compilation de production n'affiche que data/avisGoogle.ts.
+ */
+const EXEMPLES: AvisGoogle[] = [
+  { auteur: 'Exemple · Prénom N.', note: 5, texte: "Emplacement d'un vrai avis Google : quelques lignes sur le projet, le délai et le résultat obtenu.", date: 'Exemple' },
+  { auteur: 'Exemple · Prénom N.', note: 5, texte: "Emplacement d'un vrai avis Google, recopié tel qu'il apparaît sur la fiche, sans retouche.", date: 'Exemple' },
+  { auteur: 'Exemple · Prénom N.', note: 5, texte: "Emplacement d'un vrai avis Google. La carte s'adapte à la longueur du texte et garde la même hauteur que ses voisines.", date: 'Exemple' },
+]
+
 export default function AvisGoogleSection() {
-  if (avisGoogle.length === 0) {
-    if (!import.meta.env.DEV) return null
-    return (
-      <section className="bg-surface px-6 py-16">
-        <div className="mx-auto max-w-4xl rounded-3xl border-2 border-dashed border-surface-border p-10 text-center">
-          <p className="font-display text-lg font-extrabold uppercase text-accent">
-            Section « Avis Google », visible en local uniquement
-          </p>
-          <p className="mx-auto mt-3 max-w-xl text-text-secondary">
-            Elle attend les vrais avis de la fiche Google : recopiez-les dans
-            src/data/avisGoogle.ts (auteur, note, texte, date) et elle
-            s'affichera ici, sur le site en ligne aussi.
-          </p>
-        </div>
-      </section>
-    )
-  }
+  const enExemple = avisGoogle.length === 0
+  if (enExemple && !import.meta.env.DEV) return null
+  const liste = enExemple ? EXEMPLES : avisGoogle
+  const fiche = enExemple ? { note: 5, total: null, lien: null } : ficheGoogle
 
   return (
-    <section id="avis-google" className="relative overflow-hidden bg-surface py-24 md:py-32">
+    <section id="avis-google" className="relative overflow-hidden bg-surface py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
+        {enExemple && (
+          <p className="mb-8 rounded-2xl bg-accent px-5 py-3 text-center font-display text-sm font-extrabold uppercase text-surface">
+            Exemples de mise en page, visibles en local uniquement : à remplacer par vos vrais avis Google
+          </p>
+        )}
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <Reveal>
@@ -77,20 +80,20 @@ export default function AvisGoogleSection() {
             />
           </div>
 
-          {ficheGoogle.note !== null && (
+          {fiche.note !== null && (
             <Reveal delay={0.2}>
               <div className="flex items-center gap-4 rounded-3xl bg-surface-card px-6 py-5">
                 <LogoGoogle className="h-9 w-9" />
                 <div>
                   <div className="flex items-baseline gap-2">
                     <span className="font-display text-4xl font-black text-text-primary">
-                      {ficheGoogle.note.toLocaleString('fr-FR')}
+                      {fiche.note.toLocaleString('fr-FR')}
                     </span>
-                    <Etoiles note={ficheGoogle.note} />
+                    <Etoiles note={fiche.note} />
                   </div>
-                  {ficheGoogle.total !== null && (
+                  {fiche.total !== null && (
                     <p className="text-sm text-text-secondary">
-                      {ficheGoogle.total} avis sur Google
+                      {fiche.total} avis sur Google
                     </p>
                   )}
                 </div>
@@ -100,7 +103,7 @@ export default function AvisGoogleSection() {
         </div>
 
         <div className="mt-14 grid gap-4 md:mt-20 md:grid-cols-3">
-          {avisGoogle.map((avis, index) => (
+          {liste.map((avis, index) => (
             <motion.figure
               key={`${avis.auteur}-${index}`}
               className="flex flex-col rounded-3xl bg-surface-card p-7"
@@ -126,10 +129,10 @@ export default function AvisGoogleSection() {
           ))}
         </div>
 
-        {ficheGoogle.lien && (
+        {fiche.lien && (
           <Reveal delay={0.1} className="mt-10 text-center">
             <a
-              href={ficheGoogle.lien}
+              href={fiche.lien}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex min-h-[44px] items-center gap-2 font-display text-sm font-bold text-accent transition-colors hover:text-accent-hover"
