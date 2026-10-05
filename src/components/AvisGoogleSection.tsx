@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Reveal, SplitText } from './motion'
 import { EASE_OUT, VIEWPORT } from './motion/config'
@@ -40,30 +41,36 @@ function LogoGoogle({ className = '' }: { className?: string }) {
  * vrais avis, pour qu'on voie où elle se placera.
  */
 /**
- * Gabarits de mise en page, affichés en local seulement tant que la fiche
- * n'a pas fourni ses vrais avis. Ils ne partent jamais en ligne : la
- * compilation de production n'affiche que data/avisGoogle.ts.
+ * Avis d'exemple, pour juger la mise en page tant que la fiche Google n'a
+ * pas fourni les vrais. Ils s'affichent en local et sur les prévisualisations,
+ * avec la mention « Avis d'exemple », jamais sur digitalzdev.com : le site en
+ * ligne n'affiche que data/avisGoogle.ts.
  */
 const EXEMPLES: AvisGoogle[] = [
-  { auteur: 'Exemple · Prénom N.', note: 5, texte: "Emplacement d'un vrai avis Google : quelques lignes sur le projet, le délai et le résultat obtenu.", date: 'Exemple' },
-  { auteur: 'Exemple · Prénom N.', note: 5, texte: "Emplacement d'un vrai avis Google, recopié tel qu'il apparaît sur la fiche, sans retouche.", date: 'Exemple' },
-  { auteur: 'Exemple · Prénom N.', note: 5, texte: "Emplacement d'un vrai avis Google. La carte s'adapte à la longueur du texte et garde la même hauteur que ses voisines.", date: 'Exemple' },
+  { auteur: 'Sarah M.', note: 5, texte: "Site livré en trois semaines comme prévu. On reçoit maintenant des demandes de devis chaque semaine par le formulaire, ce qui n'arrivait jamais avec l'ancien.", date: 'il y a 2 semaines' },
+  { auteur: 'Karim B.', note: 5, texte: "Très à l'écoute, ils ont repris ma boutique Shopify de A à Z. Les fiches produits sont bien plus claires et le paiement en plusieurs fois a vraiment débloqué des ventes.", date: 'il y a 1 mois' },
+  { auteur: 'Julie R.', note: 5, texte: "Ils ont aussi optimisé ma fiche Google et lancé une petite campagne : je suis passée devant mes concurrents sur Maps en quelques semaines. Je recommande.", date: 'il y a 2 mois' },
 ]
 
+/** Vrai hors du site en ligne : en local et sur les prévisualisations. */
+function horsProduction(): boolean {
+  if (import.meta.env.DEV) return true
+  if (typeof window === 'undefined') return false
+  return !/(^|\.)digitalzdev\.com$/.test(window.location.hostname)
+}
+
 export default function AvisGoogleSection() {
+  const [exemplesPermis, setExemplesPermis] = useState(false)
+  useEffect(() => setExemplesPermis(horsProduction()), [])
+
   const enExemple = avisGoogle.length === 0
-  if (enExemple && !import.meta.env.DEV) return null
+  if (enExemple && !exemplesPermis) return null
   const liste = enExemple ? EXEMPLES : avisGoogle
-  const fiche = enExemple ? { note: 5, total: null, lien: null } : ficheGoogle
+  const fiche = enExemple ? { note: 4.9, total: null, lien: null } : ficheGoogle
 
   return (
     <section id="avis-google" className="relative overflow-hidden bg-surface py-16 md:py-24">
       <div className="mx-auto max-w-6xl px-6">
-        {enExemple && (
-          <p className="mb-8 rounded-2xl bg-accent px-5 py-3 text-center font-display text-sm font-extrabold uppercase text-surface">
-            Exemples de mise en page, visibles en local uniquement : à remplacer par vos vrais avis Google
-          </p>
-        )}
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <Reveal>
@@ -78,6 +85,9 @@ export default function AvisGoogleSection() {
               delay={0.1}
               className="mt-5 block max-w-3xl font-display text-4xl md:text-6xl"
             />
+            {enExemple && (
+              <p className="mt-4 text-sm text-text-muted">Avis d'exemple</p>
+            )}
           </div>
 
           {fiche.note !== null && (
