@@ -34,10 +34,10 @@ function Carte({
       >
         <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-7">
-            <h3 className="text-4xl font-black leading-[0.95] tracking-tight md:text-7xl">
+            <h3 className="text-4xl font-normal leading-[0.95] tracking-tight md:text-7xl">
               {service.title}
             </h3>
-            <p className={`mt-4 text-lg font-bold md:text-xl ${accent ? 'text-surface' : 'text-accent'}`}>
+            <p className={`mt-4 text-lg font-medium md:text-xl ${accent ? 'text-surface' : 'text-accent'}`}>
               {service.lead}
             </p>
           </div>
@@ -49,7 +49,7 @@ function Carte({
               {service.points.map((point) => (
                 <li
                   key={point}
-                  className={`rounded-xl px-4 py-3 text-sm font-semibold ${accent ? 'bg-surface/10' : 'bg-surface-light'}`}
+                  className={`rounded-xl px-4 py-3 text-sm font-medium ${accent ? 'bg-surface/10' : 'bg-surface-light'}`}
                 >
                   {point}
                 </li>
@@ -75,7 +75,7 @@ export default function ServicesStudio() {
   return (
     <section id="services" className="bg-surface px-5 pb-24 pt-24 md:px-10 md:pb-36 md:pt-36">
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs font-bold uppercase tracking-[0.25em] text-text-muted">Nos services</p>
+        <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Nos services</p>
         <h2 className="mt-6 max-w-5xl text-[11vw] text-text-primary md:text-7xl lg:text-8xl">
           Une agence web qui conçoit, développe <span className="text-accent">et fait connaître votre site.</span>
         </h2>
@@ -92,7 +92,7 @@ export default function ServicesStudio() {
         </div>
 
         <div className="mt-20 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-28 md:flex-row md:items-center md:justify-between md:p-12">
-          <p className="max-w-2xl text-xl font-bold leading-snug text-text-primary md:text-2xl">
+          <p className="max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl">
             Vous avez un projet de site internet, une boutique à ouvrir ou un site
             à refondre ? Décrivez-le-nous directement sur WhatsApp.
           </p>
@@ -101,7 +101,7 @@ export default function ServicesStudio() {
             target="_blank"
             rel="noopener noreferrer"
             data-curseur="WhatsApp"
-            className="inline-flex min-h-[56px] shrink-0 items-center rounded-full bg-accent px-8 text-base font-extrabold text-surface transition-colors hover:bg-accent-hover"
+            className="inline-flex min-h-[56px] shrink-0 items-center rounded-full bg-accent px-8 text-base font-medium text-surface transition-colors hover:bg-accent-hover"
           >
             Décrire mon projet
           </a>

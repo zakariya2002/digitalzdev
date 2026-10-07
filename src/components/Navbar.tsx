@@ -39,7 +39,7 @@ function Heure() {
     return () => window.clearInterval(t)
   }, [])
   return (
-    <span className="text-sm font-bold text-text-secondary">
+    <span className="text-sm font-medium text-text-secondary">
       Paris, France <span className="text-text-primary">{heure ?? ''}</span>
     </span>
   )
@@ -79,58 +79,84 @@ export default function Navbar() {
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-          defile && !ouvert ? 'bg-surface/70 backdrop-blur-xl' : 'bg-transparent'
-        }`}
-      >
+      {/* Deux pastilles flottantes, comme sur butter.video : à gauche le
+          logo, les liens et le menu ; à droite le contact et l'appel à
+          l'action. Dès qu'on descend, les liens se replient dans la pastille
+          et seuls le logo et le bouton de menu restent. */}
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-3 px-3 pt-3 md:px-6 md:pt-5">
         <nav
           aria-label="Navigation principale"
-          className="flex items-center justify-between gap-4 px-5 py-4 md:px-10 md:py-5"
+          className="pointer-events-auto flex items-center rounded-2xl bg-surface-card/75 py-1.5 pl-3 pr-1.5 backdrop-blur-xl md:pl-4"
         >
-          <Link to="/" onClick={fermer} className="group flex min-h-[44px] items-center gap-3">
+          <Link to="/" onClick={fermer} className="group flex min-h-[44px] items-center gap-2.5 pr-2">
             <img
               src="/logo-studio.png"
               alt=""
-              className="h-10 w-10 rounded-full transition-transform duration-500 group-hover:rotate-[-12deg]"
+              className="h-8 w-8 rounded-full transition-transform duration-500 group-hover:rotate-[-12deg]"
             />
-            <span className="text-lg font-black tracking-tight text-text-primary">
-              Digitalz <span className="text-accent">Dev</span>
-            </span>
+            <span className="hidden whitespace-nowrap text-[17px] font-medium tracking-tight text-text-primary sm:inline">Digitalz Dev</span>
           </Link>
 
-          <div className="hidden lg:block">
-            <Heure />
-          </div>
+          <motion.div
+            className="hidden overflow-hidden lg:block"
+            initial={false}
+            animate={{ width: defile ? 0 : 'auto', opacity: defile ? 0 : 1 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ul className="flex items-center gap-1 whitespace-nowrap pl-4">
+              {LIENS.filter((l) => l.vers !== '/').map((lien) => {
+                const classe =
+                  'inline-flex min-h-[40px] items-center rounded-xl px-3 text-[15px] text-text-secondary transition-colors hover:bg-surface-border/60 hover:text-text-primary'
+                return (
+                  <li key={lien.libelle}>
+                    {lien.interne ? (
+                      <Link to={lien.vers} className={classe}>{lien.libelle}</Link>
+                    ) : (
+                      <a href={lien.vers} className={classe}>{lien.libelle}</a>
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          </motion.div>
 
-          <div className="flex items-center gap-2">
-            <a
-              href={QUIZ}
-              className="hidden min-h-[44px] items-center rounded-full bg-accent px-5 text-[15px] font-extrabold text-surface transition-colors hover:bg-accent-hover sm:inline-flex"
-            >
-              Ma démo gratuite
-            </a>
-            <button
-              type="button"
-              onClick={() => setOuvert((o) => !o)}
-              aria-expanded={ouvert}
-              aria-controls="menu-plein-ecran"
-              className="relative z-[60] inline-flex min-h-[44px] items-center gap-3 rounded-full bg-surface-card px-5 text-[15px] font-extrabold text-text-primary transition-colors hover:bg-surface-border"
-            >
-              <span>{ouvert ? 'Fermer' : 'Menu'}</span>
-              <span aria-hidden className="relative block h-3 w-4">
-                <motion.span
-                  className="absolute left-0 top-0 h-[2px] w-full rounded-full bg-current"
-                  animate={ouvert ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-                />
-                <motion.span
-                  className="absolute bottom-0 left-0 h-[2px] w-full rounded-full bg-current"
-                  animate={ouvert ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-                />
-              </span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setOuvert((o) => !o)}
+            aria-expanded={ouvert}
+            aria-controls="menu-plein-ecran"
+            aria-label={ouvert ? 'Fermer le menu' : 'Ouvrir le menu'}
+            className="relative z-[60] ml-1 flex h-10 w-10 items-center justify-center rounded-xl text-text-primary transition-colors hover:bg-surface-border/60"
+          >
+            {ouvert ? (
+              <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" aria-hidden>
+                <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 4 16" className="h-4 w-1" fill="currentColor" aria-hidden>
+                <circle cx="2" cy="2" r="1.6" />
+                <circle cx="2" cy="8" r="1.6" />
+                <circle cx="2" cy="14" r="1.6" />
+              </svg>
+            )}
+          </button>
         </nav>
+
+        <div className="pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl">
+          <Link
+            to="/contact"
+            className="hidden min-h-[40px] items-center rounded-xl px-4 text-[15px] text-text-primary transition-colors hover:bg-surface-border/60 sm:inline-flex"
+          >
+            Contact
+          </Link>
+          <a
+            href={QUIZ}
+            className="inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-medium text-surface transition-colors hover:bg-accent-hover"
+          >
+            <span className="sm:hidden">Démo gratuite</span>
+            <span className="hidden sm:inline">Ma démo gratuite</span>
+          </a>
+        </div>
       </header>
 
       <AnimatePresence>
@@ -147,7 +173,7 @@ export default function Navbar() {
               <ul>
                 {LIENS.map((lien, i) => {
                   const courant = estCourant(lien, location.pathname)
-                  const classe = `group inline-flex items-center gap-4 text-[13vw] font-black leading-[0.95] tracking-[-0.05em] transition-colors md:text-[7.5vw] ${
+                  const classe = `group inline-flex items-center gap-4 text-[13vw] font-normal leading-[0.95] tracking-[-0.05em] transition-colors md:text-[7.5vw] ${
                     courant ? 'text-accent' : 'text-text-primary hover:text-accent'
                   }`
                   const contenu = (
@@ -192,7 +218,8 @@ export default function Navbar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <div className="flex flex-col gap-1 text-[15px] font-bold text-text-secondary">
+              <div className="flex flex-col gap-1 text-[15px] font-medium text-text-secondary">
+                <Heure />
                 <a href="mailto:zdigitalzdev@gmail.com" className="transition-colors hover:text-accent">
                   zdigitalzdev@gmail.com
                 </a>
@@ -215,7 +242,7 @@ export default function Navbar() {
               </div>
               <a
                 href={QUIZ}
-                className="inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-extrabold text-surface transition-colors hover:bg-accent-hover md:w-auto"
+                className="inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto"
               >
                 Générer ma démo gratuite →
               </a>

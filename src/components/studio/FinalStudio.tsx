@@ -35,8 +35,8 @@ export default function FinalStudio() {
   return (
     <section ref={ref} className="overflow-hidden bg-surface px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-40">
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs font-bold uppercase tracking-[0.25em] text-text-muted">Notre engagement</p>
-        <h2 className="mt-8 text-[13vw] text-text-primary lg:text-[min(10vw,190px)]">
+        <p className="text-center text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Notre engagement</p>
+        <h2 className="mt-8 text-center text-[9vw] uppercase leading-[1.02] text-text-primary md:text-[6.4vw] lg:text-[min(6vw,112px)]">
           <motion.span className="block" style={{ x: ligne1 }}>
             Nous vendons plus qu'un site.
           </motion.span>
@@ -45,19 +45,19 @@ export default function FinalStudio() {
           </motion.span>
         </h2>
 
-        <div className="mt-14 flex flex-col items-start gap-10 md:mt-20 md:flex-row md:items-center md:justify-between">
-          <p className="max-w-md text-xl font-bold leading-snug text-text-secondary md:text-2xl">
+        <div className="mt-12 flex flex-col items-center gap-10 text-center md:mt-16">
+          <p className="max-w-md text-xl leading-snug text-text-secondary md:text-2xl">
             Commandez le site qui vous apportera vos prochains prospects.
           </p>
 
-          <div className="flex items-center gap-6" onPointerMove={attirer} onPointerLeave={relacher}>
+          <div className="flex flex-col items-center gap-6" onPointerMove={attirer} onPointerLeave={relacher}>
             <motion.button
               ref={boutonRef}
               type="button"
               onClick={() => setRdvOuvert(true)}
               style={{ x: sx, y: sy }}
               whileTap={{ scale: 0.94 }}
-              className="flex h-40 w-40 items-center justify-center rounded-full bg-accent p-6 text-center text-lg font-black leading-tight text-surface transition-colors hover:bg-accent-hover md:h-52 md:w-52 md:text-xl"
+              className="flex h-40 w-40 items-center justify-center rounded-full bg-accent p-6 text-center text-lg font-normal leading-tight text-surface transition-colors hover:bg-accent-hover md:h-52 md:w-52 md:text-xl"
             >
               Réserver un call
             </motion.button>
@@ -65,7 +65,7 @@ export default function FinalStudio() {
               href={WHATSAPP_PROJET}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[44px] items-center text-base font-extrabold text-text-primary transition-colors hover:text-accent"
+              className="inline-flex min-h-[44px] items-center text-base font-medium text-text-primary transition-colors hover:text-accent"
             >
               ou WhatsApp ↗
             </a>

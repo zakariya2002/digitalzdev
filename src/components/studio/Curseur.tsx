@@ -50,7 +50,7 @@ export default function Curseur() {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full bg-accent font-sans text-[13px] font-extrabold text-surface"
+      className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full bg-accent font-sans text-[13px] font-medium text-surface"
       style={{ x: sx, y: sy, translateX: '-50%', translateY: '-50%' }}
       animate={{ width: taille, height: taille, scale: enfonce ? 0.85 : 1 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}

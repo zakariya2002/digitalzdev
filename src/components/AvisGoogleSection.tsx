@@ -74,7 +74,7 @@ export default function AvisGoogleSection() {
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <Reveal>
-              <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
                 Avis Google
               </span>
             </Reveal>
@@ -96,7 +96,7 @@ export default function AvisGoogleSection() {
                 <LogoGoogle className="h-9 w-9" />
                 <div>
                   <div className="flex items-baseline gap-2">
-                    <span className="font-display text-4xl font-black text-text-primary">
+                    <span className="font-display text-4xl font-normal text-text-primary">
                       {fiche.note.toLocaleString('fr-FR')}
                     </span>
                     <Etoiles note={fiche.note} />
@@ -130,7 +130,7 @@ export default function AvisGoogleSection() {
                 « {avis.texte} »
               </blockquote>
               <figcaption className="mt-6">
-                <span className="block font-display font-extrabold text-text-primary">
+                <span className="block font-display font-medium text-text-primary">
                   {avis.auteur}
                 </span>
                 <span className="text-sm text-text-muted">{avis.date}</span>
@@ -145,7 +145,7 @@ export default function AvisGoogleSection() {
               href={fiche.lien}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-[44px] items-center gap-2 font-display text-sm font-bold text-accent transition-colors hover:text-accent-hover"
+              className="inline-flex min-h-[44px] items-center gap-2 font-display text-sm font-medium text-accent transition-colors hover:text-accent-hover"
             >
               Voir tous nos avis sur Google ↗
             </a>

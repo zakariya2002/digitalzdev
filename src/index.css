@@ -53,22 +53,22 @@
     --text-muted: 85 85 85;
   }
 
-  /* Thème « studio » du site public : noir profond, crème et un seul accent
-     citron, repris du logo et de la vidéo. Une seule police, Nunito, poussée
-     de la graisse la plus fine à la plus noire. La classe est posée sur
-     <html> par App, uniquement hors de l'espace client et du tableau de bord,
-     qui gardent la charte d'origine. */
+  /* Thème « studio » du site public : graphite et acier, dans le registre
+     d'Apple. Aucune couleur vive : le relief vient du gris, de la lumière et
+     des boutons chromés. Une seule police, Nunito, en graisses fines. La
+     classe est posée sur <html> par App, uniquement hors de l'espace client
+     et du tableau de bord, qui gardent la charte d'origine. */
   html.studio {
-    --surface: 12 12 11;
-    --surface-light: 22 22 20;
-    --surface-card: 28 28 26;
-    --surface-border: 46 46 42;
-    --accent: 217 244 90;
-    --accent-hover: 232 250 140;
-    --accent-muted: 150 168 70;
-    --text-primary: 241 238 231;
-    --text-secondary: 168 164 155;
-    --text-muted: 111 108 102;
+    --surface: 17 17 19;
+    --surface-light: 27 27 30;
+    --surface-card: 36 36 40;
+    --surface-border: 58 58 63;
+    --accent: 142 142 147;
+    --accent-hover: 174 174 178;
+    --accent-muted: 99 99 104;
+    --text-primary: 245 245 247;
+    --text-secondary: 161 161 166;
+    --text-muted: 110 110 115;
     color-scheme: dark;
   }
 
@@ -78,16 +78,38 @@
     font-family: 'Nunito', system-ui, sans-serif;
   }
 
-  /* Les grands titres en Nunito noir, très serrés. */
+  /* Pas de gras : les grands titres en graisse normale, très serrés. */
   html.studio h1,
   html.studio h2 {
-    font-weight: 900;
-    letter-spacing: -0.045em;
-    line-height: 0.95;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* Le chrome : tout ce qui portait la couleur d'accent devient une plaque
+     d'acier poli. Un dégradé clair en haut, cassé à mi-hauteur, puis plus
+     clair vers le bas : c'est ce qui fait le métal et non le plastique. */
+  html.studio .bg-accent {
+    background-color: #c9cace;
+    background-image: linear-gradient(180deg, #fbfbfc 0%, #dcdde1 44%, #a7a8ae 52%, #cfd0d4 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+      0 6px 18px -8px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Le reflet plus clair au survol, réservé aux appareils à souris : sur un
+     écran tactile, l'état de survol reste collé après le toucher. */
+  @media (hover: hover) {
+    html.studio .hover\:bg-accent-hover:hover,
+    html.studio .\[\@media\(hover\:hover\)\]\:hover\:bg-accent:hover {
+      background-color: #d8d9dc;
+      background-image: linear-gradient(180deg, #ffffff 0%, #e7e8eb 44%, #b5b6bb 52%, #dcdde0 100%);
+    }
   }
 
   html.studio ::selection {
-    background-color: rgb(var(--accent));
+    background-color: rgb(var(--text-primary));
     color: rgb(var(--surface));
   }
 

@@ -30,12 +30,12 @@ function CarteProjet({ projet, className = '' }: { projet: (typeof projects)[num
       </div>
       <div className="mt-4 flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-2xl font-black tracking-tight text-text-primary md:text-4xl">
+          <h3 className="text-2xl font-normal tracking-tight text-text-primary md:text-4xl">
             {projet.title}
           </h3>
           <p className="mt-1 text-sm font-medium text-text-secondary md:text-base">{projet.subtitle}</p>
         </div>
-        <span className="mt-2 shrink-0 rounded-full bg-surface-card px-3 py-1 text-xs font-bold text-text-secondary">
+        <span className="mt-2 shrink-0 rounded-full bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary">
           {projet.year}
         </span>
       </div>
@@ -74,7 +74,7 @@ function Selection() {
               Sélection<span className="text-accent">.</span>
             </h2>
             <div className="mb-4 w-64">
-              <p className="text-right text-sm font-bold text-text-secondary">
+              <p className="text-right text-sm font-medium text-text-secondary">
                 {projects.length} sites en ligne
               </p>
               <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-surface-card">
@@ -123,7 +123,7 @@ function Index() {
       }}
     >
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs font-bold uppercase tracking-[0.25em] text-text-muted">
+        <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">
           Toutes nos réalisations
         </p>
         <p className="mt-4 max-w-xl text-lg font-medium text-text-secondary">
@@ -152,10 +152,10 @@ function Index() {
                   loading="lazy"
                   className="h-14 w-20 shrink-0 rounded-lg object-cover object-top md:hidden"
                 />
-                <span className="min-w-0 flex-1 truncate text-3xl font-black tracking-tight text-text-primary md:text-6xl lg:text-7xl">
+                <span className="min-w-0 flex-1 truncate text-3xl font-normal tracking-tight text-text-primary md:text-6xl lg:text-7xl">
                   {p.title}
                 </span>
-                <span className="hidden shrink-0 text-right text-sm font-semibold text-text-secondary md:block">
+                <span className="hidden shrink-0 text-right text-sm font-medium text-text-secondary md:block">
                   {p.subtitle}
                   <span className="block text-text-muted">{p.year}</span>
                 </span>

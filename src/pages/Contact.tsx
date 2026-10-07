@@ -110,7 +110,7 @@ export default function Contact() {
           </motion.div>
 
           <motion.span
-            className="text-accent font-display font-semibold text-sm tracking-[0.2em] uppercase"
+            className="text-accent font-display font-medium text-sm tracking-[0.2em] uppercase"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -118,7 +118,7 @@ export default function Contact() {
             Contact
           </motion.span>
           <motion.h1
-            className="font-display font-black text-5xl md:text-8xl lg:text-9xl text-text-primary mt-4 mb-6"
+            className="font-display font-normal text-5xl md:text-8xl lg:text-9xl text-text-primary mt-4 mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -153,8 +153,8 @@ export default function Contact() {
               >
                 {/* Infos personnelles */}
                 <fieldset className="space-y-5">
-                  <legend className="font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold">
+                  <legend className="font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium">
                       1
                     </span>
                     Vos coordonnées
@@ -217,8 +217,8 @@ export default function Contact() {
 
                 {/* Type de projet */}
                 <fieldset className="space-y-4">
-                  <legend className="font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold">
+                  <legend className="font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium">
                       2
                     </span>
                     Votre projet
@@ -291,8 +291,8 @@ export default function Contact() {
 
                 {/* Budget & Délai */}
                 <fieldset className="space-y-4">
-                  <legend className="font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold">
+                  <legend className="font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium">
                       3
                     </span>
                     Budget & délai
@@ -343,8 +343,8 @@ export default function Contact() {
 
                 {/* Description */}
                 <fieldset className="space-y-4">
-                  <legend className="font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold">
+                  <legend className="font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium">
                       4
                     </span>
                     Décrivez votre projet
@@ -394,7 +394,7 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={sending}
-                  className="w-full py-4 bg-accent text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full py-4 bg-accent text-surface font-display font-medium tracking-wider rounded-lg hover:opacity-90 transition-all text-lg disabled:opacity-60 disabled:cursor-not-allowed"
                   whileHover={sending ? {} : { scale: 1.01 }}
                   whileTap={sending ? {} : { scale: 0.98 }}
                 >
@@ -429,7 +429,7 @@ export default function Contact() {
                     />
                   </svg>
                 </div>
-                <h2 className="font-display font-bold text-3xl text-text-primary mb-3">
+                <h2 className="font-display font-medium text-3xl text-text-primary mb-3">
                   Demande envoyée !
                 </h2>
                 <p className="text-text-secondary text-lg mb-8">
@@ -437,7 +437,7 @@ export default function Contact() {
                 </p>
                 <Link
                   to="/"
-                  className="px-8 py-3 bg-accent text-surface rounded-full font-display font-semibold inline-block hover:opacity-90 transition-all"
+                  className="px-8 py-3 bg-accent text-surface rounded-full font-display font-medium inline-block hover:opacity-90 transition-all"
                 >
                   Retour à l'accueil
                 </Link>

@@ -18,7 +18,7 @@ export default function ExpertisesStudio() {
   return (
     <section id="expertises" className="bg-surface-light px-5 py-24 md:px-10 md:py-36">
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs font-bold uppercase tracking-[0.25em] text-text-muted">Expertises</p>
+        <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Expertises</p>
         <h2 className="mt-6 max-w-4xl text-[12vw] text-text-primary md:text-7xl lg:text-8xl">
           Trois métiers, <span className="text-accent">trois exigences.</span>
         </h2>
@@ -37,12 +37,12 @@ export default function ExpertisesStudio() {
                   actif === i ? 'bg-accent text-surface' : 'bg-surface-card text-text-primary hover:bg-surface-border'
                 }`}
               >
-                <span className="text-xl font-black tracking-tight md:text-3xl">{m.cible}</span>
+                <span className="text-xl font-normal tracking-tight md:text-3xl">{m.cible}</span>
                 <motion.span
                   aria-hidden
                   animate={{ rotate: actif === i ? 0 : -45 }}
                   transition={{ duration: 0.4, ease: EASE }}
-                  className="text-2xl font-black"
+                  className="text-2xl font-normal"
                 >
                   →
                 </motion.span>
@@ -60,7 +60,7 @@ export default function ExpertisesStudio() {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.5, ease: EASE }}
               >
-                <h3 className="text-3xl font-black leading-tight tracking-tight text-text-primary md:text-5xl">
+                <h3 className="text-3xl font-normal leading-tight tracking-tight text-text-primary md:text-5xl">
                   {metier.titre}
                 </h3>
                 <p className="mt-6 max-w-2xl text-lg font-medium leading-relaxed text-text-secondary">
@@ -73,7 +73,7 @@ export default function ExpertisesStudio() {
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.1 + i * 0.06, ease: EASE }}
-                      className="flex items-start gap-3 rounded-2xl bg-surface-card px-5 py-4 text-[15px] font-semibold text-text-primary"
+                      className="flex items-start gap-3 rounded-2xl bg-surface-card px-5 py-4 text-[15px] font-medium text-text-primary"
                     >
                       <span aria-hidden className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent" />
                       {point}

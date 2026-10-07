@@ -10,10 +10,10 @@ export default function ContactForm() {
         viewport={{ once: true }}
         transition={{ duration: 0.8 }}
       >
-        <span className="text-accent font-display font-semibold text-sm tracking-[0.2em] uppercase">
+        <span className="text-accent font-display font-medium text-sm tracking-[0.2em] uppercase">
           Contact
         </span>
-        <h2 className="font-display font-bold text-3xl md:text-4xl text-text-primary mt-4 mb-4">
+        <h2 className="font-display font-medium text-3xl md:text-4xl text-text-primary mt-4 mb-4">
           Un projet en tête ?
         </h2>
         <p className="text-text-secondary mb-8">
@@ -22,7 +22,7 @@ export default function ContactForm() {
         </p>
         <a
           href="https://quiz.digitalzdev.com"
-          className="inline-block px-8 py-4 bg-accent text-surface font-display font-semibold rounded-lg hover:opacity-90 transition-all"
+          className="inline-block px-8 py-4 bg-accent text-surface font-display font-medium rounded-lg hover:opacity-90 transition-all"
         >
           Générer ma démo gratuite
         </a>

@@ -37,7 +37,7 @@ export default function EquipeStudio() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-text-muted">L'agence</p>
+            <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">L'agence</p>
             <h2 className="mt-6 text-[12vw] text-text-primary md:text-7xl lg:text-8xl">
               Une équipe restreinte, <span className="text-accent">deux métiers complets.</span>
             </h2>
@@ -61,18 +61,18 @@ export default function EquipeStudio() {
               transition={{ duration: 0.8, delay: i * 0.1, ease: EASE }}
             >
               <div className="flex items-center gap-4">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-accent text-xl font-black text-surface">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-accent text-xl font-normal text-surface">
                   {m.initials}
                 </span>
                 <div>
-                  <h3 className="text-2xl font-black tracking-tight text-text-primary md:text-3xl">{m.name}</h3>
-                  <p className="text-sm font-bold text-accent">{m.role}</p>
+                  <h3 className="text-2xl font-normal tracking-tight text-text-primary md:text-3xl">{m.name}</h3>
+                  <p className="text-sm font-medium text-accent">{m.role}</p>
                 </div>
               </div>
               <p className="mt-6 flex-1 text-[15px] font-medium leading-relaxed text-text-secondary">{m.pitch}</p>
               <ul className="mt-6 flex flex-wrap gap-2">
                 {m.disciplines.map((d) => (
-                  <li key={d} className="rounded-full bg-surface-light px-3 py-1.5 text-xs font-bold text-text-secondary">
+                  <li key={d} className="rounded-full bg-surface-light px-3 py-1.5 text-xs font-medium text-text-secondary">
                     {d}
                   </li>
                 ))}
@@ -81,7 +81,7 @@ export default function EquipeStudio() {
                 href={m.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex min-h-[44px] w-fit items-center text-sm font-extrabold text-text-primary transition-colors hover:text-accent"
+                className="mt-6 inline-flex min-h-[44px] w-fit items-center text-sm font-medium text-text-primary transition-colors hover:text-accent"
               >
                 Profil LinkedIn ↗
               </a>
@@ -99,7 +99,7 @@ export default function EquipeStudio() {
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.7, delay: i * 0.08, ease: EASE }}
             >
-              <h3 className="text-lg font-black text-text-primary">{r.title}</h3>
+              <h3 className="text-lg font-normal text-text-primary">{r.title}</h3>
               <p className="mt-2 text-sm font-medium leading-relaxed text-text-secondary">{r.body}</p>
             </motion.div>
           ))}
@@ -108,10 +108,10 @@ export default function EquipeStudio() {
         <div className="mt-16 grid grid-cols-3 gap-4 md:mt-24">
           {FACTS.map((f) => (
             <div key={f.label} className="text-center">
-              <p className="text-[18vw] font-black leading-none tracking-[-0.06em] text-accent md:text-[10vw] lg:text-[min(10vw,180px)]">
+              <p className="text-[18vw] font-normal leading-none tracking-[-0.06em] text-accent md:text-[10vw] lg:text-[min(10vw,180px)]">
                 <Chiffre valeur={f.value} />
               </p>
-              <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-text-secondary md:text-sm">
+              <p className="mt-3 text-xs font-medium uppercase tracking-[0.18em] text-text-secondary md:text-sm">
                 {f.label}
               </p>
             </div>

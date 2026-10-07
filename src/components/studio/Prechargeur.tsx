@@ -65,13 +65,13 @@ export default function Prechargeur() {
         >
           <div className="flex items-center gap-3">
             <img src="/logo-studio.png" alt="" className="h-10 w-10 rounded-full ring-2 ring-surface" />
-            <span className="text-lg font-black tracking-tight">Digitalz Dev</span>
+            <span className="text-lg font-normal tracking-tight">Digitalz Dev</span>
           </div>
           <div className="flex items-end justify-between gap-6">
-            <p className="max-w-[14rem] text-sm font-bold leading-snug">
+            <p className="max-w-[14rem] text-sm font-medium leading-snug">
               Sites internet pour avocats, architectes et métiers de l'image.
             </p>
-            <span className="text-[28vw] font-black leading-[0.8] tracking-[-0.06em] md:text-[18vw]">
+            <span className="text-[28vw] font-normal leading-[0.8] tracking-[-0.06em] md:text-[18vw]">
               {compte}
             </span>
           </div>

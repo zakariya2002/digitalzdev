@@ -118,7 +118,7 @@ export default function HeroStudio() {
           style={{ opacity: titreOpacite, y: titreY }}
         >
           <motion.p
-            className="text-xs font-bold uppercase tracking-[0.25em] text-text-muted"
+            className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -148,13 +148,13 @@ export default function HeroStudio() {
               <button
                 type="button"
                 onClick={() => setRdvOuvert(true)}
-                className="inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-extrabold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]"
+                className="inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-medium text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]"
               >
                 Prendre rendez-vous
               </button>
               <a
                 href={QUIZ}
-                className="inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-bold text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]"
+                className="inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]"
               >
                 Voir un aperçu
               </a>
@@ -174,7 +174,7 @@ export default function HeroStudio() {
           <a
             href={QUIZ}
             data-curseur="Go"
-            className="inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-extrabold text-surface transition-colors hover:bg-accent-hover"
+            className="inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-medium text-surface transition-colors hover:bg-accent-hover"
           >
             Voir mon aperçu →
           </a>
@@ -184,7 +184,7 @@ export default function HeroStudio() {
           type="button"
           onClick={basculerSon}
           aria-label={son ? 'Couper le son' : 'Activer le son'}
-          className="absolute bottom-[6%] right-[8%] z-20 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-bold text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28"
+          className="absolute bottom-[6%] right-[8%] z-20 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28"
         >
           {son ? 'Son activé' : 'Son coupé'}
         </button>

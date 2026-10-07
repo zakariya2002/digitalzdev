@@ -40,7 +40,7 @@ export default function MissionSection() {
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mb-16 text-center md:mb-24">
           <Reveal>
-            <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+            <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
               Notre mission
             </span>
           </Reveal>
@@ -50,7 +50,7 @@ export default function MissionSection() {
             by="word"
             text="Chaque projet finance une cause"
             delay={0.1}
-            className="mx-auto mt-5 block max-w-3xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-6xl"
+            className="mx-auto mt-5 block max-w-3xl font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-6xl"
           />
 
           <Reveal delay={0.25} className="mx-auto mt-8 max-w-2xl">
@@ -60,7 +60,7 @@ export default function MissionSection() {
                 href="https://neuro-care.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-accent underline-offset-4 hover:underline"
+                className="font-medium text-accent underline-offset-4 hover:underline"
               >
                 NeuroCare
               </a>
@@ -87,7 +87,7 @@ export default function MissionSection() {
 
           <div>
             <Reveal from="right" distance={50}>
-              <h3 className="mb-6 font-display text-2xl font-bold text-text-primary md:text-3xl">
+              <h3 className="mb-6 font-display text-2xl font-medium text-text-primary md:text-3xl">
                 NeuroCare : bien plus qu'une plateforme
               </h3>
             </Reveal>
@@ -118,7 +118,7 @@ export default function MissionSection() {
                 >
                   <Counter
                     value={stat.value}
-                    className="block font-display text-xl font-bold text-accent sm:text-2xl"
+                    className="block font-display text-xl font-medium text-accent sm:text-2xl"
                   />
                   <div className="mt-1 text-xs leading-snug text-text-muted">
                     {stat.label}
@@ -133,7 +133,7 @@ export default function MissionSection() {
                   href="https://neuro-care.fr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-medium text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm"
                 >
                   Découvrir NeuroCare
                   <svg

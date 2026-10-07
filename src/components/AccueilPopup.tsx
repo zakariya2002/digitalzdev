@@ -125,7 +125,7 @@ export default function AccueilPopup() {
               <a
                 href={QUIZ}
                 onClick={fermer}
-                className="group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-full bg-accent px-8 font-display text-base font-extrabold text-surface transition-colors hover:bg-accent-hover sm:w-auto"
+                className="group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-full bg-accent px-8 font-display text-base font-medium text-surface transition-colors hover:bg-accent-hover sm:w-auto"
               >
                 Voir mon aperçu
                 <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -135,7 +135,7 @@ export default function AccueilPopup() {
               <button
                 type="button"
                 onClick={fermer}
-                className="min-h-[44px] px-4 text-sm font-semibold text-text-muted transition-colors hover:text-text-primary"
+                className="min-h-[44px] px-4 text-sm font-medium text-text-muted transition-colors hover:text-text-primary"
               >
                 Plus tard
               </button>

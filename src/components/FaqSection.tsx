@@ -81,7 +81,7 @@ export default function FaqSection() {
       <div className="mx-auto max-w-3xl px-6">
         <div className="mb-14 text-center md:mb-20">
           <Reveal>
-            <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+            <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
               Questions fréquentes
             </span>
           </Reveal>
@@ -90,7 +90,7 @@ export default function FaqSection() {
             by="word"
             text="Ce qu’on nous demande avant de se lancer"
             delay={0.1}
-            className="mx-auto mt-5 block font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-5xl"
+            className="mx-auto mt-5 block font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-5xl"
           />
         </div>
 
@@ -114,7 +114,7 @@ export default function FaqSection() {
                     aria-controls={`faq-reponse-${index}`}
                     className="flex w-full items-center justify-between gap-6 py-6 text-left"
                   >
-                    <span className="font-display text-base font-semibold text-text-primary md:text-lg">
+                    <span className="font-display text-base font-medium text-text-primary md:text-lg">
                       {item.question}
                     </span>
                     <motion.span

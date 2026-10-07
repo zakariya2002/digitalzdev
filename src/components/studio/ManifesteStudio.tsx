@@ -52,10 +52,10 @@ export default function ManifesteStudio() {
           vidéastes : nous concevons des sites sobres et rapides, qui
           inspirent confiance et font venir les bons clients.
         </p>
-        <p className="text-xs font-bold uppercase tracking-[0.25em] text-text-muted">
+        <p className="text-center text-xs font-medium uppercase tracking-[0.25em] text-text-muted">
           Notre approche
         </p>
-        <h2 className="mt-8 text-[13vw] md:text-[9vw] lg:text-[min(9vw,168px)]">
+        <h2 className="mx-auto mt-8 max-w-6xl text-center text-[9.5vw] uppercase leading-[1.02] md:text-[6.4vw] lg:text-[min(6vw,112px)]">
           {MOTS.map((m, i) => (
             <Mot key={`${m.mot}-${i}`} mot={m.mot} accent={m.accent} p={scrollYProgress} i={i} n={MOTS.length} />
           ))}

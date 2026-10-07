@@ -86,7 +86,7 @@ function NextProject({ current }: { current: Project }) {
       <Link to={next.route} className="group block">
         <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
           <Reveal>
-            <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-text-muted">
+            <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-text-muted">
               Projet suivant
             </span>
           </Reveal>
@@ -96,7 +96,7 @@ function NextProject({ current }: { current: Project }) {
               as="h2"
               by="char"
               text={next.title}
-              className={`block font-display font-bold tracking-tight text-text-primary transition-colors group-hover:text-accent ${
+              className={`block font-display font-medium tracking-tight text-text-primary transition-colors group-hover:text-accent ${
                 // La vignette de survol occupe 224 px de la ligne à partir
                 // de `md` : le corps ne repasse au maximum qu'à `lg`, sinon
                 // le nom de domaine se cassait en trois lignes à 768 px.
@@ -175,7 +175,7 @@ export default function ProjectPage({ project }: Props) {
             >
               <Link
                 to="/#projets"
-                className="group -my-2 inline-flex min-h-[44px] items-center gap-2 py-2 text-sm font-semibold text-text-primary transition-colors hover:text-accent"
+                className="group -my-2 inline-flex min-h-[44px] items-center gap-2 py-2 text-sm font-medium text-text-primary transition-colors hover:text-accent"
               >
                 <span className="transition-transform duration-300 group-hover:-translate-x-1">
                   ←
@@ -190,7 +190,7 @@ export default function ProjectPage({ project }: Props) {
               immediate
               text={project.title}
               delay={0.35}
-              className={`mt-8 block font-display font-black leading-[0.92] tracking-tight text-text-primary ${titleScale(
+              className={`mt-8 block font-display font-normal leading-[0.92] tracking-tight text-text-primary ${titleScale(
                 project.title
               )}`}
             />
@@ -215,7 +215,7 @@ export default function ProjectPage({ project }: Props) {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-medium text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm"
                 >
                   Voir le site en ligne
                   <span aria-hidden>↗</span>
@@ -235,7 +235,7 @@ export default function ProjectPage({ project }: Props) {
       {/* Stack, en ligne fixe : plus de bandeau défilant             */}
       {/* ---------------------------------------------------------- */}
       <div className="bg-surface-light px-6 py-6">
-        <ul className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-2 font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary">
+        <ul className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-2 font-display text-[11px] font-medium uppercase tracking-[0.3em] text-text-secondary">
           {project.stack.map((techno) => (
             <li key={techno}>{techno}</li>
           ))}
@@ -258,7 +258,7 @@ export default function ProjectPage({ project }: Props) {
             >
               <Counter
                 value={metric.value}
-                className="block font-display text-4xl font-bold text-accent md:text-6xl"
+                className="block font-display text-4xl font-medium text-accent md:text-6xl"
               />
               <div className="mt-2 text-sm text-text-secondary">{metric.label}</div>
             </motion.div>
@@ -295,7 +295,7 @@ export default function ProjectPage({ project }: Props) {
             >
               <div className="md:sticky md:top-32 md:h-fit">
                 <Reveal>
-                  <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+                  <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
                     {block.label}
                   </span>
                 </Reveal>
@@ -305,7 +305,7 @@ export default function ProjectPage({ project }: Props) {
                   as="h2"
                   by="word"
                   text={block.title}
-                  className="block font-display text-2xl font-bold tracking-tight text-text-primary md:text-4xl"
+                  className="block font-display text-2xl font-medium tracking-tight text-text-primary md:text-4xl"
                 />
                 <Reveal delay={0.15}>
                   <p className="mt-6 text-base leading-relaxed text-text-secondary md:text-lg">
@@ -325,7 +325,7 @@ export default function ProjectPage({ project }: Props) {
         <div className="mx-auto max-w-4xl">
           <div className="mb-12 text-center">
             <Reveal>
-              <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
                 Technique
               </span>
             </Reveal>
@@ -334,7 +334,7 @@ export default function ProjectPage({ project }: Props) {
               by="word"
               text="Caractéristiques clés"
               delay={0.1}
-              className="mt-4 block font-display text-2xl font-bold tracking-tight text-text-primary md:text-4xl"
+              className="mt-4 block font-display text-2xl font-medium tracking-tight text-text-primary md:text-4xl"
             />
           </div>
 
@@ -365,7 +365,7 @@ export default function ProjectPage({ project }: Props) {
         <div className="mx-auto max-w-5xl">
           <div className="mb-14 text-center">
             <Reveal>
-              <span className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+              <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
                 Aperçus
               </span>
             </Reveal>
@@ -374,7 +374,7 @@ export default function ProjectPage({ project }: Props) {
               by="word"
               text="Les écrans clés"
               delay={0.1}
-              className="mt-4 block font-display text-2xl font-bold tracking-tight text-text-primary md:text-4xl"
+              className="mt-4 block font-display text-2xl font-medium tracking-tight text-text-primary md:text-4xl"
             />
           </div>
 
