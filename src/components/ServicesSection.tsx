@@ -3,7 +3,7 @@ import { Magnetic, Reveal, SplitText } from './motion'
 import { EASE_OUT, VIEWPORT } from './motion/config'
 
 /** Conversation WhatsApp avec Zakariya, message d'ouverture prérempli. */
-const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
+export const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
   "Bonjour Digitalz Dev, j'aimerais vous parler de mon projet de site : "
 )}`
 
@@ -14,7 +14,7 @@ interface Service {
   points: string[]
 }
 
-const SERVICES: Service[] = [
+export const SERVICES: Service[] = [
   {
     title: 'Site vitrine sur mesure',
     lead: "Pour présenter une activité et déclencher la prise de contact.",

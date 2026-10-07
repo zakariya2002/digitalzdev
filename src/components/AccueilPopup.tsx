@@ -23,8 +23,8 @@ export default function AccueilPopup() {
       /* stockage refusé : on l'affiche, sans pouvoir s'en souvenir */
     }
     if (dejaVue) return
-    // Un court délai laisse le haut de page s'afficher avant la fenêtre.
-    const t = window.setTimeout(() => setOuverte(true), 1400)
+    // Le délai laisse passer le préchargeur et l'entrée du titre.
+    const t = window.setTimeout(() => setOuverte(true), 3500)
     return () => window.clearTimeout(t)
   }, [])
 
@@ -60,7 +60,7 @@ export default function AccueilPopup() {
             type="button"
             aria-label="Fermer"
             onClick={fermer}
-            className="absolute inset-0 cursor-default bg-[rgb(10_18_70/0.55)] backdrop-blur-sm"
+            className="absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm"
           />
 
           <motion.div
@@ -125,7 +125,7 @@ export default function AccueilPopup() {
               <a
                 href={QUIZ}
                 onClick={fermer}
-                className="group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-full bg-accent px-8 font-display text-base font-extrabold uppercase tracking-tight text-surface transition-colors hover:bg-accent-hover sm:w-auto"
+                className="group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-full bg-accent px-8 font-display text-base font-extrabold text-surface transition-colors hover:bg-accent-hover sm:w-auto"
               >
                 Voir mon aperçu
                 <svg className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>

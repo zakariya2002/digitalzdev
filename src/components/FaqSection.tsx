@@ -8,7 +8,7 @@ interface QuestionReponse {
   reponse: string
 }
 
-const FAQ: QuestionReponse[] = [
+export const FAQ: QuestionReponse[] = [
   {
     question: 'Combien coûte la création d’un site internet ?',
     reponse:

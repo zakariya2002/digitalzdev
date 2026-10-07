@@ -7,6 +7,7 @@ import ScrollToTop from './components/ScrollToTop'
 import PageTransition from './components/PageTransition'
 import Navbar from './components/Navbar'
 import CookieBanner from './components/CookieBanner'
+import Curseur from './components/studio/Curseur'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import ProjectPage from './pages/ProjectPage'
@@ -37,9 +38,9 @@ export default function App() {
     || location.pathname === '/login'
     || location.pathname.startsWith('/espace/')
 
-  // Le thème V3 ne vaut que pour la vitrine.
+  // Le thème « studio » ne vaut que pour la vitrine.
   useEffect(() => {
-    document.documentElement.classList.toggle('v3', !isDashboard)
+    document.documentElement.classList.toggle('studio', !isDashboard)
   }, [isDashboard])
 
   if (isDashboard) {
@@ -93,6 +94,7 @@ export default function App() {
         </PageTransition>
       </AnimatePresence>
       <CookieBanner />
+      <Curseur />
     </SmoothScroll>
   )
 }

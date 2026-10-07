@@ -4,7 +4,7 @@ import { Counter, Magnetic, Reveal, SplitText } from './motion'
 import CalendlyModal from './CalendlyModal'
 import { EASE_OUT, VIEWPORT } from './motion/config'
 
-interface Member {
+export interface Member {
   initials: string
   name: string
   role: string
@@ -13,7 +13,7 @@ interface Member {
   linkedin: string
 }
 
-const MEMBERS: Member[] = [
+export const MEMBERS: Member[] = [
   {
     initials: 'ZN',
     name: 'Zakariya Nebbache',
@@ -51,14 +51,14 @@ const MEMBERS: Member[] = [
 ]
 
 /** Chiffres tirés du portfolio publié sur cette page, rien de déclaratif. */
-const FACTS = [
+export const FACTS = [
   { value: '8', label: 'projets en ligne' },
   { value: '6', label: 'secteurs couverts' },
   { value: '2', label: 'métiers réunis' },
 ]
 
 /** Ce que l'agence prend en charge, au-delà de la seule mise en ligne. */
-const SERVICES = [
+export const SERVICES = [
   { title: 'Conception et développement', body: "Sites vitrines, boutiques Shopify, plateformes métier et applications iOS. Du cadrage à la mise en ligne." },
   { title: 'Meta Ads et Google Ads', body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
   { title: 'Mesure et conversions', body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." },

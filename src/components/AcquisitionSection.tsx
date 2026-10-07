@@ -12,7 +12,7 @@ const EASE = [0.22, 1, 0.36, 1] as const
  * Google font venir les gens devant. La section se clôt sur la promesse de
  * l'agence, sur fond sombre et plein écran, avec un rendez-vous Calendly.
  */
-const LEVIERS = [
+export const LEVIERS = [
   {
     titre: 'Référencement naturel',
     accroche: 'Être trouvé sur ce que cherchent vos clients.',

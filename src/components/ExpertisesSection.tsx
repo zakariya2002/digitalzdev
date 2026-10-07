@@ -10,7 +10,7 @@ const EASE = [0.22, 1, 0.36, 1] as const
  * architecte vend ses réalisations, un photographe ou un vidéaste vend son
  * regard. La section le dit dans leurs mots plutôt que dans ceux d'une agence.
  */
-const METIERS = [
+export const METIERS = [
   {
     cible: 'Avocats et cabinets',
     titre: 'Un site qui rassure avant le premier appel.',

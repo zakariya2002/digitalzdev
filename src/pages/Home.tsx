@@ -1,34 +1,41 @@
-import Hero from '../components/Hero'
-import StatementSection from '../components/StatementSection'
+import HeroStudio from '../components/studio/HeroStudio'
+import ManifesteStudio from '../components/studio/ManifesteStudio'
+import TravauxStudio from '../components/studio/TravauxStudio'
+import ExpertisesStudio from '../components/studio/ExpertisesStudio'
+import ServicesStudio from '../components/studio/ServicesStudio'
+import AcquisitionStudio from '../components/studio/AcquisitionStudio'
+import EquipeStudio from '../components/studio/EquipeStudio'
+import FinalStudio from '../components/studio/FinalStudio'
+import Prechargeur from '../components/studio/Prechargeur'
 import AvisGoogleSection from '../components/AvisGoogleSection'
-import AcquisitionSection from '../components/AcquisitionSection'
-import AccueilPopup from '../components/AccueilPopup'
-import ExpertisesSection from '../components/ExpertisesSection'
-import ProjectsSection from '../components/ProjectsSection'
-import ServicesSection from '../components/ServicesSection'
-import TestimonialsSection from '../components/TestimonialsSection'
-import TeamSection from '../components/TeamSection'
 import FaqSection from '../components/FaqSection'
 import MissionSection from '../components/MissionSection'
+import AccueilPopup from '../components/AccueilPopup'
 import Footer from '../components/Footer'
 
+/**
+ * Accueil, version « studio ».
+ *
+ * Le récit suit la mécanique des portfolios primés : un titre et une vidéo
+ * qui prend l'écran, le manifeste éclairé au défilement, les projets tout de
+ * suite, puis les métiers servis, les services en cartes empilées, les
+ * leviers d'acquisition, les preuves, l'équipe et l'appel final.
+ */
 export default function Home() {
   return (
     <main>
-      {/* Ordre inspiré des sites primés pour cette cible : la promesse, les
-          réalisations tout de suite, puis les métiers servis, la méthode
-          d'acquisition et les preuves. */}
-      <Hero />
-      <ProjectsSection />
-      <ExpertisesSection />
-      <StatementSection />
-      <AcquisitionSection />
+      <Prechargeur />
+      <HeroStudio />
+      <ManifesteStudio />
+      <TravauxStudio />
+      <ExpertisesStudio />
+      <ServicesStudio />
+      <AcquisitionStudio />
       <AvisGoogleSection />
-      <ServicesSection />
-      <TestimonialsSection />
-      <TeamSection />
+      <EquipeStudio />
       <FaqSection />
       <MissionSection />
+      <FinalStudio />
       <Footer />
       <AccueilPopup />
     </main>

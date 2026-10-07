@@ -53,72 +53,51 @@
     --text-muted: 85 85 85;
   }
 
-  /* Thème V3 du site public : éditorial et sobre, pour les avocats, les
-     architectes et les métiers de l'image. Deux couleurs, un quasi-noir chaud
-     et un crème, un seul accent vert profond. La classe est posée sur <html>
-     par App, uniquement hors de l'espace client et du tableau de bord, qui
-     gardent la charte d'origine. */
-  html.v3 {
-    --surface: 244 241 236;
-    --surface-light: 231 226 218;
-    --surface-card: 236 232 225;
-    --surface-border: 214 208 199;
-    --accent: 31 58 46;
-    --accent-hover: 21 42 33;
-    --accent-muted: 107 102 96;
-    --text-primary: 26 25 24;
-    --text-secondary: 98 93 87;
-    --text-muted: 138 133 126;
+  /* Thème « studio » du site public : noir profond, crème et un seul accent
+     citron, repris du logo et de la vidéo. Une seule police, Nunito, poussée
+     de la graisse la plus fine à la plus noire. La classe est posée sur
+     <html> par App, uniquement hors de l'espace client et du tableau de bord,
+     qui gardent la charte d'origine. */
+  html.studio {
+    --surface: 12 12 11;
+    --surface-light: 22 22 20;
+    --surface-card: 28 28 26;
+    --surface-border: 46 46 42;
+    --accent: 217 244 90;
+    --accent-hover: 232 250 140;
+    --accent-muted: 150 168 70;
+    --text-primary: 241 238 231;
+    --text-secondary: 168 164 155;
+    --text-muted: 111 108 102;
+    color-scheme: dark;
   }
 
-  html.v3 body,
-  html.v3 .font-sans,
-  html.v3 .font-display {
-    font-family: 'Inter Tight', system-ui, sans-serif;
+  html.studio body,
+  html.studio .font-sans,
+  html.studio .font-display {
+    font-family: 'Nunito', system-ui, sans-serif;
   }
 
-  /* Les grands titres en serif fin, en casse normale. Instrument Serif n'a
-     qu'une graisse : les classes de gras héritées des composants sont
-     neutralisées pour éviter un gras synthétisé par le navigateur. */
-  html.v3 h1,
-  html.v3 h2 {
-    font-family: 'Instrument Serif', Georgia, serif !important;
-    font-weight: 400 !important;
-    text-transform: none !important;
-    letter-spacing: -0.02em;
-    line-height: 1.02;
+  /* Les grands titres en Nunito noir, très serrés. */
+  html.studio h1,
+  html.studio h2 {
+    font-weight: 900;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
   }
 
-  html.v3 h1 em,
-  html.v3 h2 em {
-    font-style: italic;
-  }
-
-  html.v3 h3 {
-    font-family: 'Inter Tight', system-ui, sans-serif;
-    font-weight: 600 !important;
-    text-transform: none !important;
-    letter-spacing: -0.01em;
-  }
-
-  /* Un sous-titre en serif quand un h3 doit porter la voix des grands titres. */
-  html.v3 .titre-serif {
-    font-family: 'Instrument Serif', Georgia, serif !important;
-    font-weight: 400 !important;
-    letter-spacing: -0.015em;
-  }
-
-  /* Les surtitres en petites capitales espacées passent en mono, comme les
-     informations techniques des sites d'architectes. */
-  html.v3 .tracking-\[0\.3em\] {
-    font-family: 'Geist Mono', ui-monospace, monospace;
-    letter-spacing: 0.14em;
-    font-weight: 500;
-  }
-
-  html.v3 ::selection {
+  html.studio ::selection {
     background-color: rgb(var(--accent));
     color: rgb(var(--surface));
+  }
+
+  /* Le curseur personnalisé remplace le pointeur sur ordinateur. */
+  @media (hover: hover) and (pointer: fine) {
+    html.studio.curseur-actif,
+    html.studio.curseur-actif a,
+    html.studio.curseur-actif button {
+      cursor: none;
+    }
   }
 
   * {
