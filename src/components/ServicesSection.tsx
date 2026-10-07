@@ -190,9 +190,9 @@ export default function ServicesSection() {
               href={WHATSAPP_PROJET}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 font-display text-sm font-semibold text-surface transition-opacity hover:opacity-90"
             >
-              DÉCRIRE MON PROJET
+              Décrire mon projet
             </a>
           </Magnetic>
         </Reveal>

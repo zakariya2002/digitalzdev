@@ -28,7 +28,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <Link to="/" className="flex min-h-[44px] items-center gap-3">
             <img
-              src="/logo-punchy.png"
+              src="/logo-v3.png"
               alt="Digitalz Dev"
               className="w-10 h-10 rounded-full"
             />

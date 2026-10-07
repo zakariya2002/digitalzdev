@@ -1,21 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const QUIZ_PRODUCTION = 'https://quiz.digitalzdev.com'
-const QUIZ_PREVISUALISATION =
-  'https://digitalzdev-quiz-git-punchy-zakariya2002s-projects.vercel.app/quiz'
-
-/**
- * Sur digitalzdev.com, la fenêtre mène au quiz en ligne ; partout ailleurs
- * (local, prévisualisations), au quiz de la branche d'essai, pour qu'on juge
- * les deux dans le même style.
- */
-function urlQuiz(): string {
-  if (typeof window === 'undefined') return QUIZ_PRODUCTION
-  return /(^|\.)digitalzdev\.com$/.test(window.location.hostname)
-    ? QUIZ_PRODUCTION
-    : QUIZ_PREVISUALISATION
-}
+const QUIZ = 'https://quiz.digitalzdev.com'
 const CLE = 'digitalz-accueil-vu'
 const EASE = [0.32, 0.72, 0, 1] as const
 
@@ -137,7 +123,7 @@ export default function AccueilPopup() {
               transition={{ duration: 0.5, delay: 0.5, ease: EASE }}
             >
               <a
-                href={urlQuiz()}
+                href={QUIZ}
                 onClick={fermer}
                 className="group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-full bg-accent px-8 font-display text-base font-extrabold uppercase tracking-tight text-surface transition-colors hover:bg-accent-hover sm:w-auto"
               >

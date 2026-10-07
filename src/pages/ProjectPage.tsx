@@ -215,9 +215,9 @@ export default function ProjectPage({ project }: Props) {
                   href={project.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm sm:tracking-wider"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm"
                 >
-                  VOIR LE SITE EN LIGNE
+                  Voir le site en ligne
                   <span aria-hidden>↗</span>
                 </a>
               </Magnetic>

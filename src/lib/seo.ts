@@ -23,9 +23,9 @@ export interface PageSeo {
 /** Titre affiché dans l'onglet et en résultat de recherche. Viser 50 à 60 signes. */
 const HOME: PageSeo = {
   path: '/',
-  title: 'Agence web et création de site internet | Digitalz Dev',
+  title: 'Agence web pour avocats, architectes et photographes | Digitalz Dev',
   description:
-    "Agence web en France : création de site internet sur mesure, site vitrine, boutique Shopify et application métier. Devis sous 48 h.",
+    "Sites internet sur mesure pour cabinets d'avocats, agences d'architecture, photographes et vidéastes : design sobre, référencement local et campagnes. Devis sous 48 h.",
 }
 
 const STATIC_PAGES: PageSeo[] = [

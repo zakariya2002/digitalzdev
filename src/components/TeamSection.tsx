@@ -232,9 +232,9 @@ export default function TeamSection() {
               // Le libellé tient sur une ligne dès 320 px : sans la réduction
               // de corps et d'espacement, il se casse en deux et la pastille
               // perd son équilibre.
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-4 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:gap-3 sm:px-8 sm:text-sm sm:tracking-wider"
+              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-4 font-display text-xs font-semibold text-surface transition-opacity hover:opacity-90 sm:gap-3 sm:px-8 sm:text-sm"
             >
-              PARLONS DE VOTRE PROJET
+              Parlons de votre projet
             </button>
           </Magnetic>
         </Reveal>

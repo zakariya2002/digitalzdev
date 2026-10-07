@@ -133,9 +133,9 @@ export default function MissionSection() {
                   href="https://neuro-care.fr"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm sm:tracking-wider"
+                  className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm"
                 >
-                  DÉCOUVRIR NEUROCARE
+                  Découvrir NeuroCare
                   <svg
                     className="h-4 w-4"
                     fill="none"

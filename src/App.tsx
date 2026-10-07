@@ -37,9 +37,9 @@ export default function App() {
     || location.pathname === '/login'
     || location.pathname.startsWith('/espace/')
 
-  // Le thème « punchy » ne vaut que pour la vitrine.
+  // Le thème V3 ne vaut que pour la vitrine.
   useEffect(() => {
-    document.documentElement.classList.toggle('punchy', !isDashboard)
+    document.documentElement.classList.toggle('v3', !isDashboard)
   }, [isDashboard])
 
   if (isDashboard) {

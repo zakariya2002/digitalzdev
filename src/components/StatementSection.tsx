@@ -16,7 +16,7 @@ import {
  */
 const PHRASES = [
   { mots: ['Pas', 'seulement', 'esthétique.'], accent: false },
-  { mots: ['Pensé', 'pour', 'le', 'référencement.'], accent: true },
+  { mots: ['Pensé', 'pour', 'être', 'choisi.'], accent: true },
 ]
 
 const MOTS = PHRASES.flatMap((p) => p.mots.map((mot) => ({ mot, accent: p.accent })))

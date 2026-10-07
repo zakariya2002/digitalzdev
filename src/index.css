@@ -12,6 +12,14 @@
 @font-face { font-family: 'Inter Tight'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/inter-tight-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 @font-face { font-family: 'Inter Tight'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/inter-tight-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 
+/* V3 : Instrument Serif pour les titres, Geist Mono pour les informations. */
+@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-italic-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-italic-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/instrument-serif-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('/fonts/geist-mono-normal-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('/fonts/geist-mono-normal-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
 @layer base {
   :root {
     --surface: 250 247 242;
@@ -45,60 +53,72 @@
     --text-muted: 85 85 85;
   }
 
-  /* Thème « punchy » du site public : bleu électrique, jaune citron.
-     La classe est posée sur <html> par App, uniquement hors de l'espace
-     client et du tableau de bord, qui gardent la charte d'origine. Les
-     fenêtres rattachées au <body> en héritent aussi. */
-  html.punchy {
-    --surface: 54 84 244;
-    --surface-light: 46 74 228;
-    --surface-card: 40 66 212;
-    --surface-border: 98 124 248;
-    --accent: 227 244 92;
-    --accent-hover: 240 250 150;
-    --accent-muted: 186 202 88;
-    --text-primary: 255 255 255;
-    --text-secondary: 222 229 255;
-    --text-muted: 176 190 255;
+  /* Thème V3 du site public : éditorial et sobre, pour les avocats, les
+     architectes et les métiers de l'image. Deux couleurs, un quasi-noir chaud
+     et un crème, un seul accent vert profond. La classe est posée sur <html>
+     par App, uniquement hors de l'espace client et du tableau de bord, qui
+     gardent la charte d'origine. */
+  html.v3 {
+    --surface: 244 241 236;
+    --surface-light: 231 226 218;
+    --surface-card: 236 232 225;
+    --surface-border: 214 208 199;
+    --accent: 31 58 46;
+    --accent-hover: 21 42 33;
+    --accent-muted: 107 102 96;
+    --text-primary: 26 25 24;
+    --text-secondary: 98 93 87;
+    --text-muted: 138 133 126;
   }
 
-  html.punchy body,
-  html.punchy .font-sans,
-  html.punchy .font-display {
+  html.v3 body,
+  html.v3 .font-sans,
+  html.v3 .font-display {
     font-family: 'Inter Tight', system-ui, sans-serif;
   }
 
-  /* Les grands titres en capitales, très gras et serrés, comme l'affiche. */
-  html.punchy h1,
-  html.punchy h2 {
-    text-transform: uppercase;
-    font-weight: 900;
-    letter-spacing: -0.035em;
-    /* Pas en dessous de 0,98 : les capitales accentuées (É, À) mordraient sur
-       la ligne du dessus. */
-    line-height: 0.98;
-  }
-
-  html.punchy h3 {
-    font-weight: 800;
+  /* Les grands titres en serif fin, en casse normale. Instrument Serif n'a
+     qu'une graisse : les classes de gras héritées des composants sont
+     neutralisées pour éviter un gras synthétisé par le navigateur. */
+  html.v3 h1,
+  html.v3 h2 {
+    font-family: 'Instrument Serif', Georgia, serif !important;
+    font-weight: 400 !important;
+    text-transform: none !important;
     letter-spacing: -0.02em;
+    line-height: 1.02;
   }
 
-  html.punchy ::selection {
+  html.v3 h1 em,
+  html.v3 h2 em {
+    font-style: italic;
+  }
+
+  html.v3 h3 {
+    font-family: 'Inter Tight', system-ui, sans-serif;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    letter-spacing: -0.01em;
+  }
+
+  /* Un sous-titre en serif quand un h3 doit porter la voix des grands titres. */
+  html.v3 .titre-serif {
+    font-family: 'Instrument Serif', Georgia, serif !important;
+    font-weight: 400 !important;
+    letter-spacing: -0.015em;
+  }
+
+  /* Les surtitres en petites capitales espacées passent en mono, comme les
+     informations techniques des sites d'architectes. */
+  html.v3 .tracking-\[0\.3em\] {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    letter-spacing: 0.14em;
+    font-weight: 500;
+  }
+
+  html.v3 ::selection {
     background-color: rgb(var(--accent));
     color: rgb(var(--surface));
-  }
-
-  /* Grain léger, celui de l'affiche : il casse l'aplat numérique du bleu. */
-  html.punchy body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    pointer-events: none;
-    opacity: 0.09;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   * {

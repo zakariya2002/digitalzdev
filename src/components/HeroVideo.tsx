@@ -47,7 +47,7 @@ export default function HeroVideo({ className = '' }: { className?: string }) {
 
   return (
     <div
-      className={`relative aspect-video overflow-hidden rounded-[1.75rem] bg-surface-card shadow-[0_30px_80px_-24px_rgba(0,0,0,0.45)] ${className}`}
+      className={`relative aspect-video overflow-hidden rounded-xl bg-surface-card md:rounded-2xl ${className}`}
     >
       <video
         ref={ref}
@@ -81,7 +81,7 @@ export default function HeroVideo({ className = '' }: { className?: string }) {
         type="button"
         onClick={basculerSon}
         aria-label={son ? 'Couper le son' : 'Activer le son'}
-        className="absolute bottom-3 right-3 inline-flex min-h-[40px] items-center gap-2 rounded-full bg-accent px-4 font-display text-xs font-extrabold uppercase tracking-tight text-surface shadow-md transition-colors hover:bg-accent-hover sm:bottom-4 sm:right-4"
+        className="absolute bottom-3 right-3 inline-flex min-h-[40px] items-center gap-2 rounded-full bg-surface/90 px-4 font-display text-xs font-semibold text-text-primary backdrop-blur transition-colors hover:bg-surface sm:bottom-5 sm:right-5"
       >
         <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <path d="M11 5L6 9H3v6h3l5 4V5z" fill="currentColor" />
@@ -91,7 +91,7 @@ export default function HeroVideo({ className = '' }: { className?: string }) {
             <path d="M16 9l5 6M21 9l-5 6" />
           )}
         </svg>
-        {son ? 'Son' : 'Son coupé'}
+        {son ? 'Couper le son' : 'Activer le son'}
       </button>
     </div>
   )

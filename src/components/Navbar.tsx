@@ -150,7 +150,7 @@ export default function Navbar() {
             className="group flex min-h-[44px] min-w-0 items-center gap-2.5 rounded-full pr-3"
           >
             <img
-              src="/logo-punchy.png"
+              src="/logo-v3.png"
               alt=""
               className="h-10 w-10 shrink-0 rounded-full transition-transform duration-500 group-hover:rotate-[-8deg]"
             />
