@@ -4081,7 +4081,7 @@ function lireCookie(nom) {
   return m ? decodeURIComponent(m[1]) : void 0;
 }
 function lireAttribution() {
-  var _a;
+  var _a, _b;
   const q = new URLSearchParams(window.location.search);
   const v = (k) => {
     var _a2;
@@ -4092,7 +4092,9 @@ function lireAttribution() {
     utm_medium: v("utm_medium"),
     utm_campaign: v("utm_campaign"),
     utm_content: v("utm_content"),
-    fbclid: ((_a = q.get("fbclid")) == null ? void 0 : _a.slice(0, 300)) || null
+    fbclid: ((_a = q.get("fbclid")) == null ? void 0 : _a.slice(0, 300)) || null,
+    // Google Ads : gclid, ou gbraid / wbraid sur iOS.
+    gclid: ((_b = q.get("gclid") || q.get("gbraid") || q.get("wbraid")) == null ? void 0 : _b.slice(0, 300)) || null
   };
 }
 function Projet() {
@@ -4171,7 +4173,9 @@ function Projet() {
             utmMedium: (attribution == null ? void 0 : attribution.utm_medium) ?? void 0,
             utmCampaign: (attribution == null ? void 0 : attribution.utm_campaign) ?? void 0,
             utmContent: (attribution == null ? void 0 : attribution.utm_content) ?? void 0,
-            fbclid
+            fbclid,
+            gclid: (attribution == null ? void 0 : attribution.gclid) ?? void 0,
+            referent: document.referrer.slice(0, 300) || void 0
           }
         }),
         keepalive: true

@@ -120,6 +120,8 @@ function lireAttribution() {
     utm_campaign: v('utm_campaign'),
     utm_content: v('utm_content'),
     fbclid: q.get('fbclid')?.slice(0, 300) || null,
+    // Google Ads : gclid, ou gbraid / wbraid sur iOS.
+    gclid: (q.get('gclid') || q.get('gbraid') || q.get('wbraid'))?.slice(0, 300) || null,
   }
 }
 
@@ -215,6 +217,8 @@ export default function Projet() {
             utmCampaign: attribution?.utm_campaign ?? undefined,
             utmContent: attribution?.utm_content ?? undefined,
             fbclid,
+            gclid: attribution?.gclid ?? undefined,
+            referent: document.referrer.slice(0, 300) || undefined,
           },
         }),
         keepalive: true,
