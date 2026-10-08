@@ -117,7 +117,7 @@ export default function HeroStudio() {
           className="relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32"
           style={{ opacity: titreOpacite, y: titreY }}
         >
-          <h1 className="text-[11vw] text-text-primary md:text-[6vw] lg:text-[min(6vw,108px)]">
+          <h1 className="text-[9.5vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]">
             <Ligne delai={0.25}>Des sites à la</Ligne>
             <Ligne delai={0.35}>hauteur de votre</Ligne>
             <Ligne delai={0.45}>
