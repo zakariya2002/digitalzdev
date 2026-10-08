@@ -2,12 +2,12 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
-import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, useCallback, lazy, Suspense, StrictMode } from "react";
+import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, lazy, Suspense, StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
 import { createClient } from "@supabase/supabase-js";
 import { useLocation, Link, Navigate, Routes, Route } from "react-router-dom";
-import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate, useInView } from "framer-motion";
+import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useInView, useMotionTemplate } from "framer-motion";
 import Lenis from "lenis";
 import emailjs from "@emailjs/browser";
 const supabaseUrl = "https://uipxlesrpdocqpblmrrr.supabase.co";
@@ -1071,7 +1071,7 @@ function CookieBanner() {
       transition: { duration: 0.4 },
       children: /* @__PURE__ */ jsxs("div", { className: "max-w-3xl mx-auto bg-surface-card border border-surface-border rounded-xl p-5 md:p-6 shadow-lg flex flex-col md:flex-row items-start md:items-center gap-4", children: [
         /* @__PURE__ */ jsxs("p", { className: "text-text-secondary text-sm leading-relaxed flex-1", children: [
-          "Ce site ne dépose aucun cookie publicitaire et ne vous suit pas. Le stockage local retient seulement que vous avez lu ce message. Le calendrier de prise de rendez-vous est fourni par Calendly, et ne se charge que si vous l'ouvrez.",
+          "Ce site ne dépose aucun cookie publicitaire et ne vous suit pas. Le stockage local retient seulement que vous avez lu ce message. Les prises de contact passent par WhatsApp, qui ne s'ouvre que si vous cliquez.",
           " ",
           /* @__PURE__ */ jsx(
             Link,
@@ -1152,388 +1152,6 @@ function ProtectedRoute({ children }) {
     return /* @__PURE__ */ jsx(Navigate, { to: "/login", replace: true });
   }
   return /* @__PURE__ */ jsx(Fragment, { children });
-}
-const CALENDLY_URL = "https://calendly.com/zakariya-neurocare/call-decouverte-20min?hide_gdpr_banner=1";
-const SCRIPT_SRC = "https://assets.calendly.com/assets/external/widget.js";
-let chargement = null;
-function chargerCalendly() {
-  if (chargement) return chargement;
-  chargement = new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
-      resolve();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = SCRIPT_SRC;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("script Calendly injoignable"));
-    document.head.appendChild(script);
-  });
-  return chargement;
-}
-function CalendlyModal({ open, onClose }) {
-  const conteneur = useRef(null);
-  const fermer = useCallback(() => {
-    if (conteneur.current) conteneur.current.innerHTML = "";
-    onClose();
-  }, [onClose]);
-  useEffect(() => {
-    if (!open) return;
-    const gererTouche = (e) => {
-      if (e.key === "Escape") fermer();
-    };
-    window.addEventListener("keydown", gererTouche);
-    const defilementInitial = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", gererTouche);
-      document.body.style.overflow = defilementInitial;
-    };
-  }, [open, fermer]);
-  useEffect(() => {
-    if (!open) return;
-    let annule = false;
-    void chargerCalendly().then(() => {
-      const cible = conteneur.current;
-      const fenetre = window;
-      if (annule || !cible || !fenetre.Calendly) return;
-      cible.innerHTML = "";
-      fenetre.Calendly.initInlineWidget({
-        url: CALENDLY_URL,
-        parentElement: cible
-      });
-    }).catch((err) => console.error("[calendly]", err));
-    return () => {
-      annule = true;
-    };
-  }, [open]);
-  return /* @__PURE__ */ jsx(AnimatePresence, { children: open && /* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[60] flex items-end justify-center sm:items-center", children: [
-    /* @__PURE__ */ jsx(
-      motion.div,
-      {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-        transition: { duration: 0.2 },
-        onClick: fermer,
-        className: "absolute inset-0 bg-text-primary/50 backdrop-blur-sm",
-        "aria-hidden": true
-      }
-    ),
-    /* @__PURE__ */ jsxs(
-      motion.div,
-      {
-        role: "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "calendly-titre",
-        initial: { y: 40, opacity: 0, scale: 0.98 },
-        animate: { y: 0, opacity: 1, scale: 1 },
-        exit: { y: 40, opacity: 0, scale: 0.98 },
-        transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
-        className: "relative z-10 flex max-h-[94vh] w-full flex-col overflow-hidden rounded-t-2xl border border-surface-border bg-surface-card sm:max-h-[92vh] sm:max-w-3xl sm:rounded-2xl",
-        children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 px-6 pb-4 pt-6", children: [
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(
-                "h2",
-                {
-                  id: "calendly-titre",
-                  className: "font-display text-xl font-bold text-text-primary sm:text-2xl",
-                  children: "Parlons de votre projet"
-                }
-              ),
-              /* @__PURE__ */ jsx("p", { className: "mt-2 max-w-xl text-sm leading-relaxed text-text-secondary", children: "Un appel court pour comprendre ce que vous voulez mettre en place, ce dont vous disposez déjà, et ce que ça représente. Vous repartez avec un devis précis, sans engagement." })
-            ] }),
-            /* @__PURE__ */ jsx(
-              "button",
-              {
-                type: "button",
-                onClick: fermer,
-                "aria-label": "Fermer",
-                className: "-m-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-surface-light hover:text-text-primary",
-                children: /* @__PURE__ */ jsx(
-                  "svg",
-                  {
-                    className: "h-5 w-5",
-                    fill: "none",
-                    stroke: "currentColor",
-                    viewBox: "0 0 24 24",
-                    strokeWidth: 1.5,
-                    "aria-hidden": true,
-                    children: /* @__PURE__ */ jsx(
-                      "path",
-                      {
-                        strokeLinecap: "round",
-                        strokeLinejoin: "round",
-                        d: "M6 18L18 6M6 6l12 12"
-                      }
-                    )
-                  }
-                )
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsx("div", { className: "flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6", children: /* @__PURE__ */ jsx(
-            "div",
-            {
-              ref: conteneur,
-              className: "h-[68vh] min-h-[560px] w-full overflow-hidden rounded-xl bg-white"
-            }
-          ) })
-        ]
-      }
-    )
-  ] }) });
-}
-const EASE$5 = [0.22, 1, 0.36, 1];
-const QUIZ$1 = "https://quiz.digitalzdev.com";
-function Ligne$1({ children, delai }) {
-  return /* @__PURE__ */ jsx("span", { className: "block overflow-hidden pb-[0.06em]", children: /* @__PURE__ */ jsx(
-    motion.span,
-    {
-      className: "block",
-      initial: { y: "110%" },
-      animate: { y: 0 },
-      transition: { duration: 1, delay: delai, ease: EASE$5 },
-      children
-    }
-  ) });
-}
-function HeroStudio() {
-  const sectionRef = useRef(null);
-  const videoRef = useRef(null);
-  const [rdvOuvert, setRdvOuvert] = useState(false);
-  const [son, setSon] = useState(false);
-  const [mobile, setMobile] = useState(false);
-  useEffect(() => {
-    const requete = window.matchMedia("(max-width: 767px)");
-    const suivre = () => setMobile(requete.matches);
-    suivre();
-    requete.addEventListener("change", suivre);
-    return () => requete.removeEventListener("change", suivre);
-  }, []);
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const obs = new IntersectionObserver(
-      ([e]) => e.isIntersecting ? void video.play().catch(() => {
-      }) : video.pause(),
-      { threshold: 0.1 }
-    );
-    obs.observe(video);
-    return () => obs.disconnect();
-  }, []);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"]
-  });
-  const [haut0, droite0, bas0, gauche0] = mobile ? [58, 5, 4, 5] : [56, 4, 5, 50];
-  const haut = useTransform(scrollYProgress, [0, 0.6], [haut0, 0]);
-  const droite = useTransform(scrollYProgress, [0, 0.6], [droite0, 0]);
-  const bas = useTransform(scrollYProgress, [0, 0.6], [bas0, 0]);
-  const gauche = useTransform(scrollYProgress, [0, 0.6], [gauche0, 0]);
-  const rayon = useTransform(scrollYProgress, [0, 0.6], [mobile ? 18 : 28, 0]);
-  const decoupe = useMotionTemplate`inset(${haut}% ${droite}% ${bas}% ${gauche}% round ${rayon}px)`;
-  const zoom = useTransform(scrollYProgress, [0, 0.6], [1.15, 1]);
-  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.4], [1, 0]);
-  const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-12%"]);
-  const accrocheOpacite = useTransform(scrollYProgress, [0.62, 0.78], [0, 1]);
-  const accrocheY = useTransform(scrollYProgress, [0.62, 0.78], [40, 0]);
-  const basculerSon = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = !video.muted;
-    setSon(!video.muted);
-    if (video.paused) void video.play().catch(() => {
-    });
-  };
-  return /* @__PURE__ */ jsxs("section", { ref: sectionRef, className: "relative h-[190vh] bg-surface md:h-[240vh]", children: [
-    /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-[100svh] overflow-hidden", children: [
-      /* @__PURE__ */ jsxs(motion.div, { className: "absolute inset-0", style: { clipPath: decoupe }, children: [
-        /* @__PURE__ */ jsx(
-          motion.video,
-          {
-            ref: videoRef,
-            className: "h-full w-full object-cover",
-            style: { scale: zoom },
-            src: "/videos/presentation.mp4",
-            poster: "/videos/presentation-poster.jpg",
-            muted: true,
-            loop: true,
-            playsInline: true,
-            preload: "metadata",
-            "aria-label": "Vidéo de présentation de Digitalz Dev"
-          }
-        ),
-        /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" })
-      ] }),
-      /* @__PURE__ */ jsxs(
-        motion.div,
-        {
-          className: "relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32",
-          style: { opacity: titreOpacite, y: titreY },
-          children: [
-            /* @__PURE__ */ jsxs("h1", { className: "text-[9.5vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]", children: [
-              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Créons un site à la" }),
-              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.35, children: "hauteur de votre" }),
-              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.45, children: /* @__PURE__ */ jsx("span", { className: "text-pop", children: "image." }) })
-            ] }),
-            /* @__PURE__ */ jsxs(
-              motion.div,
-              {
-                className: "mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0",
-                initial: { opacity: 0, y: 20 },
-                animate: { opacity: 1, y: 0 },
-                transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
-                children: [
-                  /* @__PURE__ */ jsx("p", { className: "hidden text-[15px] font-medium leading-relaxed text-text-secondary md:block", children: "Cabinets d'avocats, agences d'architecture, photographes et vidéastes : nous concevons des sites sobres et rapides, qui inspirent confiance et font venir les bons clients." }),
-                  /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2 md:mt-5", children: [
-                    /* @__PURE__ */ jsx(
-                      "button",
-                      {
-                        type: "button",
-                        onClick: () => setRdvOuvert(true),
-                        className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
-                        children: "Prendre rendez-vous"
-                      }
-                    ),
-                    /* @__PURE__ */ jsx(
-                      "a",
-                      {
-                        href: QUIZ$1,
-                        className: "inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]",
-                        children: "Voir un aperçu"
-                      }
-                    )
-                  ] })
-                ]
-              }
-            )
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxs(
-        motion.div,
-        {
-          className: "absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14",
-          style: { opacity: accrocheOpacite, y: accrocheY },
-          children: [
-            /* @__PURE__ */ jsxs("h2", { className: "max-w-3xl text-5xl text-white md:text-7xl", children: [
-              "Votre site à votre image.",
-              /* @__PURE__ */ jsx("span", { className: "block font-extrabold text-[#1d1d1f]", children: "Un aperçu en 60 secondes." })
-            ] }),
-            /* @__PURE__ */ jsx(
-              "a",
-              {
-                href: QUIZ$1,
-                "data-curseur": "Go",
-                className: "inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover",
-                children: "Voir mon aperçu →"
-              }
-            )
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsx(
-        "button",
-        {
-          type: "button",
-          onClick: basculerSon,
-          "aria-label": son ? "Couper le son" : "Activer le son",
-          className: "absolute bottom-[6%] right-[8%] z-20 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28",
-          children: son ? "Son activé" : "Son coupé"
-        }
-      )
-    ] }),
-    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
-  ] });
-}
-const PHRASE = [
-  { texte: "Pas seulement esthétique.", accent: false },
-  { texte: "Pensé pour le référencement.", accent: true }
-];
-const MOTS = PHRASE.flatMap(
-  (p) => p.texte.split(" ").map((mot) => ({ mot, accent: p.accent }))
-);
-function Mot({
-  mot,
-  accent,
-  p,
-  i,
-  n
-}) {
-  const opacite = useTransform(p, [i / n, (i + 1) / n], [0.14, 1]);
-  return /* @__PURE__ */ jsxs(motion.span, { style: { opacity: opacite }, className: accent ? "text-pop" : "text-text-primary", children: [
-    mot,
-    " "
-  ] });
-}
-function ManifesteStudio() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.6"] });
-  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS.map((m, i) => /* @__PURE__ */ jsx(Mot, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS.length }, `${m.mot}-${i}`)) }) }) });
-}
-function CarteProjet({ projet, className = "" }) {
-  return /* @__PURE__ */ jsxs(
-    Link,
-    {
-      to: projet.route,
-      "data-curseur": "Voir",
-      className: `group block shrink-0 ${className}`,
-      children: [
-        /* @__PURE__ */ jsx("div", { className: "relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-auto lg:h-[calc(100svh-14rem)]", children: /* @__PURE__ */ jsx(
-          "img",
-          {
-            src: projet.heroImage,
-            alt: `Site ${projet.title}`,
-            loading: "lazy",
-            className: "h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-          }
-        ) }),
-        /* @__PURE__ */ jsxs("div", { className: "mt-4 flex items-start justify-between gap-4", children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("h3", { className: "text-xl font-normal tracking-tight text-text-primary md:text-2xl", children: projet.title }),
-            /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm font-medium text-text-secondary md:text-base", children: projet.subtitle })
-          ] }),
-          /* @__PURE__ */ jsx("span", { className: "mt-2 shrink-0 rounded-full bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary", children: projet.year })
-        ] })
-      ]
-    }
-  );
-}
-function Selection() {
-  const sectionRef = useRef(null);
-  const pisteRef = useRef(null);
-  const [course, setCourse] = useState(0);
-  useEffect(() => {
-    const mesurer = () => {
-      const piste = pisteRef.current;
-      if (piste) setCourse(Math.max(0, piste.scrollWidth - window.innerWidth));
-    };
-    mesurer();
-    window.addEventListener("resize", mesurer);
-    return () => window.removeEventListener("resize", mesurer);
-  }, []);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const brut = useTransform(scrollYProgress, [0, 1], [0, -course]);
-  const x = useSpring(brut, { stiffness: 120, damping: 30, mass: 0.4 });
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(
-      "section",
-      {
-        ref: sectionRef,
-        className: "relative hidden lg:block",
-        style: { height: `calc(100vh + ${course}px)` },
-        children: /* @__PURE__ */ jsx("div", { className: "sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24", children: /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[46vw]" }, p.id)) }) })
-      }
-    ),
-    /* @__PURE__ */ jsx("section", { className: "pb-6 pt-24 lg:hidden", children: /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[82vw] snap-center sm:w-[60vw]" }, p.id)) }) })
-  ] });
-}
-function TravauxStudio() {
-  return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, {}) });
 }
 const offsetFor = (from, distance) => {
   switch (from) {
@@ -1831,6 +1449,255 @@ const SERVICES$1 = [
     ]
   }
 ];
+const EASE$5 = [0.22, 1, 0.36, 1];
+const QUIZ$1 = "https://quiz.digitalzdev.com";
+function Ligne$1({ children, delai }) {
+  return /* @__PURE__ */ jsx("span", { className: "block overflow-hidden pb-[0.06em]", children: /* @__PURE__ */ jsx(
+    motion.span,
+    {
+      className: "block",
+      initial: { y: "110%" },
+      animate: { y: 0 },
+      transition: { duration: 1, delay: delai, ease: EASE$5 },
+      children
+    }
+  ) });
+}
+function HeroStudio() {
+  const sectionRef = useRef(null);
+  const videoRef = useRef(null);
+  const [son, setSon] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const requete = window.matchMedia("(max-width: 767px)");
+    const suivre = () => setMobile(requete.matches);
+    suivre();
+    requete.addEventListener("change", suivre);
+    return () => requete.removeEventListener("change", suivre);
+  }, []);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const obs = new IntersectionObserver(
+      ([e]) => e.isIntersecting ? void video.play().catch(() => {
+      }) : video.pause(),
+      { threshold: 0.1 }
+    );
+    obs.observe(video);
+    return () => obs.disconnect();
+  }, []);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"]
+  });
+  const [haut0, droite0, bas0, gauche0] = mobile ? [58, 5, 4, 5] : [56, 4, 5, 50];
+  const haut = useTransform(scrollYProgress, [0, 0.6], [haut0, 0]);
+  const droite = useTransform(scrollYProgress, [0, 0.6], [droite0, 0]);
+  const bas = useTransform(scrollYProgress, [0, 0.6], [bas0, 0]);
+  const gauche = useTransform(scrollYProgress, [0, 0.6], [gauche0, 0]);
+  const rayon = useTransform(scrollYProgress, [0, 0.6], [mobile ? 18 : 28, 0]);
+  const decoupe = useMotionTemplate`inset(${haut}% ${droite}% ${bas}% ${gauche}% round ${rayon}px)`;
+  const zoom = useTransform(scrollYProgress, [0, 0.6], [1.15, 1]);
+  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.4], [1, 0]);
+  const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-12%"]);
+  const accrocheOpacite = useTransform(scrollYProgress, [0.62, 0.78], [0, 1]);
+  const accrocheY = useTransform(scrollYProgress, [0.62, 0.78], [40, 0]);
+  const basculerSon = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setSon(!video.muted);
+    if (video.paused) void video.play().catch(() => {
+    });
+  };
+  return /* @__PURE__ */ jsx("section", { ref: sectionRef, className: "relative h-[190vh] bg-surface md:h-[240vh]", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-[100svh] overflow-hidden", children: [
+    /* @__PURE__ */ jsxs(motion.div, { className: "absolute inset-0", style: { clipPath: decoupe }, children: [
+      /* @__PURE__ */ jsx(
+        motion.video,
+        {
+          ref: videoRef,
+          className: "h-full w-full object-cover",
+          style: { scale: zoom },
+          src: "/videos/presentation.mp4",
+          poster: "/videos/presentation-poster.jpg",
+          muted: true,
+          loop: true,
+          playsInline: true,
+          preload: "metadata",
+          "aria-label": "Vidéo de présentation de Digitalz Dev"
+        }
+      ),
+      /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" })
+    ] }),
+    /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        className: "relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32",
+        style: { opacity: titreOpacite, y: titreY },
+        children: [
+          /* @__PURE__ */ jsxs("h1", { className: "whitespace-nowrap text-[8.6vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]", children: [
+            /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Créons un site" }),
+            /* @__PURE__ */ jsx(Ligne$1, { delai: 0.35, children: "à la hauteur de" }),
+            /* @__PURE__ */ jsxs(Ligne$1, { delai: 0.45, children: [
+              "votre ",
+              /* @__PURE__ */ jsx("span", { className: "text-pop", children: "image." })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              className: "mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0",
+              initial: { opacity: 0, y: 20 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
+              children: [
+                /* @__PURE__ */ jsx("p", { className: "hidden text-[15px] font-medium leading-relaxed text-text-secondary md:block", children: "Cabinets d'avocats, agences d'architecture, photographes et vidéastes : nous concevons des sites sobres et rapides, qui inspirent confiance et font venir les bons clients." }),
+                /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2 md:mt-5", children: [
+                  /* @__PURE__ */ jsx(
+                    "a",
+                    {
+                      href: WHATSAPP_PROJET,
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
+                      children: "Prendre rendez-vous"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx(
+                    "a",
+                    {
+                      href: QUIZ$1,
+                      className: "inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]",
+                      children: "Voir un aperçu"
+                    }
+                  )
+                ] })
+              ]
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        className: "absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14",
+        style: { opacity: accrocheOpacite, y: accrocheY },
+        children: [
+          /* @__PURE__ */ jsxs("h2", { className: "max-w-3xl text-5xl text-white md:text-7xl", children: [
+            "Votre site à votre image.",
+            /* @__PURE__ */ jsx("span", { className: "block font-extrabold text-[#1d1d1f]", children: "Un aperçu en 60 secondes." })
+          ] }),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: QUIZ$1,
+              "data-curseur": "Go",
+              className: "inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover",
+              children: "Voir mon aperçu →"
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      "button",
+      {
+        type: "button",
+        onClick: basculerSon,
+        "aria-label": son ? "Couper le son" : "Activer le son",
+        className: "absolute bottom-[6%] right-[8%] z-20 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28",
+        children: son ? "Son activé" : "Son coupé"
+      }
+    )
+  ] }) });
+}
+const PHRASE = [
+  { texte: "Pas seulement esthétique.", accent: false },
+  { texte: "Pensé pour le référencement.", accent: true }
+];
+const MOTS = PHRASE.flatMap(
+  (p) => p.texte.split(" ").map((mot) => ({ mot, accent: p.accent }))
+);
+function Mot({
+  mot,
+  accent,
+  p,
+  i,
+  n
+}) {
+  const opacite = useTransform(p, [i / n, (i + 1) / n], [0.14, 1]);
+  return /* @__PURE__ */ jsxs(motion.span, { style: { opacity: opacite }, className: accent ? "text-pop" : "text-text-primary", children: [
+    mot,
+    " "
+  ] });
+}
+function ManifesteStudio() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.6"] });
+  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS.map((m, i) => /* @__PURE__ */ jsx(Mot, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS.length }, `${m.mot}-${i}`)) }) }) });
+}
+function CarteProjet({ projet, className = "" }) {
+  return /* @__PURE__ */ jsxs(
+    Link,
+    {
+      to: projet.route,
+      "data-curseur": "Voir",
+      className: `group block shrink-0 ${className}`,
+      children: [
+        /* @__PURE__ */ jsx("div", { className: "relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-auto lg:h-[calc(100svh-14rem)]", children: /* @__PURE__ */ jsx(
+          "img",
+          {
+            src: projet.heroImage,
+            alt: `Site ${projet.title}`,
+            loading: "lazy",
+            className: "h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+          }
+        ) }),
+        /* @__PURE__ */ jsxs("div", { className: "mt-4 flex items-start justify-between gap-4", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("h3", { className: "text-xl font-normal tracking-tight text-text-primary md:text-2xl", children: projet.title }),
+            /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm font-medium text-text-secondary md:text-base", children: projet.subtitle })
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "mt-2 shrink-0 rounded-full bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary", children: projet.year })
+        ] })
+      ]
+    }
+  );
+}
+function Selection() {
+  const sectionRef = useRef(null);
+  const pisteRef = useRef(null);
+  const [course, setCourse] = useState(0);
+  useEffect(() => {
+    const mesurer = () => {
+      const piste = pisteRef.current;
+      if (piste) setCourse(Math.max(0, piste.scrollWidth - window.innerWidth));
+    };
+    mesurer();
+    window.addEventListener("resize", mesurer);
+    return () => window.removeEventListener("resize", mesurer);
+  }, []);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const brut = useTransform(scrollYProgress, [0, 1], [0, -course]);
+  const x = useSpring(brut, { stiffness: 120, damping: 30, mass: 0.4 });
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(
+      "section",
+      {
+        ref: sectionRef,
+        className: "relative hidden lg:block",
+        style: { height: `calc(100vh + ${course}px)` },
+        children: /* @__PURE__ */ jsx("div", { className: "sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24", children: /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[46vw]" }, p.id)) }) })
+      }
+    ),
+    /* @__PURE__ */ jsx("section", { className: "pb-6 pt-24 lg:hidden", children: /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[82vw] snap-center sm:w-[60vw]" }, p.id)) }) })
+  ] });
+}
+function TravauxStudio() {
+  return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, {}) });
+}
 function Carte({
   service,
   i,
@@ -2223,23 +2090,6 @@ const MEMBERS = [
       "WebGL"
     ],
     linkedin: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/"
-  },
-  {
-    initials: "AN",
-    name: "Anissa N.",
-    role: "Direction de projet, marketing & design",
-    pitch: "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison, puis ce qu'il produit une fois en ligne : campagnes Meta Ads et Google Ads, suivi des conversions, itérations.",
-    disciplines: [
-      "Direction artistique",
-      "UX / UI",
-      "Stratégie de marque",
-      "Meta Ads",
-      "Google Ads",
-      "Tracking & conversions",
-      "Gestion de projet",
-      "Relation client"
-    ],
-    linkedin: "https://www.linkedin.com/in/anissa-nebbache-696bb9150/"
   }
 ];
 const FACTS = [
@@ -2251,6 +2101,23 @@ const SERVICES = [
   { title: "Conception et développement", body: "Sites vitrines, boutiques Shopify, plateformes métier et applications iOS. Du cadrage à la mise en ligne." },
   { title: "Meta Ads et Google Ads", body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
   { title: "Mesure et conversions", body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." }
+];
+const FONDATEUR = MEMBERS[0];
+const DISCIPLINES_EQUIPE = [
+  "Direction artistique",
+  "UX / UI",
+  "Stratégie de marque",
+  "Meta Ads",
+  "Google Ads",
+  "Tracking & conversions",
+  "Gestion de projet"
+];
+const PHOTOS = [
+  { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[26rem]" },
+  { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "aspect-[4/3] md:col-span-5 md:aspect-auto md:h-[26rem]" },
+  { src: "/images/equipe/moodboard.webp", alt: "Réunion devant un tableau d'inspiration", classe: "aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72" },
+  { src: "/images/equipe/strategie.webp", alt: "Point stratégie devant un tableau de bord", classe: "aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72" },
+  { src: "/images/equipe/reunion.webp", alt: "Échange avec l'équipe en réunion", classe: "aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72" }
 ];
 const EASE$3 = [0.22, 1, 0.36, 1];
 function Chiffre({ valeur }) {
@@ -2279,40 +2146,81 @@ function EquipeStudio() {
         "Une équipe, ",
         /* @__PURE__ */ jsx("span", { className: "font-bold text-citron", children: "deux métiers complets." })
       ] }) }),
-      /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5", children: "Pas de chaîne d'intermédiaires : vous parlez directement aux deux personnes qui conçoivent et qui développent. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." })
+      /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5", children: "Pas de chaîne d'intermédiaires : vous parlez directement à l'équipe qui conçoit et qui développe votre site. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "mt-16 grid gap-4 md:mt-24 md:grid-cols-2", children: MEMBERS.map((m, i) => /* @__PURE__ */ jsxs(
-      motion.article,
+    /* @__PURE__ */ jsx("div", { className: "mt-12 grid gap-4 md:mt-16 md:grid-cols-12", children: PHOTOS.map((photo, i) => /* @__PURE__ */ jsx(
+      motion.figure,
       {
-        className: "flex flex-col rounded-[1.75rem] bg-surface-card p-8 md:p-10",
+        className: `overflow-hidden rounded-[1.75rem] bg-surface-card ${photo.classe}`,
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.1, ease: EASE$3 },
-        children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
-            /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: m.initials }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight text-text-primary md:text-3xl", children: m.name }),
-              /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-accent", children: m.role })
-            ] })
-          ] }),
-          /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-text-secondary", children: m.pitch }),
-          /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: m.disciplines.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-surface-light px-3 py-1.5 text-xs font-medium text-text-secondary", children: d }, d)) }),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: m.linkedin,
-              target: "_blank",
-              rel: "noopener noreferrer",
-              className: "mt-6 inline-flex min-h-[44px] w-fit items-center text-sm font-medium text-text-primary transition-colors hover:text-accent",
-              children: "Profil LinkedIn ↗"
-            }
-          )
-        ]
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$3 },
+        children: /* @__PURE__ */ jsx(
+          "img",
+          {
+            src: photo.src,
+            alt: photo.alt,
+            loading: "lazy",
+            decoding: "async",
+            className: "h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03]"
+          }
+        )
       },
-      m.name
+      photo.src
     )) }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-4 grid gap-4 md:grid-cols-2", children: [
+      /* @__PURE__ */ jsxs(
+        motion.article,
+        {
+          className: "flex flex-col rounded-[1.75rem] bg-surface-card p-8 md:p-10",
+          initial: { opacity: 0, y: 40 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "-60px" },
+          transition: { duration: 0.8, ease: EASE$3 },
+          children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
+              /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: FONDATEUR.initials }),
+              /* @__PURE__ */ jsxs("div", { children: [
+                /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight text-text-primary md:text-3xl", children: FONDATEUR.name }),
+                /* @__PURE__ */ jsxs("p", { className: "text-sm font-medium text-accent", children: [
+                  "Fondateur · ",
+                  FONDATEUR.role
+                ] })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-text-secondary", children: FONDATEUR.pitch }),
+            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: FONDATEUR.disciplines.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-surface-light px-3 py-1.5 text-xs font-medium text-text-secondary", children: d }, d)) }),
+            /* @__PURE__ */ jsx(
+              "a",
+              {
+                href: FONDATEUR.linkedin,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "mt-6 inline-flex min-h-[44px] w-fit items-center text-sm font-medium text-text-primary transition-colors hover:text-accent",
+                children: "Profil LinkedIn ↗"
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs(
+        motion.article,
+        {
+          className: "flex flex-col rounded-[1.75rem] bg-pop p-8 text-white md:p-10",
+          initial: { opacity: 0, y: 40 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "-60px" },
+          transition: { duration: 0.8, delay: 0.1, ease: EASE$3 },
+          children: [
+            /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight md:text-3xl", children: "L'équipe" }),
+            /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-white/75", children: "Direction de projet, design et marketing" }),
+            /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-white/85", children: "Autour du développement, une équipe cadre votre besoin, dessine le parcours, pilote le projet jusqu'à la livraison, puis fait vivre le site une fois en ligne : campagnes Meta Ads et Google Ads, suivi des conversions, améliorations continues." }),
+            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: DISCIPLINES_EQUIPE.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white", children: d }, d)) })
+          ]
+        }
+      )
+    ] }),
     /* @__PURE__ */ jsx("div", { className: "mt-4 grid gap-4 md:grid-cols-3", children: SERVICES.map((r, i) => /* @__PURE__ */ jsxs(
       motion.div,
       {
@@ -2468,7 +2376,6 @@ function AppelEntrant() {
 function FinalStudio() {
   const ref = useRef(null);
   const boutonRef = useRef(null);
-  const [rdvOuvert, setRdvOuvert] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
   const ligne1 = useTransform(scrollYProgress, [0, 0.6], ["-12%", "0%"]);
   const ligne2 = useTransform(scrollYProgress, [0, 0.6], ["12%", "0%"]);
@@ -2486,43 +2393,29 @@ function FinalStudio() {
     mx.set(0);
     my.set(0);
   };
-  return /* @__PURE__ */ jsxs("section", { ref, className: "overflow-hidden bg-surface px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20", children: [
-    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
-      /* @__PURE__ */ jsxs("h2", { className: "text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: [
-        /* @__PURE__ */ jsx(motion.span, { className: "block", style: { x: ligne1 }, children: "Nous vendons plus qu'un site." }),
-        /* @__PURE__ */ jsx(motion.span, { className: "block text-[#25D366]", style: { x: ligne2 }, children: "Nous vendons des appels." })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant, {}) }),
-      /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center gap-10 text-center md:mt-8", children: [
-        /* @__PURE__ */ jsx("p", { className: "max-w-md text-xl leading-snug text-text-secondary md:text-2xl", children: "Commandez le site qui vous apportera vos prochains prospects." }),
-        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-6", onPointerMove: attirer, onPointerLeave: relacher, children: [
-          /* @__PURE__ */ jsx(
-            motion.button,
-            {
-              ref: boutonRef,
-              type: "button",
-              onClick: () => setRdvOuvert(true),
-              style: { x: sx, y: sy },
-              whileTap: { scale: 0.94 },
-              className: "flex h-32 w-32 items-center justify-center rounded-full bg-[#25D366] p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:text-lg",
-              children: "Réserver un call"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: WHATSAPP_PROJET,
-              target: "_blank",
-              rel: "noopener noreferrer",
-              className: "inline-flex min-h-[44px] items-center text-base font-medium text-text-primary transition-colors hover:text-accent",
-              children: "ou WhatsApp ↗"
-            }
-          )
-        ] })
-      ] })
+  return /* @__PURE__ */ jsx("section", { ref, className: "overflow-hidden bg-surface px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+    /* @__PURE__ */ jsxs("h2", { className: "text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: [
+      /* @__PURE__ */ jsx(motion.span, { className: "block", style: { x: ligne1 }, children: "Nous vendons plus qu'un site." }),
+      /* @__PURE__ */ jsx(motion.span, { className: "block text-[#25D366]", style: { x: ligne2 }, children: "Nous vendons des appels." })
     ] }),
-    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
-  ] });
+    /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant, {}) }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center gap-10 text-center md:mt-8", children: [
+      /* @__PURE__ */ jsx("p", { className: "max-w-md text-xl leading-snug text-text-secondary md:text-2xl", children: "Commandez le site qui vous apportera vos prochains prospects." }),
+      /* @__PURE__ */ jsx("div", { className: "flex flex-col items-center gap-6", onPointerMove: attirer, onPointerLeave: relacher, children: /* @__PURE__ */ jsx(
+        motion.a,
+        {
+          ref: boutonRef,
+          href: WHATSAPP_PROJET,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          style: { x: sx, y: sy },
+          whileTap: { scale: 0.94 },
+          className: "flex h-32 w-32 items-center justify-center rounded-full bg-[#25D366] p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:text-lg",
+          children: "Réserver un call"
+        }
+      ) })
+    ] })
+  ] }) });
 }
 const CLE$1 = "digitalz-prechargeur-vu";
 const DUREE_MS = 1100;

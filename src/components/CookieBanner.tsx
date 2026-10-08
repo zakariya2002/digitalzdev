@@ -34,8 +34,8 @@ export default function CookieBanner() {
             <p className="text-text-secondary text-sm leading-relaxed flex-1">
               Ce site ne dépose aucun cookie publicitaire et ne vous suit pas.
               Le stockage local retient seulement que vous avez lu ce message.
-              Le calendrier de prise de rendez-vous est fourni par Calendly, et
-              ne se charge que si vous l&apos;ouvrez.{' '}
+              Les prises de contact passent par WhatsApp, qui ne s&apos;ouvre
+              que si vous cliquez.{' '}
               <Link
                 to="/politique-confidentialite"
                 className="text-accent underline"

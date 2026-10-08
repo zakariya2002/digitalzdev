@@ -5,7 +5,7 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion'
-import CalendlyModal from '../CalendlyModal'
+import { WHATSAPP_PROJET } from '../ServicesSection'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 const QUIZ = 'https://quiz.digitalzdev.com'
@@ -38,7 +38,6 @@ function Ligne({ children, delai }: { children: ReactNode; delai: number }) {
 export default function HeroStudio() {
   const sectionRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [rdvOuvert, setRdvOuvert] = useState(false)
   const [son, setSon] = useState(false)
   const [mobile, setMobile] = useState(false)
 
@@ -117,11 +116,11 @@ export default function HeroStudio() {
           className="relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32"
           style={{ opacity: titreOpacite, y: titreY }}
         >
-          <h1 className="text-[9.5vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]">
-            <Ligne delai={0.25}>Créons un site à la</Ligne>
-            <Ligne delai={0.35}>hauteur de votre</Ligne>
+          <h1 className="whitespace-nowrap text-[8.6vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]">
+            <Ligne delai={0.25}>Créons un site</Ligne>
+            <Ligne delai={0.35}>à la hauteur de</Ligne>
             <Ligne delai={0.45}>
-              <span className="text-pop">image.</span>
+              votre <span className="text-pop">image.</span>
             </Ligne>
           </h1>
 
@@ -137,13 +136,14 @@ export default function HeroStudio() {
               inspirent confiance et font venir les bons clients.
             </p>
             <div className="flex flex-wrap gap-2 md:mt-5">
-              <button
-                type="button"
-                onClick={() => setRdvOuvert(true)}
+              <a
+                href={WHATSAPP_PROJET}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]"
               >
                 Prendre rendez-vous
-              </button>
+              </a>
               <a
                 href={QUIZ}
                 className="inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]"
@@ -182,7 +182,6 @@ export default function HeroStudio() {
         </button>
       </div>
 
-      <CalendlyModal open={rdvOuvert} onClose={() => setRdvOuvert(false)} />
     </section>
   )
 }

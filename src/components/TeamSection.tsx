@@ -30,24 +30,6 @@ export const MEMBERS: Member[] = [
     ],
     linkedin: 'https://www.linkedin.com/in/zakariya-nebbache-7b0644214/',
   },
-  {
-    initials: 'AN',
-    name: 'Anissa N.',
-    role: 'Direction de projet, marketing & design',
-    pitch:
-      "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison, puis ce qu'il produit une fois en ligne : campagnes Meta Ads et Google Ads, suivi des conversions, itérations.",
-    disciplines: [
-      'Direction artistique',
-      'UX / UI',
-      'Stratégie de marque',
-      'Meta Ads',
-      'Google Ads',
-      'Tracking & conversions',
-      'Gestion de projet',
-      'Relation client',
-    ],
-    linkedin: 'https://www.linkedin.com/in/anissa-nebbache-696bb9150/',
-  },
 ]
 
 /** Chiffres tirés du portfolio publié sur cette page, rien de déclaratif. */

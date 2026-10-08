@@ -1,6 +1,5 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
-import CalendlyModal from '../CalendlyModal'
 import AppelEntrant from './AppelEntrant'
 import { WHATSAPP_PROJET } from '../ServicesSection'
 
@@ -10,8 +9,7 @@ import { WHATSAPP_PROJET } from '../ServicesSection'
  */
 export default function FinalStudio() {
   const ref = useRef<HTMLElement>(null)
-  const boutonRef = useRef<HTMLButtonElement>(null)
-  const [rdvOuvert, setRdvOuvert] = useState(false)
+  const boutonRef = useRef<HTMLAnchorElement>(null)
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] })
   const ligne1 = useTransform(scrollYProgress, [0, 0.6], ['-12%', '0%'])
@@ -56,29 +54,21 @@ export default function FinalStudio() {
           </p>
 
           <div className="flex flex-col items-center gap-6" onPointerMove={attirer} onPointerLeave={relacher}>
-            <motion.button
+            <motion.a
               ref={boutonRef}
-              type="button"
-              onClick={() => setRdvOuvert(true)}
+              href={WHATSAPP_PROJET}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{ x: sx, y: sy }}
               whileTap={{ scale: 0.94 }}
               className="flex h-32 w-32 items-center justify-center rounded-full bg-[#25D366] p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:text-lg"
             >
               Réserver un call
-            </motion.button>
-            <a
-              href={WHATSAPP_PROJET}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-[44px] items-center text-base font-medium text-text-primary transition-colors hover:text-accent"
-            >
-              ou WhatsApp ↗
-            </a>
+            </motion.a>
           </div>
         </div>
       </div>
 
-      <CalendlyModal open={rdvOuvert} onClose={() => setRdvOuvert(false)} />
     </section>
   )
 }
