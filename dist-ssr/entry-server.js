@@ -1422,7 +1422,7 @@ function HeroStudio() {
           children: [
             /* @__PURE__ */ jsxs("h2", { className: "max-w-3xl text-5xl text-white md:text-7xl", children: [
               "Votre site à votre image.",
-              /* @__PURE__ */ jsx("span", { className: "block text-accent", children: "Un aperçu en 60 secondes." })
+              /* @__PURE__ */ jsx("span", { className: "block font-extrabold text-[#1d1d1f]", children: "Un aperçu en 60 secondes." })
             ] }),
             /* @__PURE__ */ jsx(
               "a",
@@ -1872,7 +1872,7 @@ function ServicesStudio() {
   return /* @__PURE__ */ jsx("section", { id: "services", className: "bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
       "Une agence web qui conçoit, développe ",
-      /* @__PURE__ */ jsx("span", { className: "text-accent", children: "et fait connaître votre site." })
+      /* @__PURE__ */ jsx("span", { className: "text-pop", children: "et fait connaître votre site." })
     ] }),
     /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Création de site internet, boutique en ligne, refonte, outil métier et campagnes publicitaires. Un projet de site web se juge sur ce qu'il rapporte une fois en ligne, pas sur sa maquette." }),
     /* @__PURE__ */ jsx("div", { ref: pileRef, className: "mt-16 space-y-6 md:mt-24 md:space-y-10", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, n: SERVICES$1.length, progression: scrollYProgress }, s.title)) }),
@@ -2103,7 +2103,7 @@ function RechercheGoogle() {
     /* @__PURE__ */ jsx(Badge, { progression: p, debut: 0.66, className: "absolute bottom-[10%] left-1 z-20 lg:bottom-[16%] lg:left-[6%]", titre: "Meta Ads", detail: "Vos réalisations sur Instagram" }),
     /* @__PURE__ */ jsxs("h2", { className: "w-full max-w-4xl text-center text-[7vw] text-text-primary md:text-4xl lg:text-[2.6rem]", children: [
       "Un beau site ne suffit pas. ",
-      /* @__PURE__ */ jsx("span", { className: "text-accent", children: "Il doit être trouvé." })
+      /* @__PURE__ */ jsx("span", { className: "text-citron", children: "Il doit être trouvé." })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-[0_40px_90px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 bg-[#f1f3f4] px-4 py-2.5", children: [
@@ -2271,7 +2271,7 @@ function EquipeStudio() {
     /* @__PURE__ */ jsxs("div", { className: "grid gap-10 lg:grid-cols-12", children: [
       /* @__PURE__ */ jsx("div", { className: "lg:col-span-7", children: /* @__PURE__ */ jsxs("h2", { className: "text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
         "Une équipe restreinte, ",
-        /* @__PURE__ */ jsx("span", { className: "text-accent", children: "deux métiers complets." })
+        /* @__PURE__ */ jsx("span", { className: "text-citron", children: "deux métiers complets." })
       ] }) }),
       /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5", children: "Pas de chaîne d'intermédiaires : vous parlez directement aux deux personnes qui conçoivent et qui développent. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." })
     ] }),
@@ -3129,7 +3129,7 @@ function Footer() {
       motion.p,
       {
         "aria-hidden": true,
-        className: "whitespace-nowrap pb-[0.06em] text-center text-[13vw] font-normal leading-[1.05] tracking-[-0.06em] text-text-primary",
+        className: "whitespace-nowrap pb-[0.06em] text-center text-[13vw] font-extrabold leading-[1.05] tracking-[-0.06em] text-text-primary",
         initial: { y: "60%" },
         whileInView: { y: "0%" },
         viewport: { once: true },

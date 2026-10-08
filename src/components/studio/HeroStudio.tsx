@@ -161,7 +161,7 @@ export default function HeroStudio() {
         >
           <h2 className="max-w-3xl text-5xl text-white md:text-7xl">
             Votre site à votre image.
-            <span className="block text-accent">Un aperçu en 60 secondes.</span>
+            <span className="block font-extrabold text-[#1d1d1f]">Un aperçu en 60 secondes.</span>
           </h2>
           <a
             href={QUIZ}

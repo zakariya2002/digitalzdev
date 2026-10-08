@@ -100,7 +100,7 @@ export default function Footer() {
       <div className="mt-10 overflow-hidden">
         <motion.p
           aria-hidden
-          className="whitespace-nowrap pb-[0.06em] text-center text-[13vw] font-normal leading-[1.05] tracking-[-0.06em] text-text-primary"
+          className="whitespace-nowrap pb-[0.06em] text-center text-[13vw] font-extrabold leading-[1.05] tracking-[-0.06em] text-text-primary"
           initial={{ y: '60%' }}
           whileInView={{ y: '0%' }}
           viewport={{ once: true }}

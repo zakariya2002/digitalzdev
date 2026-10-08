@@ -243,7 +243,7 @@ export default function RechercheGoogle() {
         <Badge progression={p} debut={0.66} className="absolute bottom-[10%] left-1 z-20 lg:bottom-[16%] lg:left-[6%]" titre="Meta Ads" detail="Vos réalisations sur Instagram" />
 
         <h2 className="w-full max-w-4xl text-center text-[7vw] text-text-primary md:text-4xl lg:text-[2.6rem]">
-          Un beau site ne suffit pas. <span className="text-accent">Il doit être trouvé.</span>
+          Un beau site ne suffit pas. <span className="text-citron">Il doit être trouvé.</span>
         </h2>
 
         {/* La page de résultats */}
