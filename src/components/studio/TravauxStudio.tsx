@@ -11,7 +11,7 @@ function CarteProjet({ projet, className = '' }: { projet: (typeof projects)[num
       data-curseur="Voir"
       className={`group block shrink-0 ${className}`}
     >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-auto lg:h-[calc(100svh-14rem)]">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-[16/10] lg:h-auto">
         <img
           src={projet.heroImage}
           alt={`Site ${projet.title}`}
@@ -68,10 +68,10 @@ function Selection() {
         className="relative hidden lg:block"
         style={{ height: `calc(100vh + ${course}px)` }}
       >
-        <div className="sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24">
+        <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
           <motion.div ref={pisteRef} className="flex gap-8 px-10 will-change-transform" style={{ x }}>
             {projects.map((p) => (
-              <CarteProjet key={p.id} projet={p} className="w-[46vw]" />
+              <CarteProjet key={p.id} projet={p} className="w-[36vw] max-w-[640px]" />
             ))}
           </motion.div>
         </div>
@@ -81,7 +81,7 @@ function Selection() {
       <section className="pb-6 pt-24 lg:hidden">
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]">
           {projects.map((p) => (
-            <CarteProjet key={p.id} projet={p} className="w-[82vw] snap-center sm:w-[60vw]" />
+            <CarteProjet key={p.id} projet={p} className="w-[72vw] snap-center sm:w-[50vw]" />
           ))}
         </div>
       </section>

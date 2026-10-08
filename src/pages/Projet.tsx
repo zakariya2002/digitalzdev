@@ -7,6 +7,7 @@ import RechercheGoogle from '../components/studio/RechercheGoogle'
 import FinalStudio from '../components/studio/FinalStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
 import Footer from '../components/Footer'
+import VoirSite from '../components/studio/VoirSite'
 
 /**
  * Page d'atterrissage des publicités Meta : quatre questions, les
@@ -430,6 +431,7 @@ export default function Projet() {
           <RechercheGoogle />
           <FinalStudio />
           <EquipeStudio />
+          <VoirSite />
           <Footer />
         </div>
       )}
