@@ -63,7 +63,7 @@ export default function FinalStudio() {
               whileTap={{ scale: 0.94 }}
               className="flex h-32 w-32 items-center justify-center rounded-full bg-[#25D366] p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:text-lg"
             >
-              Réserver un call
+              Parlons-en
             </motion.a>
           </div>
         </div>

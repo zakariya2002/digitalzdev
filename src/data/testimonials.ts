@@ -41,18 +41,6 @@ export const testimonials: Testimonial[] = [
     color: '#7A6A55',
   },
   {
-    projectId: 'drive',
-    company: 'DRIVE',
-    sector: 'Réseau de franchisés',
-    delivered:
-      "Portail d'équipement privé pour les dix agences du réseau. Un kit d'ouverture permet d'équiper une nouvelle agence en une seule commande, le reste du catalogue est rangé par zone du point de vente, à tarifs cadrés par la centrale.",
-    quote: null,
-    author: null,
-    image: '/screenshots/drive-hero.webp',
-    route: '/drive',
-    color: '#8A93A0',
-  },
-  {
     projectId: 'neurocare',
     company: 'NeuroCare',
     sector: 'Santé et neurodéveloppement',

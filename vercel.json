@@ -25,6 +25,16 @@
       "source": "/the-sourcing",
       "destination": "/#projets",
       "permanent": true
+    },
+    {
+      "source": "/copaine",
+      "destination": "/#projets",
+      "permanent": true
+    },
+    {
+      "source": "/drive",
+      "destination": "/#projets",
+      "permanent": true
     }
   ]
 }
