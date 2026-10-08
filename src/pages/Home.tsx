@@ -28,8 +28,8 @@ export default function Home() {
       <ManifesteStudio />
       <TravauxStudio />
       <FinalStudio />
-      <ServicesStudio />
       <AcquisitionStudio />
+      <ServicesStudio />
       <AvisGoogleSection />
       <EquipeStudio />
       <FaqSection />
