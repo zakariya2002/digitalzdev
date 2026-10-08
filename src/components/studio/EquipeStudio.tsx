@@ -60,7 +60,7 @@ export default function EquipeStudio() {
               transition={{ duration: 0.8, delay: i * 0.1, ease: EASE }}
             >
               <div className="flex items-center gap-4">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-accent text-xl font-normal text-surface">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]">
                   {m.initials}
                 </span>
                 <div>
@@ -107,7 +107,7 @@ export default function EquipeStudio() {
         <div className="mt-16 grid grid-cols-3 gap-4 md:mt-24">
           {FACTS.map((f) => (
             <div key={f.label} className="text-center">
-              <p className="text-[13vw] font-normal leading-none tracking-[-0.05em] text-accent md:text-[6vw] lg:text-[min(6vw,104px)]">
+              <p className="text-[13vw] font-normal leading-none tracking-[-0.05em] text-pop md:text-[6vw] lg:text-[min(6vw,104px)]">
                 <Chiffre valeur={f.value} />
               </p>
               <p className="mt-3 text-xs font-medium uppercase tracking-[0.18em] text-text-secondary md:text-sm">

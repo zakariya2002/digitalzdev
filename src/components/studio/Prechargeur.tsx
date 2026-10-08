@@ -58,7 +58,7 @@ export default function Prechargeur() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[90] flex flex-col justify-between bg-accent p-6 text-surface md:p-10"
+          className="fixed inset-0 z-[90] flex flex-col justify-between bg-pop p-6 text-white md:p-10"
           initial={{ y: 0 }}
           exit={{ y: '-100%' }}
           transition={{ duration: 0.8, ease: EASE }}

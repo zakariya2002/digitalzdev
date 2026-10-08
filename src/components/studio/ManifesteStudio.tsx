@@ -32,7 +32,7 @@ function Mot({
 }) {
   const opacite = useTransform(p, [i / n, (i + 1) / n], [0.14, 1])
   return (
-    <motion.span style={{ opacity: opacite }} className={accent ? 'text-accent' : 'text-text-primary'}>
+    <motion.span style={{ opacity: opacite }} className={accent ? 'text-pop' : 'text-text-primary'}>
       {mot}{' '}
     </motion.span>
   )

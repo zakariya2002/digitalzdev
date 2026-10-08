@@ -40,7 +40,7 @@ export default function FinalStudio() {
           <motion.span className="block" style={{ x: ligne1 }}>
             Nous vendons plus qu'un site.
           </motion.span>
-          <motion.span className="block text-accent" style={{ x: ligne2 }}>
+          <motion.span className="block text-pop" style={{ x: ligne2 }}>
             Nous vendons des appels.
           </motion.span>
         </h2>
@@ -62,7 +62,7 @@ export default function FinalStudio() {
               onClick={() => setRdvOuvert(true)}
               style={{ x: sx, y: sy }}
               whileTap={{ scale: 0.94 }}
-              className="flex h-32 w-32 items-center justify-center rounded-full bg-accent p-6 text-center text-lg font-normal leading-tight text-surface transition-colors hover:bg-accent-hover md:h-40 md:w-40 md:text-lg"
+              className="flex h-32 w-32 items-center justify-center rounded-full bg-pop p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-pop/85 md:h-40 md:w-40 md:text-lg"
             >
               Réserver un call
             </motion.button>

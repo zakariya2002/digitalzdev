@@ -46,7 +46,7 @@ export default function AcquisitionStudio() {
                     key={point}
                     className="flex gap-3 text-[15px] font-medium text-text-secondary transition-colors duration-500 [@media(hover:hover)]:group-hover:text-surface"
                   >
-                    <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent transition-colors duration-500 [@media(hover:hover)]:group-hover:bg-surface" />
+                    <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pop transition-colors duration-500 [@media(hover:hover)]:group-hover:bg-surface" />
                     {point}
                   </li>
                 ))}

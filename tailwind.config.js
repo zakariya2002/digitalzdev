@@ -16,6 +16,9 @@ export default {
           hover: 'rgb(var(--accent-hover) / <alpha-value>)',
           muted: 'rgb(var(--accent-muted) / <alpha-value>)',
         },
+        // Touches de couleur du thème « studio » : bleu électrique et citron.
+        pop: 'rgb(var(--pop, 54 84 244) / <alpha-value>)',
+        citron: 'rgb(var(--citron, 217 244 90) / <alpha-value>)',
         text: {
           primary: 'rgb(var(--text-primary) / <alpha-value>)',
           secondary: 'rgb(var(--text-secondary) / <alpha-value>)',

@@ -5,7 +5,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion'
  * Pastille de survol, sur ordinateur uniquement.
  *
  * Le pointeur reste celui du système. Au survol d'un élément portant
- * `data-curseur="Libellé"`, une petite pastille gris acier apparaît près du
+ * `data-curseur="Libellé"`, une petite pastille citron apparaît près du
  * pointeur avec le libellé, comme « Voir » sur un projet. Sur écran tactile,
  * ou si l'appareil demande moins d'animations, rien n'est affiché.
  */
@@ -47,7 +47,7 @@ export default function Curseur() {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full bg-accent font-sans text-[11px] font-medium text-surface"
+      className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full bg-citron font-sans text-[11px] font-medium text-[#1d1d1f]"
       style={{ x: sx, y: sy, translateX: '-50%', translateY: '-50%' }}
       animate={{
         width: libelle ? 56 : 0,

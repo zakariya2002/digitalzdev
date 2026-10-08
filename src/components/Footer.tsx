@@ -106,7 +106,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          Digitalz <span className="text-accent">Dev</span>
+          Digitalz <span className="text-pop">Dev</span>
         </motion.p>
       </div>
     </footer>

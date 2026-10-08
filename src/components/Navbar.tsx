@@ -163,7 +163,7 @@ export default function Navbar() {
           </Link>
           <a
             href={QUIZ}
-            className="inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-medium text-surface transition-colors hover:bg-accent-hover"
+            className="inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-pop px-4 text-[15px] font-medium text-white transition-colors hover:bg-pop/85"
           >
             <span className="sm:hidden">Démo gratuite</span>
             <span className="hidden sm:inline">Ma démo gratuite</span>
@@ -186,7 +186,7 @@ export default function Navbar() {
                 {LIENS.map((lien, i) => {
                   const courant = estCourant(lien, location.pathname)
                   const classe = `group inline-flex items-center gap-4 text-[13vw] font-normal leading-[0.95] tracking-[-0.05em] transition-colors md:text-[7.5vw] ${
-                    courant ? 'text-accent' : 'text-text-primary hover:text-accent'
+                    courant ? 'text-pop' : 'text-text-primary hover:text-pop'
                   }`
                   const contenu = (
                     <>

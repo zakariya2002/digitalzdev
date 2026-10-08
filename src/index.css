@@ -69,6 +69,10 @@
     --text-primary: 29 29 31;
     --text-secondary: 99 99 104;
     --text-muted: 142 142 147;
+    /* Deux couleurs vives, en touches seulement : le mot qui compte, l'appel
+       à l'action principal, un chiffre, une pastille. */
+    --pop: 54 84 244;
+    --citron: 217 244 90;
   }
 
   html.studio body,
