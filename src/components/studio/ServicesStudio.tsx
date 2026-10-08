@@ -29,7 +29,7 @@ function Carte({
       <motion.article
         style={{ scale: echelle, filter: filtre }}
         className={`origin-top rounded-[1.75rem] p-7 md:min-h-[62vh] md:p-12 ${
-          accent ? 'bg-citron text-[#1d1d1f]' : 'bg-surface-card text-text-primary'
+          accent ? 'bg-pop text-white' : 'bg-surface-card text-text-primary'
         }`}
       >
         <div className="grid gap-8 md:grid-cols-12">
@@ -37,19 +37,19 @@ function Carte({
             <h3 className="text-3xl font-normal leading-[1] tracking-tight md:text-5xl">
               {service.title}
             </h3>
-            <p className={`mt-4 text-lg font-medium md:text-xl ${accent ? 'text-[#1d1d1f]' : 'text-accent'}`}>
+            <p className={`mt-4 text-lg font-medium md:text-xl ${accent ? 'text-white' : 'text-accent'}`}>
               {service.lead}
             </p>
           </div>
           <div className="md:col-span-5">
-            <p className={`text-[15px] font-medium leading-relaxed md:text-base ${accent ? 'text-[#1d1d1f]/75' : 'text-text-secondary'}`}>
+            <p className={`text-[15px] font-medium leading-relaxed md:text-base ${accent ? 'text-white/80' : 'text-text-secondary'}`}>
               {service.body}
             </p>
             <ul className="mt-6 space-y-2">
               {service.points.map((point) => (
                 <li
                   key={point}
-                  className={`rounded-xl px-4 py-3 text-sm font-medium ${accent ? 'bg-white/45' : 'bg-surface-light'}`}
+                  className={`rounded-xl px-4 py-3 text-sm font-medium ${accent ? 'bg-white/15' : 'bg-surface-light'}`}
                 >
                   {point}
                 </li>
