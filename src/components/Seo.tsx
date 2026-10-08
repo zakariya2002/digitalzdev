@@ -69,7 +69,7 @@ export default function Seo() {
     const isNotFound = page.path === '/404'
     setMeta('meta[name="robots"]', {
       name: 'robots',
-      content: isNotFound ? 'noindex, follow' : 'index, follow',
+      content: isNotFound || page.noindex ? 'noindex, follow' : 'index, follow',
     })
   }, [pathname])
 

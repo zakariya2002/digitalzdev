@@ -2,7 +2,7 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
-import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, lazy, Suspense, StrictMode } from "react";
+import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, useMemo, lazy, Suspense, StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
 import { createClient } from "@supabase/supabase-js";
@@ -697,6 +697,12 @@ const STATIC_PAGES = [
     description: "Décrivez votre projet de site internet en deux minutes : type de site, budget, délais. Réponse sous 24 à 48 h avec un devis adapté par notre agence web."
   },
   {
+    path: "/projet",
+    title: "Parlons de votre site | Digitalz Dev",
+    description: "Quatre questions sur votre projet de site internet, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
+    noindex: true
+  },
+  {
     path: "/mentions-legales",
     title: "Mentions légales | Digitalz Dev",
     description: "Mentions légales du site digitalzdev.com : éditeur, directeur de la publication, hébergeur et propriété intellectuelle."
@@ -778,7 +784,7 @@ function Seo() {
     const isNotFound = page.path === "/404";
     setMeta('meta[name="robots"]', {
       name: "robots",
-      content: isNotFound ? "noindex, follow" : "index, follow"
+      content: isNotFound || page.noindex ? "noindex, follow" : "index, follow"
     });
   }, [pathname]);
   return null;
@@ -885,7 +891,7 @@ const LIENS = [
   { libelle: "Contact", vers: "/contact", interne: true }
 ];
 const QUIZ$1 = "https://quiz.digitalzdev.com";
-const EASE$5 = [0.76, 0, 0.24, 1];
+const EASE$6 = [0.76, 0, 0.24, 1];
 function estCourant(lien2, chemin) {
   if (lien2.vers === "/") return chemin === "/";
   if (lien2.vers.startsWith("/#")) return false;
@@ -1016,7 +1022,7 @@ function Navbar() {
         initial: { clipPath: "inset(0% 0% 100% 0%)" },
         animate: { clipPath: "inset(0% 0% 0% 0%)" },
         exit: { clipPath: "inset(0% 0% 100% 0%)" },
-        transition: { duration: 0.7, ease: EASE$5 },
+        transition: { duration: 0.7, ease: EASE$6 },
         children: [
           /* @__PURE__ */ jsx("nav", { "aria-label": "Menu", children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien2, i) => {
             const courant = estCourant(lien2, location.pathname);
@@ -1489,7 +1495,7 @@ const SERVICES$1 = [
     ]
   }
 ];
-const EASE$4 = [0.22, 1, 0.36, 1];
+const EASE$5 = [0.22, 1, 0.36, 1];
 const QUIZ = "https://quiz.digitalzdev.com";
 function Ligne$1({ children, delai }) {
   return /* @__PURE__ */ jsx("span", { className: "block overflow-hidden pb-[0.06em]", children: /* @__PURE__ */ jsx(
@@ -1498,7 +1504,7 @@ function Ligne$1({ children, delai }) {
       className: "block",
       initial: { y: "110%" },
       animate: { y: 0 },
-      transition: { duration: 1, delay: delai, ease: EASE$4 },
+      transition: { duration: 1, delay: delai, ease: EASE$5 },
       children
     }
   ) });
@@ -1510,10 +1516,10 @@ function HeroStudio() {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const requete = window.matchMedia("(max-width: 767px)");
-    const suivre = () => setMobile(requete.matches);
-    suivre();
-    requete.addEventListener("change", suivre);
-    return () => requete.removeEventListener("change", suivre);
+    const suivre2 = () => setMobile(requete.matches);
+    suivre2();
+    requete.addEventListener("change", suivre2);
+    return () => requete.removeEventListener("change", suivre2);
   }, []);
   useEffect(() => {
     const video = videoRef.current;
@@ -1590,7 +1596,7 @@ function HeroStudio() {
               className: "mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0",
               initial: { opacity: 0, y: 20 },
               animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.8, delay: 0.8, ease: EASE$4 },
+              transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
               children: [
                 /* @__PURE__ */ jsx("p", { className: "hidden text-[15px] font-medium leading-relaxed text-text-secondary md:block", children: "Cabinets d'avocats, agences d'architecture, photographes et vidéastes : nous concevons des sites sobres et rapides, qui inspirent confiance et font venir les bons clients." }),
                 /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2 md:mt-5", children: [
@@ -1785,10 +1791,10 @@ function ServicesStudio() {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const requete = window.matchMedia("(max-width: 767px)");
-    const suivre = () => setMobile(requete.matches);
-    suivre();
-    requete.addEventListener("change", suivre);
-    return () => requete.removeEventListener("change", suivre);
+    const suivre2 = () => setMobile(requete.matches);
+    suivre2();
+    requete.addEventListener("change", suivre2);
+    return () => requete.removeEventListener("change", suivre2);
   }, []);
   return /* @__PURE__ */ jsx("section", { id: "services", className: "overflow-x-clip bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
@@ -1873,10 +1879,10 @@ function useHauteurLigne() {
   const [h, setH] = useState(84);
   useEffect(() => {
     const requete = window.matchMedia("(max-width: 767px)");
-    const suivre = () => setH(requete.matches ? 104 : 84);
-    suivre();
-    requete.addEventListener("change", suivre);
-    return () => requete.removeEventListener("change", suivre);
+    const suivre2 = () => setH(requete.matches ? 104 : 84);
+    suivre2();
+    requete.addEventListener("change", suivre2);
+    return () => requete.removeEventListener("change", suivre2);
   }, []);
   return h;
 }
@@ -2108,7 +2114,7 @@ function RechercheGoogle() {
     ] })
   ] }) });
 }
-const EASE$3 = [0.22, 1, 0.36, 1];
+const EASE$4 = [0.22, 1, 0.36, 1];
 const LARGEURS = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
 const SURVOL = [
   { carte: "[@media(hover:hover)]:hover:bg-[#1d1d1f]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
@@ -2126,7 +2132,7 @@ function AcquisitionStudio() {
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$3 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$4 },
         children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("p", { className: `text-sm font-medium text-accent transition-colors duration-500 ${SURVOL[i].texte}`, children: levier.titre }),
@@ -2188,9 +2194,9 @@ const DISCIPLINES_EQUIPE = [
 ];
 const PHOTOS = [
   { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[28rem]" },
-  { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "aspect-[4/3] md:col-span-5 md:aspect-auto md:h-[28rem]" }
+  { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "hidden md:block md:col-span-5 md:h-[28rem]" }
 ];
-const EASE$2 = [0.22, 1, 0.36, 1];
+const EASE$3 = [0.22, 1, 0.36, 1];
 function Chiffre({ valeur }) {
   const ref = useRef(null);
   const vu = useInView(ref, { once: true, margin: "-60px" });
@@ -2226,7 +2232,7 @@ function EquipeStudio() {
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$2 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$3 },
         children: /* @__PURE__ */ jsx(
           "img",
           {
@@ -2248,7 +2254,7 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, ease: EASE$2 },
+          transition: { duration: 0.8, ease: EASE$3 },
           children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
               /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: FONDATEUR.initials }),
@@ -2282,7 +2288,7 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, delay: 0.1, ease: EASE$2 },
+          transition: { duration: 0.8, delay: 0.1, ease: EASE$3 },
           children: [
             /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight md:text-3xl", children: "L'équipe" }),
             /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-white/75", children: "Direction de projet, design et marketing" }),
@@ -2299,7 +2305,7 @@ function EquipeStudio() {
         initial: { opacity: 0, y: 30 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$2 },
+        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$3 },
         children: [
           /* @__PURE__ */ jsx("h3", { className: "text-lg font-normal text-text-primary", children: r.title }),
           /* @__PURE__ */ jsx("p", { className: "mt-2 text-sm font-medium leading-relaxed text-text-secondary", children: r.body })
@@ -2313,7 +2319,7 @@ function EquipeStudio() {
     ] }, f.label)) })
   ] }) });
 }
-const EASE$1 = [0.22, 1, 0.36, 1];
+const EASE$2 = [0.22, 1, 0.36, 1];
 const DUREES = { sonne: 2600, decroche: 900 };
 function Combine({ className = "" }) {
   return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", className, fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z" }) });
@@ -2381,7 +2387,7 @@ function AppelEntrant() {
       {
         className: "relative h-[27rem] w-[13.5rem] rounded-[2.6rem] bg-[#1d1d1f] p-[7px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] md:h-[31rem] md:w-[15.5rem]",
         animate: sonne ? { rotate: [0, -3, 3, -3, 3, -2, 2, 0, 0, 0], x: [0, -2, 2, -2, 2, -1, 1, 0, 0, 0] } : { rotate: 0, x: 0, y: etape === "decroche" ? -8 : 0 },
-        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$1 },
+        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$2 },
         children: /* @__PURE__ */ jsxs("div", { className: "relative flex h-full w-full flex-col overflow-hidden rounded-[2.2rem] bg-gradient-to-b from-[#3a3d42] via-[#26282c] to-[#161718] px-5 pb-8 pt-12 text-white", children: [
           /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "absolute left-1/2 top-2.5 h-5 w-20 -translate-x-1/2 rounded-full bg-black" }),
           /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: etape !== "enligne" ? /* @__PURE__ */ jsxs(
@@ -2410,7 +2416,7 @@ function AppelEntrant() {
                     {
                       className: "absolute left-1 top-1 flex h-12 w-12 items-center justify-center rounded-full bg-[#34c759]",
                       animate: { x: etape === "decroche" ? course : 0 },
-                      transition: { duration: 0.7, ease: EASE$1 },
+                      transition: { duration: 0.7, ease: EASE$2 },
                       children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5" })
                     }
                   )
@@ -2424,7 +2430,7 @@ function AppelEntrant() {
               className: "flex h-full flex-col items-center",
               initial: { opacity: 0, y: 10 },
               animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.45, ease: EASE$1 },
+              transition: { duration: 0.45, ease: EASE$2 },
               children: [
                 /* @__PURE__ */ jsx("p", { className: "text-sm tabular-nums text-[#34c759]", children: duree }),
                 /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
@@ -2490,7 +2496,7 @@ function FinalStudio() {
 }
 const CLE = "digitalz-prechargeur-vu";
 const DUREE_MS = 1100;
-const EASE = [0.76, 0, 0.24, 1];
+const EASE$1 = [0.76, 0, 0.24, 1];
 function Prechargeur() {
   const [visible, setVisible] = useState(false);
   const [compte, setCompte] = useState(0);
@@ -2530,7 +2536,7 @@ function Prechargeur() {
       className: "fixed inset-0 z-[90] flex flex-col justify-between bg-pop p-6 text-white md:p-10",
       initial: { y: 0 },
       exit: { y: "-100%" },
-      transition: { duration: 0.8, ease: EASE },
+      transition: { duration: 0.8, ease: EASE$1 },
       children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
           /* @__PURE__ */ jsx("img", { src: "/logo-studio.png", alt: "", className: "h-10 w-10 rounded-full ring-2 ring-surface" }),
@@ -4005,6 +4011,308 @@ function NotFound() {
     )
   ] }) });
 }
+const WHATSAPP = "33783259869";
+const PIXEL_ID = "28061156510173105";
+const EASE = [0.22, 1, 0.36, 1];
+const QUESTIONS = [
+  {
+    cle: "metier",
+    titre: "Quel est votre métier ?",
+    options: ["Avocat ou cabinet", "Architecte ou agence", "Photographe ou vidéaste", "Autre activité"]
+  },
+  {
+    cle: "besoin",
+    titre: "De quoi avez-vous besoin ?",
+    options: ["Créer mon site", "Refaire mon site actuel", "Être plus visible sur Google", "Un site et des publicités"]
+  },
+  {
+    cle: "budget",
+    titre: "Quel budget envisagez-vous ?",
+    options: ["Moins de 1 500 €", "1 500 à 3 000 €", "3 000 à 6 000 €", "Plus de 6 000 €", "Je ne sais pas encore"]
+  },
+  {
+    cle: "delai",
+    titre: "Pour quand ?",
+    options: ["Dès que possible", "Dans 1 à 3 mois", "Plus tard, je me renseigne"]
+  }
+];
+function normaliserTelephone(brut) {
+  const chiffres = brut.replace(/[^\d+]/g, "");
+  const n = chiffres.startsWith("00") ? `+${chiffres.slice(2)}` : chiffres;
+  const international = /^0[1-9]\d{8}$/.test(n) ? `+33${n.slice(1)}` : /^\+[1-9]\d{7,14}$/.test(n) ? n : null;
+  if (!international) return null;
+  if (international.startsWith("+33")) {
+    const national = international.slice(3);
+    if (new Set(national).size <= 2) return null;
+    if (/(012345|123456|234567|345678|456789|987654|876543|765432|654321|543210)/.test(national)) return null;
+  }
+  return international;
+}
+function chargerPixel() {
+  const w = window;
+  if (w.fbq) return;
+  (function(f, b, e, v) {
+    if (f.fbq) return;
+    const n = f.fbq = function() {
+      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = true;
+    n.version = "2.0";
+    n.queue = [];
+    const t = b.createElement(e);
+    t.async = true;
+    t.src = v;
+    const s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s);
+  })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+  const fbq = window.fbq;
+  fbq("init", PIXEL_ID);
+  fbq("track", "PageView");
+}
+function suivre(evenement, donnees, options) {
+  const fbq = window.fbq;
+  fbq == null ? void 0 : fbq("track", evenement, donnees ?? {}, options ?? {});
+}
+function lireAttribution() {
+  var _a;
+  const q = new URLSearchParams(window.location.search);
+  const v = (k) => {
+    var _a2;
+    return ((_a2 = q.get(k)) == null ? void 0 : _a2.slice(0, 200)) || null;
+  };
+  return {
+    utm_source: v("utm_source"),
+    utm_medium: v("utm_medium"),
+    utm_campaign: v("utm_campaign"),
+    utm_content: v("utm_content"),
+    fbclid: ((_a = q.get("fbclid")) == null ? void 0 : _a.slice(0, 300)) || null
+  };
+}
+function Projet() {
+  const [etape, setEtape] = useState(0);
+  const [reponses, setReponses] = useState({});
+  const [nom, setNom] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [activite, setActivite] = useState("");
+  const [message, setMessage] = useState("");
+  const [touche, setTouche] = useState(false);
+  const [envoi, setEnvoi] = useState(false);
+  const [lienWhatsapp, setLienWhatsapp] = useState(null);
+  const attribution = useMemo(() => typeof window === "undefined" ? null : lireAttribution(), []);
+  useEffect(() => {
+    chargerPixel();
+  }, []);
+  const total = QUESTIONS.length + 1;
+  const question = QUESTIONS[etape];
+  const telValide = normaliserTelephone(telephone);
+  const peutEnvoyer = nom.trim().length >= 2 && !!telValide && !envoi;
+  const choisir = (valeur) => {
+    setReponses((r) => ({ ...r, [question.cle]: valeur }));
+    window.setTimeout(() => setEtape((e) => e + 1), 180);
+  };
+  const envoyer = async (e) => {
+    var _a;
+    e.preventDefault();
+    setTouche(true);
+    if (!peutEnvoyer || !telValide) return;
+    setEnvoi(true);
+    const ligne = {
+      metier: reponses.metier ?? "",
+      besoin: reponses.besoin ?? "",
+      budget: reponses.budget ?? "",
+      delai: reponses.delai ?? "",
+      nom: nom.trim().slice(0, 120),
+      telephone: telValide,
+      activite: activite.trim().slice(0, 160) || null,
+      message: message.trim().slice(0, 1e3) || null,
+      ...attribution
+    };
+    try {
+      await supabase.from("site_leads").insert(ligne);
+    } catch {
+    }
+    suivre("Lead", { content_category: ligne.metier, content_name: ligne.besoin }, { eventID: ((_a = crypto.randomUUID) == null ? void 0 : _a.call(crypto)) ?? String(Date.now()) });
+    const texte = [
+      "Bonjour Digitalz Dev, je viens de remplir le formulaire de votre site.",
+      "",
+      `• Métier : ${ligne.metier}`,
+      `• Besoin : ${ligne.besoin}`,
+      `• Budget : ${ligne.budget}`,
+      `• Délai : ${ligne.delai}`,
+      `• Nom : ${ligne.nom}`,
+      ligne.activite ? `• Activité / site : ${ligne.activite}` : null,
+      ligne.message ? `• Projet : ${ligne.message}` : null
+    ].filter((l) => l !== null).join("\n");
+    const lien2 = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texte)}`;
+    setLienWhatsapp(lien2);
+    window.location.href = lien2;
+  };
+  return /* @__PURE__ */ jsxs("main", { className: "flex min-h-[100svh] flex-col bg-surface px-5 pb-10 pt-6 md:px-10", children: [
+    /* @__PURE__ */ jsxs("header", { className: "mx-auto flex w-full max-w-2xl items-center justify-between", children: [
+      /* @__PURE__ */ jsxs(Link, { to: "/", className: "flex min-h-[44px] items-center gap-2.5", children: [
+        /* @__PURE__ */ jsx("img", { src: "/logo-studio.png", alt: "", className: "h-9 w-9 rounded-full" }),
+        /* @__PURE__ */ jsx("span", { className: "text-[17px] font-medium tracking-tight text-text-primary", children: "Digitalz Dev" })
+      ] }),
+      /* @__PURE__ */ jsxs("span", { className: "text-sm text-text-muted", children: [
+        Math.min(etape + 1, total),
+        " / ",
+        total
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "mx-auto mt-4 h-1 w-full max-w-2xl overflow-hidden rounded-full bg-surface-card", children: /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        className: "h-full rounded-full bg-pop",
+        animate: { width: `${(Math.min(etape, total - 1) + (lienWhatsapp ? 1 : 0)) / total * 100}%` },
+        transition: { duration: 0.4, ease: EASE }
+      }
+    ) }),
+    /* @__PURE__ */ jsx("div", { className: "mx-auto mt-10 w-full max-w-2xl flex-1 md:mt-16", children: /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: lienWhatsapp ? /* @__PURE__ */ jsxs(motion.div, { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, className: "text-center", children: [
+      /* @__PURE__ */ jsxs("h1", { className: "text-3xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl", children: [
+        "Merci, on en parle sur ",
+        /* @__PURE__ */ jsx("span", { className: "text-[#25D366]", children: "WhatsApp" })
+      ] }),
+      /* @__PURE__ */ jsx("p", { className: "mx-auto mt-4 max-w-md text-text-secondary", children: "Votre message est prêt : il ne reste qu'à appuyer sur « Envoyer » dans WhatsApp. Si l'application ne s'est pas ouverte, utilisez le bouton ci-dessous." }),
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: lienWhatsapp,
+          className: "mt-8 inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]",
+          children: "Ouvrir WhatsApp"
+        }
+      )
+    ] }, "fin") : question ? /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        initial: { opacity: 0, x: 24 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: -24 },
+        transition: { duration: 0.3, ease: EASE },
+        children: [
+          etape === 0 && /* @__PURE__ */ jsx("p", { className: "mb-4 text-text-secondary", children: "Quatre questions sur votre projet, puis on en parle directement sur WhatsApp." }),
+          /* @__PURE__ */ jsx("h1", { className: "text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl", children: question.titre }),
+          /* @__PURE__ */ jsx("div", { className: "mt-8 grid gap-3", children: question.options.map((o) => {
+            const actif = reponses[question.cle] === o;
+            return /* @__PURE__ */ jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: () => choisir(o),
+                className: `flex min-h-[60px] items-center justify-between rounded-2xl px-5 text-left text-[17px] transition-colors ${actif ? "bg-[#1d1d1f] text-white" : "bg-surface-card text-text-primary hover:bg-surface-border"}`,
+                children: [
+                  o,
+                  /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "text-lg", children: "→" })
+                ]
+              },
+              o
+            );
+          }) }),
+          etape > 0 && /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => setEtape((e) => e - 1),
+              className: "mt-6 min-h-[44px] text-sm text-text-muted hover:text-text-primary",
+              children: "← Retour"
+            }
+          )
+        ]
+      },
+      question.cle
+    ) : /* @__PURE__ */ jsxs(
+      motion.form,
+      {
+        onSubmit: envoyer,
+        initial: { opacity: 0, x: 24 },
+        animate: { opacity: 1, x: 0 },
+        exit: { opacity: 0, x: -24 },
+        transition: { duration: 0.3, ease: EASE },
+        noValidate: true,
+        children: [
+          /* @__PURE__ */ jsx("h1", { className: "text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl", children: "Comment vous joindre ?" }),
+          /* @__PURE__ */ jsxs("div", { className: "mt-8 grid gap-4", children: [
+            /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Nom et prénom" }),
+              /* @__PURE__ */ jsx(
+                "input",
+                {
+                  value: nom,
+                  onChange: (e) => setNom(e.target.value),
+                  autoComplete: "name",
+                  className: "min-h-[56px] rounded-2xl bg-surface-card px-5 text-base text-text-primary outline-none focus:ring-2 focus:ring-pop"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Téléphone (WhatsApp)" }),
+              /* @__PURE__ */ jsx(
+                "input",
+                {
+                  value: telephone,
+                  onChange: (e) => setTelephone(e.target.value),
+                  type: "tel",
+                  inputMode: "tel",
+                  autoComplete: "tel",
+                  className: "min-h-[56px] rounded-2xl bg-surface-card px-5 text-base text-text-primary outline-none focus:ring-2 focus:ring-pop"
+                }
+              ),
+              touche && !telValide && /* @__PURE__ */ jsx("span", { className: "text-sm text-red-600", children: "Indiquez un numéro valide pour qu'on puisse vous répondre." })
+            ] }),
+            /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Votre activité ou votre site actuel (facultatif)" }),
+              /* @__PURE__ */ jsx(
+                "input",
+                {
+                  value: activite,
+                  onChange: (e) => setActivite(e.target.value),
+                  className: "min-h-[56px] rounded-2xl bg-surface-card px-5 text-base text-text-primary outline-none focus:ring-2 focus:ring-pop"
+                }
+              )
+            ] }),
+            /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Votre projet en quelques mots (facultatif)" }),
+              /* @__PURE__ */ jsx(
+                "textarea",
+                {
+                  value: message,
+                  onChange: (e) => setMessage(e.target.value),
+                  rows: 3,
+                  className: "rounded-2xl bg-surface-card px-5 py-4 text-base text-text-primary outline-none focus:ring-2 focus:ring-pop"
+                }
+              )
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "submit",
+              disabled: envoi,
+              className: "mt-8 inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a] disabled:opacity-60",
+              children: envoi ? "Ouverture de WhatsApp…" : "Envoyer sur WhatsApp"
+            }
+          ),
+          /* @__PURE__ */ jsxs("p", { className: "mt-3 text-center text-xs text-text-muted", children: [
+            "Vos réponses servent uniquement à préparer notre échange.",
+            " ",
+            /* @__PURE__ */ jsx(Link, { to: "/politique-confidentialite", className: "underline", children: "Confidentialité" })
+          ] }),
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => setEtape((e) => e - 1),
+              className: "mt-4 min-h-[44px] text-sm text-text-muted hover:text-text-primary",
+              children: "← Retour"
+            }
+          )
+        ]
+      },
+      "contact"
+    ) }) })
+  ] });
+}
 const Login = lazy(() => import("./assets/Login-DIbTS8yc.js"));
 const ClientPortal = lazy(() => import("./assets/ClientPortal-Cyb14TnS.js"));
 const DashboardLayout = lazy(() => import("./assets/DashboardLayout-oy6br7e7.js"));
@@ -4031,6 +4339,13 @@ function App() {
           }
         )
       ] }) })
+    ] });
+  }
+  if (location.pathname === "/projet") {
+    return /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx(Seo, {}),
+      /* @__PURE__ */ jsx(ScrollToTop, {}),
+      /* @__PURE__ */ jsx(Projet, {})
     ] });
   }
   return /* @__PURE__ */ jsxs(SmoothScroll, { children: [

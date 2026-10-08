@@ -15,6 +15,7 @@ import Contact from './pages/Contact'
 import MentionsLegales from './pages/MentionsLegales'
 import PolitiqueConfidentialite from './pages/PolitiqueConfidentialite'
 import NotFound from './pages/NotFound'
+import Projet from './pages/Projet'
 import { projects } from './data/projects'
 
 // Le back-office embarque Supabase, Twilio, Recharts et pdf.js. Rien de tout
@@ -61,6 +62,17 @@ export default function App() {
             />
           </Routes>
         </Suspense>
+      </>
+    )
+  }
+
+  // Page d'atterrissage des publicités : rien autour du formulaire.
+  if (location.pathname === '/projet') {
+    return (
+      <>
+        <Seo />
+        <ScrollToTop />
+        <Projet />
       </>
     )
   }

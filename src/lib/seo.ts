@@ -18,6 +18,8 @@ export interface PageSeo {
   path: string
   title: string
   description: string
+  /** Page d'atterrissage publicitaire, tenue hors de l'index. */
+  noindex?: boolean
 }
 
 /** Titre affiché dans l'onglet et en résultat de recherche. Viser 50 à 60 signes. */
@@ -35,6 +37,13 @@ const STATIC_PAGES: PageSeo[] = [
     title: 'Devis gratuit pour votre projet de site internet | Digitalz Dev',
     description:
       "Décrivez votre projet de site internet en deux minutes : type de site, budget, délais. Réponse sous 24 à 48 h avec un devis adapté par notre agence web.",
+  },
+  {
+    path: '/projet',
+    title: 'Parlons de votre site | Digitalz Dev',
+    description:
+      "Quatre questions sur votre projet de site internet, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
+    noindex: true,
   },
   {
     path: '/mentions-legales',
