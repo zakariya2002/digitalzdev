@@ -470,3 +470,20 @@
 @media (prefers-reduced-motion: reduce) {
   .onde-appel { animation: none; opacity: 0; }
 }
+
+/* Petits décors Google autour des étiquettes de la scène de recherche. */
+@keyframes point-google {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate(3px, -5px) scale(1.25); opacity: 1; }
+}
+@keyframes etincelle-google {
+  0%, 60%, 100% { transform: scale(0.3) rotate(0deg); opacity: 0; }
+  70% { transform: scale(1.1) rotate(25deg); opacity: 1; }
+  85% { transform: scale(0.85) rotate(45deg); opacity: 0.9; }
+}
+.point-google { animation: point-google 2.8s ease-in-out infinite; }
+.etincelle-google { animation: etincelle-google 3.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .point-google, .etincelle-google { animation: none; }
+  .etincelle-google { opacity: 0; }
+}

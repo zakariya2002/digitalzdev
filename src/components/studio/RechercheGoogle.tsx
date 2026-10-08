@@ -175,6 +175,39 @@ function useEclat(progression: MotionValue<number>, seuil: number) {
   return visible ? cle : 0
 }
 
+
+/**
+ * Décor permanent d'une étiquette : quatre points aux couleurs de Google qui
+ * flottent autour, et une étincelle qui scintille. Animations CSS en boucle,
+ * décalées d'une étiquette à l'autre pour ne pas battre au même rythme.
+ */
+function DecorGoogle({ decalage = 0 }: { decalage?: number }) {
+  const points = [
+    { c: '#4285f4', cls: '-left-2 -top-2 h-2.5 w-2.5' },
+    { c: '#ea4335', cls: '-right-1.5 top-1/3 h-2 w-2' },
+    { c: '#fbbc05', cls: '-bottom-2 left-1/3 h-2 w-2' },
+    { c: '#34a853', cls: '-bottom-1 -right-2 h-2.5 w-2.5' },
+  ]
+  return (
+    <span aria-hidden className="pointer-events-none absolute inset-0">
+      {points.map((pt, i) => (
+        <span
+          key={i}
+          className={`point-google absolute rounded-full ${pt.cls}`}
+          style={{ backgroundColor: pt.c, animationDelay: `${-(i * 0.7 + decalage)}s` }}
+        />
+      ))}
+      <svg
+        viewBox="0 0 24 24"
+        className="etincelle-google absolute -right-3 -top-3 h-4 w-4"
+        style={{ animationDelay: `${-decalage}s` }}
+      >
+        <path fill="#fbbc05" d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" />
+      </svg>
+    </span>
+  )
+}
+
 /** Une étiquette qui flotte autour de la page et apparaît à son tour. */
 function Badge({
   progression,
@@ -197,6 +230,7 @@ function Badge({
       className={`rounded-xl bg-white px-3 py-2 shadow-[0_18px_40px_-14px_rgba(0,0,0,0.4)] ring-1 ring-black/5 lg:rounded-2xl lg:px-4 lg:py-3 ${className}`}
       style={{ opacity: opacite, y }}
     >
+      <DecorGoogle decalage={debut * 10} />
       {eclat > 0 && <Eclat cle={eclat} />}
       <p className="text-[13px] font-medium text-text-primary lg:text-sm">{titre}</p>
       <p className="text-[10px] text-text-secondary lg:text-xs">{detail}</p>
