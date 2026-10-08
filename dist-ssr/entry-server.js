@@ -2158,7 +2158,7 @@ function AcquisitionStudio() {
 const MEMBERS = [
   {
     initials: "ZN",
-    name: "Zakariya N.",
+    name: "Zakariya Nebbache",
     role: "Développement",
     pitch: "Développeur fullstack. Je prends le projet du premier commit à la mise en ligne : interface, back-office, intégrations et applications iOS.",
     disciplines: [

@@ -93,6 +93,10 @@ const template = readFileSync(join(dist, 'index.html'), 'utf8')
 // comportement, des balises correctes et un corps vide, plutôt que de casser
 // la mise en ligne.
 /** Longueur du texte visible d'un fragment HTML, balises retirées. */
+
+/** Pages publicitaires tenues hors de l'index, comme dans lib/seo.ts. */
+const PAGES_NOINDEX = ['/projet']
+
 function texteBrut(html) {
   return html
     .replace(/<[^>]+>/g, ' ')
@@ -127,6 +131,13 @@ for (const page of pages) {
     /<link rel="canonical" href=".*?" \/>/s,
     `<link rel="canonical" href="${url}" />`
   )
+  // Pages d'atterrissage publicitaires : hors de l'index.
+  if (PAGES_NOINDEX.includes(page.path)) {
+    html = html.replace(
+      /<meta name="robots" content=".*?" \/>/s,
+      '<meta name="robots" content="noindex, follow" />'
+    )
+  }
   html = html.replace(
     /<meta property="og:title" content=".*?" \/>/s,
     `<meta property="og:title" content="${escape(page.title)}" />`
