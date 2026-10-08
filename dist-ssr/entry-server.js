@@ -308,6 +308,165 @@ const projects = [
     ]
   },
   {
+    id: "fidal",
+    title: "Fidal Montpellier",
+    subtitle: "Cabinet d’avocats d’affaires",
+    year: "2026",
+    tags: ["Avocats", "Site institutionnel", "Référencement local"],
+    stack: ["CMS", "SEO local", "Cartographie"],
+    description: "Page du bureau montpelliérain de Fidal, cabinet d'avocats d'affaires : présentation du bureau, expertises, équipe et coordonnées, pensée pour le référencement local.",
+    url: "https://www.fidal.com/nos-implantations/mediterranee/montpellier",
+    route: "/fidal",
+    color: "#1B2A41",
+    gradient: "from-[#E6E9EE] via-[#C9D0DA] to-[#1B2A41]",
+    heroImage: "/screenshots/fidal-hero.webp",
+    brief: "Fidal souhaitait que chacun de ses bureaux régionaux existe en ligne à part entière : une page qui présente le bureau de Montpellier, ses expertises et ses avocats, et qui ressorte sur les recherches locales d'avocat d'affaires.",
+    solution: "Une page de bureau structurée pour la recherche locale : présentation et domaines d'intervention, coordonnées et carte, équipe avec fonctions et secteurs, liens vers les autres implantations.",
+    features: [
+      "Page de bureau dédiée à Montpellier",
+      "Présentation des expertises du bureau",
+      "Équipe avec fonctions et secteurs",
+      "Coordonnées, carte et accès",
+      "Maillage vers les autres implantations",
+      "Référencement local avocat d’affaires"
+    ],
+    metrics: [
+      { value: "1", label: "bureau régional dédié" },
+      { value: "100%", label: "référencement local" },
+      { value: "FR / EN", label: "cabinet international" }
+    ],
+    mockups: [
+      {
+        title: "Bureau",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Présentation du bureau de Montpellier",
+        image: "/screenshots/fidal-hero.webp"
+      },
+      {
+        title: "Contact",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Coordonnées et carte",
+        image: "/screenshots/fidal-2.webp"
+      },
+      {
+        title: "Équipe",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Avocats et directeur de bureau",
+        image: "/screenshots/fidal-3.webp"
+      },
+      {
+        title: "Réseau",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Les autres implantations",
+        image: "/screenshots/fidal-4.webp"
+      }
+    ]
+  },
+  {
+    id: "celsi",
+    title: "oliviercelsi.com",
+    subtitle: "Maison d’architecture à Bordeaux",
+    year: "2026",
+    tags: ["Architecte", "Portfolio", "Site vitrine"],
+    stack: ["Site vitrine", "Galerie projets", "SEO"],
+    description: "Site d'Olivier Celsi Maison d'Architecture (OCMA), à Bordeaux : construction et rénovation de maisons, appartements et commerces, présentés par de grandes images.",
+    url: "https://www.oliviercelsi.com",
+    route: "/olivier-celsi",
+    color: "#6B4E3D",
+    gradient: "from-[#F2ECE6] via-[#DCCFC4] to-[#B59C88]",
+    heroImage: "/screenshots/celsi-hero.webp",
+    brief: "OCMA voulait un site à l'image de son architecture : chaleureux, lumineux, où les réalisations parlent d'elles-mêmes, et qui donne envie aux particuliers de confier leur projet de vie à l'agence.",
+    solution: "Un site vitrine où l'image domine : intérieurs et extérieurs en plein écran, une présentation de la maison et de sa démarche, des actualités et une galerie de projets, sur une mise en page sobre et aérée.",
+    features: [
+      "Visuels de réalisations plein écran",
+      "Présentation de la maison et de sa démarche",
+      "Galerie de projets",
+      "Rubrique actualités",
+      "Mise en page sobre et aérée",
+      "Référencement architecte à Bordeaux"
+    ],
+    metrics: [
+      { value: "OCMA", label: "maison d’architecture" },
+      { value: "3", label: "types de projets" },
+      { value: "100%", label: "responsive" }
+    ],
+    mockups: [
+      {
+        title: "Accueil",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Intérieur en plein écran",
+        image: "/screenshots/celsi-hero.webp"
+      },
+      {
+        title: "La Maison",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Présentation de l’agence",
+        image: "/screenshots/celsi-2.webp"
+      },
+      {
+        title: "Projets",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Galerie de réalisations",
+        image: "/screenshots/celsi-3.webp"
+      }
+    ]
+  },
+  {
+    id: "determines",
+    title: "lesdetermines.fr",
+    subtitle: "Programme d’entrepreneuriat",
+    year: "2026",
+    tags: ["Association", "Site institutionnel", "Candidatures"],
+    stack: ["Site institutionnel", "Formulaires", "Vidéo"],
+    description: "Site des Déterminés, programme d'accompagnement à l'entrepreneuriat présent dans près de 20 villes : programmes, événements, actualités et candidatures en ligne.",
+    url: "https://www.lesdetermines.fr",
+    route: "/les-determines",
+    color: "#1E40FF",
+    gradient: "from-[#E7ECFF] via-[#B9C6FF] to-[#1E40FF]",
+    heroImage: "/screenshots/determines-hero.webp",
+    brief: "Les Déterminés devaient parler à des publics très différents (candidats, partenaires, formateurs) et donner envie de postuler aux habitants des quartiers prioritaires et des zones rurales, avec une identité forte et engagée.",
+    solution: "Un site à l'identité affirmée : vidéo en ouverture, typographie condensée, programmes présentés en cartes de couleur, actualités, et des parcours clairs pour candidater, devenir partenaire ou formateur.",
+    features: [
+      "Vidéo et accroche en ouverture",
+      "Programmes en cartes de couleur",
+      "Candidature en ligne",
+      "Espaces partenaires et formateurs",
+      "Actualités et événements",
+      "Identité typographique forte"
+    ],
+    metrics: [
+      { value: "20", label: "villes en France" },
+      { value: "3", label: "programmes" },
+      { value: "100%", label: "gratuit pour les candidats" }
+    ],
+    mockups: [
+      {
+        title: "Accueil",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Accroche et vidéo",
+        image: "/screenshots/determines-hero.webp"
+      },
+      {
+        title: "Programmes",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Cartes de couleur",
+        image: "/screenshots/determines-2.webp"
+      },
+      {
+        title: "Actualités",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Dernières nouvelles",
+        image: "/screenshots/determines-3.webp"
+      },
+      {
+        title: "Rejoindre",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Candidats, partenaires, formateurs",
+        image: "/screenshots/determines-4.webp"
+      }
+    ]
+  },
+  {
     id: "copaine",
     title: "copaine.com",
     subtitle: "Mode parisienne en précommande",
