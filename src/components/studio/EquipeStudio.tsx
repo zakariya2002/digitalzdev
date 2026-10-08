@@ -38,7 +38,7 @@ export default function EquipeStudio() {
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <h2 className="text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
-              Une équipe restreinte, <span className="text-citron">deux métiers complets.</span>
+              Une équipe restreinte, <span className="font-bold text-citron">deux métiers complets.</span>
             </h2>
           </div>
           <p className="self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5">
