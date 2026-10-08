@@ -47,13 +47,11 @@ export default function Curseur() {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full bg-citron font-sans text-[11px] font-medium text-[#1d1d1f]"
+      className="pointer-events-none fixed left-0 top-0 z-[100] flex h-14 w-14 items-center justify-center rounded-full bg-citron font-sans text-[11px] font-medium text-[#1d1d1f]"
       style={{ x: sx, y: sy, translateX: '-50%', translateY: '-50%' }}
       animate={{
-        width: libelle ? 56 : 0,
-        height: libelle ? 56 : 0,
         opacity: libelle ? 1 : 0,
-        scale: enfonce ? 0.85 : 1,
+        scale: libelle ? (enfonce ? 0.85 : 1) : 0,
       }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
     >

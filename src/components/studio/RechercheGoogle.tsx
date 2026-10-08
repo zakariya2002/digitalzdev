@@ -39,16 +39,19 @@ function useHauteurLigne() {
   return h
 }
 
-function Etoiles({ note }: { note: number }) {
+function Etoiles({ remplissage }: { remplissage: MotionValue<string> }) {
   return (
-    <span className="relative inline-flex text-[#dadce0]" aria-label={`${note.toFixed(1)} sur 5`}>
+    <span className="relative inline-flex text-[#dadce0]" aria-hidden>
       {'★★★★★'}
-      <span className="absolute inset-0 overflow-hidden text-[#fbbc04]" style={{ width: `${(note / 5) * 100}%` }}>
+      <motion.span className="absolute inset-0 text-[#fbbc04]" style={{ clipPath: remplissage }}>
         {'★★★★★'}
-      </span>
+      </motion.span>
     </span>
   )
 }
+
+/** Note, avis et remplissage des étoiles, calculés hors de React. */
+type Fiche = { note: MotionValue<string>; avis: MotionValue<string>; remplissage: MotionValue<string> }
 
 function LogoGoogle({ className = '' }: { className?: string }) {
   return (
@@ -88,26 +91,24 @@ function Resultat({
   url,
   texte,
   client = false,
-  note,
-  avis,
+  fiche,
 }: {
   titre: string
   url: string
   texte: string
   client?: boolean
-  note?: number
-  avis?: number
+  fiche?: Fiche
 }) {
   return (
     <div className={`rounded-xl px-3 py-2.5 ${client ? 'bg-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5' : ''}`}>
       <p className="truncate text-xs text-[#4d5156]">{url}</p>
       <p className={`truncate text-[15px] leading-snug md:text-[17px] ${client ? 'text-[#1a0dab]' : 'text-[#1a0dab]/80'}`}>{titre}</p>
       {/* Sur mobile, la note de la fiche Google s'affiche dans le résultat. */}
-      {note !== undefined && (
+      {fiche && (
         <p className="mt-0.5 flex items-center gap-1.5 text-xs text-[#4d5156] md:hidden">
-          <span className="tabular-nums text-[#202124]">{note.toFixed(1).replace('.', ',')}</span>
-          <Etoiles note={note} />
-          <span className="tabular-nums">({avis})</span>
+          <motion.span className="tabular-nums text-[#202124]">{fiche.note}</motion.span>
+          <Etoiles remplissage={fiche.remplissage} />
+          <motion.span className="tabular-nums">{fiche.avis}</motion.span>
         </p>
       )}
       <p className="line-clamp-2 text-xs text-[#4d5156] md:text-[13px]">{texte}</p>
@@ -216,16 +217,17 @@ export default function RechercheGoogle() {
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ['start start', 'end end'] })
 
-  const [lettres, setLettres] = useState(0)
-  const [note, setNote] = useState(NOTE_DEBUT)
-  const [avis, setAvis] = useState(12)
-
-  useMotionValueEvent(p, 'change', (v) => {
-    setLettres(Math.round(Math.min(1, Math.max(0, v / 0.18)) * REQUETE.length))
-    const t = Math.min(1, Math.max(0, (v - 0.3) / 0.5))
-    setNote(Math.round((NOTE_DEBUT + t * (NOTE_FIN - NOTE_DEBUT)) * 10) / 10)
-    setAvis(Math.round(12 + t * 136))
-  })
+  // Tout est dérivé du défilement en valeurs animées, écrites directement
+  // dans la page : aucun re-rendu React pendant la scène.
+  const texteRequete = useTransform(p, (v) =>
+    REQUETE.slice(0, Math.round(Math.min(1, Math.max(0, v / 0.18)) * REQUETE.length))
+  )
+  const t = useTransform(p, [0.3, 0.8], [0, 1], { clamp: true })
+  const fiche: Fiche = {
+    note: useTransform(t, (v) => (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)).toFixed(1).replace('.', ',')),
+    avis: useTransform(t, (v) => `(${Math.round(12 + v * 136)})`),
+    remplissage: useTransform(t, (v) => `inset(0 ${100 - (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)) * 20}% 0 0)`),
+  }
 
   // Position du client dans la liste : 4 (en bas) jusqu'à 0 (en tête).
   const position = useTransform(p, [0.2, 0.75], [CONCURRENTS.length, 0], { clamp: true })
@@ -259,7 +261,7 @@ export default function RechercheGoogle() {
             <div className="flex items-center gap-4">
               <LogoGoogle className="hidden text-2xl md:inline" />
               <div className="flex min-h-[44px] flex-1 items-center rounded-full bg-white px-5 text-[15px] text-[#202124] shadow-[0_1px_6px_rgba(32,33,36,0.28)]">
-                {REQUETE.slice(0, lettres)}
+                <motion.span>{texteRequete}</motion.span>
                 <motion.span
                   aria-hidden
                   className="ml-0.5 inline-block h-5 w-px bg-[#202124]"
@@ -283,7 +285,7 @@ export default function RechercheGoogle() {
                     >
                       Sponsorisé
                     </motion.span>
-                    <Resultat {...CLIENT} client note={note} avis={avis} />
+                    <Resultat {...CLIENT} client fiche={fiche} />
                   </div>
                 </motion.div>
               </div>
@@ -293,9 +295,9 @@ export default function RechercheGoogle() {
                 <div className="h-24 rounded-lg bg-gradient-to-br from-[#e8eaed] to-[#c9ccd1]" />
                 <p className="mt-3 text-[17px] text-[#202124]">Martin Avocats</p>
                 <p className="mt-0.5 flex items-center gap-1.5 text-sm text-[#4d5156]">
-                  <span className="tabular-nums text-[#202124]">{note.toFixed(1).replace('.', ',')}</span>
-                  <Etoiles note={note} />
-                  <span className="tabular-nums">({avis})</span>
+                  <motion.span className="tabular-nums text-[#202124]">{fiche.note}</motion.span>
+                  <Etoiles remplissage={fiche.remplissage} />
+                  <motion.span className="tabular-nums">{fiche.avis}</motion.span>
                 </p>
                 <p className="mt-1 text-xs text-[#4d5156]">Avocat · Lyon 2e · Ouvert</p>
                 <div className="mt-3 grid grid-cols-3 gap-1.5 text-center text-[11px] text-[#1a73e8]">

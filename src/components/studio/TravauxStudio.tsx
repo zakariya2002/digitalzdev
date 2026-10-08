@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { projects } from '../../data/projects'
 
 
@@ -15,7 +15,8 @@ function CarteProjet({ projet, className = '' }: { projet: (typeof projects)[num
         <img
           src={projet.heroImage}
           alt={`Site ${projet.title}`}
-          loading="lazy"
+          loading="eager"
+          decoding="async"
           className="h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
         />
       </div>
@@ -55,8 +56,9 @@ function Selection() {
   }, [])
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] })
-  const brut = useTransform(scrollYProgress, [0, 1], [0, -course])
-  const x = useSpring(brut, { stiffness: 120, damping: 30, mass: 0.4 })
+  // Pas de ressort : Lenis lisse déjà le défilement, un second lissage
+  // faisait traîner la piste derrière le scroll puis glisser après coup.
+  const x = useTransform(scrollYProgress, [0, 1], [0, -course])
 
   return (
     <>
@@ -67,7 +69,7 @@ function Selection() {
         style={{ height: `calc(100vh + ${course}px)` }}
       >
         <div className="sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24">
-          <motion.div ref={pisteRef} className="flex gap-8 px-10" style={{ x }}>
+          <motion.div ref={pisteRef} className="flex gap-8 px-10 will-change-transform" style={{ x }}>
             {projects.map((p) => (
               <CarteProjet key={p.id} projet={p} className="w-[46vw]" />
             ))}

@@ -1130,13 +1130,11 @@ function Curseur() {
     motion.div,
     {
       "aria-hidden": true,
-      className: "pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full bg-citron font-sans text-[11px] font-medium text-[#1d1d1f]",
+      className: "pointer-events-none fixed left-0 top-0 z-[100] flex h-14 w-14 items-center justify-center rounded-full bg-citron font-sans text-[11px] font-medium text-[#1d1d1f]",
       style: { x: sx, y: sy, translateX: "-50%", translateY: "-50%" },
       animate: {
-        width: libelle ? 56 : 0,
-        height: libelle ? 56 : 0,
         opacity: libelle ? 1 : 0,
-        scale: enfonce ? 0.85 : 1
+        scale: libelle ? enfonce ? 0.85 : 1 : 0
       },
       transition: { type: "spring", stiffness: 400, damping: 30 },
       children: libelle ? /* @__PURE__ */ jsx(motion.span, { initial: { opacity: 0 }, animate: { opacity: 1 }, children: libelle }) : null
@@ -1651,7 +1649,8 @@ function CarteProjet({ projet, className = "" }) {
           {
             src: projet.heroImage,
             alt: `Site ${projet.title}`,
-            loading: "lazy",
+            loading: "eager",
+            decoding: "async",
             className: "h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
           }
         ) }),
@@ -1680,8 +1679,7 @@ function Selection() {
     return () => window.removeEventListener("resize", mesurer);
   }, []);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const brut = useTransform(scrollYProgress, [0, 1], [0, -course]);
-  const x = useSpring(brut, { stiffness: 120, damping: 30, mass: 0.4 });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -course]);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(
       "section",
@@ -1689,7 +1687,7 @@ function Selection() {
         ref: sectionRef,
         className: "relative hidden lg:block",
         style: { height: `calc(100vh + ${course}px)` },
-        children: /* @__PURE__ */ jsx("div", { className: "sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24", children: /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[46vw]" }, p.id)) }) })
+        children: /* @__PURE__ */ jsx("div", { className: "sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24", children: /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10 will-change-transform", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[46vw]" }, p.id)) }) })
       }
     ),
     /* @__PURE__ */ jsx("section", { className: "pb-6 pt-24 lg:hidden", children: /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[82vw] snap-center sm:w-[60vw]" }, p.id)) }) })
@@ -1705,31 +1703,33 @@ function Carte({
   progression
 }) {
   const echelle = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.035]);
-  const lumiere = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.08]);
-  const filtre = useTransform(lumiere, (l) => `brightness(${l})`);
+  const voile = useTransform(progression, [i / n, 1], [0, (n - 1 - i) * 0.08]);
   const accent = i === n - 1;
-  return /* @__PURE__ */ jsx("div", { className: "sticky", style: { top: `calc(12vh + ${i * 22}px)` }, children: /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsx("div", { className: "sticky", style: { top: `calc(12svh + ${i * 22}px)` }, children: /* @__PURE__ */ jsxs(
     motion.article,
     {
-      style: { scale: echelle, filter: filtre },
-      className: `origin-top rounded-[1.75rem] p-7 md:min-h-[62vh] md:p-12 ${accent ? "bg-pop text-white" : "bg-surface-card text-text-primary"}`,
-      children: /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-12", children: [
-        /* @__PURE__ */ jsxs("div", { className: "md:col-span-7", children: [
-          /* @__PURE__ */ jsx("h3", { className: "text-3xl font-normal leading-[1] tracking-tight md:text-5xl", children: service.title }),
-          /* @__PURE__ */ jsx("p", { className: `mt-4 text-lg font-medium md:text-xl ${accent ? "text-white" : "text-accent"}`, children: service.lead })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "md:col-span-5", children: [
-          /* @__PURE__ */ jsx("p", { className: `text-[15px] font-medium leading-relaxed md:text-base ${accent ? "text-white/80" : "text-text-secondary"}`, children: service.body }),
-          /* @__PURE__ */ jsx("ul", { className: "mt-6 space-y-2", children: service.points.map((point) => /* @__PURE__ */ jsx(
-            "li",
-            {
-              className: `rounded-xl px-4 py-3 text-sm font-medium ${accent ? "bg-white/15" : "bg-surface-light"}`,
-              children: point
-            },
-            point
-          )) })
+      style: { scale: echelle },
+      className: `relative origin-top overflow-hidden rounded-[1.75rem] will-change-transform p-7 md:min-h-[62vh] md:p-12 ${accent ? "bg-pop text-white" : "bg-surface-card text-text-primary"}`,
+      children: [
+        /* @__PURE__ */ jsx(motion.div, { "aria-hidden": true, className: "pointer-events-none absolute inset-0 z-10 bg-black", style: { opacity: voile } }),
+        /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-12", children: [
+          /* @__PURE__ */ jsxs("div", { className: "md:col-span-7", children: [
+            /* @__PURE__ */ jsx("h3", { className: "text-3xl font-normal leading-[1] tracking-tight md:text-5xl", children: service.title }),
+            /* @__PURE__ */ jsx("p", { className: `mt-4 text-lg font-medium md:text-xl ${accent ? "text-white" : "text-accent"}`, children: service.lead })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "md:col-span-5", children: [
+            /* @__PURE__ */ jsx("p", { className: `text-[15px] font-medium leading-relaxed md:text-base ${accent ? "text-white/80" : "text-text-secondary"}`, children: service.body }),
+            /* @__PURE__ */ jsx("ul", { className: "mt-6 space-y-2", children: service.points.map((point) => /* @__PURE__ */ jsx(
+              "li",
+              {
+                className: `rounded-xl px-4 py-3 text-sm font-medium ${accent ? "bg-white/15" : "bg-surface-light"}`,
+                children: point
+              },
+              point
+            )) })
+          ] })
         ] })
-      ] })
+      ]
     }
   ) });
 }
@@ -1826,10 +1826,10 @@ function useHauteurLigne() {
   }, []);
   return h;
 }
-function Etoiles$1({ note }) {
-  return /* @__PURE__ */ jsxs("span", { className: "relative inline-flex text-[#dadce0]", "aria-label": `${note.toFixed(1)} sur 5`, children: [
+function Etoiles$1({ remplissage }) {
+  return /* @__PURE__ */ jsxs("span", { className: "relative inline-flex text-[#dadce0]", "aria-hidden": true, children: [
     "★★★★★",
-    /* @__PURE__ */ jsx("span", { className: "absolute inset-0 overflow-hidden text-[#fbbc04]", style: { width: `${note / 5 * 100}%` }, children: "★★★★★" })
+    /* @__PURE__ */ jsx(motion.span, { className: "absolute inset-0 text-[#fbbc04]", style: { clipPath: remplissage }, children: "★★★★★" })
   ] });
 }
 function LogoGoogle$1({ className = "" }) {
@@ -1856,20 +1856,15 @@ function Resultat({
   url,
   texte,
   client = false,
-  note,
-  avis
+  fiche
 }) {
   return /* @__PURE__ */ jsxs("div", { className: `rounded-xl px-3 py-2.5 ${client ? "bg-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5" : ""}`, children: [
     /* @__PURE__ */ jsx("p", { className: "truncate text-xs text-[#4d5156]", children: url }),
     /* @__PURE__ */ jsx("p", { className: `truncate text-[15px] leading-snug md:text-[17px] ${client ? "text-[#1a0dab]" : "text-[#1a0dab]/80"}`, children: titre }),
-    note !== void 0 && /* @__PURE__ */ jsxs("p", { className: "mt-0.5 flex items-center gap-1.5 text-xs text-[#4d5156] md:hidden", children: [
-      /* @__PURE__ */ jsx("span", { className: "tabular-nums text-[#202124]", children: note.toFixed(1).replace(".", ",") }),
-      /* @__PURE__ */ jsx(Etoiles$1, { note }),
-      /* @__PURE__ */ jsxs("span", { className: "tabular-nums", children: [
-        "(",
-        avis,
-        ")"
-      ] })
+    fiche && /* @__PURE__ */ jsxs("p", { className: "mt-0.5 flex items-center gap-1.5 text-xs text-[#4d5156] md:hidden", children: [
+      /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums text-[#202124]", children: fiche.note }),
+      /* @__PURE__ */ jsx(Etoiles$1, { remplissage: fiche.remplissage }),
+      /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums", children: fiche.avis })
     ] }),
     /* @__PURE__ */ jsx("p", { className: "line-clamp-2 text-xs text-[#4d5156] md:text-[13px]", children: texte })
   ] });
@@ -1950,15 +1945,16 @@ function Badge({
 function RechercheGoogle() {
   const ref = useRef(null);
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const [lettres, setLettres] = useState(0);
-  const [note, setNote] = useState(NOTE_DEBUT);
-  const [avis, setAvis] = useState(12);
-  useMotionValueEvent(p, "change", (v) => {
-    setLettres(Math.round(Math.min(1, Math.max(0, v / 0.18)) * REQUETE.length));
-    const t = Math.min(1, Math.max(0, (v - 0.3) / 0.5));
-    setNote(Math.round((NOTE_DEBUT + t * (NOTE_FIN - NOTE_DEBUT)) * 10) / 10);
-    setAvis(Math.round(12 + t * 136));
-  });
+  const texteRequete = useTransform(
+    p,
+    (v) => REQUETE.slice(0, Math.round(Math.min(1, Math.max(0, v / 0.18)) * REQUETE.length))
+  );
+  const t = useTransform(p, [0.3, 0.8], [0, 1], { clamp: true });
+  const fiche = {
+    note: useTransform(t, (v) => (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)).toFixed(1).replace(".", ",")),
+    avis: useTransform(t, (v) => `(${Math.round(12 + v * 136)})`),
+    remplissage: useTransform(t, (v) => `inset(0 ${100 - (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)) * 20}% 0 0)`)
+  };
   const position = useTransform(p, [0.2, 0.75], [CONCURRENTS.length, 0], { clamp: true });
   const H = useHauteurLigne();
   const yClient = useTransform(position, (v) => v * H);
@@ -1983,7 +1979,7 @@ function RechercheGoogle() {
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
           /* @__PURE__ */ jsx(LogoGoogle$1, { className: "hidden text-2xl md:inline" }),
           /* @__PURE__ */ jsxs("div", { className: "flex min-h-[44px] flex-1 items-center rounded-full bg-white px-5 text-[15px] text-[#202124] shadow-[0_1px_6px_rgba(32,33,36,0.28)]", children: [
-            REQUETE.slice(0, lettres),
+            /* @__PURE__ */ jsx(motion.span, { children: texteRequete }),
             /* @__PURE__ */ jsx(
               motion.span,
               {
@@ -2007,20 +2003,16 @@ function RechercheGoogle() {
                   children: "Sponsorisé"
                 }
               ),
-              /* @__PURE__ */ jsx(Resultat, { ...CLIENT, client: true, note, avis })
+              /* @__PURE__ */ jsx(Resultat, { ...CLIENT, client: true, fiche })
             ] }) })
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "hidden self-start rounded-xl p-4 ring-1 ring-black/10 md:block", children: [
             /* @__PURE__ */ jsx("div", { className: "h-24 rounded-lg bg-gradient-to-br from-[#e8eaed] to-[#c9ccd1]" }),
             /* @__PURE__ */ jsx("p", { className: "mt-3 text-[17px] text-[#202124]", children: "Martin Avocats" }),
             /* @__PURE__ */ jsxs("p", { className: "mt-0.5 flex items-center gap-1.5 text-sm text-[#4d5156]", children: [
-              /* @__PURE__ */ jsx("span", { className: "tabular-nums text-[#202124]", children: note.toFixed(1).replace(".", ",") }),
-              /* @__PURE__ */ jsx(Etoiles$1, { note }),
-              /* @__PURE__ */ jsxs("span", { className: "tabular-nums", children: [
-                "(",
-                avis,
-                ")"
-              ] })
+              /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums text-[#202124]", children: fiche.note }),
+              /* @__PURE__ */ jsx(Etoiles$1, { remplissage: fiche.remplissage }),
+              /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums", children: fiche.avis })
             ] }),
             /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-[#4d5156]", children: "Avocat · Lyon 2e · Ouvert" }),
             /* @__PURE__ */ jsxs("div", { className: "mt-3 grid grid-cols-3 gap-1.5 text-center text-[11px] text-[#1a73e8]", children: [
@@ -2711,7 +2703,7 @@ function MissionSection() {
           motion.div,
           {
             "aria-hidden": true,
-            className: "pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent blur-[130px]",
+            className: "pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent blur-[130px] will-change-transform",
             style: { scale: auraScale, opacity: auraOpacity }
           }
         ),

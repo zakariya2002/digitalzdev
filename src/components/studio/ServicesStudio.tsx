@@ -20,18 +20,20 @@ function Carte({
   progression: MotionValue<number>
 }) {
   const echelle = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.035])
-  const lumiere = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.08])
-  const filtre = useTransform(lumiere, (l) => `brightness(${l})`)
+  // Un voile noir dont on anime l'opacité assombrit la carte sans forcer le
+  // navigateur à la redessiner à chaque image, contrairement à un filtre.
+  const voile = useTransform(progression, [i / n, 1], [0, (n - 1 - i) * 0.08])
   const accent = i === n - 1
 
   return (
-    <div className="sticky" style={{ top: `calc(12vh + ${i * 22}px)` }}>
+    <div className="sticky" style={{ top: `calc(12svh + ${i * 22}px)` }}>
       <motion.article
-        style={{ scale: echelle, filter: filtre }}
-        className={`origin-top rounded-[1.75rem] p-7 md:min-h-[62vh] md:p-12 ${
+        style={{ scale: echelle }}
+        className={`relative origin-top overflow-hidden rounded-[1.75rem] will-change-transform p-7 md:min-h-[62vh] md:p-12 ${
           accent ? 'bg-pop text-white' : 'bg-surface-card text-text-primary'
         }`}
       >
+        <motion.div aria-hidden className="pointer-events-none absolute inset-0 z-10 bg-black" style={{ opacity: voile }} />
         <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-7">
             <h3 className="text-3xl font-normal leading-[1] tracking-tight md:text-5xl">
