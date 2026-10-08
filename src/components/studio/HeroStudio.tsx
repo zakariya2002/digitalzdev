@@ -67,18 +67,20 @@ export default function HeroStudio() {
     offset: ['start start', 'end end'],
   })
 
-  // Découpe de la vidéo : une carte en bas, puis le plein écran.
-  const [haut0, droite0, bas0, gauche0] = mobile ? [58, 5, 4, 5] : [56, 4, 5, 50]
-  const haut = useTransform(scrollYProgress, [0, 0.6], [haut0, 0])
-  const droite = useTransform(scrollYProgress, [0, 0.6], [droite0, 0])
-  const bas = useTransform(scrollYProgress, [0, 0.6], [bas0, 0])
-  const gauche = useTransform(scrollYProgress, [0, 0.6], [gauche0, 0])
-  const rayon = useTransform(scrollYProgress, [0, 0.6], [mobile ? 18 : 28, 0])
+  // Découpe de la vidéo : invisible au départ, elle monte du bas de l'écran
+  // en carte dès qu'on défile, puis s'ouvre jusqu'au plein écran.
+  const cote = mobile ? 5 : 18
+  const haut = useTransform(scrollYProgress, [0, 0.02, 0.3, 0.7], [100, 100, mobile ? 40 : 34, 0])
+  const droite = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0])
+  const bas = useTransform(scrollYProgress, [0, 0.3, 0.7], [4, 4, 0])
+  const gauche = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0])
+  const rayon = useTransform(scrollYProgress, [0, 0.3, 0.7], [mobile ? 18 : 28, mobile ? 18 : 28, 0])
   const decoupe = useMotionTemplate`inset(${haut}% ${droite}% ${bas}% ${gauche}% round ${rayon}px)`
-  const zoom = useTransform(scrollYProgress, [0, 0.6], [1.15, 1])
+  const zoom = useTransform(scrollYProgress, [0, 0.7], [1.15, 1])
+  const sonOpacite = useTransform(scrollYProgress, [0.08, 0.25], [0, 1])
 
-  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.4], [1, 0])
-  const titreY = useTransform(scrollYProgress, [0, 0.4], ['0%', '-12%'])
+  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.3], [1, 0])
+  const titreY = useTransform(scrollYProgress, [0, 0.4], ['0%', '-18%'])
 
   const basculerSon = () => {
     const video = videoRef.current
@@ -90,9 +92,13 @@ export default function HeroStudio() {
 
   return (
     <section ref={sectionRef} className="relative h-[190vh] bg-surface md:h-[240vh]">
-      <div className="sticky top-0 h-[100svh] overflow-hidden">
+      <div
+        className="sticky top-0 h-[100svh] overflow-hidden"
+        // Fond dégradé gris clair, comme butter.video.
+        style={{ background: 'linear-gradient(#d6d6d6 0%, #fafafa 100%)' }}
+      >
         {/* La vidéo, découpée */}
-        <motion.div className="absolute inset-0" style={{ clipPath: decoupe }}>
+        <motion.div className="absolute inset-0 z-20" style={{ clipPath: decoupe }}>
           <motion.video
             ref={videoRef}
             className="h-full w-full object-cover"
@@ -110,47 +116,41 @@ export default function HeroStudio() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
         </motion.div>
 
-        {/* Le titre, au-dessus de la carte vidéo */}
+        {/* Le titre et le bouton, centrés au milieu de l'écran */}
         <motion.div
-          className="relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32"
-          style={{ opacity: titreOpacite, y: titreY }}
+          className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center"
+          style={{ opacity: titreOpacite, y: titreY, fontFamily: "'Inter Tight', system-ui, sans-serif" }}
         >
-          <h1 className="whitespace-nowrap text-[8.6vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]">
+          {/* Trousseau 3D masqué pour l'instant : <Trousseau className="pointer-events-none absolute inset-0 -z-10" /> */}
+          <h1 className="text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]">
             <Ligne delai={0.25}>Créons un site</Ligne>
-            <Ligne delai={0.35}>à la hauteur de</Ligne>
-            <Ligne delai={0.45}>
-              votre <span className="text-pop">image.</span>
+            <Ligne delai={0.35}>
+              à la hauteur de votre <span className="text-pop">image.</span>
             </Ligne>
           </h1>
 
-          <motion.div
-            className="mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0"
-            initial={{ opacity: 0, y: 20 }}
+          <motion.a
+            href={WHATSAPP_PROJET}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black md:mt-10"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8, ease: EASE }}
+            transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
           >
-            <div className="flex flex-wrap gap-2">
-              <a
-                href={WHATSAPP_PROJET}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]"
-              >
-                Prendre rendez-vous
-              </a>
-            </div>
-          </motion.div>
+            Prendre rendez-vous
+          </motion.a>
         </motion.div>
 
-
-        <button
+        <motion.button
           type="button"
+          style={{ opacity: sonOpacite }}
           onClick={basculerSon}
           aria-label={son ? 'Couper le son' : 'Activer le son'}
-          className="absolute bottom-[6%] right-[8%] z-20 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28"
+          className="absolute bottom-[6%] right-[8%] z-30 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28"
         >
           {son ? 'Son activé' : 'Son coupé'}
-        </button>
+        </motion.button>
       </div>
 
     </section>

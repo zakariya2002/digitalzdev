@@ -1536,16 +1536,17 @@ function HeroStudio() {
     target: sectionRef,
     offset: ["start start", "end end"]
   });
-  const [haut0, droite0, bas0, gauche0] = mobile ? [58, 5, 4, 5] : [56, 4, 5, 50];
-  const haut = useTransform(scrollYProgress, [0, 0.6], [haut0, 0]);
-  const droite = useTransform(scrollYProgress, [0, 0.6], [droite0, 0]);
-  const bas = useTransform(scrollYProgress, [0, 0.6], [bas0, 0]);
-  const gauche = useTransform(scrollYProgress, [0, 0.6], [gauche0, 0]);
-  const rayon = useTransform(scrollYProgress, [0, 0.6], [mobile ? 18 : 28, 0]);
+  const cote = mobile ? 5 : 18;
+  const haut = useTransform(scrollYProgress, [0, 0.02, 0.3, 0.7], [100, 100, mobile ? 40 : 34, 0]);
+  const droite = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0]);
+  const bas = useTransform(scrollYProgress, [0, 0.3, 0.7], [4, 4, 0]);
+  const gauche = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0]);
+  const rayon = useTransform(scrollYProgress, [0, 0.3, 0.7], [mobile ? 18 : 28, mobile ? 18 : 28, 0]);
   const decoupe = useMotionTemplate`inset(${haut}% ${droite}% ${bas}% ${gauche}% round ${rayon}px)`;
-  const zoom = useTransform(scrollYProgress, [0, 0.6], [1.15, 1]);
-  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.4], [1, 0]);
-  const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-12%"]);
+  const zoom = useTransform(scrollYProgress, [0, 0.7], [1.15, 1]);
+  const sonOpacite = useTransform(scrollYProgress, [0.08, 0.25], [0, 1]);
+  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
+  const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-18%"]);
   const basculerSon = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -1554,72 +1555,73 @@ function HeroStudio() {
     if (video.paused) void video.play().catch(() => {
     });
   };
-  return /* @__PURE__ */ jsx("section", { ref: sectionRef, className: "relative h-[190vh] bg-surface md:h-[240vh]", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-[100svh] overflow-hidden", children: [
-    /* @__PURE__ */ jsxs(motion.div, { className: "absolute inset-0", style: { clipPath: decoupe }, children: [
-      /* @__PURE__ */ jsx(
-        motion.video,
-        {
-          ref: videoRef,
-          className: "h-full w-full object-cover",
-          style: { scale: zoom },
-          src: mobile ? "/videos/presentation-mobile.mp4" : "/videos/presentation.mp4",
-          poster: mobile ? "/videos/presentation-mobile-poster.jpg" : "/videos/presentation-poster.jpg",
-          muted: true,
-          loop: true,
-          playsInline: true,
-          preload: "metadata",
-          "aria-label": "Vidéo de présentation de Digitalz Dev"
-        }
-      ),
-      /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" })
-    ] }),
-    /* @__PURE__ */ jsxs(
-      motion.div,
-      {
-        className: "relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32",
-        style: { opacity: titreOpacite, y: titreY },
-        children: [
-          /* @__PURE__ */ jsxs("h1", { className: "whitespace-nowrap text-[8.6vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]", children: [
-            /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Créons un site" }),
-            /* @__PURE__ */ jsx(Ligne$1, { delai: 0.35, children: "à la hauteur de" }),
-            /* @__PURE__ */ jsxs(Ligne$1, { delai: 0.45, children: [
-              "votre ",
-              /* @__PURE__ */ jsx("span", { className: "text-pop", children: "image." })
-            ] })
-          ] }),
+  return /* @__PURE__ */ jsx("section", { ref: sectionRef, className: "relative h-[190vh] bg-surface md:h-[240vh]", children: /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: "sticky top-0 h-[100svh] overflow-hidden",
+      style: { background: "linear-gradient(#d6d6d6 0%, #fafafa 100%)" },
+      children: [
+        /* @__PURE__ */ jsxs(motion.div, { className: "absolute inset-0 z-20", style: { clipPath: decoupe }, children: [
           /* @__PURE__ */ jsx(
-            motion.div,
+            motion.video,
             {
-              className: "mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0",
-              initial: { opacity: 0, y: 20 },
-              animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
-              children: /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-2", children: /* @__PURE__ */ jsx(
-                "a",
+              ref: videoRef,
+              className: "h-full w-full object-cover",
+              style: { scale: zoom },
+              src: mobile ? "/videos/presentation-mobile.mp4" : "/videos/presentation.mp4",
+              poster: mobile ? "/videos/presentation-mobile-poster.jpg" : "/videos/presentation-poster.jpg",
+              muted: true,
+              loop: true,
+              playsInline: true,
+              preload: "metadata",
+              "aria-label": "Vidéo de présentation de Digitalz Dev"
+            }
+          ),
+          /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" })
+        ] }),
+        /* @__PURE__ */ jsxs(
+          motion.div,
+          {
+            className: "relative z-10 flex h-full flex-col items-center justify-center px-5 text-center",
+            style: { opacity: titreOpacite, y: titreY, fontFamily: "'Inter Tight', system-ui, sans-serif" },
+            children: [
+              /* @__PURE__ */ jsxs("h1", { className: "text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]", children: [
+                /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Créons un site" }),
+                /* @__PURE__ */ jsxs(Ligne$1, { delai: 0.35, children: [
+                  "à la hauteur de votre ",
+                  /* @__PURE__ */ jsx("span", { className: "text-pop", children: "image." })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsx(
+                motion.a,
                 {
                   href: WHATSAPP_PROJET,
                   target: "_blank",
                   rel: "noopener noreferrer",
-                  className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
+                  className: "mt-8 inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black md:mt-10",
+                  initial: { opacity: 0, y: 16 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.8, delay: 0.7, ease: EASE$5 },
                   children: "Prendre rendez-vous"
                 }
-              ) })
-            }
-          )
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsx(
-      "button",
-      {
-        type: "button",
-        onClick: basculerSon,
-        "aria-label": son ? "Couper le son" : "Activer le son",
-        className: "absolute bottom-[6%] right-[8%] z-20 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28",
-        children: son ? "Son activé" : "Son coupé"
-      }
-    )
-  ] }) });
+              )
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          motion.button,
+          {
+            type: "button",
+            style: { opacity: sonOpacite },
+            onClick: basculerSon,
+            "aria-label": son ? "Couper le son" : "Activer le son",
+            className: "absolute bottom-[6%] right-[8%] z-30 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28",
+            children: son ? "Son activé" : "Son coupé"
+          }
+        )
+      ]
+    }
+  ) });
 }
 const PHRASE = [
   { texte: "Pas seulement esthétique.", accent: false },
