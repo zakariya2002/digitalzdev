@@ -1498,7 +1498,7 @@ const SERVICES$1 = [
 const EASE$5 = [0.22, 1, 0.36, 1];
 const QUIZ = "https://quiz.digitalzdev.com";
 function Ligne$1({ children, delai }) {
-  return /* @__PURE__ */ jsx("span", { className: "block overflow-hidden pb-[0.06em]", children: /* @__PURE__ */ jsx(
+  return /* @__PURE__ */ jsx("span", { className: "-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]", children: /* @__PURE__ */ jsx(
     motion.span,
     {
       className: "block",

@@ -13,7 +13,7 @@ const QUIZ = 'https://quiz.digitalzdev.com'
 /** Une ligne de titre qui monte depuis derrière son propre masque. */
 function Ligne({ children, delai }: { children: ReactNode; delai: number }) {
   return (
-    <span className="block overflow-hidden pb-[0.06em]">
+    <span className="-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]">
       <motion.span
         className="block"
         initial={{ y: '110%' }}
