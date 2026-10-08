@@ -66,7 +66,7 @@ function Selection() {
         className="relative hidden lg:block"
         style={{ height: `calc(100vh + ${course}px)` }}
       >
-        <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+        <div className="sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24">
           <motion.div ref={pisteRef} className="flex gap-8 px-10" style={{ x }}>
             {projects.map((p) => (
               <CarteProjet key={p.id} projet={p} className="w-[46vw]" />

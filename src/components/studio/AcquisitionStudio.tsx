@@ -15,16 +15,10 @@ const LARGEURS = ['md:col-span-4', 'md:col-span-2', 'md:col-span-2', 'md:col-spa
 export default function AcquisitionStudio() {
   return (
  <>
-    <section id="acquisition" className="bg-surface px-5 pt-12 md:px-10 md:pt-20">
-      <div className="mx-auto max-w-7xl">
-        <h2 className="mt-6 max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
-          Un beau site ne suffit pas. <span className="text-accent">Il doit être trouvé.</span>
-        </h2>
-      </div>
-    </section>
-
     {/* La recherche Google rejouée au défilement */}
-    <RechercheGoogle />
+    <div id="acquisition">
+      <RechercheGoogle />
+    </div>
 
     <section className="bg-surface px-5 pb-12 md:px-10 md:pb-20">
       <div className="mx-auto max-w-7xl">

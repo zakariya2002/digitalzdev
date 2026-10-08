@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   motion,
   useMotionValueEvent,
@@ -25,8 +25,19 @@ const CLIENT = {
   texte: 'Cabinet dédié aux entreprises : création, contrats, levées de fonds. Premier rendez-vous sous 48 h.',
 }
 
-/** Hauteur d'une ligne de résultat, en pixels. */
-const H = 96
+/** Hauteur d'une ligne de résultat, en pixels : plus haute sur mobile, où
+ * les extraits passent sur trois lignes. */
+function useHauteurLigne() {
+  const [h, setH] = useState(84)
+  useEffect(() => {
+    const requete = window.matchMedia('(max-width: 767px)')
+    const suivre = () => setH(requete.matches ? 104 : 84)
+    suivre()
+    requete.addEventListener('change', suivre)
+    return () => requete.removeEventListener('change', suivre)
+  }, [])
+  return h
+}
 
 function Etoiles({ note }: { note: number }) {
   return (
@@ -57,12 +68,14 @@ function Ligne({
   i,
   position,
   r,
+  h,
 }: {
   i: number
   position: MotionValue<number>
   r: (typeof CONCURRENTS)[number]
+  h: number
 }) {
-  const y = useTransform(position, (p) => (i + Math.min(1, Math.max(0, i + 1 - p))) * H)
+  const y = useTransform(position, (p) => (i + Math.min(1, Math.max(0, i + 1 - p))) * h)
   return (
     <motion.div className="absolute inset-x-0 top-0 px-1" style={{ y }}>
       <Resultat {...r} />
@@ -102,6 +115,65 @@ function Resultat({
   )
 }
 
+const COULEURS = ['#4285f4', '#ea4335', '#fbbc05', '#34a853', '#a142f4', '#ff6d01']
+
+/**
+ * Petit éclat coloré : des points qui jaillissent autour de l'étiquette et
+ * deux étincelles qui scintillent. Se rejoue à chaque apparition.
+ */
+function Eclat({ cle }: { cle: number }) {
+  return (
+    <span key={cle} aria-hidden className="pointer-events-none absolute inset-0">
+      {COULEURS.concat(COULEURS).map((c, i) => {
+        const angle = (i / 12) * Math.PI * 2
+        const distance = 34 + (i % 3) * 10
+        return (
+          <motion.span
+            key={i}
+            className="absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full"
+            style={{ backgroundColor: c }}
+            initial={{ x: 0, y: 0, scale: 0, opacity: 1 }}
+            animate={{
+              x: Math.cos(angle) * distance,
+              y: Math.sin(angle) * distance,
+              scale: [0, 1.4, 0],
+              opacity: [1, 1, 0],
+            }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          />
+        )
+      })}
+      {[
+        { c: '#fbbc05', cls: '-right-2 -top-2' },
+        { c: '#4285f4', cls: '-bottom-2 -left-1' },
+      ].map((e, i) => (
+        <motion.svg
+          key={i}
+          viewBox="0 0 24 24"
+          className={`absolute h-4 w-4 ${e.cls}`}
+          initial={{ scale: 0, rotate: -30, opacity: 0 }}
+          animate={{ scale: [0, 1.2, 0.9, 1.1, 0], rotate: [-30, 0, 20, 0, 30], opacity: [0, 1, 1, 1, 0] }}
+          transition={{ duration: 1.4, delay: 0.15 + i * 0.2 }}
+        >
+          <path fill={e.c} d="M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" />
+        </motion.svg>
+      ))}
+    </span>
+  )
+}
+
+/** Rejoue l'éclat chaque fois que la progression franchit le seuil. */
+function useEclat(progression: MotionValue<number>, seuil: number) {
+  const [cle, setCle] = useState(0)
+  const [visible, setVisible] = useState(false)
+  useMotionValueEvent(progression, 'change', (v) => {
+    const dedans = v >= seuil
+    if (dedans && !visible) setCle((c) => c + 1)
+    if (dedans !== visible) setVisible(dedans)
+  })
+  return visible ? cle : 0
+}
+
 /** Une étiquette qui flotte autour de la page et apparaît à son tour. */
 function Badge({
   progression,
@@ -118,13 +190,15 @@ function Badge({
 }) {
   const opacite = useTransform(progression, [debut, debut + 0.08], [0, 1])
   const y = useTransform(progression, [debut, debut + 0.08], [24, 0])
+  const eclat = useEclat(progression, debut + 0.02)
   return (
     <motion.div
-      className={`rounded-2xl bg-white px-4 py-3 shadow-[0_18px_40px_-18px_rgba(0,0,0,0.35)] ring-1 ring-black/5 ${className}`}
+      className={`rounded-xl bg-white px-3 py-2 shadow-[0_18px_40px_-14px_rgba(0,0,0,0.4)] ring-1 ring-black/5 lg:rounded-2xl lg:px-4 lg:py-3 ${className}`}
       style={{ opacity: opacite, y }}
     >
-      <p className="text-sm font-medium text-text-primary">{titre}</p>
-      <p className="text-xs text-text-secondary">{detail}</p>
+      {eclat > 0 && <Eclat cle={eclat} />}
+      <p className="text-[13px] font-medium text-text-primary lg:text-sm">{titre}</p>
+      <p className="text-[10px] text-text-secondary lg:text-xs">{detail}</p>
     </motion.div>
   )
 }
@@ -155,17 +229,22 @@ export default function RechercheGoogle() {
 
   // Position du client dans la liste : 4 (en bas) jusqu'à 0 (en tête).
   const position = useTransform(p, [0.2, 0.75], [CONCURRENTS.length, 0], { clamp: true })
+  const H = useHauteurLigne()
   const yClient = useTransform(position, (v) => v * H)
   const resultatsOpacite = useTransform(p, [0.14, 0.22], [0, 1])
   const sponsorise = useTransform(p, [0.78, 0.86], [0, 1])
 
   return (
     <section ref={ref} className="relative h-[240vh] bg-surface md:h-[280vh]">
-      <div className="sticky top-0 flex h-[100svh] flex-col items-center justify-center gap-4 overflow-hidden px-4 pt-16 md:px-10 md:pt-0">
-        {/* Étiquettes autour de la page, sur ordinateur */}
-        <Badge progression={p} debut={0.3} className="absolute left-[4%] top-[22%] hidden lg:block" titre="Optimisation SEO" detail="Positions suivies chaque mois" />
-        <Badge progression={p} debut={0.5} className="absolute right-[4%] top-[30%] hidden lg:block" titre="Google Ads" detail="+214 % de clics qualifiés" />
-        <Badge progression={p} debut={0.66} className="absolute bottom-[16%] left-[6%] hidden lg:block" titre="Meta Ads" detail="Vos réalisations sur Instagram" />
+      <div className="sticky top-0 flex h-[100svh] flex-col items-center justify-center gap-4 overflow-hidden px-4 pt-16 md:gap-6 md:px-10 md:pt-20">
+        {/* Étiquettes autour de la page ; sur mobile, elles débordent sur ses bords */}
+        <Badge progression={p} debut={0.3} className="absolute left-1 top-[36%] z-20 lg:left-[4%] lg:top-[22%]" titre="Optimisation SEO" detail="Positions suivies chaque mois" />
+        <Badge progression={p} debut={0.5} className="absolute right-1 top-[55%] z-20 lg:right-[4%] lg:top-[30%]" titre="Google Ads" detail="+214 % de clics qualifiés" />
+        <Badge progression={p} debut={0.66} className="absolute bottom-[10%] left-1 z-20 lg:bottom-[16%] lg:left-[6%]" titre="Meta Ads" detail="Vos réalisations sur Instagram" />
+
+        <h2 className="w-full max-w-4xl text-center text-[7vw] text-text-primary md:text-4xl lg:text-[2.6rem]">
+          Un beau site ne suffit pas. <span className="text-accent">Il doit être trouvé.</span>
+        </h2>
 
         {/* La page de résultats */}
         <div className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-[0_40px_90px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
@@ -194,7 +273,7 @@ export default function RechercheGoogle() {
               {/* Résultats organiques */}
               <div className="relative" style={{ height: (CONCURRENTS.length + 1) * H }}>
                 {CONCURRENTS.map((r, i) => (
-                  <Ligne key={r.url} i={i} position={position} r={r} />
+                  <Ligne key={r.url} i={i} position={position} r={r} h={H} />
                 ))}
                 <motion.div className="absolute inset-x-0 top-0 z-10 px-1" style={{ y: yClient }}>
                   <div className="relative">
@@ -228,23 +307,8 @@ export default function RechercheGoogle() {
             </motion.div>
           </div>
         </div>
-
-        {/* Sur mobile, les trois leviers en pastilles sous la page */}
-        <div className="flex flex-wrap justify-center gap-2 lg:hidden">
-          {['Optimisation SEO', 'Google Ads', 'Meta Ads'].map((l, i) => (
-            <Pastille key={l} progression={p} debut={0.3 + i * 0.18} libelle={l} />
-          ))}
-        </div>
       </div>
     </section>
   )
 }
 
-function Pastille({ progression, debut, libelle }: { progression: MotionValue<number>; debut: number; libelle: string }) {
-  const opacite = useTransform(progression, [debut, debut + 0.08], [0, 1])
-  return (
-    <motion.span className="rounded-full bg-white px-4 py-2 text-sm text-text-primary shadow-md ring-1 ring-black/5" style={{ opacity: opacite }}>
-      {libelle}
-    </motion.span>
-  )
-}
