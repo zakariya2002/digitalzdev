@@ -16,7 +16,7 @@ export interface Member {
 export const MEMBERS: Member[] = [
   {
     initials: 'ZN',
-    name: 'Zakariya Nebbache',
+    name: 'Zakariya N.',
     role: 'Développement',
     pitch:
       "Développeur fullstack. Je prends le projet du premier commit à la mise en ligne : interface, back-office, intégrations et applications iOS.",
@@ -32,7 +32,7 @@ export const MEMBERS: Member[] = [
   },
   {
     initials: 'AN',
-    name: 'Anissa Nebbache',
+    name: 'Anissa N.',
     role: 'Direction de projet, marketing & design',
     pitch:
       "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison, puis ce qu'il produit une fois en ligne : campagnes Meta Ads et Google Ads, suivi des conversions, itérations.",
