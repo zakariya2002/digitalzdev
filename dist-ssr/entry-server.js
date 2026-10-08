@@ -4337,7 +4337,7 @@ function Projet() {
               type: "submit",
               disabled: envoi,
               className: "mt-8 inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a] disabled:opacity-60",
-              children: envoi ? "Ouverture de WhatsApp…" : "Envoyer sur WhatsApp"
+              children: envoi ? "Envoi…" : "Contactez-nous"
             }
           ),
           /* @__PURE__ */ jsxs("p", { className: "mt-3 text-center text-xs text-text-muted", children: [

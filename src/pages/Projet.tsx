@@ -383,7 +383,7 @@ export default function Projet() {
                 disabled={envoi}
                 className="mt-8 inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a] disabled:opacity-60"
               >
-                {envoi ? 'Ouverture de WhatsApp…' : 'Envoyer sur WhatsApp'}
+                {envoi ? 'Envoi…' : 'Contactez-nous'}
               </button>
               <p className="mt-3 text-center text-xs text-text-muted">
                 Vos réponses servent uniquement à préparer notre échange.{' '}
