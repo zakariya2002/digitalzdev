@@ -1713,7 +1713,7 @@ function CarteProjet({ projet, className = "" }) {
     }
   );
 }
-function Selection() {
+function Selection({ titre }) {
   const sectionRef = useRef(null);
   const pisteRef = useRef(null);
   const [course, setCourse] = useState(0);
@@ -1735,14 +1735,20 @@ function Selection() {
         ref: sectionRef,
         className: "relative hidden lg:block",
         style: { height: `calc(100vh + ${course}px)` },
-        children: /* @__PURE__ */ jsx("div", { className: "sticky top-0 flex h-screen flex-col justify-center overflow-hidden", children: /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10 will-change-transform", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[36vw] max-w-[640px]" }, p.id)) }) })
+        children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 flex h-screen flex-col justify-center overflow-hidden", children: [
+          titre && /* @__PURE__ */ jsx("h2", { className: "mb-8 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
+          /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10 will-change-transform", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[36vw] max-w-[640px]" }, p.id)) })
+        ] })
       }
     ),
-    /* @__PURE__ */ jsx("section", { className: "pb-6 pt-24 lg:hidden", children: /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[72vw] snap-center sm:w-[50vw]" }, p.id)) }) })
+    /* @__PURE__ */ jsxs("section", { className: "pb-6 pt-24 lg:hidden", children: [
+      titre && /* @__PURE__ */ jsx("h2", { className: "mb-6 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
+      /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[72vw] snap-center sm:w-[50vw]" }, p.id)) })
+    ] })
   ] });
 }
-function TravauxStudio() {
-  return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, {}) });
+function TravauxStudio({ titre } = {}) {
+  return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, { titre }) });
 }
 const DEPART = [
   { x: 55, y: 30, r: -9 },
@@ -4011,56 +4017,6 @@ function NotFound() {
     )
   ] }) });
 }
-function VoirSite() {
-  const ref = useRef(null);
-  const [dedans, setDedans] = useState(false);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 300, damping: 28, mass: 0.5 });
-  const sy = useSpring(y, { stiffness: 300, damping: 28, mass: 0.5 });
-  const bouger = (e) => {
-    if (e.pointerType !== "mouse" || !ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    x.set(e.clientX - r.left - r.width / 2);
-    y.set(e.clientY - r.top - r.height / 2);
-    setDedans(true);
-  };
-  const sortir = () => {
-    setDedans(false);
-    x.set(0);
-    y.set(0);
-  };
-  return /* @__PURE__ */ jsxs(
-    "a",
-    {
-      ref,
-      href: "/",
-      onPointerMove: bouger,
-      onPointerLeave: sortir,
-      className: "relative flex h-[70svh] min-h-[420px] items-center justify-center overflow-hidden bg-[#1d1d1f] md:cursor-none",
-      children: [
-        /* @__PURE__ */ jsx(
-          "p",
-          {
-            "aria-hidden": true,
-            className: "pointer-events-none select-none px-5 text-center text-[13vw] font-extrabold uppercase leading-[0.95] tracking-tight text-white/10 md:text-[9vw]",
-            children: "Digitalz Dev"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          motion.span,
-          {
-            style: { x: sx, y: sy },
-            animate: { scale: dedans ? 1.05 : 1 },
-            transition: { type: "spring", stiffness: 300, damping: 20 },
-            className: "pointer-events-none absolute flex h-36 w-36 items-center justify-center rounded-full bg-pop text-center text-lg font-semibold leading-tight text-white shadow-[0_20px_50px_-15px_rgba(54,84,244,0.7)] md:h-44 md:w-44 md:text-xl",
-            children: "Voir notre site"
-          }
-        )
-      ]
-    }
-  );
-}
 const WHATSAPP = "33783259869";
 const PIXEL_ID = "28061156510173105";
 const API_LEAD = "https://quiz.digitalzdev.com/api/lead-site";
@@ -4424,12 +4380,10 @@ function Projet() {
           }
         )
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "mx-auto mt-16 max-w-5xl px-5 md:mt-24 md:px-10", children: /* @__PURE__ */ jsx("h2", { className: "text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl", children: "Nos créations" }) }),
-      /* @__PURE__ */ jsx(TravauxStudio, {}),
+      /* @__PURE__ */ jsx(TravauxStudio, { titre: "Nos créations" }),
       /* @__PURE__ */ jsx(RechercheGoogle, {}),
       /* @__PURE__ */ jsx(FinalStudio, {}),
       /* @__PURE__ */ jsx(EquipeStudio, {}),
-      /* @__PURE__ */ jsx(VoirSite, {}),
       /* @__PURE__ */ jsx(Footer, {})
     ] })
   ] });

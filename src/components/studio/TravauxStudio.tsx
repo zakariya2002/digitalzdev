@@ -40,7 +40,7 @@ function CarteProjet({ projet, className = '' }: { projet: (typeof projects)[num
  * hauteur de la section égale la course horizontale : chaque pixel de
  * défilement fait avancer la piste, sans temps mort avant ni après.
  */
-function Selection() {
+function Selection({ titre }: { titre?: string }) {
   const sectionRef = useRef<HTMLElement>(null)
   const pisteRef = useRef<HTMLDivElement>(null)
   const [course, setCourse] = useState(0)
@@ -69,6 +69,11 @@ function Selection() {
         style={{ height: `calc(100vh + ${course}px)` }}
       >
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
+          {titre && (
+            <h2 className="mb-8 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary">
+              {titre}
+            </h2>
+          )}
           <motion.div ref={pisteRef} className="flex gap-8 px-10 will-change-transform" style={{ x }}>
             {projects.map((p) => (
               <CarteProjet key={p.id} projet={p} className="w-[36vw] max-w-[640px]" />
@@ -79,6 +84,11 @@ function Selection() {
 
       {/* Mobile et tablette : carrousel natif */}
       <section className="pb-6 pt-24 lg:hidden">
+        {titre && (
+          <h2 className="mb-6 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary">
+            {titre}
+          </h2>
+        )}
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]">
           {projects.map((p) => (
             <CarteProjet key={p.id} projet={p} className="w-[72vw] snap-center sm:w-[50vw]" />
@@ -89,10 +99,11 @@ function Selection() {
   )
 }
 
-export default function TravauxStudio() {
+/** `titre` : affiché au-dessus des cartes, dans la section elle-même. */
+export default function TravauxStudio({ titre }: { titre?: string } = {}) {
   return (
     <div id="projets">
-      <Selection />
+      <Selection titre={titre} />
     </div>
   )
 }

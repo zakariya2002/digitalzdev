@@ -7,7 +7,6 @@ import RechercheGoogle from '../components/studio/RechercheGoogle'
 import FinalStudio from '../components/studio/FinalStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
 import Footer from '../components/Footer'
-import VoirSite from '../components/studio/VoirSite'
 
 /**
  * Page d'atterrissage des publicités Meta : quatre questions, les
@@ -422,16 +421,10 @@ export default function Projet() {
               preload="metadata"
             />
           </div>
-          <div className="mx-auto mt-16 max-w-5xl px-5 md:mt-24 md:px-10">
-            <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl">
-              Nos créations
-            </h2>
-          </div>
-          <TravauxStudio />
+          <TravauxStudio titre="Nos créations" />
           <RechercheGoogle />
           <FinalStudio />
           <EquipeStudio />
-          <VoirSite />
           <Footer />
         </div>
       )}
