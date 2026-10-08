@@ -15,7 +15,8 @@ const LIENS = [
 
 type Lien = (typeof LIENS)[number]
 
-const QUIZ = 'https://quiz.digitalzdev.com'
+/** Formulaire de projet : remplace l'ancienne démo du quiz. */
+const PROJET = '/projet'
 const EASE = [0.76, 0, 0.24, 1] as const
 
 function estCourant(lien: Lien, chemin: string): boolean {
@@ -162,11 +163,11 @@ export default function Navbar() {
             Contact
           </Link>
           <a
-            href={QUIZ}
+            href={PROJET}
             className="inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover"
           >
-            <span className="sm:hidden">Démo gratuite</span>
-            <span className="hidden sm:inline">Ma démo gratuite</span>
+            <span className="sm:hidden">Mon projet</span>
+            <span className="hidden sm:inline">Démarrer mon projet</span>
           </a>
         </div>
       </header>
@@ -253,10 +254,10 @@ export default function Navbar() {
                 </a>
               </div>
               <a
-                href={QUIZ}
+                href={PROJET}
                 className="inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto"
               >
-                Générer ma démo gratuite →
+                Démarrer mon projet →
               </a>
             </motion.div>
           </motion.div>

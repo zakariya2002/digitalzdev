@@ -17,14 +17,14 @@ export default function ContactForm() {
           Un projet en tête ?
         </h2>
         <p className="text-text-secondary mb-8">
-          Répondez à huit questions et repartez avec un aperçu de votre site,
-          généré pour votre marque. Gratuit, en moins d'une minute.
+          Décrivez votre projet en une minute : quelques questions, et nous
+          revenons vers vous sur WhatsApp.
         </p>
         <a
-          href="https://quiz.digitalzdev.com"
+          href="/projet"
           className="inline-block px-8 py-4 bg-accent text-surface font-display font-medium rounded-lg hover:opacity-90 transition-all"
         >
-          Générer ma démo gratuite
+          Démarrer mon projet
         </a>
       </motion.div>
     </section>

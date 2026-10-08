@@ -890,7 +890,7 @@ const LIENS = [
   { libelle: "L'agence", vers: "/#agence", interne: false },
   { libelle: "Contact", vers: "/contact", interne: true }
 ];
-const QUIZ$1 = "https://quiz.digitalzdev.com";
+const PROJET = "/projet";
 const EASE$6 = [0.76, 0, 0.24, 1];
 function estCourant(lien2, chemin) {
   if (lien2.vers === "/") return chemin === "/";
@@ -1004,11 +1004,11 @@ function Navbar() {
         /* @__PURE__ */ jsxs(
           "a",
           {
-            href: QUIZ$1,
+            href: PROJET,
             className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
             children: [
-              /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Démo gratuite" }),
-              /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Ma démo gratuite" })
+              /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Mon projet" }),
+              /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Démarrer mon projet" })
             ]
           }
         )
@@ -1085,9 +1085,9 @@ function Navbar() {
                 /* @__PURE__ */ jsx(
                   "a",
                   {
-                    href: QUIZ$1,
+                    href: PROJET,
                     className: "inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto",
-                    children: "Générer ma démo gratuite →"
+                    children: "Démarrer mon projet →"
                   }
                 )
               ]
@@ -2910,9 +2910,8 @@ const RACCOURCIS = [
   { to: "/#agence", label: "L'agence" },
   { to: "/#faq", label: "Questions fréquentes" },
   { to: "/contact", label: "Nous contacter" },
-  // Point d'entrée principal : plutôt qu'un formulaire de devis, le visiteur
-  // repart avec un aperçu de son site en une minute.
-  { to: "https://quiz.digitalzdev.com", label: "Générer ma démo gratuite", externe: true }
+  // Point d'entrée principal : le formulaire de projet, qui ouvre WhatsApp.
+  { to: "/projet", label: "Démarrer mon projet" }
 ];
 const RESEAUX = [
   { href: "https://www.instagram.com/digitalzdev/", label: "Instagram" },
@@ -3009,13 +3008,13 @@ function ContactForm() {
       children: [
         /* @__PURE__ */ jsx("span", { className: "text-accent font-display font-medium text-sm tracking-[0.2em] uppercase", children: "Contact" }),
         /* @__PURE__ */ jsx("h2", { className: "font-display font-medium text-3xl md:text-4xl text-text-primary mt-4 mb-4", children: "Un projet en tête ?" }),
-        /* @__PURE__ */ jsx("p", { className: "text-text-secondary mb-8", children: "Répondez à huit questions et repartez avec un aperçu de votre site, généré pour votre marque. Gratuit, en moins d'une minute." }),
+        /* @__PURE__ */ jsx("p", { className: "text-text-secondary mb-8", children: "Décrivez votre projet en une minute : quelques questions, et nous revenons vers vous sur WhatsApp." }),
         /* @__PURE__ */ jsx(
           "a",
           {
-            href: "https://quiz.digitalzdev.com",
+            href: "/projet",
             className: "inline-block px-8 py-4 bg-accent text-surface font-display font-medium rounded-lg hover:opacity-90 transition-all",
-            children: "Générer ma démo gratuite"
+            children: "Démarrer mon projet"
           }
         )
       ]

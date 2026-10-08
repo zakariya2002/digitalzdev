@@ -11,15 +11,14 @@ import { projects } from '../data/projects'
  * rend atteignables depuis n'importe quelle page, pour un visiteur comme pour
  * un robot.
  */
-const RACCOURCIS = [
+const RACCOURCIS: Array<{ to: string; label: string; externe?: boolean }> = [
   { to: '/#services', label: 'Nos services' },
   { to: '/#projets', label: 'Nos réalisations' },
   { to: '/#agence', label: "L'agence" },
   { to: '/#faq', label: 'Questions fréquentes' },
   { to: '/contact', label: 'Nous contacter' },
-  // Point d'entrée principal : plutôt qu'un formulaire de devis, le visiteur
-  // repart avec un aperçu de son site en une minute.
-  { to: 'https://quiz.digitalzdev.com', label: 'Générer ma démo gratuite', externe: true },
+  // Point d'entrée principal : le formulaire de projet, qui ouvre WhatsApp.
+  { to: '/projet', label: 'Démarrer mon projet' },
 ]
 
 const RESEAUX = [
