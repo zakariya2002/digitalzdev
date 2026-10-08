@@ -2276,7 +2276,7 @@ function EquipeStudio() {
   return /* @__PURE__ */ jsx("section", { id: "agence", className: "bg-surface-light px-5 py-10 md:px-10 md:py-14", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("div", { className: "grid gap-10 lg:grid-cols-12", children: [
       /* @__PURE__ */ jsx("div", { className: "lg:col-span-7", children: /* @__PURE__ */ jsxs("h2", { className: "text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
-        "Une équipe restreinte, ",
+        "Une équipe, ",
         /* @__PURE__ */ jsx("span", { className: "font-bold text-citron", children: "deux métiers complets." })
       ] }) }),
       /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5", children: "Pas de chaîne d'intermédiaires : vous parlez directement aux deux personnes qui conçoivent et qui développent. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." })
