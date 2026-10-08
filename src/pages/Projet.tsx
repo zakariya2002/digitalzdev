@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
+import { projects } from '../data/projects'
 
 /**
  * Page d'atterrissage des publicités Meta : quatre questions, les
@@ -15,6 +16,8 @@ import { supabase } from '../lib/supabase'
 
 const WHATSAPP = '33783259869'
 const PIXEL_ID = '28061156510173105'
+/** Enregistrement et conversion côté serveur, hébergés par le quiz. */
+const API_LEAD = 'https://quiz.digitalzdev.com/api/lead-site'
 const EASE = [0.22, 1, 0.36, 1] as const
 
 interface Question {
@@ -98,6 +101,11 @@ function suivre(evenement: string, donnees?: Record<string, unknown>, options?: 
   fbq?.('track', evenement, donnees ?? {}, options ?? {})
 }
 
+function lireCookie(nom: string): string | undefined {
+  const m = document.cookie.match(new RegExp(`(?:^|; )${nom}=([^;]*)`))
+  return m ? decodeURIComponent(m[1]) : undefined
+}
+
 /** Origine du visiteur, lue une fois à l'arrivée. */
 function lireAttribution() {
   const q = new URLSearchParams(window.location.search)
@@ -121,6 +129,10 @@ export default function Projet() {
   const [touche, setTouche] = useState(false)
   const [envoi, setEnvoi] = useState(false)
   const [lienWhatsapp, setLienWhatsapp] = useState<string | null>(null)
+  const [mobile, setMobile] = useState(false)
+  useEffect(() => {
+    setMobile(window.matchMedia('(max-width: 767px)').matches)
+  }, [])
   const attribution = useMemo(() => (typeof window === 'undefined' ? null : lireAttribution()), [])
 
   useEffect(() => {
@@ -152,16 +164,7 @@ export default function Projet() {
       telephone: telValide,
       activite: activite.trim().slice(0, 160) || null,
       message: message.trim().slice(0, 1000) || null,
-      ...attribution,
     }
-    // L'enregistrement ne doit jamais bloquer le visiteur : en cas d'échec,
-    // il passe quand même sur WhatsApp, où la demande arrive de toute façon.
-    try {
-      await supabase.from('site_leads' as never).insert(ligne as never)
-    } catch {
-      /* rien */
-    }
-    suivre('Lead', { content_category: ligne.metier, content_name: ligne.besoin }, { eventID: crypto.randomUUID?.() ?? String(Date.now()) })
 
     const texte = [
       'Bonjour Digitalz Dev, je viens de remplir le formulaire de votre site.',
@@ -177,8 +180,51 @@ export default function Projet() {
       .filter((l) => l !== null)
       .join('\n')
     const lien = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texte)}`
+
+    // WhatsApp s'ouvre tout de suite, pendant le clic : ouvert après une
+    // attente réseau, le navigateur le bloquerait. La page reste derrière,
+    // avec la vidéo et les réalisations.
+    window.open(lien, '_blank', 'noopener')
     setLienWhatsapp(lien)
-    window.location.href = lien
+
+    // Conversion : le pixel et le serveur partent avec le même identifiant,
+    // Meta n'en compte qu'une.
+    const evenementId = crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`
+    suivre('Lead', { content_category: ligne.metier, content_name: ligne.besoin }, { eventID: evenementId })
+
+    const fbclid = attribution?.fbclid ?? undefined
+    try {
+      const res = await fetch(API_LEAD, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          evenementId,
+          ...ligne,
+          activite: ligne.activite ?? undefined,
+          message: ligne.message ?? undefined,
+          url: window.location.href.slice(0, 500),
+          fbp: lireCookie('_fbp'),
+          fbc: lireCookie('_fbc') ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined),
+          attribution: {
+            utmSource: attribution?.utm_source ?? undefined,
+            utmMedium: attribution?.utm_medium ?? undefined,
+            utmCampaign: attribution?.utm_campaign ?? undefined,
+            utmContent: attribution?.utm_content ?? undefined,
+            fbclid,
+          },
+        }),
+        keepalive: true,
+      })
+      if (!res.ok) throw new Error(String(res.status))
+    } catch {
+      // Serveur injoignable : on enregistre au moins la demande directement.
+      try {
+        await supabase.from('site_leads' as never).insert({ ...ligne, ...attribution } as never)
+      } catch {
+        /* rien */
+      }
+    }
+    window.scrollTo(0, 0)
   }
 
   return (
@@ -201,23 +247,69 @@ export default function Projet() {
         />
       </div>
 
-      <div className="mx-auto mt-10 w-full max-w-2xl flex-1 md:mt-16">
+      <div className={`mx-auto mt-10 w-full flex-1 md:mt-16 ${lienWhatsapp ? "max-w-4xl" : "max-w-2xl"}`}>
         <AnimatePresence mode="wait">
           {lienWhatsapp ? (
-            <motion.div key="fin" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-              <h1 className="text-3xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl">
-                Merci, on en parle sur <span className="text-[#25D366]">WhatsApp</span>
-              </h1>
-              <p className="mx-auto mt-4 max-w-md text-text-secondary">
-                Votre message est prêt : il ne reste qu'à appuyer sur « Envoyer » dans WhatsApp.
-                Si l'application ne s'est pas ouverte, utilisez le bouton ci-dessous.
-              </p>
-              <a
-                href={lienWhatsapp}
-                className="mt-8 inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]"
-              >
-                Ouvrir WhatsApp
-              </a>
+            <motion.div key="fin" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="text-center">
+                <h1 className="text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl">
+                  Merci, on en parle sur <span className="text-[#25D366]">WhatsApp</span>
+                </h1>
+                <p className="mx-auto mt-4 max-w-md text-text-secondary">
+                  Votre message est prêt dans WhatsApp : appuyez sur « Envoyer » et
+                  nous revenons vers vous rapidement. Si l'application ne s'est pas
+                  ouverte, utilisez le bouton ci-dessous.
+                </p>
+                <a
+                  href={lienWhatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]"
+                >
+                  Ouvrir WhatsApp
+                </a>
+              </div>
+
+              {/* En attendant la réponse : qui nous sommes, et ce que nous faisons */}
+              <div className="mt-14">
+                <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-3xl">
+                  En attendant, découvrez Digitalz Dev
+                </h2>
+                <video
+                  className="mt-5 aspect-[9/16] w-full rounded-2xl bg-surface-card object-cover md:aspect-video"
+                  src={mobile ? '/videos/presentation-mobile.mp4' : '/videos/presentation.mp4'}
+                  poster={mobile ? '/videos/presentation-mobile-poster.jpg' : '/videos/presentation-poster.jpg'}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  preload="metadata"
+                />
+              </div>
+
+              <div className="mt-14">
+                <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-3xl">
+                  Nos réalisations
+                </h2>
+                <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                  {projects.map((projet) => (
+                    <a key={projet.id} href={projet.route} target="_blank" rel="noopener" className="group block">
+                      <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-surface-card">
+                        <img
+                          src={projet.heroImage}
+                          alt={`Site ${projet.title}`}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+                        />
+                      </div>
+                      <p className="mt-3 text-lg text-text-primary">{projet.title}</p>
+                      <p className="text-sm text-text-secondary">{projet.subtitle}</p>
+                    </a>
+                  ))}
+                </div>
+              </div>
             </motion.div>
           ) : question ? (
             <motion.div

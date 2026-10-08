@@ -4013,6 +4013,7 @@ function NotFound() {
 }
 const WHATSAPP = "33783259869";
 const PIXEL_ID = "28061156510173105";
+const API_LEAD = "https://quiz.digitalzdev.com/api/lead-site";
 const EASE = [0.22, 1, 0.36, 1];
 const QUESTIONS = [
   {
@@ -4075,6 +4076,10 @@ function suivre(evenement, donnees, options) {
   const fbq = window.fbq;
   fbq == null ? void 0 : fbq("track", evenement, donnees ?? {}, options ?? {});
 }
+function lireCookie(nom) {
+  const m = document.cookie.match(new RegExp(`(?:^|; )${nom}=([^;]*)`));
+  return m ? decodeURIComponent(m[1]) : void 0;
+}
 function lireAttribution() {
   var _a;
   const q = new URLSearchParams(window.location.search);
@@ -4100,6 +4105,10 @@ function Projet() {
   const [touche, setTouche] = useState(false);
   const [envoi, setEnvoi] = useState(false);
   const [lienWhatsapp, setLienWhatsapp] = useState(null);
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    setMobile(window.matchMedia("(max-width: 767px)").matches);
+  }, []);
   const attribution = useMemo(() => typeof window === "undefined" ? null : lireAttribution(), []);
   useEffect(() => {
     chargerPixel();
@@ -4126,14 +4135,8 @@ function Projet() {
       nom: nom.trim().slice(0, 120),
       telephone: telValide,
       activite: activite.trim().slice(0, 160) || null,
-      message: message.trim().slice(0, 1e3) || null,
-      ...attribution
+      message: message.trim().slice(0, 1e3) || null
     };
-    try {
-      await supabase.from("site_leads").insert(ligne);
-    } catch {
-    }
-    suivre("Lead", { content_category: ligne.metier, content_name: ligne.besoin }, { eventID: ((_a = crypto.randomUUID) == null ? void 0 : _a.call(crypto)) ?? String(Date.now()) });
     const texte = [
       "Bonjour Digitalz Dev, je viens de remplir le formulaire de votre site.",
       "",
@@ -4146,8 +4149,41 @@ function Projet() {
       ligne.message ? `• Projet : ${ligne.message}` : null
     ].filter((l) => l !== null).join("\n");
     const lien2 = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texte)}`;
+    window.open(lien2, "_blank", "noopener");
     setLienWhatsapp(lien2);
-    window.location.href = lien2;
+    const evenementId = ((_a = crypto.randomUUID) == null ? void 0 : _a.call(crypto)) ?? `${Date.now()}-${Math.random()}`;
+    suivre("Lead", { content_category: ligne.metier, content_name: ligne.besoin }, { eventID: evenementId });
+    const fbclid = (attribution == null ? void 0 : attribution.fbclid) ?? void 0;
+    try {
+      const res = await fetch(API_LEAD, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          evenementId,
+          ...ligne,
+          activite: ligne.activite ?? void 0,
+          message: ligne.message ?? void 0,
+          url: window.location.href.slice(0, 500),
+          fbp: lireCookie("_fbp"),
+          fbc: lireCookie("_fbc") ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : void 0),
+          attribution: {
+            utmSource: (attribution == null ? void 0 : attribution.utm_source) ?? void 0,
+            utmMedium: (attribution == null ? void 0 : attribution.utm_medium) ?? void 0,
+            utmCampaign: (attribution == null ? void 0 : attribution.utm_campaign) ?? void 0,
+            utmContent: (attribution == null ? void 0 : attribution.utm_content) ?? void 0,
+            fbclid
+          }
+        }),
+        keepalive: true
+      });
+      if (!res.ok) throw new Error(String(res.status));
+    } catch {
+      try {
+        await supabase.from("site_leads").insert({ ...ligne, ...attribution });
+      } catch {
+      }
+    }
+    window.scrollTo(0, 0);
   };
   return /* @__PURE__ */ jsxs("main", { className: "flex min-h-[100svh] flex-col bg-surface px-5 pb-10 pt-6 md:px-10", children: [
     /* @__PURE__ */ jsxs("header", { className: "mx-auto flex w-full max-w-2xl items-center justify-between", children: [
@@ -4169,20 +4205,58 @@ function Projet() {
         transition: { duration: 0.4, ease: EASE }
       }
     ) }),
-    /* @__PURE__ */ jsx("div", { className: "mx-auto mt-10 w-full max-w-2xl flex-1 md:mt-16", children: /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: lienWhatsapp ? /* @__PURE__ */ jsxs(motion.div, { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, className: "text-center", children: [
-      /* @__PURE__ */ jsxs("h1", { className: "text-3xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl", children: [
-        "Merci, on en parle sur ",
-        /* @__PURE__ */ jsx("span", { className: "text-[#25D366]", children: "WhatsApp" })
+    /* @__PURE__ */ jsx("div", { className: `mx-auto mt-10 w-full flex-1 md:mt-16 ${lienWhatsapp ? "max-w-4xl" : "max-w-2xl"}`, children: /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: lienWhatsapp ? /* @__PURE__ */ jsxs(motion.div, { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, children: [
+      /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsxs("h1", { className: "text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl", children: [
+          "Merci, on en parle sur ",
+          /* @__PURE__ */ jsx("span", { className: "text-[#25D366]", children: "WhatsApp" })
+        ] }),
+        /* @__PURE__ */ jsx("p", { className: "mx-auto mt-4 max-w-md text-text-secondary", children: "Votre message est prêt dans WhatsApp : appuyez sur « Envoyer » et nous revenons vers vous rapidement. Si l'application ne s'est pas ouverte, utilisez le bouton ci-dessous." }),
+        /* @__PURE__ */ jsx(
+          "a",
+          {
+            href: lienWhatsapp,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: "mt-6 inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]",
+            children: "Ouvrir WhatsApp"
+          }
+        )
       ] }),
-      /* @__PURE__ */ jsx("p", { className: "mx-auto mt-4 max-w-md text-text-secondary", children: "Votre message est prêt : il ne reste qu'à appuyer sur « Envoyer » dans WhatsApp. Si l'application ne s'est pas ouverte, utilisez le bouton ci-dessous." }),
-      /* @__PURE__ */ jsx(
-        "a",
-        {
-          href: lienWhatsapp,
-          className: "mt-8 inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]",
-          children: "Ouvrir WhatsApp"
-        }
-      )
+      /* @__PURE__ */ jsxs("div", { className: "mt-14", children: [
+        /* @__PURE__ */ jsx("h2", { className: "text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-3xl", children: "En attendant, découvrez Digitalz Dev" }),
+        /* @__PURE__ */ jsx(
+          "video",
+          {
+            className: "mt-5 aspect-[9/16] w-full rounded-2xl bg-surface-card object-cover md:aspect-video",
+            src: mobile ? "/videos/presentation-mobile.mp4" : "/videos/presentation.mp4",
+            poster: mobile ? "/videos/presentation-mobile-poster.jpg" : "/videos/presentation-poster.jpg",
+            autoPlay: true,
+            muted: true,
+            loop: true,
+            playsInline: true,
+            controls: true,
+            preload: "metadata"
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-14", children: [
+        /* @__PURE__ */ jsx("h2", { className: "text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-3xl", children: "Nos réalisations" }),
+        /* @__PURE__ */ jsx("div", { className: "mt-5 grid gap-5 sm:grid-cols-2", children: projects.map((projet) => /* @__PURE__ */ jsxs("a", { href: projet.route, target: "_blank", rel: "noopener", className: "group block", children: [
+          /* @__PURE__ */ jsx("div", { className: "aspect-[16/10] overflow-hidden rounded-2xl bg-surface-card", children: /* @__PURE__ */ jsx(
+            "img",
+            {
+              src: projet.heroImage,
+              alt: `Site ${projet.title}`,
+              loading: "lazy",
+              decoding: "async",
+              className: "h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+            }
+          ) }),
+          /* @__PURE__ */ jsx("p", { className: "mt-3 text-lg text-text-primary", children: projet.title }),
+          /* @__PURE__ */ jsx("p", { className: "text-sm text-text-secondary", children: projet.subtitle })
+        ] }, projet.id)) })
+      ] })
     ] }, "fin") : question ? /* @__PURE__ */ jsxs(
       motion.div,
       {
