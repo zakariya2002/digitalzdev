@@ -19,7 +19,7 @@ import Footer from '../components/Footer'
  */
 
 const WHATSAPP = '33783259869'
-const PIXEL_ID = '28061156510173105'
+const PIXEL_ID = '1770228247552236'
 /** Enregistrement et conversion côté serveur, hébergés par le quiz. */
 const API_LEAD = 'https://quiz.digitalzdev.com/api/lead-site'
 const EASE = [0.22, 1, 0.36, 1] as const

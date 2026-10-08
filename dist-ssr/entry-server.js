@@ -4018,7 +4018,7 @@ function NotFound() {
   ] }) });
 }
 const WHATSAPP = "33783259869";
-const PIXEL_ID = "28061156510173105";
+const PIXEL_ID = "1770228247552236";
 const API_LEAD = "https://quiz.digitalzdev.com/api/lead-site";
 const EASE = [0.22, 1, 0.36, 1];
 const QUESTIONS = [
