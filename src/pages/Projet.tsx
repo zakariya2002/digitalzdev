@@ -6,6 +6,7 @@ import TravauxStudio from '../components/studio/TravauxStudio'
 import RechercheGoogle from '../components/studio/RechercheGoogle'
 import FinalStudio from '../components/studio/FinalStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
+import Footer from '../components/Footer'
 
 /**
  * Page d'atterrissage des publicités Meta : quatre questions, les
@@ -231,7 +232,7 @@ export default function Projet() {
   }
 
   return (
-    <main className="flex min-h-[100svh] flex-col overflow-x-clip bg-surface px-5 pb-10 pt-6 md:px-10">
+    <main className="flex min-h-[100svh] flex-col overflow-x-clip bg-surface px-5 pt-6 md:px-10">
       <header className="mx-auto flex w-full max-w-2xl items-center justify-between">
         <Link to="/" className="flex min-h-[44px] items-center gap-2.5">
           <img src="/logo-studio.png" alt="" className="h-9 w-9 rounded-full" />
@@ -250,7 +251,7 @@ export default function Projet() {
         />
       </div>
 
-      <div className={`mx-auto mt-10 w-full md:mt-16 max-w-2xl ${lienWhatsapp ? "" : "flex-1"}`}>
+      <div className={`mx-auto mt-10 w-full md:mt-16 max-w-2xl ${lienWhatsapp ? "" : "flex-1 pb-10"}`}>
         <AnimatePresence mode="wait">
           {lienWhatsapp ? (
             <motion.div key="fin" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
@@ -416,10 +417,16 @@ export default function Projet() {
               preload="metadata"
             />
           </div>
+          <div className="mx-auto mt-16 max-w-5xl px-5 md:mt-24 md:px-10">
+            <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl">
+              Nos créations
+            </h2>
+          </div>
           <TravauxStudio />
           <RechercheGoogle />
           <FinalStudio />
           <EquipeStudio />
+          <Footer />
         </div>
       )}
     </main>

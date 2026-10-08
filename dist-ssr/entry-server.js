@@ -4185,7 +4185,7 @@ function Projet() {
     }
     window.scrollTo(0, 0);
   };
-  return /* @__PURE__ */ jsxs("main", { className: "flex min-h-[100svh] flex-col overflow-x-clip bg-surface px-5 pb-10 pt-6 md:px-10", children: [
+  return /* @__PURE__ */ jsxs("main", { className: "flex min-h-[100svh] flex-col overflow-x-clip bg-surface px-5 pt-6 md:px-10", children: [
     /* @__PURE__ */ jsxs("header", { className: "mx-auto flex w-full max-w-2xl items-center justify-between", children: [
       /* @__PURE__ */ jsxs(Link, { to: "/", className: "flex min-h-[44px] items-center gap-2.5", children: [
         /* @__PURE__ */ jsx("img", { src: "/logo-studio.png", alt: "", className: "h-9 w-9 rounded-full" }),
@@ -4205,7 +4205,7 @@ function Projet() {
         transition: { duration: 0.4, ease: EASE }
       }
     ) }),
-    /* @__PURE__ */ jsx("div", { className: `mx-auto mt-10 w-full md:mt-16 max-w-2xl ${lienWhatsapp ? "" : "flex-1"}`, children: /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: lienWhatsapp ? /* @__PURE__ */ jsx(motion.div, { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, children: /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
+    /* @__PURE__ */ jsx("div", { className: `mx-auto mt-10 w-full md:mt-16 max-w-2xl ${lienWhatsapp ? "" : "flex-1 pb-10"}`, children: /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: lienWhatsapp ? /* @__PURE__ */ jsx(motion.div, { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, children: /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
       /* @__PURE__ */ jsxs("h1", { className: "text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl", children: [
         "Merci, on en parle sur ",
         /* @__PURE__ */ jsx("span", { className: "text-[#25D366]", children: "WhatsApp" })
@@ -4370,10 +4370,12 @@ function Projet() {
           }
         )
       ] }),
+      /* @__PURE__ */ jsx("div", { className: "mx-auto mt-16 max-w-5xl px-5 md:mt-24 md:px-10", children: /* @__PURE__ */ jsx("h2", { className: "text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl", children: "Nos créations" }) }),
       /* @__PURE__ */ jsx(TravauxStudio, {}),
       /* @__PURE__ */ jsx(RechercheGoogle, {}),
       /* @__PURE__ */ jsx(FinalStudio, {}),
-      /* @__PURE__ */ jsx(EquipeStudio, {})
+      /* @__PURE__ */ jsx(EquipeStudio, {}),
+      /* @__PURE__ */ jsx(Footer, {})
     ] })
   ] });
 }
