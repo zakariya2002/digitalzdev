@@ -2103,7 +2103,7 @@ function RechercheGoogle() {
     /* @__PURE__ */ jsx(Badge, { progression: p, debut: 0.66, className: "absolute bottom-[10%] left-1 z-20 lg:bottom-[16%] lg:left-[6%]", titre: "Meta Ads", detail: "Vos réalisations sur Instagram" }),
     /* @__PURE__ */ jsxs("h2", { className: "w-full max-w-4xl text-center text-[7vw] text-text-primary md:text-4xl lg:text-[2.6rem]", children: [
       "Un beau site ne suffit pas. ",
-      /* @__PURE__ */ jsx("span", { className: "text-citron", children: "Il doit être trouvé." })
+      /* @__PURE__ */ jsx("span", { className: "font-bold text-citron", children: "Il doit être trouvé." })
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-[0_40px_90px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5", children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 bg-[#f1f3f4] px-4 py-2.5", children: [
