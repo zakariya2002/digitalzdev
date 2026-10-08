@@ -96,13 +96,13 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Le nom, en lettres géantes, posé sur le bord bas de la page */}
+      {/* Le nom, en lettres géantes, en bas de page ; le jambage du « g » reste visible */}
       <div className="mt-10 overflow-hidden">
         <motion.p
           aria-hidden
-          className="whitespace-nowrap text-center text-[13vw] font-normal leading-[0.8] tracking-[-0.06em] text-text-primary"
+          className="whitespace-nowrap pb-[0.06em] text-center text-[13vw] font-normal leading-[1.05] tracking-[-0.06em] text-text-primary"
           initial={{ y: '60%' }}
-          whileInView={{ y: '8%' }}
+          whileInView={{ y: '0%' }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
