@@ -1378,7 +1378,7 @@ function HeroStudio() {
             /* @__PURE__ */ jsxs("h1", { className: "text-[9.5vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]", children: [
               /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Des sites à la" }),
               /* @__PURE__ */ jsx(Ligne$1, { delai: 0.35, children: "hauteur de votre" }),
-              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.45, children: /* @__PURE__ */ jsx("span", { className: "text-pop", children: "réputation." }) })
+              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.45, children: /* @__PURE__ */ jsx("span", { className: "text-pop", children: "image." }) })
             ] }),
             /* @__PURE__ */ jsxs(
               motion.div,

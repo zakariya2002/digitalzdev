@@ -121,7 +121,7 @@ export default function HeroStudio() {
             <Ligne delai={0.25}>Des sites à la</Ligne>
             <Ligne delai={0.35}>hauteur de votre</Ligne>
             <Ligne delai={0.45}>
-              <span className="text-pop">réputation.</span>
+              <span className="text-pop">image.</span>
             </Ligne>
           </h1>
 
