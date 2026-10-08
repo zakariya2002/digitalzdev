@@ -11,7 +11,7 @@ function CarteProjet({ projet, className = '' }: { projet: (typeof projects)[num
       data-curseur="Voir"
       className={`group block shrink-0 ${className}`}
     >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10]">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-auto lg:h-[calc(100svh-14rem)]">
         <img
           src={projet.heroImage}
           alt={`Site ${projet.title}`}

@@ -69,7 +69,7 @@ export default function AvisGoogleSection() {
   const fiche = enExemple ? { note: 4.9, total: null, lien: null } : ficheGoogle
 
   return (
-    <section id="avis-google" className="relative overflow-hidden bg-surface py-16 md:py-24">
+    <section id="avis-google" className="relative overflow-hidden bg-surface py-10 md:py-14">
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
@@ -78,7 +78,7 @@ export default function AvisGoogleSection() {
               by="word"
               text="Nos clients en parlent mieux que nous."
               delay={0.1}
-              className="mt-5 block max-w-3xl font-display text-4xl md:text-6xl"
+              className="block max-w-3xl font-display text-4xl md:text-6xl"
             />
             {enExemple && (
               <p className="mt-4 text-sm text-text-muted">Avis d'exemple</p>

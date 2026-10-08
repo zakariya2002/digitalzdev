@@ -77,7 +77,7 @@ export default function FaqSection() {
   }, [])
 
   return (
-    <section id="faq" className="relative bg-surface-light py-16 md:py-24">
+    <section id="faq" className="relative bg-surface-light py-10 md:py-14">
       <div className="mx-auto max-w-3xl px-6">
         <div className="mb-14 text-center md:mb-20">
           <SplitText
@@ -85,7 +85,7 @@ export default function FaqSection() {
             by="word"
             text="Ce qu’on nous demande avant de se lancer"
             delay={0.1}
-            className="mx-auto mt-5 block font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-5xl"
+            className="mx-auto block font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-5xl"
           />
         </div>
 
@@ -95,7 +95,7 @@ export default function FaqSection() {
             return (
               <motion.div
                 key={item.question}
-                className="mb-3 rounded-2xl bg-surface-card px-5 md:px-7"
+                className="mb-3 rounded-2xl bg-surface-card px-5 last:mb-0 md:px-7"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VIEWPORT}

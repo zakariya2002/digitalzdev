@@ -236,7 +236,7 @@ export default function RechercheGoogle() {
 
   return (
     <section ref={ref} className="relative h-[240vh] bg-surface md:h-[280vh]">
-      <div className="sticky top-0 flex h-[100svh] flex-col items-center justify-center gap-4 overflow-hidden px-4 pt-16 md:gap-6 md:px-10 md:pt-20">
+      <div className="sticky top-0 flex h-[100svh] flex-col items-center justify-start gap-4 overflow-hidden px-4 pt-16 md:gap-6 md:px-10 md:pt-28">
         {/* Étiquettes autour de la page ; sur mobile, elles débordent sur ses bords */}
         <Badge progression={p} debut={0.3} className="absolute left-1 top-[36%] z-20 lg:left-[4%] lg:top-[22%]" titre="Optimisation SEO" detail="Positions suivies chaque mois" />
         <Badge progression={p} debut={0.5} className="absolute right-1 top-[55%] z-20 lg:right-[4%] lg:top-[30%]" titre="Google Ads" detail="+214 % de clics qualifiés" />

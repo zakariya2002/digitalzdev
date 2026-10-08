@@ -70,7 +70,7 @@ export default function HeroStudio() {
   })
 
   // Découpe de la vidéo : une carte en bas, puis le plein écran.
-  const [haut0, droite0, bas0, gauche0] = mobile ? [67, 5, 4, 5] : [56, 4, 5, 50]
+  const [haut0, droite0, bas0, gauche0] = mobile ? [58, 5, 4, 5] : [56, 4, 5, 50]
   const haut = useTransform(scrollYProgress, [0, 0.6], [haut0, 0])
   const droite = useTransform(scrollYProgress, [0, 0.6], [droite0, 0])
   const bas = useTransform(scrollYProgress, [0, 0.6], [bas0, 0])
@@ -121,7 +121,7 @@ export default function HeroStudio() {
             <Ligne delai={0.25}>Des sites à la</Ligne>
             <Ligne delai={0.35}>hauteur de votre</Ligne>
             <Ligne delai={0.45}>
-              <span className="text-pop">réputation.</span>
+              <span className="text-accent">réputation.</span>
             </Ligne>
           </h1>
 
@@ -140,7 +140,7 @@ export default function HeroStudio() {
               <button
                 type="button"
                 onClick={() => setRdvOuvert(true)}
-                className="inline-flex min-h-[46px] items-center rounded-full bg-pop px-5 text-sm font-medium text-white transition-colors hover:bg-pop/85 md:min-h-[48px] md:px-6 md:text-[15px]"
+                className="inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]"
               >
                 Prendre rendez-vous
               </button>
@@ -161,12 +161,12 @@ export default function HeroStudio() {
         >
           <h2 className="max-w-3xl text-5xl text-white md:text-7xl">
             Votre site à votre image.
-            <span className="block text-citron">Un aperçu en 60 secondes.</span>
+            <span className="block text-accent">Un aperçu en 60 secondes.</span>
           </h2>
           <a
             href={QUIZ}
             data-curseur="Go"
-            className="inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-citron px-8 text-base font-medium text-[#1d1d1f] transition-colors hover:bg-citron/85"
+            className="inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover"
           >
             Voir mon aperçu →
           </a>

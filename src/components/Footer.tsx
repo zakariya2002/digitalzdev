@@ -32,7 +32,7 @@ const lien = 'inline-block py-2 text-[15px] font-medium text-text-secondary tran
 
 export default function Footer() {
   return (
-    <footer className="overflow-hidden bg-surface px-5 pt-16 md:px-10 md:pt-24">
+    <footer className="overflow-hidden bg-surface px-5 pt-10 md:px-10 md:pt-14">
       <div className="mx-auto max-w-7xl">
         <nav aria-label="Plan du site" className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-3">
@@ -106,7 +106,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          Digitalz <span className="text-pop">Dev</span>
+          Digitalz <span className="text-accent">Dev</span>
         </motion.p>
       </div>
     </footer>

@@ -29,7 +29,7 @@ function Carte({
       <motion.article
         style={{ scale: echelle, filter: filtre }}
         className={`origin-top rounded-[1.75rem] p-7 md:min-h-[62vh] md:p-12 ${
-          accent ? 'bg-accent text-surface' : 'bg-surface-card text-text-primary'
+          accent ? 'bg-citron text-[#1d1d1f]' : 'bg-surface-card text-text-primary'
         }`}
       >
         <div className="grid gap-8 md:grid-cols-12">
@@ -37,19 +37,19 @@ function Carte({
             <h3 className="text-3xl font-normal leading-[1] tracking-tight md:text-5xl">
               {service.title}
             </h3>
-            <p className={`mt-4 text-lg font-medium md:text-xl ${accent ? 'text-surface' : 'text-accent'}`}>
+            <p className={`mt-4 text-lg font-medium md:text-xl ${accent ? 'text-[#1d1d1f]' : 'text-accent'}`}>
               {service.lead}
             </p>
           </div>
           <div className="md:col-span-5">
-            <p className={`text-[15px] font-medium leading-relaxed md:text-base ${accent ? 'text-surface/80' : 'text-text-secondary'}`}>
+            <p className={`text-[15px] font-medium leading-relaxed md:text-base ${accent ? 'text-[#1d1d1f]/75' : 'text-text-secondary'}`}>
               {service.body}
             </p>
             <ul className="mt-6 space-y-2">
               {service.points.map((point) => (
                 <li
                   key={point}
-                  className={`rounded-xl px-4 py-3 text-sm font-medium ${accent ? 'bg-surface/10' : 'bg-surface-light'}`}
+                  className={`rounded-xl px-4 py-3 text-sm font-medium ${accent ? 'bg-white/45' : 'bg-surface-light'}`}
                 >
                   {point}
                 </li>
@@ -73,9 +73,9 @@ export default function ServicesStudio() {
   const { scrollYProgress } = useScroll({ target: pileRef, offset: ['start start', 'end end'] })
 
   return (
-    <section id="services" className="bg-surface px-5 pb-12 pt-16 md:px-10 md:pb-16 md:pt-20">
+    <section id="services" className="bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="mx-auto max-w-7xl">
-        <h2 className="mt-6 max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
+        <h2 className="max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
           Une agence web qui conçoit, développe <span className="text-accent">et fait connaître votre site.</span>
         </h2>
         <p className="mt-6 max-w-2xl text-lg font-medium text-text-secondary">

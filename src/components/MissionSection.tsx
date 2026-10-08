@@ -29,7 +29,7 @@ export default function MissionSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-surface py-16 md:py-24"
+      className="relative overflow-hidden bg-surface py-10 md:py-14"
     >
       <motion.div
         aria-hidden
@@ -45,7 +45,7 @@ export default function MissionSection() {
             by="word"
             text="Chaque projet finance une cause"
             delay={0.1}
-            className="mx-auto mt-5 block max-w-3xl font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-6xl"
+            className="mx-auto block max-w-3xl font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-6xl"
           />
 
           <Reveal delay={0.25} className="mx-auto mt-8 max-w-2xl">

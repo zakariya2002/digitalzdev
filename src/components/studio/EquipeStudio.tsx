@@ -33,11 +33,11 @@ function Chiffre({ valeur }: { valeur: string }) {
  */
 export default function EquipeStudio() {
   return (
-    <section id="agence" className="bg-surface-light px-5 py-12 md:px-10 md:py-20">
+    <section id="agence" className="bg-surface-light px-5 py-10 md:px-10 md:py-14">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <h2 className="mt-6 text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
+            <h2 className="text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
               Une équipe restreinte, <span className="text-accent">deux métiers complets.</span>
             </h2>
           </div>
@@ -107,7 +107,7 @@ export default function EquipeStudio() {
         <div className="mt-16 grid grid-cols-3 gap-4 md:mt-24">
           {FACTS.map((f) => (
             <div key={f.label} className="text-center">
-              <p className="text-[13vw] font-normal leading-none tracking-[-0.05em] text-pop md:text-[6vw] lg:text-[min(6vw,104px)]">
+              <p className="text-[13vw] font-extrabold leading-none tracking-[-0.04em] text-pop md:text-[6vw] lg:text-[min(6vw,104px)]">
                 <Chiffre valeur={f.value} />
               </p>
               <p className="mt-3 text-xs font-medium uppercase tracking-[0.18em] text-text-secondary md:text-sm">
