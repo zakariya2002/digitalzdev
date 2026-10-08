@@ -2,7 +2,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
-import { projects } from '../data/projects'
+import TravauxStudio from '../components/studio/TravauxStudio'
+import RechercheGoogle from '../components/studio/RechercheGoogle'
+import FinalStudio from '../components/studio/FinalStudio'
+import EquipeStudio from '../components/studio/EquipeStudio'
 
 /**
  * Page d'atterrissage des publicités Meta : quatre questions, les
@@ -228,7 +231,7 @@ export default function Projet() {
   }
 
   return (
-    <main className="flex min-h-[100svh] flex-col bg-surface px-5 pb-10 pt-6 md:px-10">
+    <main className="flex min-h-[100svh] flex-col overflow-x-clip bg-surface px-5 pb-10 pt-6 md:px-10">
       <header className="mx-auto flex w-full max-w-2xl items-center justify-between">
         <Link to="/" className="flex min-h-[44px] items-center gap-2.5">
           <img src="/logo-studio.png" alt="" className="h-9 w-9 rounded-full" />
@@ -247,7 +250,7 @@ export default function Projet() {
         />
       </div>
 
-      <div className={`mx-auto mt-10 w-full flex-1 md:mt-16 ${lienWhatsapp ? "max-w-4xl" : "max-w-2xl"}`}>
+      <div className={`mx-auto mt-10 w-full md:mt-16 max-w-2xl ${lienWhatsapp ? "" : "flex-1"}`}>
         <AnimatePresence mode="wait">
           {lienWhatsapp ? (
             <motion.div key="fin" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
@@ -270,46 +273,6 @@ export default function Projet() {
                 </a>
               </div>
 
-              {/* En attendant la réponse : qui nous sommes, et ce que nous faisons */}
-              <div className="mt-14">
-                <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-3xl">
-                  En attendant, découvrez Digitalz Dev
-                </h2>
-                <video
-                  className="mt-5 aspect-[9/16] w-full rounded-2xl bg-surface-card object-cover md:aspect-video"
-                  src={mobile ? '/videos/presentation-mobile.mp4' : '/videos/presentation.mp4'}
-                  poster={mobile ? '/videos/presentation-mobile-poster.jpg' : '/videos/presentation-poster.jpg'}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  controls
-                  preload="metadata"
-                />
-              </div>
-
-              <div className="mt-14">
-                <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-3xl">
-                  Nos réalisations
-                </h2>
-                <div className="mt-5 grid gap-5 sm:grid-cols-2">
-                  {projects.map((projet) => (
-                    <a key={projet.id} href={projet.route} target="_blank" rel="noopener" className="group block">
-                      <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-surface-card">
-                        <img
-                          src={projet.heroImage}
-                          alt={`Site ${projet.title}`}
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
-                        />
-                      </div>
-                      <p className="mt-3 text-lg text-text-primary">{projet.title}</p>
-                      <p className="text-sm text-text-secondary">{projet.subtitle}</p>
-                    </a>
-                  ))}
-                </div>
-              </div>
             </motion.div>
           ) : question ? (
             <motion.div
@@ -432,6 +395,33 @@ export default function Projet() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Après l'envoi : la même vitrine que la page d'accueil, pour patienter
+          en découvrant l'agence. */}
+      {lienWhatsapp && (
+        <div className="-mx-5 mt-16 md:-mx-10">
+          <div className="mx-auto max-w-5xl px-5 md:px-10">
+            <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl">
+              En attendant, découvrez Digitalz <span className="text-accent">Dev</span>
+            </h2>
+            <video
+              className="mt-6 aspect-[9/16] w-full rounded-2xl bg-surface-card object-cover md:aspect-video"
+              src={mobile ? '/videos/presentation-mobile.mp4' : '/videos/presentation.mp4'}
+              poster={mobile ? '/videos/presentation-mobile-poster.jpg' : '/videos/presentation-poster.jpg'}
+              autoPlay
+              muted
+              loop
+              playsInline
+              controls
+              preload="metadata"
+            />
+          </div>
+          <TravauxStudio />
+          <RechercheGoogle />
+          <FinalStudio />
+          <EquipeStudio />
+        </div>
+      )}
     </main>
   )
 }
