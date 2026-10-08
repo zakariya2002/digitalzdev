@@ -1872,7 +1872,7 @@ function ServicesStudio() {
   return /* @__PURE__ */ jsx("section", { id: "services", className: "bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
       "Une agence web qui conçoit, développe ",
-      /* @__PURE__ */ jsx("span", { className: "text-pop", children: "et fait connaître votre site." })
+      /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "et fait connaître votre site." })
     ] }),
     /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Création de site internet, boutique en ligne, refonte, outil métier et campagnes publicitaires. Un projet de site web se juge sur ce qu'il rapporte une fois en ligne, pas sur sa maquette." }),
     /* @__PURE__ */ jsx("div", { ref: pileRef, className: "mt-16 space-y-6 md:mt-24 md:space-y-10", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, n: SERVICES$1.length, progression: scrollYProgress }, s.title)) }),

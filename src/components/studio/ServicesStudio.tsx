@@ -76,7 +76,7 @@ export default function ServicesStudio() {
     <section id="services" className="bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="mx-auto max-w-7xl">
         <h2 className="max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
-          Une agence web qui conçoit, développe <span className="text-pop">et fait connaître votre site.</span>
+          Une agence web qui conçoit, développe <span className="font-bold text-pop">et fait connaître votre site.</span>
         </h2>
         <p className="mt-6 max-w-2xl text-lg font-medium text-text-secondary">
           Création de site internet, boutique en ligne, refonte, outil métier et
