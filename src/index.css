@@ -455,3 +455,18 @@
   .ag-table thead { display: table-header-group; }
   .ag-closing, .ag-accord, .ag-footer { break-inside: avoid; page-break-inside: avoid; }
 }
+
+/* Ondes de l'appel entrant : agrandissement et fondu continus, même vitesse
+   d'un bout à l'autre pour que le cycle reboucle sans à-coup. */
+@keyframes onde-appel {
+  0% { transform: scale(0.75); opacity: 0; }
+  12% { opacity: 0.6; }
+  100% { transform: scale(2); opacity: 0; }
+}
+.onde-appel {
+  animation: onde-appel 2.7s cubic-bezier(0.25, 0.6, 0.35, 1) infinite;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .onde-appel { animation: none; opacity: 0; }
+}

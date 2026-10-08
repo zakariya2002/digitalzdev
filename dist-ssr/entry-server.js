@@ -2380,18 +2380,23 @@ function AppelEntrant() {
   const duree = `${String(Math.floor(secondes / 60)).padStart(2, "0")}:${String(secondes % 60).padStart(2, "0")}`;
   const sonne = etape === "sonne";
   return /* @__PURE__ */ jsxs("div", { ref, className: "relative mx-auto flex h-[30rem] w-full items-center justify-center md:h-[34rem]", children: [
-    /* @__PURE__ */ jsx(AnimatePresence, { children: sonne && [0, 1, 2].map((i) => /* @__PURE__ */ jsx(
-      motion.span,
+    /* @__PURE__ */ jsx(
+      motion.div,
       {
         "aria-hidden": true,
-        className: "absolute h-64 w-64 rounded-full border border-accent/40",
-        initial: { scale: 0.8, opacity: 0 },
-        animate: { scale: [0.8, 1.9], opacity: [0.5, 0] },
-        exit: { opacity: 0 },
-        transition: { duration: 2.2, delay: i * 0.6, repeat: Infinity, ease: "easeOut" }
-      },
-      i
-    )) }),
+        className: "pointer-events-none absolute inset-0 flex items-center justify-center",
+        animate: { opacity: sonne ? 1 : 0 },
+        transition: { duration: 0.6, ease: "easeOut" },
+        children: [0, 1, 2].map((i) => /* @__PURE__ */ jsx(
+          "span",
+          {
+            className: "onde-appel absolute h-64 w-64 rounded-full border-2 border-[#25D366]/50",
+            style: { animationDelay: `${-i * 0.9}s` }
+          },
+          i
+        ))
+      }
+    ),
     /* @__PURE__ */ jsx(
       motion.div,
       {
