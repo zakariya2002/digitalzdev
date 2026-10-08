@@ -1590,36 +1590,33 @@ function HeroStudio() {
               /* @__PURE__ */ jsx("span", { className: "text-pop", children: "image." })
             ] })
           ] }),
-          /* @__PURE__ */ jsxs(
+          /* @__PURE__ */ jsx(
             motion.div,
             {
               className: "mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0",
               initial: { opacity: 0, y: 20 },
               animate: { opacity: 1, y: 0 },
               transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
-              children: [
-                /* @__PURE__ */ jsx("p", { className: "hidden text-[15px] font-medium leading-relaxed text-text-secondary md:block", children: "Cabinets d'avocats, agences d'architecture, photographes et vidéastes : nous concevons des sites sobres et rapides, qui inspirent confiance et font venir les bons clients." }),
-                /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2 md:mt-5", children: [
-                  /* @__PURE__ */ jsx(
-                    "a",
-                    {
-                      href: WHATSAPP_PROJET,
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                      className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
-                      children: "Prendre rendez-vous"
-                    }
-                  ),
-                  /* @__PURE__ */ jsx(
-                    "a",
-                    {
-                      href: QUIZ,
-                      className: "inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]",
-                      children: "Voir un aperçu"
-                    }
-                  )
-                ] })
-              ]
+              children: /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2", children: [
+                /* @__PURE__ */ jsx(
+                  "a",
+                  {
+                    href: WHATSAPP_PROJET,
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
+                    children: "Prendre rendez-vous"
+                  }
+                ),
+                /* @__PURE__ */ jsx(
+                  "a",
+                  {
+                    href: QUIZ,
+                    className: "inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]",
+                    children: "Voir un aperçu"
+                  }
+                )
+              ] })
             }
           )
         ]

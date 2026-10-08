@@ -132,12 +132,7 @@ export default function HeroStudio() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8, ease: EASE }}
           >
-            <p className="hidden text-[15px] font-medium leading-relaxed text-text-secondary md:block">
-              Cabinets d'avocats, agences d'architecture, photographes et
-              vidéastes : nous concevons des sites sobres et rapides, qui
-              inspirent confiance et font venir les bons clients.
-            </p>
-            <div className="flex flex-wrap gap-2 md:mt-5">
+            <div className="flex flex-wrap gap-2">
               <a
                 href={WHATSAPP_PROJET}
                 target="_blank"
