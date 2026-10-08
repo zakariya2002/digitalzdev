@@ -41,18 +41,6 @@ export const testimonials: Testimonial[] = [
     color: '#7A6A55',
   },
   {
-    projectId: 'sourcing',
-    company: 'The Sourcing',
-    sector: 'Sourcing et production',
-    delivered:
-      "Vitrine bilingue français et anglais servie depuis un même arbre de routes Next.js. Sept pôles de services, une méthode en six étapes révélée au scroll, et deux pages dédiées au sourcing en Chine et à la logistique.",
-    quote: null,
-    author: null,
-    image: '/screenshots/sourcing-hero.webp',
-    route: '/the-sourcing',
-    color: '#B8B8B8',
-  },
-  {
     projectId: 'drive',
     company: 'DRIVE',
     sector: 'Réseau de franchisés',
@@ -77,18 +65,6 @@ export const testimonials: Testimonial[] = [
     color: '#5BA89D',
   },
   {
-    projectId: 'lissage',
-    company: 'Lissage sur Mesure',
-    sector: 'Beauté',
-    delivered:
-      "Site vitrine dark luxe pour un salon spécialisé. Animations au scroll, typographie serif, balisage Schema.org pour le référencement local. Le parcours mène de la découverte de la formule à la prise de rendez-vous.",
-    quote: null,
-    author: null,
-    image: '/screenshots/lissage-hero.webp',
-    route: '/lissage',
-    color: '#5B1A3A',
-  },
-  {
     projectId: 'angele',
     company: 'Angèle',
     sector: 'Merchandising artiste',
@@ -99,18 +75,6 @@ export const testimonials: Testimonial[] = [
     image: '/screenshots/angele-hero.webp',
     route: '/angele',
     color: '#7ECDB5',
-  },
-  {
-    projectId: 'reuni',
-    company: 'Reuni',
-    sector: 'Mode éthique',
-    delivered:
-      "Plateforme e-commerce avec design system sur mesure. Catalogue à filtres dynamiques, tunnel d'achat optimisé pour la conversion, chargement sous une seconde et demie et score Lighthouse de 98.",
-    quote: null,
-    author: null,
-    image: '/screenshots/reuni-hero.webp',
-    route: '/reuni',
-    color: '#C4A882',
   },
   {
     projectId: 'st-agni',

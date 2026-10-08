@@ -86,63 +86,6 @@ class ErrorBoundary extends Component {
 }
 const projects = [
   {
-    id: "neurocare",
-    title: "neuro-care.fr",
-    subtitle: "Santé & neurodéveloppement",
-    year: "2026",
-    tags: ["Plateforme", "Annuaire vérifié", "Communauté"],
-    stack: ["Next.js", "React", "PostgreSQL", "RGPD"],
-    description: "Plateforme d'orientation pour les familles concernées par les troubles du neurodéveloppement : annuaire de professionnels vérifiés, forum d'entraide, simulateur d'aides et carte des lieux adaptés. Gratuit, sans inscription.",
-    url: "https://neuro-care.fr",
-    route: "/neurocare",
-    color: "#5BA89D",
-    gradient: "from-[#5BA89D] via-[#2C7A70] to-[#134B45]",
-    heroImage: "/screenshots/neurocare-hero.webp",
-    brief: "Trouver un orthophoniste, un psychomotricien ou un éducateur formé aux TND relève souvent du parcours du combattant : listes obsolètes, diplômes invérifiables, délais à rallonge. NeuroCare devait répondre à trois besoins d'un coup : trouver le bon professionnel, comprendre à quelles aides on a droit, et ne pas rester seul dans les démarches. Le tout gratuitement pour les familles, et conforme au RGPD sur des données de santé.",
-    solution: "La plateforme s'est élargie bien au-delà de l'annuaire initial. Chaque professionnel passe désormais une vérification en quatre étapes, avec croisement du numéro RPPS / ADELI contre l'Annuaire Santé avant d'obtenir le badge « Vérifié ». Autour, nous avons ouvert un forum modéré, un simulateur d'aides financières (AEEH, PCH, CESU), une carte des lieux adaptés, un espace structures pour les cabinets et associations, un blog et des annonces. Hébergement en France, échanges chiffrés.",
-    features: [
-      "Vérification en 4 étapes, RPPS / ADELI contrôlés",
-      "Recherche par spécialité, trouble ou ville",
-      "Forum communautaire modéré, lecture libre",
-      "Simulateur d’aides : AEEH, PCH, CESU",
-      "Carte des lieux adaptés et annonces familles",
-      "Espace structures : cabinets et associations",
-      "Espace pro avec agenda et demandes de RDV",
-      "Hébergé en France, RGPD, échanges chiffrés"
-    ],
-    metrics: [
-      { value: "100%", label: "gratuit pour les familles" },
-      { value: "4", label: "étapes de vérification" },
-      { value: "30+", label: "villes couvertes" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#134B45] to-[#2C7A70]",
-        content: "Recherche en trois étapes, sans inscription",
-        image: "/screenshots/neurocare-hero.webp"
-      },
-      {
-        title: "Recherche",
-        gradient: "from-[#2C7A70] to-[#5BA89D]",
-        content: "Filtres par spécialité, trouble et ville",
-        image: "/screenshots/neurocare-2.webp"
-      },
-      {
-        title: "Forum",
-        gradient: "from-[#5BA89D] to-[#2C7A70]",
-        content: "Conseils, témoignages, questions, ressources",
-        image: "/screenshots/neurocare-3.webp"
-      },
-      {
-        title: "Simulateur d’aides",
-        gradient: "from-[#2C7A70] to-[#134B45]",
-        content: "AEEH, PCH et CESU en deux minutes",
-        image: "/screenshots/neurocare-4.webp"
-      }
-    ]
-  },
-  {
     id: "nouvelle-garde",
     title: "lanouvellegarde.com",
     subtitle: "Groupe de brasseries",
@@ -253,57 +196,114 @@ const projects = [
     ]
   },
   {
-    id: "reuni",
-    title: "reuni.com",
-    subtitle: "Mode éthique française",
-    year: "2025",
-    tags: ["E-commerce", "Mode", "Éco-responsable"],
-    stack: ["React", "Design system", "Headless"],
-    description: "Plateforme e-commerce pour une marque de mode éthique et responsable. Design épuré à la française avec une expérience d'achat premium.",
-    url: "https://reuni.com",
-    route: "/reuni",
-    color: "#C4A882",
-    gradient: "from-[#C4A882] via-[#D4B892] to-[#E8D5B8]",
-    heroImage: "/screenshots/reuni-hero.webp",
-    brief: "Reuni avait besoin d'une plateforme e-commerce qui reflète ses valeurs : éthique, transparence et élégance. Le challenge était de créer une expérience d'achat haut de gamme tout en mettant en avant l'engagement éco-responsable de la marque. Chaque détail devait respirer l'authenticité et le savoir-faire français.",
-    solution: "Nous avons conçu une architecture front-end performante avec un design system sur mesure. L'accent a été mis sur la vitesse de chargement, l'expérience mobile et les micro-interactions qui guident l'utilisateur vers la conversion.",
+    id: "soeur",
+    title: "soeur.fr",
+    subtitle: "Prêt-à-porter parisien",
+    year: "2026",
+    tags: ["E-commerce", "Mode", "Shopify"],
+    stack: ["Shopify", "Liquid", "JavaScript"],
+    description: "Boutique en ligne de la maison parisienne Soeur : prêt-à-porter femme et enfant, sacs, chaussures, seconde main et archives, dans un univers éditorial sobre.",
+    url: "https://www.soeur.fr",
+    route: "/soeur",
+    color: "#8C7A62",
+    gradient: "from-[#EDE8E0] via-[#DDD6CB] to-[#C9C0B2]",
+    heroImage: "/screenshots/soeur-hero.webp",
+    brief: "Soeur avait besoin d'une boutique à la hauteur de ses campagnes : des collections présentées comme dans un lookbook, un catalogue large (prêt-à-porter, enfant, sacs, chaussures) facile à parcourir, et des rubriques à part pour la seconde main et les archives.",
+    solution: "Une boutique Shopify où l'image domine : visuels de campagne plein écran, grilles produits aérées sur fond neutre, navigation par familles et par catégories, et un parcours d'achat court sur mobile comme sur ordinateur.",
     features: [
-      "Design responsive mobile-first",
-      "Temps de chargement < 1.5s",
-      "Catalogue produits avec filtres dynamiques",
-      "Panier et checkout optimisés conversion",
-      "Animations scroll fluides",
-      "Score Lighthouse 98/100"
+      "Visuels de campagne plein écran",
+      "Grilles produits épurées par catégorie",
+      "Rubriques seconde main et archives",
+      "Navigation par familles et sous-catégories",
+      "Parcours d’achat optimisé mobile",
+      "Thème Shopify sur mesure"
     ],
     metrics: [
-      { value: "98", label: "score Lighthouse" },
-      { value: "<1.5s", label: "temps de chargement" },
-      { value: "100%", label: "mobile-first" }
+      { value: "Shopify", label: "boutique sur mesure" },
+      { value: "2", label: "univers : femme et enfant" },
+      { value: "100%", label: "responsive" }
+    ],
+    mockups: [
+      {
+        title: "Accueil",
+        gradient: "from-[#EDE8E0] to-[#DDD6CB]",
+        content: "Campagne plein écran",
+        image: "/screenshots/soeur-hero.webp"
+      },
+      {
+        title: "Collection",
+        gradient: "from-[#DDD6CB] to-[#CFC7BA]",
+        content: "Grille produits sur fond neutre",
+        image: "/screenshots/soeur-2.webp"
+      },
+      {
+        title: "Catalogue",
+        gradient: "from-[#CFC7BA] to-[#C1B8AA]",
+        content: "Familles et sous-catégories",
+        image: "/screenshots/soeur-3.webp"
+      },
+      {
+        title: "Nouveautés",
+        gradient: "from-[#C1B8AA] to-[#B3A99A]",
+        content: "Parcours fluide jusqu’au panier",
+        image: "/screenshots/soeur-4.webp"
+      }
+    ]
+  },
+  {
+    id: "neurocare",
+    title: "neuro-care.fr",
+    subtitle: "Santé & neurodéveloppement",
+    year: "2026",
+    tags: ["Plateforme", "Annuaire vérifié", "Communauté"],
+    stack: ["Next.js", "React", "PostgreSQL", "RGPD"],
+    description: "Plateforme d'orientation pour les familles concernées par les troubles du neurodéveloppement : annuaire de professionnels vérifiés, forum d'entraide, simulateur d'aides et carte des lieux adaptés. Gratuit, sans inscription.",
+    url: "https://neuro-care.fr",
+    route: "/neurocare",
+    color: "#5BA89D",
+    gradient: "from-[#5BA89D] via-[#2C7A70] to-[#134B45]",
+    heroImage: "/screenshots/neurocare-hero.webp",
+    brief: "Trouver un orthophoniste, un psychomotricien ou un éducateur formé aux TND relève souvent du parcours du combattant : listes obsolètes, diplômes invérifiables, délais à rallonge. NeuroCare devait répondre à trois besoins d'un coup : trouver le bon professionnel, comprendre à quelles aides on a droit, et ne pas rester seul dans les démarches. Le tout gratuitement pour les familles, et conforme au RGPD sur des données de santé.",
+    solution: "La plateforme s'est élargie bien au-delà de l'annuaire initial. Chaque professionnel passe désormais une vérification en quatre étapes, avec croisement du numéro RPPS / ADELI contre l'Annuaire Santé avant d'obtenir le badge « Vérifié ». Autour, nous avons ouvert un forum modéré, un simulateur d'aides financières (AEEH, PCH, CESU), une carte des lieux adaptés, un espace structures pour les cabinets et associations, un blog et des annonces. Hébergement en France, échanges chiffrés.",
+    features: [
+      "Vérification en 4 étapes, RPPS / ADELI contrôlés",
+      "Recherche par spécialité, trouble ou ville",
+      "Forum communautaire modéré, lecture libre",
+      "Simulateur d’aides : AEEH, PCH, CESU",
+      "Carte des lieux adaptés et annonces familles",
+      "Espace structures : cabinets et associations",
+      "Espace pro avec agenda et demandes de RDV",
+      "Hébergé en France, RGPD, échanges chiffrés"
+    ],
+    metrics: [
+      { value: "100%", label: "gratuit pour les familles" },
+      { value: "4", label: "étapes de vérification" },
+      { value: "30+", label: "villes couvertes" }
     ],
     mockups: [
       {
         title: "Page d'accueil",
-        gradient: "from-[#F5EDE3] to-[#E8D5B8]",
-        content: "Hero immersif avec vidéo de la collection",
-        image: "/screenshots/reuni-hero.webp"
+        gradient: "from-[#134B45] to-[#2C7A70]",
+        content: "Recherche en trois étapes, sans inscription",
+        image: "/screenshots/neurocare-hero.webp"
       },
       {
-        title: "Catalogue produits",
-        gradient: "from-[#E8D5B8] to-[#D4C4A8]",
-        content: "Grille produits avec filtres latéraux",
-        image: "/screenshots/reuni-2.webp"
+        title: "Recherche",
+        gradient: "from-[#2C7A70] to-[#5BA89D]",
+        content: "Filtres par spécialité, trouble et ville",
+        image: "/screenshots/neurocare-2.webp"
       },
       {
-        title: "Fiche produit",
-        gradient: "from-[#D4C4A8] to-[#C4B498]",
-        content: "Galerie zoom + sélecteur taille/couleur",
-        image: "/screenshots/reuni-3.webp"
+        title: "Forum",
+        gradient: "from-[#5BA89D] to-[#2C7A70]",
+        content: "Conseils, témoignages, questions, ressources",
+        image: "/screenshots/neurocare-3.webp"
       },
       {
-        title: "Checkout",
-        gradient: "from-[#C4B498] to-[#B4A488]",
-        content: "Tunnel d'achat en 3 étapes",
-        image: "/screenshots/reuni-4.webp"
+        title: "Simulateur d’aides",
+        gradient: "from-[#2C7A70] to-[#134B45]",
+        content: "AEEH, PCH et CESU en deux minutes",
+        image: "/screenshots/neurocare-4.webp"
       }
     ]
   },
@@ -470,116 +470,6 @@ const projects = [
         gradient: "from-[#A89880] to-[#7A6A55]",
         content: "Actifs, formulation et Scroll & Shop",
         image: "/screenshots/kalira-4.webp"
-      }
-    ]
-  },
-  {
-    id: "sourcing",
-    title: "the-sourcing.com",
-    subtitle: "Sourcing & production",
-    year: "2026",
-    tags: ["Site vitrine", "Bilingue", "B2B"],
-    stack: ["Next.js", "React", "TypeScript", "i18n"],
-    description: "Vitrine bilingue d'un cabinet de sourcing entre la France et la Chine. Noir et blanc, typographie massive, et une méthode en six temps rendue lisible d'un seul scroll.",
-    url: "https://www.the-sourcing.com/fr",
-    route: "/the-sourcing",
-    color: "#B8B8B8",
-    gradient: "from-[#1A1A1A] via-[#2E2E2E] to-[#0A0A0A]",
-    heroImage: "/screenshots/sourcing-hero.webp",
-    brief: "The Sourcing accompagne des entrepreneurs et des marques dans la recherche de fabricants, le développement produit et la logistique internationale. Un métier de confiance, difficile à vendre en ligne : le visiteur doit comprendre en trente secondes ce qui est pris en charge, à quel moment il décide, et pourquoi il ne se retrouvera pas seul face à une usine à 9 000 km. Le tout en français et en anglais, sans dupliquer le travail.",
-    solution: "Un parti pris graphique radical : noir profond, photographie d'entrepôt en pleine page, typographie condensée à très grande échelle. La méthode devient un parcours numéroté en six étapes (Présenter, Étudier, Proposer, Rechercher, Sélectionner, Produire) révélé progressivement au scroll. L'architecture Next.js sert les deux langues depuis un même arbre de routes, avec des pages dédiées au sourcing en Chine et à la logistique.",
-    features: [
-      "Architecture Next.js bilingue FR / EN",
-      "Méthode en 6 étapes révélée au scroll",
-      "Sept pôles de services détaillés",
-      "Pages dédiées sourcing Chine et logistique",
-      "Direction artistique noir et blanc, typo condensée",
-      "Formulaire de qualification de projet"
-    ],
-    metrics: [
-      { value: "2", label: "langues servies" },
-      { value: "6", label: "étapes de méthode" },
-      { value: "7", label: "pôles de services" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#0A0A0A] to-[#1A1A1A]",
-        content: "Hero entrepôt et promesse en trois lignes",
-        image: "/screenshots/sourcing-hero.webp"
-      },
-      {
-        title: "Services",
-        gradient: "from-[#1A1A1A] to-[#2E2E2E]",
-        content: "Les sept pôles d'accompagnement",
-        image: "/screenshots/sourcing-2.webp"
-      },
-      {
-        title: "Sourcing Chine",
-        gradient: "from-[#2E2E2E] to-[#1A1A1A]",
-        content: "Voyages, salons et visites d'usines",
-        image: "/screenshots/sourcing-3.webp"
-      },
-      {
-        title: "Logistique",
-        gradient: "from-[#1A1A1A] to-[#0A0A0A]",
-        content: "Aérien, maritime, routier et ferroviaire",
-        image: "/screenshots/sourcing-4.webp"
-      }
-    ]
-  },
-  {
-    id: "lissage",
-    title: "lissage-sur-mesure.com",
-    subtitle: "Beauté & soins capillaires",
-    year: "2025",
-    tags: ["Site vitrine", "Dark luxe", "SEO local"],
-    stack: ["Next.js", "Framer Motion", "Lenis", "Schema.org"],
-    description: "Site vitrine haut de gamme pour un salon spécialisé en lissage sur mesure. Dark luxe, animations immersives et parcours guidé jusqu’à la prise de rendez-vous.",
-    url: "https://www.lissage-sur-mesure.com",
-    route: "/lissage",
-    color: "#5B1A3A",
-    gradient: "from-[#5B1A3A] via-[#7A2A4A] to-[#3D1228]",
-    heroImage: "/screenshots/lissage-hero.webp",
-    brief: "Lissage sur Mesure avait besoin d'un site vitrine à la hauteur de son positionnement premium. Le défi : traduire l'expertise capillaire et le savoir-faire artisanal en une expérience digitale élégante. Le site devait présenter la formule unique, les services de lissage personnalisé et la formation professionnelle certifiante, tout en véhiculant confiance et luxe.",
-    solution: "Nous avons conçu un site vitrine immersif avec une esthétique dark luxe, des animations scroll fluides et une typographie serif élégante. L'architecture Next.js assure des performances optimales, tandis que Framer Motion apporte des transitions cinématiques. Chaque section guide le visiteur de la découverte de la formule jusqu'à la prise de rendez-vous.",
-    features: [
-      "Design dark luxe immersif",
-      "Animations scroll avec Framer Motion",
-      "Smooth scroll avec Lenis",
-      "Optimisation SEO avec Schema.org",
-      "Architecture Next.js performante",
-      "Responsive mobile-first"
-    ],
-    metrics: [
-      { value: "3", label: "piliers de savoir-faire" },
-      { value: "1", label: "formule signature" },
-      { value: "<1.5s", label: "temps de chargement" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#5B1A3A] to-[#3D1228]",
-        content: "Hero plein écran avec vidéo capillaire",
-        image: "/screenshots/lissage-hero.webp"
-      },
-      {
-        title: "Savoir-faire",
-        gradient: "from-[#3D1228] to-[#5B1A3A]",
-        content: "Trois piliers : Produits, Lissages, Formation",
-        image: "/screenshots/lissage-2.webp"
-      },
-      {
-        title: "La Formule",
-        gradient: "from-[#5B1A3A] to-[#7A2A4A]",
-        content: "Philosophie et formule unique sans compromis",
-        image: "/screenshots/lissage-3.webp"
-      },
-      {
-        title: "Actifs & Contact",
-        gradient: "from-[#7A2A4A] to-[#5B1A3A]",
-        content: "Composition des actifs et localisation salon",
-        image: "/screenshots/lissage-4.webp"
       }
     ]
   },
@@ -2582,7 +2472,7 @@ const FAQ = [
   },
   {
     question: "Travaillez-vous partout en France ?",
-    reponse: "Oui, dans toute la France et à l'international. Nos réalisations vont d'une marque de mode australienne à un cabinet de sourcing entre la France et la Chine. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique."
+    reponse: "Oui, dans toute la France et à l'international. Nos réalisations vont d'une marque de mode australienne à une maison de prêt-à-porter parisienne. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique."
   },
   {
     question: "Que se passe-t-il après la mise en ligne ?",

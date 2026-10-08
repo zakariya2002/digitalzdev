@@ -1,5 +1,30 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/reuni",
+      "destination": "/#projets",
+      "permanent": true
+    },
+    {
+      "source": "/lissage",
+      "destination": "/#projets",
+      "permanent": true
+    },
+    {
+      "source": "/sourcing",
+      "destination": "/#projets",
+      "permanent": true
+    },
+    {
+      "source": "/the-sourcing",
+      "destination": "/#projets",
+      "permanent": true
+    }
   ]
 }

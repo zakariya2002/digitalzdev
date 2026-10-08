@@ -32,7 +32,7 @@ export const FAQ: QuestionReponse[] = [
   {
     question: 'Travaillez-vous partout en France ?',
     reponse:
-      "Oui, dans toute la France et à l'international. Nos réalisations vont d'une marque de mode australienne à un cabinet de sourcing entre la France et la Chine. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
+      "Oui, dans toute la France et à l'international. Nos réalisations vont d'une marque de mode australienne à une maison de prêt-à-porter parisienne. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
   },
   {
     question: 'Que se passe-t-il après la mise en ligne ?',
