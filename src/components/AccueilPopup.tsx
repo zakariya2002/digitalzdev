@@ -97,7 +97,7 @@ export default function AccueilPopup() {
                 Votre site à votre image.
               </motion.span>
               <motion.span
-                className="mt-1 block text-accent"
+                className="mt-1 block font-bold text-accent"
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.28, ease: EASE }}
