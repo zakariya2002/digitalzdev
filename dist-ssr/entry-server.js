@@ -2169,28 +2169,34 @@ function RechercheGoogle() {
 }
 const EASE$4 = [0.22, 1, 0.36, 1];
 const LARGEURS = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
+const SURVOL = [
+  { carte: "[@media(hover:hover)]:hover:bg-[#1d1d1f]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
+  { carte: "[@media(hover:hover)]:hover:bg-[#6e7177]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
+  { carte: "[@media(hover:hover)]:hover:bg-pop", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
+  { carte: "[@media(hover:hover)]:hover:bg-citron", texte: "[@media(hover:hover)]:group-hover:text-[#1d1d1f]", puce: "[@media(hover:hover)]:group-hover:bg-[#1d1d1f]" }
+];
 function AcquisitionStudio() {
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("div", { id: "acquisition", children: /* @__PURE__ */ jsx(RechercheGoogle, {}) }),
     /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-8 md:px-10 md:pb-10", children: /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("div", { className: "grid gap-4 md:grid-cols-6", children: LEVIERS.map((levier, i) => /* @__PURE__ */ jsxs(
       motion.article,
       {
-        className: `group flex flex-col justify-between rounded-[1.75rem] bg-surface-card p-7 transition-colors duration-500 [@media(hover:hover)]:hover:bg-accent md:min-h-[24rem] md:p-10 ${LARGEURS[i]}`,
+        className: `group flex flex-col justify-between rounded-[1.75rem] bg-surface-card p-7 transition-colors duration-500 md:min-h-[24rem] md:p-10 ${SURVOL[i].carte} ${LARGEURS[i]}`,
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
         transition: { duration: 0.8, delay: i * 0.08, ease: EASE$4 },
         children: [
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-accent transition-colors duration-500 [@media(hover:hover)]:group-hover:text-surface", children: levier.titre }),
-            /* @__PURE__ */ jsx("h3", { className: "mt-4 text-2xl font-normal leading-[1.05] tracking-tight text-text-primary transition-colors duration-500 [@media(hover:hover)]:group-hover:text-surface md:text-3xl", children: levier.accroche })
+            /* @__PURE__ */ jsx("p", { className: `text-sm font-medium text-accent transition-colors duration-500 ${SURVOL[i].texte}`, children: levier.titre }),
+            /* @__PURE__ */ jsx("h3", { className: `mt-4 text-2xl font-normal leading-[1.05] tracking-tight text-text-primary transition-colors duration-500 md:text-3xl ${SURVOL[i].texte}`, children: levier.accroche })
           ] }),
           /* @__PURE__ */ jsx("ul", { className: "mt-8 space-y-2", children: levier.points.map((point) => /* @__PURE__ */ jsxs(
             "li",
             {
-              className: "flex gap-3 text-[15px] font-medium text-text-secondary transition-colors duration-500 [@media(hover:hover)]:group-hover:text-surface",
+              className: `flex gap-3 text-[15px] font-medium text-text-secondary transition-colors duration-500 ${SURVOL[i].texte}`,
               children: [
-                /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pop transition-colors duration-500 [@media(hover:hover)]:group-hover:bg-surface" }),
+                /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: `mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pop transition-colors duration-500 ${SURVOL[i].puce}` }),
                 point
               ]
             },
