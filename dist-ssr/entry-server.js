@@ -2178,7 +2178,7 @@ const SURVOL = [
 function AcquisitionStudio() {
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("div", { id: "acquisition", children: /* @__PURE__ */ jsx(RechercheGoogle, {}) }),
-    /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-8 md:px-10 md:pb-10", children: /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("div", { className: "grid gap-4 md:grid-cols-6", children: LEVIERS.map((levier, i) => /* @__PURE__ */ jsxs(
+    /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-8 pt-16 md:px-10 md:pb-10 md:pt-8", children: /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("div", { className: "grid gap-4 md:grid-cols-6", children: LEVIERS.map((levier, i) => /* @__PURE__ */ jsxs(
       motion.article,
       {
         className: `group flex flex-col justify-between rounded-[1.75rem] bg-surface-card p-7 transition-colors duration-500 md:min-h-[24rem] md:p-10 ${SURVOL[i].carte} ${LARGEURS[i]}`,

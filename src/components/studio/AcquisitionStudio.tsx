@@ -31,7 +31,7 @@ export default function AcquisitionStudio() {
       <RechercheGoogle />
     </div>
 
-    <section className="bg-surface px-5 pb-8 md:px-10 md:pb-10">
+    <section className="bg-surface px-5 pb-8 pt-16 md:px-10 md:pb-10 md:pt-8">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-4 md:grid-cols-6">
           {LEVIERS.map((levier, i) => (
