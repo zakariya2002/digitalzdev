@@ -100,8 +100,10 @@ export default function HeroStudio() {
             ref={videoRef}
             className="h-full w-full object-cover"
             style={{ scale: zoom }}
-            src="/videos/presentation.mp4"
-            poster="/videos/presentation-poster.jpg"
+            // Version verticale sur mobile, horizontale ailleurs : la vidéo
+            // finit en plein écran, elle doit épouser le format de l'écran.
+            src={mobile ? '/videos/presentation-mobile.mp4' : '/videos/presentation.mp4'}
+            poster={mobile ? '/videos/presentation-mobile-poster.jpg' : '/videos/presentation-poster.jpg'}
             muted
             loop
             playsInline

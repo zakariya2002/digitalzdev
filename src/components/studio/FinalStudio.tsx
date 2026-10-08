@@ -61,7 +61,7 @@ export default function FinalStudio() {
               rel="noopener noreferrer"
               style={{ x: sx, y: sy }}
               whileTap={{ scale: 0.94 }}
-              className="flex h-32 w-32 items-center justify-center rounded-full bg-[#25D366] p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:text-lg"
+              className="flex h-28 w-28 items-center justify-center whitespace-nowrap rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg"
             >
               Parlons-en
             </motion.a>

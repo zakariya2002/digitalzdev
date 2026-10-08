@@ -1559,8 +1559,8 @@ function HeroStudio() {
           ref: videoRef,
           className: "h-full w-full object-cover",
           style: { scale: zoom },
-          src: "/videos/presentation.mp4",
-          poster: "/videos/presentation-poster.jpg",
+          src: mobile ? "/videos/presentation-mobile.mp4" : "/videos/presentation.mp4",
+          poster: mobile ? "/videos/presentation-mobile-poster.jpg" : "/videos/presentation-poster.jpg",
           muted: true,
           loop: true,
           playsInline: true,
@@ -2449,7 +2449,7 @@ function FinalStudio() {
           rel: "noopener noreferrer",
           style: { x: sx, y: sy },
           whileTap: { scale: 0.94 },
-          className: "flex h-32 w-32 items-center justify-center rounded-full bg-[#25D366] p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:text-lg",
+          className: "flex h-28 w-28 items-center justify-center whitespace-nowrap rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg",
           children: "Parlons-en"
         }
       ) })
