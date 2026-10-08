@@ -34,7 +34,7 @@ const QUESTIONS: Question[] = [
   {
     cle: 'metier',
     titre: 'Quel est votre métier ?',
-    options: ['Avocat ou cabinet', 'Architecte ou agence', 'Photographe ou vidéaste', 'Autre activité'],
+    options: ['Avocat / cabinet', 'Architecte / agence', 'Photographe / vidéaste', 'Autre activité'],
   },
   {
     cle: 'besoin',
