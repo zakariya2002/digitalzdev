@@ -5,14 +5,16 @@ import { jsx, jsxs, Fragment } from "react/jsx-runtime";
 import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, useMemo, lazy, Suspense, StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
-import { createClient } from "@supabase/supabase-js";
 import { useLocation, Link, Navigate, Routes, Route } from "react-router-dom";
 import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useInView, useMotionTemplate } from "framer-motion";
 import Lenis from "lenis";
 import emailjs from "@emailjs/browser";
-const supabaseUrl = "https://uipxlesrpdocqpblmrrr.supabase.co";
-const supabaseAnonKey = "sb_publishable_9xAZPEmBviPFiunZ8vwifw_ZIo493WC";
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabase = new Proxy({}, {
+  get: () => () => {
+    console.warn("Supabase not configured: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY");
+    return { data: null, error: null };
+  }
+});
 const AuthContext = createContext(void 0);
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -683,7 +685,7 @@ const projects = [
 ];
 const SITE_URL = "https://digitalzdev.com";
 const SITE_NAME = "Digitalz Dev";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.png`;
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 const HOME = {
   path: "/",
   title: "Agence web pour avocats, architectes et photographes | Digitalz Dev",
@@ -3341,10 +3343,10 @@ function Contact() {
     };
     try {
       await emailjs.send(
-        "service_jpu9w4m",
-        "template_uf32b6j",
+        void 0,
+        void 0,
         templateParams,
-        "_sQi0ifLC4W46LEvs"
+        void 0
       );
       setSubmitted(true);
     } catch {
@@ -4351,9 +4353,9 @@ function Projet() {
     ] })
   ] });
 }
-const Login = lazy(() => import("./assets/Login-DIbTS8yc.js"));
-const ClientPortal = lazy(() => import("./assets/ClientPortal-Cyb14TnS.js"));
-const DashboardLayout = lazy(() => import("./assets/DashboardLayout-oy6br7e7.js"));
+const Login = lazy(() => import("./assets/Login-CzCSMGCF.js"));
+const ClientPortal = lazy(() => import("./assets/ClientPortal-B93RoSxd.js"));
+const DashboardLayout = lazy(() => import("./assets/DashboardLayout-D-TddZCM.js"));
 function RouteFallback() {
   return /* @__PURE__ */ jsx("div", { className: "flex min-h-screen items-center justify-center bg-surface", children: /* @__PURE__ */ jsx("span", { className: "h-8 w-8 animate-spin rounded-full border-2 border-surface-border border-t-accent" }) });
 }

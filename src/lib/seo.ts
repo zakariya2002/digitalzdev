@@ -12,7 +12,7 @@ import { projects } from '../data/projects'
 
 export const SITE_URL = 'https://digitalzdev.com'
 export const SITE_NAME = 'Digitalz Dev'
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.png`
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`
 
 export interface PageSeo {
   path: string

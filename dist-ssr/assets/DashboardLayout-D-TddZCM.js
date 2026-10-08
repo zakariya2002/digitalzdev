@@ -14,7 +14,6 @@ import { f as formatCurrency, B as BUSINESS, P as PRICING_GRID } from "./busines
 import { createPortal } from "react-dom";
 import "react-dom/server";
 import "react-router-dom/server.mjs";
-import "@supabase/supabase-js";
 import "lenis";
 import "@emailjs/browser";
 const TeamContext = createContext(void 0);
@@ -859,7 +858,7 @@ async function fetchTwilioToken() {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) throw new Error("Non authentifié");
   const response = await fetch(
-    `${"https://uipxlesrpdocqpblmrrr.supabase.co"}/functions/v1/twilio-token`,
+    `${void 0}/functions/v1/twilio-token`,
     {
       method: "POST",
       headers: {
@@ -876,7 +875,7 @@ async function sendSms(params) {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) throw new Error("Non authentifié");
   const response = await fetch(
-    `${"https://uipxlesrpdocqpblmrrr.supabase.co"}/functions/v1/send-sms`,
+    `${void 0}/functions/v1/send-sms`,
     {
       method: "POST",
       headers: {
@@ -5572,7 +5571,7 @@ function toBase64(file) {
   });
 }
 async function analyseWithClaude(input, accessToken) {
-  const url = `${"https://uipxlesrpdocqpblmrrr.supabase.co"}/functions/v1/analyze-quote`;
+  const url = `${void 0}/functions/v1/analyze-quote`;
   const payload = {};
   if (input.file && input.file.type === "application/pdf") {
     payload.fileBase64 = await toBase64(input.file);
@@ -6283,7 +6282,7 @@ function ShareLinkPanel({ entityType, entityId, defaultAllowAccept = true, defau
     setError(null);
     const { data: session } = await supabase.auth.getSession();
     try {
-      const res = await fetch(`${"https://uipxlesrpdocqpblmrrr.supabase.co"}/functions/v1/send-document`, {
+      const res = await fetch(`${void 0}/functions/v1/send-document`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

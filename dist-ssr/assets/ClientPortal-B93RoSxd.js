@@ -157,7 +157,7 @@ function ClientContentSection({ items, functionUrl, token, onChanged }) {
     }) })
   ] });
 }
-const FUNCTION_URL = `${"https://uipxlesrpdocqpblmrrr.supabase.co"}/functions/v1/client-portal`;
+const FUNCTION_URL = `${void 0}/functions/v1/client-portal`;
 const MILESTONE_LABEL = {
   planned: "Prévu",
   at_risk: "À confirmer",
