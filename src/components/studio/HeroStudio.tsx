@@ -118,7 +118,7 @@ export default function HeroStudio() {
           style={{ opacity: titreOpacite, y: titreY }}
         >
           <h1 className="text-[9.5vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]">
-            <Ligne delai={0.25}>Des sites à la</Ligne>
+            <Ligne delai={0.25}>Créons un site à la</Ligne>
             <Ligne delai={0.35}>hauteur de votre</Ligne>
             <Ligne delai={0.45}>
               <span className="text-pop">image.</span>
