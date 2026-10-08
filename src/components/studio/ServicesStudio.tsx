@@ -18,8 +18,11 @@ const DEPART = [
   { x: -45, y: -35, r: -8 },
 ]
 
-/** Fonds alternés, gris clair et bleu très pâle, comme chez Cuberto. */
-const FONDS = ['bg-surface-card', 'bg-[#e8eefc]']
+/**
+ * Fonds pastel, autant de chaque : gris, bleu, jaune. L'ordre évite que deux
+ * cartes de même couleur se touchent dans la grille de 3 × 2.
+ */
+const FONDS = ['bg-[#efeff2]', 'bg-[#e4ebfd]', 'bg-[#f6fbd6]', 'bg-[#e4ebfd]', 'bg-[#f6fbd6]', 'bg-[#efeff2]']
 
 /**
  * Une carte de service : elle part de sa position « en vrac » et rejoint sa
@@ -44,7 +47,7 @@ function Carte({
   return (
     <motion.article
       style={{ x, y, rotate, zIndex: 10 - i }}
-      className={`relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % 2]}`}
+      className={`relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % FONDS.length]}`}
     >
       <span aria-hidden className="text-5xl leading-none text-text-muted/50">❞</span>
       <h3 className="mt-4 text-2xl font-normal leading-tight tracking-tight text-text-primary md:text-3xl">

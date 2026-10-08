@@ -17,11 +17,8 @@ const DISCIPLINES_EQUIPE = [
 
 /** Photos Pexels, libres de droits. */
 const PHOTOS = [
-  { src: '/images/equipe/atelier.webp', alt: "L'équipe au travail autour d'un bureau", classe: 'aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[26rem]' },
-  { src: '/images/equipe/creation.webp', alt: 'Séance de création sur un projet de site', classe: 'aspect-[4/3] md:col-span-5 md:aspect-auto md:h-[26rem]' },
-  { src: '/images/equipe/moodboard.webp', alt: "Réunion devant un tableau d'inspiration", classe: 'aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72' },
-  { src: '/images/equipe/strategie.webp', alt: 'Point stratégie devant un tableau de bord', classe: 'aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72' },
-  { src: '/images/equipe/reunion.webp', alt: "Échange avec l'équipe en réunion", classe: 'aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72' },
+  { src: '/images/equipe/atelier.webp', alt: "L'équipe au travail autour d'un bureau", classe: 'aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[28rem]' },
+  { src: '/images/equipe/creation.webp', alt: 'Séance de création sur un projet de site', classe: 'aspect-[4/3] md:col-span-5 md:aspect-auto md:h-[28rem]' },
 ]
 
 const EASE = [0.22, 1, 0.36, 1] as const

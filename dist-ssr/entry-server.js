@@ -1746,7 +1746,7 @@ const DEPART = [
   { x: 0, y: -60, r: -5 },
   { x: -45, y: -35, r: -8 }
 ];
-const FONDS = ["bg-surface-card", "bg-[#e8eefc]"];
+const FONDS = ["bg-[#efeff2]", "bg-[#e4ebfd]", "bg-[#f6fbd6]", "bg-[#e4ebfd]", "bg-[#f6fbd6]", "bg-[#efeff2]"];
 function Carte({
   service,
   i,
@@ -1761,7 +1761,7 @@ function Carte({
     motion.article,
     {
       style: { x, y, rotate, zIndex: 10 - i },
-      className: `relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % 2]}`,
+      className: `relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % FONDS.length]}`,
       children: [
         /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "text-5xl leading-none text-text-muted/50", children: "❞" }),
         /* @__PURE__ */ jsx("h3", { className: "mt-4 text-2xl font-normal leading-tight tracking-tight text-text-primary md:text-3xl", children: service.title }),
@@ -2155,11 +2155,8 @@ const DISCIPLINES_EQUIPE = [
   "Gestion de projet"
 ];
 const PHOTOS = [
-  { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[26rem]" },
-  { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "aspect-[4/3] md:col-span-5 md:aspect-auto md:h-[26rem]" },
-  { src: "/images/equipe/moodboard.webp", alt: "Réunion devant un tableau d'inspiration", classe: "aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72" },
-  { src: "/images/equipe/strategie.webp", alt: "Point stratégie devant un tableau de bord", classe: "aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72" },
-  { src: "/images/equipe/reunion.webp", alt: "Échange avec l'équipe en réunion", classe: "aspect-[4/3] md:col-span-4 md:aspect-auto md:h-72" }
+  { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[28rem]" },
+  { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "aspect-[4/3] md:col-span-5 md:aspect-auto md:h-[28rem]" }
 ];
 const EASE$3 = [0.22, 1, 0.36, 1];
 function Chiffre({ valeur }) {
