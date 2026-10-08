@@ -40,7 +40,7 @@ function Mot({
 
 export default function ManifesteStudio() {
   const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.95', 'end 0.2'] })
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.8', 'end 0.6'] })
 
   return (
     <section className="bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32">
