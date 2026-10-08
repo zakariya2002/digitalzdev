@@ -2359,7 +2359,7 @@ function AppelEntrant() {
       motion.div,
       {
         "aria-hidden": true,
-        className: "pointer-events-none absolute inset-0 flex items-center justify-center",
+        className: "pointer-events-none absolute inset-0 hidden items-center justify-center md:flex",
         animate: { opacity: sonne ? 1 : 0 },
         transition: { duration: 0.6, ease: "easeOut" },
         children: [0, 1, 2].map((i) => /* @__PURE__ */ jsx(
