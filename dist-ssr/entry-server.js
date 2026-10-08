@@ -1496,7 +1496,6 @@ const SERVICES$1 = [
   }
 ];
 const EASE$5 = [0.22, 1, 0.36, 1];
-const QUIZ = "https://quiz.digitalzdev.com";
 function Ligne$1({ children, delai }) {
   return /* @__PURE__ */ jsx("span", { className: "-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]", children: /* @__PURE__ */ jsx(
     motion.span,
@@ -1547,8 +1546,6 @@ function HeroStudio() {
   const zoom = useTransform(scrollYProgress, [0, 0.6], [1.15, 1]);
   const titreOpacite = useTransform(scrollYProgress, [0.05, 0.4], [1, 0]);
   const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-12%"]);
-  const accrocheOpacite = useTransform(scrollYProgress, [0.62, 0.78], [0, 1]);
-  const accrocheY = useTransform(scrollYProgress, [0.62, 0.78], [40, 0]);
   const basculerSon = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -1597,45 +1594,19 @@ function HeroStudio() {
               initial: { opacity: 0, y: 20 },
               animate: { opacity: 1, y: 0 },
               transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
-              children: /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2", children: [
-                /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: WHATSAPP_PROJET,
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                    className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
-                    children: "Prendre rendez-vous"
-                  }
-                ),
-                /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: QUIZ,
-                    className: "inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]",
-                    children: "Voir un aperçu"
-                  }
-                )
-              ] })
+              children: /* @__PURE__ */ jsx("div", { className: "flex flex-wrap gap-2", children: /* @__PURE__ */ jsx(
+                "a",
+                {
+                  href: WHATSAPP_PROJET,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
+                  children: "Prendre rendez-vous"
+                }
+              ) })
             }
           )
         ]
-      }
-    ),
-    /* @__PURE__ */ jsx(
-      motion.div,
-      {
-        className: "absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14",
-        style: { opacity: accrocheOpacite, y: accrocheY },
-        children: /* @__PURE__ */ jsx(
-          "a",
-          {
-            href: QUIZ,
-            "data-curseur": "Go",
-            className: "inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover",
-            children: "Voir mon aperçu →"
-          }
-        )
       }
     ),
     /* @__PURE__ */ jsx(

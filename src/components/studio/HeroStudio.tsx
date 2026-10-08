@@ -8,7 +8,6 @@ import {
 import { WHATSAPP_PROJET } from '../ServicesSection'
 
 const EASE = [0.22, 1, 0.36, 1] as const
-const QUIZ = 'https://quiz.digitalzdev.com'
 
 /** Une ligne de titre qui monte depuis derrière son propre masque. */
 function Ligne({ children, delai }: { children: ReactNode; delai: number }) {
@@ -32,7 +31,7 @@ function Ligne({ children, delai }: { children: ReactNode; delai: number }) {
  * La vidéo est posée en plein écran dès le départ, mais découpée en une
  * carte en bas de l'écran. En défilant, la section reste fixée le temps que
  * la découpe s'ouvre jusqu'aux bords et que le titre s'efface ; l'accroche de
- * l'aperçu gratuit vient alors se poser sur l'image. Quelque chose est
+ * la vidéo se joue alors en plein écran. Quelque chose est
  * toujours à l'écran : jamais de vide pendant l'animation.
  */
 export default function HeroStudio() {
@@ -80,8 +79,6 @@ export default function HeroStudio() {
 
   const titreOpacite = useTransform(scrollYProgress, [0.05, 0.4], [1, 0])
   const titreY = useTransform(scrollYProgress, [0, 0.4], ['0%', '-12%'])
-  const accrocheOpacite = useTransform(scrollYProgress, [0.62, 0.78], [0, 1])
-  const accrocheY = useTransform(scrollYProgress, [0.62, 0.78], [40, 0])
 
   const basculerSon = () => {
     const video = videoRef.current
@@ -141,29 +138,10 @@ export default function HeroStudio() {
               >
                 Prendre rendez-vous
               </a>
-              <a
-                href={QUIZ}
-                className="inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]"
-              >
-                Voir un aperçu
-              </a>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* L'accroche, une fois la vidéo en plein écran */}
-        <motion.div
-          className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14"
-          style={{ opacity: accrocheOpacite, y: accrocheY }}
-        >
-          <a
-            href={QUIZ}
-            data-curseur="Go"
-            className="inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover"
-          >
-            Voir mon aperçu →
-          </a>
-        </motion.div>
 
         <button
           type="button"
