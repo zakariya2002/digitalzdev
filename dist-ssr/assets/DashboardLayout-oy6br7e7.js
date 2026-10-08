@@ -16,7 +16,6 @@ import "react-dom/server";
 import "react-router-dom/server.mjs";
 import "@supabase/supabase-js";
 import "lenis";
-import "three";
 import "@emailjs/browser";
 const TeamContext = createContext(void 0);
 function TeamProvider({ children }) {

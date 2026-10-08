@@ -7,7 +7,6 @@ import "react-router-dom/server.mjs";
 import "@supabase/supabase-js";
 import "framer-motion";
 import "lenis";
-import "three";
 import "@emailjs/browser";
 function Login() {
   const [email, setEmail] = useState("");

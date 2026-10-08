@@ -2,14 +2,13 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
-import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, lazy, Suspense, useCallback, useMemo, StrictMode } from "react";
+import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, useCallback, lazy, Suspense, StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
 import { createClient } from "@supabase/supabase-js";
-import { useLocation, Link, Navigate, useNavigate, Routes, Route } from "react-router-dom";
-import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useSpring, useTransform, useInView, useMotionValue } from "framer-motion";
+import { useLocation, Link, Navigate, Routes, Route } from "react-router-dom";
+import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate, useInView } from "framer-motion";
 import Lenis from "lenis";
-import * as THREE from "three";
 import emailjs from "@emailjs/browser";
 const supabaseUrl = "https://uipxlesrpdocqpblmrrr.supabase.co";
 const supabaseAnonKey = "sb_publishable_9xAZPEmBviPFiunZ8vwifw_ZIo493WC";
@@ -645,8 +644,8 @@ const SITE_NAME = "Digitalz Dev";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/logo.png`;
 const HOME = {
   path: "/",
-  title: "Agence web et création de site internet | Digitalz Dev",
-  description: "Agence web en France : création de site internet sur mesure, site vitrine, boutique Shopify et application métier. Devis sous 48 h."
+  title: "Agence web pour avocats, architectes et photographes | Digitalz Dev",
+  description: "Sites internet sur mesure pour cabinets d'avocats, agences d'architecture, photographes et vidéastes : design sobre, référencement local et campagnes. Devis sous 48 h."
 };
 const STATIC_PAGES = [
   HOME,
@@ -742,32 +741,16 @@ function Seo() {
   }, [pathname]);
   return null;
 }
-const scrollState = {
-  /** Position de scroll en pixels */
-  y: 0,
-  /** Vitesse brute renvoyée par Lenis (px/frame) */
-  velocity: 0,
-  /** Vitesse normalisée et lissée, dans [-1, 1] environ */
-  smoothVelocity: 0,
-  /** Progression dans la page, dans [0, 1] */
-  progress: 0
-};
 let lenis = null;
 const prefersReducedMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isTouch = () => typeof window !== "undefined" && (window.matchMedia("(max-width: 1024px)").matches || "ontouchstart" in window);
 function initSmoothScroll() {
   const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   if (isTouch() || prefersReducedMotion()) {
-    let last = window.scrollY;
     let raf2 = 0;
     const tick2 = () => {
       const y = window.scrollY;
-      const v = y - last;
-      last = y;
-      scrollState.y = y;
-      scrollState.velocity = v;
-      scrollState.smoothVelocity += (clamp(v / 60, -1, 1) - scrollState.smoothVelocity) * 0.1;
-      scrollState.progress = y / maxScroll();
+      y / maxScroll();
       raf2 = requestAnimationFrame(tick2);
     };
     raf2 = requestAnimationFrame(tick2);
@@ -783,14 +766,11 @@ function initSmoothScroll() {
   lenis = instance;
   window.__lenis = instance;
   instance.on("scroll", ({ scroll, velocity }) => {
-    scrollState.y = scroll;
-    scrollState.velocity = velocity;
-    scrollState.progress = scroll / maxScroll();
+    scroll / maxScroll();
   });
   let raf = 0;
   const tick = (time) => {
     instance.raf(time);
-    scrollState.smoothVelocity += (clamp(scrollState.velocity / 60, -1, 1) - scrollState.smoothVelocity) * 0.08;
     raf = requestAnimationFrame(tick);
   };
   raf = requestAnimationFrame(tick);
@@ -806,16 +786,10 @@ function scrollTo(target, options = {}) {
     lenis.scrollTo(target, options);
     return;
   }
-  const el = typeof target === "string" ? document.querySelector(target) : target;
-  if (typeof target === "number") {
+  {
     window.scrollTo({ top: target, behavior: options.immediate ? "auto" : "smooth" });
-  } else if (el instanceof HTMLElement) {
-    const top = el.getBoundingClientRect().top + window.scrollY + (options.offset ?? 0);
-    window.scrollTo({ top, behavior: options.immediate ? "auto" : "smooth" });
   }
 }
-const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-const lerp = (a, b, t) => a + (b - a) * t;
 function SmoothScroll({ children }) {
   useEffect(() => initSmoothScroll(), []);
   return /* @__PURE__ */ jsx(Fragment, { children });
@@ -864,289 +838,210 @@ function PageTransition({ children }) {
 const LIENS = [
   { libelle: "Accueil", vers: "/", interne: true },
   { libelle: "Projets", vers: "/#projets", interne: false },
+  { libelle: "Services", vers: "/#services", interne: false },
   { libelle: "L'agence", vers: "/#agence", interne: false },
   { libelle: "Contact", vers: "/contact", interne: true }
 ];
-const QUIZ = "https://quiz.digitalzdev.com";
-const EASE = [0.32, 0.72, 0, 1];
-function estCourant(lien, chemin) {
-  if (lien.vers === "/") return chemin === "/";
-  if (lien.vers.startsWith("/#")) return false;
-  return chemin === lien.vers;
+const QUIZ$2 = "https://quiz.digitalzdev.com";
+const EASE$6 = [0.76, 0, 0.24, 1];
+function estCourant(lien2, chemin) {
+  if (lien2.vers === "/") return chemin === "/";
+  if (lien2.vers.startsWith("/#")) return false;
+  return chemin === lien2.vers;
 }
-function Fleche({ className = "" }) {
-  return /* @__PURE__ */ jsx(
-    "svg",
-    {
-      className,
-      viewBox: "0 0 16 16",
-      fill: "none",
-      stroke: "currentColor",
-      strokeWidth: 1.8,
-      strokeLinecap: "round",
-      strokeLinejoin: "round",
-      "aria-hidden": true,
-      children: /* @__PURE__ */ jsx("path", { d: "M3 8h10M9 4l4 4-4 4" })
-    }
-  );
-}
-function LienNav({
-  lien,
-  className,
-  onClick,
-  children,
-  ...reste
-}) {
-  return lien.interne ? /* @__PURE__ */ jsx(Link, { to: lien.vers, className, onClick, ...reste, children }) : /* @__PURE__ */ jsx("a", { href: lien.vers, className, onClick, ...reste, children });
+function Heure() {
+  const formater = () => new Intl.DateTimeFormat("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Paris"
+  }).format(/* @__PURE__ */ new Date());
+  const [heure, setHeure] = useState(null);
+  useEffect(() => {
+    setHeure(formater());
+    const t = window.setInterval(() => setHeure(formater()), 3e4);
+    return () => window.clearInterval(t);
+  }, []);
+  return /* @__PURE__ */ jsxs("span", { className: "text-sm font-medium text-text-secondary", children: [
+    "Paris, France ",
+    /* @__PURE__ */ jsx("span", { className: "text-text-primary", children: heure ?? "" })
+  ] });
 }
 function Navbar() {
-  var _a;
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [survol, setSurvol] = useState(null);
+  const [defile, setDefile] = useState(false);
+  const [survol, setSurvol] = useState(false);
+  const [epingle, setEpingle] = useState(false);
+  const liensVisibles = !defile || survol || epingle;
+  const [ouvert, setOuvert] = useState(false);
   const location = useLocation();
   const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 24));
+  useMotionValueEvent(scrollY, "change", (y) => setDefile(y > 24));
+  useEffect(() => setOuvert(false), [location]);
   useEffect(() => {
-    setMenuOpen(false);
-  }, [location]);
-  useEffect(() => {
-    if (!menuOpen) return;
+    if (!ouvert) return;
     const { overflow } = document.body.style;
     document.body.style.overflow = "hidden";
-    const auClavier = (e) => {
-      if (e.key === "Escape") setMenuOpen(false);
-    };
-    window.addEventListener("keydown", auClavier);
+    const clavier = (e) => e.key === "Escape" && setOuvert(false);
+    window.addEventListener("keydown", clavier);
     return () => {
       document.body.style.overflow = overflow;
-      window.removeEventListener("keydown", auClavier);
+      window.removeEventListener("keydown", clavier);
     };
-  }, [menuOpen]);
-  const fermer = () => setMenuOpen(false);
-  const pastille = scrolled || menuOpen;
-  const lienSurvole = survol ?? ((_a = LIENS.find((l) => estCourant(l, location.pathname))) == null ? void 0 : _a.libelle);
+  }, [ouvert]);
+  const fermer = () => setOuvert(false);
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(
-      motion.header,
-      {
-        className: "fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4",
-        initial: { y: -100 },
-        animate: { y: 0 },
-        transition: { duration: 0.45, ease: EASE },
-        children: /* @__PURE__ */ jsxs(
-          "nav",
-          {
-            "aria-label": "Navigation principale",
-            className: `mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-full py-2 pl-2 pr-2 transition-[background-color,box-shadow,backdrop-filter] duration-500 sm:pl-3 ${pastille ? "bg-surface/75 shadow-[0_10px_40px_-12px_rgba(40,28,18,0.18)] backdrop-blur-xl" : "bg-transparent"}`,
-            children: [
-              /* @__PURE__ */ jsxs(
-                Link,
-                {
-                  to: "/",
-                  onClick: fermer,
-                  className: "group flex min-h-[44px] min-w-0 items-center gap-2.5 rounded-full pr-3",
-                  children: [
-                    /* @__PURE__ */ jsx(
-                      "img",
-                      {
-                        src: "/logo.png",
-                        alt: "",
-                        className: "h-10 w-10 shrink-0 rounded-full transition-transform duration-500 group-hover:rotate-[-8deg]"
-                      }
-                    ),
-                    /* @__PURE__ */ jsxs("span", { className: "truncate font-display text-[17px] font-extrabold tracking-tight text-text-primary", children: [
-                      "Digitalz ",
-                      /* @__PURE__ */ jsx("span", { className: "font-semibold text-accent", children: "Dev" })
-                    ] })
-                  ]
-                }
-              ),
+    /* @__PURE__ */ jsxs("header", { className: "pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-3 px-3 pt-3 md:px-6 md:pt-5", children: [
+      /* @__PURE__ */ jsxs(
+        "nav",
+        {
+          "aria-label": "Navigation principale",
+          className: "pointer-events-auto flex items-center rounded-2xl bg-surface-card/75 py-1.5 pl-3 pr-1.5 backdrop-blur-xl md:pl-4",
+          onPointerLeave: () => setSurvol(false),
+          children: [
+            /* @__PURE__ */ jsxs(Link, { to: "/", onClick: fermer, className: "group flex min-h-[44px] items-center gap-2.5 pr-2", children: [
               /* @__PURE__ */ jsx(
-                "div",
+                "img",
                 {
-                  className: "hidden items-center gap-1 md:flex",
-                  onMouseLeave: () => setSurvol(null),
-                  children: LIENS.map((lien) => {
-                    const courant = estCourant(lien, location.pathname);
-                    return /* @__PURE__ */ jsxs(
-                      LienNav,
-                      {
-                        lien,
-                        onMouseEnter: () => setSurvol(lien.libelle),
-                        "aria-current": courant ? "page" : void 0,
-                        className: `relative isolate inline-flex min-h-[44px] items-center rounded-full px-4 text-[15px] font-semibold transition-colors ${courant ? "text-text-primary" : "text-text-secondary hover:text-text-primary"}`,
-                        children: [
-                          lienSurvole === lien.libelle && /* @__PURE__ */ jsx(
-                            motion.span,
-                            {
-                              layoutId: "nav-pastille",
-                              className: "absolute inset-0 -z-10 rounded-full bg-surface-light",
-                              transition: { type: "spring", stiffness: 420, damping: 36 }
-                            }
-                          ),
-                          lien.libelle
-                        ]
-                      },
-                      lien.libelle
-                    );
-                  })
+                  src: "/logo-studio.png",
+                  alt: "",
+                  className: "h-8 w-8 rounded-full transition-transform duration-500 group-hover:rotate-[-12deg]"
                 }
               ),
-              /* @__PURE__ */ jsxs("div", { className: "flex shrink-0 items-center gap-2", children: [
-                /* @__PURE__ */ jsxs(
-                  "a",
-                  {
-                    href: QUIZ,
-                    className: "group hidden min-h-[44px] items-center gap-2 rounded-full bg-accent pl-5 pr-4 font-display text-[15px] font-bold text-surface transition-colors hover:bg-accent-hover md:inline-flex",
-                    children: [
-                      "Ma démo gratuite",
-                      /* @__PURE__ */ jsx(Fleche, { className: "h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" })
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxs(
-                  "button",
-                  {
-                    type: "button",
-                    onClick: () => setMenuOpen((o) => !o),
-                    className: `relative flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-300 md:hidden ${menuOpen ? "bg-accent text-surface" : "bg-surface-card text-text-primary shadow-[0_4px_16px_-6px_rgba(40,28,18,0.25)]"}`,
-                    "aria-label": menuOpen ? "Fermer le menu" : "Ouvrir le menu",
-                    "aria-expanded": menuOpen,
-                    "aria-controls": "menu-mobile",
-                    children: [
-                      /* @__PURE__ */ jsx(
-                        motion.span,
-                        {
-                          className: "absolute h-[2px] w-[18px] rounded-full bg-current",
-                          animate: menuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -4 },
-                          transition: { duration: 0.3, ease: EASE }
-                        }
-                      ),
-                      /* @__PURE__ */ jsx(
-                        motion.span,
-                        {
-                          className: "absolute h-[2px] rounded-full bg-current",
-                          animate: menuOpen ? { rotate: -45, y: 0, width: 18, x: 0 } : { rotate: 0, y: 4, width: 12, x: 3 },
-                          transition: { duration: 0.3, ease: EASE }
-                        }
-                      )
-                    ]
-                  }
-                )
-              ] })
+              /* @__PURE__ */ jsx("span", { className: "hidden whitespace-nowrap text-[17px] font-medium tracking-tight text-text-primary sm:inline", children: "Digitalz Dev" })
+            ] }),
+            /* @__PURE__ */ jsx(
+              motion.div,
+              {
+                className: "hidden overflow-hidden lg:block",
+                initial: false,
+                animate: { width: liensVisibles ? "auto" : 0, opacity: liensVisibles ? 1 : 0 },
+                transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                children: /* @__PURE__ */ jsx("ul", { className: "flex items-center gap-1 whitespace-nowrap pl-4", children: LIENS.filter((l) => l.vers !== "/").map((lien2) => {
+                  const classe = "inline-flex min-h-[40px] items-center rounded-xl px-3 text-[15px] text-text-primary transition-colors hover:text-text-muted";
+                  return /* @__PURE__ */ jsx("li", { children: lien2.interne ? /* @__PURE__ */ jsx(Link, { to: lien2.vers, className: classe, children: lien2.libelle }) : /* @__PURE__ */ jsx("a", { href: lien2.vers, className: classe, children: lien2.libelle }) }, lien2.libelle);
+                }) })
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onPointerEnter: (e) => e.pointerType === "mouse" && setSurvol(true),
+                onClick: () => {
+                  if (window.matchMedia("(min-width: 1024px)").matches) setEpingle((v) => !v);
+                  else setOuvert((o) => !o);
+                },
+                "aria-expanded": ouvert,
+                "aria-controls": "menu-plein-ecran",
+                "aria-label": ouvert ? "Fermer le menu" : "Ouvrir le menu",
+                className: "relative z-[60] ml-1 flex h-10 w-10 items-center justify-center rounded-xl text-text-primary transition-colors hover:bg-surface-border/60",
+                children: ouvert ? /* @__PURE__ */ jsx("svg", { viewBox: "0 0 16 16", className: "h-4 w-4", fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M3.5 3.5l9 9M12.5 3.5l-9 9" }) }) : /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 4 16", className: "h-4 w-1", fill: "currentColor", "aria-hidden": true, children: [
+                  /* @__PURE__ */ jsx("circle", { cx: "2", cy: "2", r: "1.6" }),
+                  /* @__PURE__ */ jsx("circle", { cx: "2", cy: "8", r: "1.6" }),
+                  /* @__PURE__ */ jsx("circle", { cx: "2", cy: "14", r: "1.6" })
+                ] })
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs("div", { className: "pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl", children: [
+        /* @__PURE__ */ jsx(
+          Link,
+          {
+            to: "/contact",
+            className: "hidden min-h-[40px] items-center rounded-xl px-4 text-[15px] text-text-primary transition-colors hover:bg-surface-border/60 sm:inline-flex",
+            children: "Contact"
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          "a",
+          {
+            href: QUIZ$2,
+            className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
+            children: [
+              /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Démo gratuite" }),
+              /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Ma démo gratuite" })
             ]
           }
         )
-      }
-    ),
-    /* @__PURE__ */ jsx(AnimatePresence, { children: menuOpen && /* @__PURE__ */ jsxs(
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(AnimatePresence, { children: ouvert && /* @__PURE__ */ jsxs(
       motion.div,
       {
-        id: "menu-mobile",
-        className: "fixed inset-0 z-40 flex flex-col bg-surface md:hidden",
-        initial: { clipPath: "circle(0px at calc(100% - 42px) 38px)" },
-        animate: { clipPath: "circle(150% at calc(100% - 42px) 38px)" },
-        exit: { clipPath: "circle(0px at calc(100% - 42px) 38px)" },
-        transition: { duration: 0.55, ease: EASE },
+        id: "menu-plein-ecran",
+        className: "fixed inset-0 z-40 flex flex-col justify-between bg-surface-light px-5 pb-8 pt-28 md:px-10 md:pb-10",
+        initial: { clipPath: "inset(0% 0% 100% 0%)" },
+        animate: { clipPath: "inset(0% 0% 0% 0%)" },
+        exit: { clipPath: "inset(0% 0% 100% 0%)" },
+        transition: { duration: 0.7, ease: EASE$6 },
         children: [
-          /* @__PURE__ */ jsx(
-            "nav",
-            {
-              "aria-label": "Menu",
-              className: "flex flex-1 flex-col justify-center overflow-y-auto overscroll-contain px-7 pb-6 pt-24",
-              children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien, i) => {
-                const courant = estCourant(lien, location.pathname);
-                return /* @__PURE__ */ jsx(
-                  motion.li,
-                  {
-                    initial: { opacity: 0, y: 24 },
-                    animate: { opacity: 1, y: 0 },
-                    exit: { opacity: 0, transition: { duration: 0.12 } },
-                    transition: { duration: 0.45, delay: 0.12 + i * 0.06, ease: EASE },
-                    children: /* @__PURE__ */ jsxs(
-                      LienNav,
-                      {
-                        lien,
-                        onClick: fermer,
-                        "aria-current": courant ? "page" : void 0,
-                        className: "group flex min-h-[52px] items-center gap-3 active:opacity-60",
-                        children: [
-                          /* @__PURE__ */ jsx(
-                            "span",
-                            {
-                              className: `font-display text-2xl font-bold leading-none tracking-tight ${courant ? "text-accent" : "text-text-primary"}`,
-                              children: lien.libelle
-                            }
-                          ),
-                          courant ? /* @__PURE__ */ jsx("span", { className: "ml-1 h-2 w-2 rounded-full bg-accent", "aria-hidden": true }) : /* @__PURE__ */ jsx(Fleche, { className: "ml-auto h-4 w-4 text-text-muted" })
-                        ]
-                      }
-                    )
-                  },
-                  lien.libelle
-                );
-              }) })
-            }
-          ),
+          /* @__PURE__ */ jsx("nav", { "aria-label": "Menu", children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien2, i) => {
+            const courant = estCourant(lien2, location.pathname);
+            const classe = `group inline-flex items-center gap-4 text-[13vw] font-normal leading-[0.95] tracking-[-0.05em] transition-colors md:text-[7.5vw] ${courant ? "text-accent" : "text-text-primary hover:text-accent"}`;
+            const contenu = /* @__PURE__ */ jsxs(Fragment, { children: [
+              lien2.libelle,
+              /* @__PURE__ */ jsx(
+                "span",
+                {
+                  "aria-hidden": true,
+                  className: "text-[0.4em] opacity-0 transition-all duration-300 group-hover:translate-x-2 group-hover:opacity-100",
+                  children: "→"
+                }
+              )
+            ] });
+            return /* @__PURE__ */ jsx("li", { className: "overflow-hidden", children: /* @__PURE__ */ jsx(
+              motion.div,
+              {
+                initial: { y: "110%" },
+                animate: { y: 0 },
+                exit: { y: "110%" },
+                transition: { duration: 0.6, delay: 0.15 + i * 0.05, ease: [0.22, 1, 0.36, 1] },
+                children: lien2.interne ? /* @__PURE__ */ jsx(Link, { to: lien2.vers, onClick: fermer, className: classe, "aria-current": courant ? "page" : void 0, children: contenu }) : /* @__PURE__ */ jsx("a", { href: lien2.vers, onClick: fermer, className: classe, children: contenu })
+              }
+            ) }, lien2.libelle);
+          }) }) }),
           /* @__PURE__ */ jsxs(
             motion.div,
             {
-              className: "px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]",
-              initial: { opacity: 0, y: 24 },
+              className: "flex flex-col gap-6 md:flex-row md:items-end md:justify-between",
+              initial: { opacity: 0, y: 20 },
               animate: { opacity: 1, y: 0 },
-              exit: { opacity: 0, transition: { duration: 0.12 } },
-              transition: { duration: 0.45, delay: 0.12 + LIENS.length * 0.06, ease: EASE },
+              exit: { opacity: 0 },
+              transition: { duration: 0.5, delay: 0.4 },
               children: [
-                /* @__PURE__ */ jsxs(
-                  "a",
-                  {
-                    href: QUIZ,
-                    className: "flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-accent font-display text-lg font-bold text-surface transition-colors active:bg-accent-hover",
-                    children: [
-                      "Générer ma démo gratuite",
-                      /* @__PURE__ */ jsx(Fleche, { className: "h-5 w-5" })
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxs("div", { className: "mt-5 flex items-center justify-between rounded-3xl bg-surface-light px-5 py-4", children: [
+                /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-1 text-[15px] font-medium text-text-secondary", children: [
+                  /* @__PURE__ */ jsx(Heure, {}),
+                  /* @__PURE__ */ jsx("a", { href: "mailto:zdigitalzdev@gmail.com", className: "transition-colors hover:text-accent", children: "zdigitalzdev@gmail.com" }),
                   /* @__PURE__ */ jsx(
                     "a",
                     {
-                      href: "mailto:zdigitalzdev@gmail.com",
-                      className: "min-w-0 truncate text-sm font-semibold text-text-secondary",
-                      children: "zdigitalzdev@gmail.com"
+                      href: "https://www.instagram.com/digitalzdev/",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "transition-colors hover:text-accent",
+                      children: "Instagram"
                     }
                   ),
-                  /* @__PURE__ */ jsxs("div", { className: "flex shrink-0 items-center", children: [
-                    /* @__PURE__ */ jsx(
-                      "a",
-                      {
-                        href: "https://www.instagram.com/digitalzdev/",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        "aria-label": "Instagram",
-                        className: "flex h-10 w-10 items-center justify-center text-text-secondary",
-                        children: /* @__PURE__ */ jsxs("svg", { className: "h-[18px] w-[18px]", fill: "none", stroke: "currentColor", strokeWidth: 1.8, viewBox: "0 0 24 24", "aria-hidden": true, children: [
-                          /* @__PURE__ */ jsx("rect", { x: "3", y: "3", width: "18", height: "18", rx: "5" }),
-                          /* @__PURE__ */ jsx("circle", { cx: "12", cy: "12", r: "4" }),
-                          /* @__PURE__ */ jsx("circle", { cx: "17.5", cy: "6.5", r: "0.6", fill: "currentColor" })
-                        ] })
-                      }
-                    ),
-                    /* @__PURE__ */ jsx(
-                      "a",
-                      {
-                        href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/",
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        "aria-label": "LinkedIn",
-                        className: "flex h-10 w-10 items-center justify-center text-text-secondary",
-                        children: /* @__PURE__ */ jsx("svg", { className: "h-[18px] w-[18px]", fill: "currentColor", viewBox: "0 0 24 24", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z" }) })
-                      }
-                    )
-                  ] })
-                ] })
+                  /* @__PURE__ */ jsx(
+                    "a",
+                    {
+                      href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "transition-colors hover:text-accent",
+                      children: "LinkedIn"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsx(
+                  "a",
+                  {
+                    href: QUIZ$2,
+                    className: "inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto",
+                    children: "Générer ma démo gratuite →"
+                  }
+                )
               ]
             }
           )
@@ -1191,13 +1086,62 @@ function CookieBanner() {
           "button",
           {
             onClick: accept,
-            className: "px-6 py-2.5 bg-accent text-surface text-sm font-display font-semibold rounded-lg hover:opacity-90 transition-all whitespace-nowrap",
+            className: "px-6 py-2.5 bg-accent text-surface text-sm font-display font-medium rounded-lg hover:opacity-90 transition-all whitespace-nowrap",
             children: "Compris"
           }
         )
       ] })
     }
   ) });
+}
+function Curseur() {
+  const [actif, setActif] = useState(false);
+  const [libelle, setLibelle] = useState(null);
+  const [enfonce, setEnfonce] = useState(false);
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
+  const sx = useSpring(x, { stiffness: 500, damping: 40, mass: 0.4 });
+  const sy = useSpring(y, { stiffness: 500, damping: 40, mass: 0.4 });
+  useEffect(() => {
+    const fin = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const sobre = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!fin || sobre) return;
+    setActif(true);
+    const bouger = (e) => {
+      var _a;
+      x.set(e.clientX);
+      y.set(e.clientY);
+      const cible = (_a = e.target) == null ? void 0 : _a.closest("[data-curseur]");
+      setLibelle((cible == null ? void 0 : cible.dataset.curseur) ?? null);
+    };
+    const bas = () => setEnfonce(true);
+    const haut = () => setEnfonce(false);
+    window.addEventListener("pointermove", bouger);
+    window.addEventListener("pointerdown", bas);
+    window.addEventListener("pointerup", haut);
+    return () => {
+      window.removeEventListener("pointermove", bouger);
+      window.removeEventListener("pointerdown", bas);
+      window.removeEventListener("pointerup", haut);
+    };
+  }, [x, y]);
+  if (!actif) return null;
+  return /* @__PURE__ */ jsx(
+    motion.div,
+    {
+      "aria-hidden": true,
+      className: "pointer-events-none fixed left-0 top-0 z-[100] flex items-center justify-center rounded-full bg-citron font-sans text-[11px] font-medium text-[#1d1d1f]",
+      style: { x: sx, y: sy, translateX: "-50%", translateY: "-50%" },
+      animate: {
+        width: libelle ? 56 : 0,
+        height: libelle ? 56 : 0,
+        opacity: libelle ? 1 : 0,
+        scale: enfonce ? 0.85 : 1
+      },
+      transition: { type: "spring", stiffness: 400, damping: 30 },
+      children: libelle ? /* @__PURE__ */ jsx(motion.span, { initial: { opacity: 0 }, animate: { opacity: 1 }, children: libelle }) : null
+    }
+  );
 }
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -1209,120 +1153,387 @@ function ProtectedRoute({ children }) {
   }
   return /* @__PURE__ */ jsx(Fragment, { children });
 }
-let webglSupport = null;
-function isWebGLAvailable() {
-  var _a;
-  if (typeof window === "undefined") return false;
-  if (prefersReducedMotion()) return false;
-  if (webglSupport !== null) return webglSupport;
-  try {
-    const canvas = document.createElement("canvas");
-    const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
-    (_a = gl == null ? void 0 : gl.getExtension("WEBGL_lose_context")) == null ? void 0 : _a.loseContext();
-    webglSupport = !!gl;
-  } catch {
-    webglSupport = false;
-  }
-  return webglSupport;
-}
-const pixelRatio = () => Math.min(typeof window !== "undefined" ? window.devicePixelRatio : 1, 2);
-function createRenderer(canvas) {
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    antialias: true,
-    alpha: true,
-    powerPreference: "high-performance"
-  });
-  renderer.setPixelRatio(pixelRatio());
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  return renderer;
-}
-function createRenderLoop(canvas, frame) {
-  const clock = new THREE.Clock();
-  let raf = 0;
-  let visible = true;
-  let onScreen = true;
-  const running = () => visible && onScreen;
-  const tick = () => {
-    raf = requestAnimationFrame(tick);
-    const delta = Math.min(clock.getDelta(), 1 / 30);
-    if (!running()) return;
-    frame(clock.getElapsedTime(), delta);
-  };
-  const onVisibility = () => {
-    visible = document.visibilityState === "visible";
-  };
-  document.addEventListener("visibilitychange", onVisibility);
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      onScreen = entry.isIntersecting;
-    },
-    { rootMargin: "200px" }
-  );
-  observer.observe(canvas);
-  raf = requestAnimationFrame(tick);
-  return () => {
-    cancelAnimationFrame(raf);
-    document.removeEventListener("visibilitychange", onVisibility);
-    observer.disconnect();
-  };
-}
-function observeResize(element, onResize) {
-  const observer = new ResizeObserver((entries) => {
-    const rect2 = entries[0].contentRect;
-    if (rect2.width > 0 && rect2.height > 0) onResize(rect2.width, rect2.height);
-  });
-  observer.observe(element);
-  const rect = element.getBoundingClientRect();
-  if (rect.width > 0 && rect.height > 0) onResize(rect.width, rect.height);
-  return () => observer.disconnect();
-}
-const readVar = (name) => {
-  const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  const [r, g, b] = raw.split(/\s+/).map(Number);
-  const color = new THREE.Color();
-  if ([r, g, b].every((n) => Number.isFinite(n))) {
-    color.setRGB(r / 255, g / 255, b / 255, THREE.SRGBColorSpace);
-  }
-  return color;
-};
-function readPalette() {
-  return {
-    surface: readVar("--surface"),
-    accent: readVar("--accent"),
-    text: readVar("--text-primary"),
-    isDark: document.documentElement.classList.contains("dark")
-  };
-}
-function watchTheme(onChange) {
-  const observer = new MutationObserver(() => onChange(readPalette()));
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"]
-  });
-  return () => observer.disconnect();
-}
-function disposeScene(scene) {
-  scene.traverse((object) => {
-    const mesh = object;
-    if (mesh.geometry) mesh.geometry.dispose();
-    const material = mesh.material;
-    if (!material) return;
-    const materials = Array.isArray(material) ? material : [material];
-    for (const mat of materials) {
-      for (const value of Object.values(mat)) {
-        if (value instanceof THREE.Texture) value.dispose();
-      }
-      const uniforms = mat.uniforms;
-      if (uniforms) {
-        for (const uniform of Object.values(uniforms)) {
-          if (uniform.value instanceof THREE.Texture) uniform.value.dispose();
-        }
-      }
-      mat.dispose();
+const CALENDLY_URL = "https://calendly.com/zakariya-neurocare/call-decouverte-20min?hide_gdpr_banner=1";
+const SCRIPT_SRC = "https://assets.calendly.com/assets/external/widget.js";
+let chargement = null;
+function chargerCalendly() {
+  if (chargement) return chargement;
+  chargement = new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
+      resolve();
+      return;
     }
+    const script = document.createElement("script");
+    script.src = SCRIPT_SRC;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("script Calendly injoignable"));
+    document.head.appendChild(script);
   });
-  scene.clear();
+  return chargement;
+}
+function CalendlyModal({ open, onClose }) {
+  const conteneur = useRef(null);
+  const fermer = useCallback(() => {
+    if (conteneur.current) conteneur.current.innerHTML = "";
+    onClose();
+  }, [onClose]);
+  useEffect(() => {
+    if (!open) return;
+    const gererTouche = (e) => {
+      if (e.key === "Escape") fermer();
+    };
+    window.addEventListener("keydown", gererTouche);
+    const defilementInitial = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", gererTouche);
+      document.body.style.overflow = defilementInitial;
+    };
+  }, [open, fermer]);
+  useEffect(() => {
+    if (!open) return;
+    let annule = false;
+    void chargerCalendly().then(() => {
+      const cible = conteneur.current;
+      const fenetre = window;
+      if (annule || !cible || !fenetre.Calendly) return;
+      cible.innerHTML = "";
+      fenetre.Calendly.initInlineWidget({
+        url: CALENDLY_URL,
+        parentElement: cible
+      });
+    }).catch((err) => console.error("[calendly]", err));
+    return () => {
+      annule = true;
+    };
+  }, [open]);
+  return /* @__PURE__ */ jsx(AnimatePresence, { children: open && /* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[60] flex items-end justify-center sm:items-center", children: [
+    /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+        transition: { duration: 0.2 },
+        onClick: fermer,
+        className: "absolute inset-0 bg-text-primary/50 backdrop-blur-sm",
+        "aria-hidden": true
+      }
+    ),
+    /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "calendly-titre",
+        initial: { y: 40, opacity: 0, scale: 0.98 },
+        animate: { y: 0, opacity: 1, scale: 1 },
+        exit: { y: 40, opacity: 0, scale: 0.98 },
+        transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+        className: "relative z-10 flex max-h-[94vh] w-full flex-col overflow-hidden rounded-t-2xl border border-surface-border bg-surface-card sm:max-h-[92vh] sm:max-w-3xl sm:rounded-2xl",
+        children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 px-6 pb-4 pt-6", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(
+                "h2",
+                {
+                  id: "calendly-titre",
+                  className: "font-display text-xl font-bold text-text-primary sm:text-2xl",
+                  children: "Parlons de votre projet"
+                }
+              ),
+              /* @__PURE__ */ jsx("p", { className: "mt-2 max-w-xl text-sm leading-relaxed text-text-secondary", children: "Un appel court pour comprendre ce que vous voulez mettre en place, ce dont vous disposez déjà, et ce que ça représente. Vous repartez avec un devis précis, sans engagement." })
+            ] }),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: fermer,
+                "aria-label": "Fermer",
+                className: "-m-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-surface-light hover:text-text-primary",
+                children: /* @__PURE__ */ jsx(
+                  "svg",
+                  {
+                    className: "h-5 w-5",
+                    fill: "none",
+                    stroke: "currentColor",
+                    viewBox: "0 0 24 24",
+                    strokeWidth: 1.5,
+                    "aria-hidden": true,
+                    children: /* @__PURE__ */ jsx(
+                      "path",
+                      {
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        d: "M6 18L18 6M6 6l12 12"
+                      }
+                    )
+                  }
+                )
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6", children: /* @__PURE__ */ jsx(
+            "div",
+            {
+              ref: conteneur,
+              className: "h-[68vh] min-h-[560px] w-full overflow-hidden rounded-xl bg-white"
+            }
+          ) })
+        ]
+      }
+    )
+  ] }) });
+}
+const EASE$5 = [0.22, 1, 0.36, 1];
+const QUIZ$1 = "https://quiz.digitalzdev.com";
+function Ligne$1({ children, delai }) {
+  return /* @__PURE__ */ jsx("span", { className: "block overflow-hidden pb-[0.06em]", children: /* @__PURE__ */ jsx(
+    motion.span,
+    {
+      className: "block",
+      initial: { y: "110%" },
+      animate: { y: 0 },
+      transition: { duration: 1, delay: delai, ease: EASE$5 },
+      children
+    }
+  ) });
+}
+function HeroStudio() {
+  const sectionRef = useRef(null);
+  const videoRef = useRef(null);
+  const [rdvOuvert, setRdvOuvert] = useState(false);
+  const [son, setSon] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const requete = window.matchMedia("(max-width: 767px)");
+    const suivre = () => setMobile(requete.matches);
+    suivre();
+    requete.addEventListener("change", suivre);
+    return () => requete.removeEventListener("change", suivre);
+  }, []);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const obs = new IntersectionObserver(
+      ([e]) => e.isIntersecting ? void video.play().catch(() => {
+      }) : video.pause(),
+      { threshold: 0.1 }
+    );
+    obs.observe(video);
+    return () => obs.disconnect();
+  }, []);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"]
+  });
+  const [haut0, droite0, bas0, gauche0] = mobile ? [58, 5, 4, 5] : [56, 4, 5, 50];
+  const haut = useTransform(scrollYProgress, [0, 0.6], [haut0, 0]);
+  const droite = useTransform(scrollYProgress, [0, 0.6], [droite0, 0]);
+  const bas = useTransform(scrollYProgress, [0, 0.6], [bas0, 0]);
+  const gauche = useTransform(scrollYProgress, [0, 0.6], [gauche0, 0]);
+  const rayon = useTransform(scrollYProgress, [0, 0.6], [mobile ? 18 : 28, 0]);
+  const decoupe = useMotionTemplate`inset(${haut}% ${droite}% ${bas}% ${gauche}% round ${rayon}px)`;
+  const zoom = useTransform(scrollYProgress, [0, 0.6], [1.15, 1]);
+  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.4], [1, 0]);
+  const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-12%"]);
+  const accrocheOpacite = useTransform(scrollYProgress, [0.62, 0.78], [0, 1]);
+  const accrocheY = useTransform(scrollYProgress, [0.62, 0.78], [40, 0]);
+  const basculerSon = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setSon(!video.muted);
+    if (video.paused) void video.play().catch(() => {
+    });
+  };
+  return /* @__PURE__ */ jsxs("section", { ref: sectionRef, className: "relative h-[190vh] bg-surface md:h-[240vh]", children: [
+    /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-[100svh] overflow-hidden", children: [
+      /* @__PURE__ */ jsxs(motion.div, { className: "absolute inset-0", style: { clipPath: decoupe }, children: [
+        /* @__PURE__ */ jsx(
+          motion.video,
+          {
+            ref: videoRef,
+            className: "h-full w-full object-cover",
+            style: { scale: zoom },
+            src: "/videos/presentation.mp4",
+            poster: "/videos/presentation-poster.jpg",
+            muted: true,
+            loop: true,
+            playsInline: true,
+            preload: "metadata",
+            "aria-label": "Vidéo de présentation de Digitalz Dev"
+          }
+        ),
+        /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" })
+      ] }),
+      /* @__PURE__ */ jsxs(
+        motion.div,
+        {
+          className: "relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32",
+          style: { opacity: titreOpacite, y: titreY },
+          children: [
+            /* @__PURE__ */ jsxs("h1", { className: "text-[9.5vw] font-extrabold uppercase leading-[1.02] text-text-primary md:text-[5vw] lg:text-[min(5vw,88px)]", children: [
+              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Des sites à la" }),
+              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.35, children: "hauteur de votre" }),
+              /* @__PURE__ */ jsx(Ligne$1, { delai: 0.45, children: /* @__PURE__ */ jsx("span", { className: "text-pop", children: "réputation." }) })
+            ] }),
+            /* @__PURE__ */ jsxs(
+              motion.div,
+              {
+                className: "mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0",
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
+                children: [
+                  /* @__PURE__ */ jsx("p", { className: "hidden text-[15px] font-medium leading-relaxed text-text-secondary md:block", children: "Cabinets d'avocats, agences d'architecture, photographes et vidéastes : nous concevons des sites sobres et rapides, qui inspirent confiance et font venir les bons clients." }),
+                  /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2 md:mt-5", children: [
+                    /* @__PURE__ */ jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: () => setRdvOuvert(true),
+                        className: "inline-flex min-h-[46px] items-center rounded-full bg-accent px-5 text-sm font-semibold text-surface transition-colors hover:bg-accent-hover md:min-h-[48px] md:px-6 md:text-[15px]",
+                        children: "Prendre rendez-vous"
+                      }
+                    ),
+                    /* @__PURE__ */ jsx(
+                      "a",
+                      {
+                        href: QUIZ$1,
+                        className: "inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]",
+                        children: "Voir un aperçu"
+                      }
+                    )
+                  ] })
+                ]
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs(
+        motion.div,
+        {
+          className: "absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14",
+          style: { opacity: accrocheOpacite, y: accrocheY },
+          children: [
+            /* @__PURE__ */ jsxs("h2", { className: "max-w-3xl text-5xl text-white md:text-7xl", children: [
+              "Votre site à votre image.",
+              /* @__PURE__ */ jsx("span", { className: "block text-accent", children: "Un aperçu en 60 secondes." })
+            ] }),
+            /* @__PURE__ */ jsx(
+              "a",
+              {
+                href: QUIZ$1,
+                "data-curseur": "Go",
+                className: "inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover",
+                children: "Voir mon aperçu →"
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        "button",
+        {
+          type: "button",
+          onClick: basculerSon,
+          "aria-label": son ? "Couper le son" : "Activer le son",
+          className: "absolute bottom-[6%] right-[8%] z-20 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28",
+          children: son ? "Son activé" : "Son coupé"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
+  ] });
+}
+const PHRASE = [
+  { texte: "Pas seulement esthétique.", accent: false },
+  { texte: "Pensé pour le référencement.", accent: true }
+];
+const MOTS = PHRASE.flatMap(
+  (p) => p.texte.split(" ").map((mot) => ({ mot, accent: p.accent }))
+);
+function Mot({
+  mot,
+  accent,
+  p,
+  i,
+  n
+}) {
+  const opacite = useTransform(p, [i / n, (i + 1) / n], [0.14, 1]);
+  return /* @__PURE__ */ jsxs(motion.span, { style: { opacity: opacite }, className: accent ? "text-pop" : "text-text-primary", children: [
+    mot,
+    " "
+  ] });
+}
+function ManifesteStudio() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.95", "end 0.2"] });
+  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS.map((m, i) => /* @__PURE__ */ jsx(Mot, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS.length }, `${m.mot}-${i}`)) }) }) });
+}
+function CarteProjet({ projet, className = "" }) {
+  return /* @__PURE__ */ jsxs(
+    Link,
+    {
+      to: projet.route,
+      "data-curseur": "Voir",
+      className: `group block shrink-0 ${className}`,
+      children: [
+        /* @__PURE__ */ jsx("div", { className: "relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-auto lg:h-[calc(100svh-14rem)]", children: /* @__PURE__ */ jsx(
+          "img",
+          {
+            src: projet.heroImage,
+            alt: `Site ${projet.title}`,
+            loading: "lazy",
+            className: "h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+          }
+        ) }),
+        /* @__PURE__ */ jsxs("div", { className: "mt-4 flex items-start justify-between gap-4", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("h3", { className: "text-xl font-normal tracking-tight text-text-primary md:text-2xl", children: projet.title }),
+            /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm font-medium text-text-secondary md:text-base", children: projet.subtitle })
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "mt-2 shrink-0 rounded-full bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary", children: projet.year })
+        ] })
+      ]
+    }
+  );
+}
+function Selection() {
+  const sectionRef = useRef(null);
+  const pisteRef = useRef(null);
+  const [course, setCourse] = useState(0);
+  useEffect(() => {
+    const mesurer = () => {
+      const piste = pisteRef.current;
+      if (piste) setCourse(Math.max(0, piste.scrollWidth - window.innerWidth));
+    };
+    mesurer();
+    window.addEventListener("resize", mesurer);
+    return () => window.removeEventListener("resize", mesurer);
+  }, []);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const brut = useTransform(scrollYProgress, [0, 1], [0, -course]);
+  const x = useSpring(brut, { stiffness: 120, damping: 30, mass: 0.4 });
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(
+      "section",
+      {
+        ref: sectionRef,
+        className: "relative hidden lg:block",
+        style: { height: `calc(100vh + ${course}px)` },
+        children: /* @__PURE__ */ jsx("div", { className: "sticky top-0 flex h-screen flex-col justify-start overflow-hidden pt-24", children: /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[46vw]" }, p.id)) }) })
+      }
+    ),
+    /* @__PURE__ */ jsx("section", { className: "pb-6 pt-24 lg:hidden", children: /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[82vw] snap-center sm:w-[60vw]" }, p.id)) }) })
+  ] });
+}
+function TravauxStudio() {
+  return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, {}) });
 }
 const offsetFor = (from, distance) => {
   switch (from) {
@@ -1549,365 +1760,9 @@ function Magnetic({ children, className, strength = 0.35 }) {
     }
   );
 }
-const HeroScene = lazy(() => import("./assets/HeroScene-CwDnVrpC.js"));
-function Hero() {
-  const containerRef = useRef(null);
-  const [webgl, setWebgl] = useState(false);
-  useEffect(() => setWebgl(isWebGLAvailable()), []);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.35, 0.6], [1, 1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 0.6], ["0%", "-18%"]);
-  const [grandEcran, setGrandEcran] = useState(false);
-  useEffect(() => {
-    const requete = window.matchMedia("(min-width: 1024px)");
-    const suivre = () => setGrandEcran(requete.matches);
-    suivre();
-    requete.addEventListener("change", suivre);
-    return () => requete.removeEventListener("change", suivre);
-  }, []);
-  return /* @__PURE__ */ jsx("section", { ref: containerRef, className: "relative h-[100svh] bg-surface lg:h-[190vh]", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 h-[100svh] overflow-hidden bg-surface lg:h-screen", children: [
-    webgl ? /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(HeroScene, { className: "absolute inset-0 opacity-40 lg:left-[45%] lg:right-[2%] lg:opacity-100" }) }) : /* @__PURE__ */ jsx(
-      "div",
-      {
-        "aria-hidden": true,
-        className: "absolute left-1/2 top-1/2 h-[70vmin] w-[70vmin] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 lg:left-[72%]",
-        style: {
-          background: "radial-gradient(circle at 35% 30%, rgb(var(--accent)), transparent 68%)",
-          filter: "blur(40px)"
-        }
-      }
-    ),
-    /* @__PURE__ */ jsx(
-      "div",
-      {
-        "aria-hidden": true,
-        className: "pointer-events-none absolute inset-0 lg:hidden",
-        style: {
-          background: "radial-gradient(ellipse 78% 52% at 50% 48%, rgb(var(--surface) / 0.94) 0%, rgb(var(--surface) / 0.74) 55%, rgb(var(--surface) / 0.25) 85%)"
-        }
-      }
-    ),
-    /* @__PURE__ */ jsx("div", { className: "relative z-10 flex h-full items-center", children: /* @__PURE__ */ jsxs(
-      motion.div,
-      {
-        className: "mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center lg:items-start lg:text-left",
-        style: grandEcran ? { opacity: contentOpacity, y: contentY } : void 0,
-        children: [
-          /* @__PURE__ */ jsxs("h1", { className: "max-w-3xl font-display text-[13vw] font-bold leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[min(6.4vw,118px)]", children: [
-            /* @__PURE__ */ jsx(
-              SplitText,
-              {
-                as: "span",
-                by: "char",
-                immediate: true,
-                text: "Digitalz Dev",
-                delay: 0.15,
-                className: "block text-text-primary"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              SplitText,
-              {
-                as: "span",
-                by: "char",
-                immediate: true,
-                text: "agence web",
-                delay: 0.45,
-                className: "block text-accent"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsx(
-            motion.p,
-            {
-              className: "mt-8 max-w-md text-base leading-relaxed text-text-secondary md:text-lg",
-              initial: { opacity: 0, y: 24 },
-              animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.9, delay: 0.9, ease: EASE_OUT },
-              children: "Sites vitrines, boutiques Shopify et plateformes métier. Conçus, développés, puis portés par vos campagnes Meta Ads et Google Ads."
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            motion.div,
-            {
-              className: "mt-10",
-              initial: { opacity: 0, y: 24 },
-              animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.9, delay: 1.1, ease: EASE_OUT },
-              children: /* @__PURE__ */ jsx(Magnetic, { className: "inline-block", children: /* @__PURE__ */ jsx(
-                "a",
-                {
-                  href: "https://quiz.digitalzdev.com",
-                  className: "inline-flex min-h-[56px] items-center gap-2 rounded-full bg-accent px-8 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90",
-                  children: "GÉNÉRER MA DÉMO GRATUITE"
-                }
-              ) })
-            }
-          )
-        ]
-      }
-    ) })
-  ] }) });
-}
-function ProjectsIndex({ projects: projects2 }) {
-  const [hovered, setHovered] = useState(null);
-  return /* @__PURE__ */ jsx("ul", { className: "mx-auto max-w-6xl px-6", children: projects2.map((project, index) => {
-    const isHovered = hovered === project.id;
-    return /* @__PURE__ */ jsx(
-      motion.li,
-      {
-        initial: { opacity: 0, y: 24 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: VIEWPORT,
-        transition: { duration: 0.6, delay: index * 0.05, ease: EASE_OUT },
-        onMouseEnter: () => setHovered(project.id),
-        onMouseLeave: () => setHovered(null),
-        children: /* @__PURE__ */ jsxs(
-          Link,
-          {
-            to: project.route,
-            className: "group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 py-6 md:grid-cols-[1fr_auto_auto] md:gap-x-10 md:py-8",
-            children: [
-              /* @__PURE__ */ jsxs("div", { className: "min-w-0 md:col-start-1 md:row-start-1", children: [
-                /* @__PURE__ */ jsx("h3", { className: "truncate font-display text-lg font-bold text-accent transition-colors group-hover:text-accent-hover sm:text-xl md:text-3xl", children: project.title }),
-                /* @__PURE__ */ jsx("p", { className: "mt-1 truncate text-sm text-text-secondary", children: project.subtitle })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: "col-span-2 row-start-2 mt-4 md:col-span-1 md:col-start-2 md:row-start-1 md:mt-0", children: [
-                /* @__PURE__ */ jsx("div", { className: "flex gap-2 md:hidden", children: /* @__PURE__ */ jsx(
-                  "img",
-                  {
-                    src: project.heroImage,
-                    alt: "",
-                    loading: "lazy",
-                    className: "h-32 w-full rounded-lg object-cover object-top"
-                  }
-                ) }),
-                /* @__PURE__ */ jsx(AnimatePresence, { children: isHovered && /* @__PURE__ */ jsx(
-                  motion.div,
-                  {
-                    className: "hidden gap-2 md:flex",
-                    initial: { opacity: 0, width: 0 },
-                    animate: { opacity: 1, width: "auto" },
-                    exit: { opacity: 0, width: 0 },
-                    transition: { duration: 0.4, ease: EASE_OUT },
-                    children: project.mockups.slice(0, 3).map((mockup) => /* @__PURE__ */ jsx(
-                      "img",
-                      {
-                        src: mockup.image,
-                        alt: "",
-                        loading: "lazy",
-                        className: "h-16 w-28 shrink-0 rounded-md object-cover object-top"
-                      },
-                      mockup.title
-                    ))
-                  }
-                ) })
-              ] }),
-              /* @__PURE__ */ jsxs("div", { className: "col-start-2 row-start-1 flex items-center gap-3 md:col-start-3", children: [
-                /* @__PURE__ */ jsx("div", { className: "hidden gap-2 lg:flex", children: project.tags.slice(0, 2).map((tag) => /* @__PURE__ */ jsx(
-                  "span",
-                  {
-                    className: "rounded-full border border-surface-border px-3 py-1 text-[11px] uppercase tracking-wider text-text-secondary",
-                    children: tag
-                  },
-                  tag
-                )) }),
-                /* @__PURE__ */ jsx("span", { className: "text-text-muted transition-transform duration-300 group-hover:translate-x-1 group-hover:text-accent", children: "→" })
-              ] })
-            ]
-          }
-        )
-      },
-      project.id
-    );
-  }) });
-}
-const GalleryScene = lazy(() => import("./assets/GalleryScene-Bqq0HVxz.js"));
-const VH_PER_PROJECT = 85;
-const MIN_GALLERY_WIDTH = 900;
-function ProjectsSection() {
-  const navigate = useNavigate();
-  const trackRef = useRef(null);
-  const infoRef = useRef(null);
-  const [active, setActive] = useState(0);
-  const [hovering, setHovering] = useState(false);
-  const [wide, setWide] = useState(false);
-  const [failed, setFailed] = useState(false);
-  useEffect(() => {
-    const query = window.matchMedia(`(min-width: ${MIN_GALLERY_WIDTH}px)`);
-    const sync = () => setWide(query.matches);
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
-  const useWebGL = wide && !failed && isWebGLAvailable();
-  const project = projects[clamp(active, 0, projects.length - 1)];
-  const cursorX = useMotionValue(0);
-  const cursorY = useMotionValue(0);
-  const smoothX = useSpring(cursorX, { stiffness: 400, damping: 32, mass: 0.4 });
-  const smoothY = useSpring(cursorY, { stiffness: 400, damping: 32, mass: 0.4 });
-  const trackCursor = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    cursorX.set(event.clientX - rect.left);
-    cursorY.set(event.clientY - rect.top);
-  };
-  const goToProject = useCallback((index) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const top = track.getBoundingClientRect().top + window.scrollY;
-    const distance = track.offsetHeight - window.innerHeight;
-    const ratio = index / Math.max(projects.length - 1, 1);
-    scrollTo(top + distance * ratio, { duration: 1.1 });
-  }, []);
-  const openProject = useCallback(
-    (index) => navigate(projects[index].route),
-    [navigate]
-  );
-  useEffect(() => {
-    if (!useWebGL) return;
-    const onKey = (event) => {
-      const track = trackRef.current;
-      if (!track) return;
-      const rect = track.getBoundingClientRect();
-      const pinned = rect.top <= 1 && rect.bottom >= window.innerHeight;
-      if (!pinned) return;
-      if (event.key === "ArrowRight") {
-        event.preventDefault();
-        goToProject(Math.min(active + 1, projects.length - 1));
-      } else if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        goToProject(Math.max(active - 1, 0));
-      } else if (event.key === "Enter") {
-        openProject(active);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [active, useWebGL, goToProject, openProject]);
-  const trackHeight = useMemo(
-    () => `${projects.length * VH_PER_PROJECT}vh`,
-    []
-  );
-  return /* @__PURE__ */ jsxs("section", { id: "projets", className: "relative bg-surface", children: [
-    /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-6xl px-6 pb-16 pt-24 md:pb-24 md:pt-32", children: /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-8 md:flex-row md:items-end md:justify-between", children: [
-      /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(
-        SplitText,
-        {
-          as: "h2",
-          by: "char",
-          text: "Nos réalisations",
-          delay: 0.1,
-          className: "block font-display text-4xl font-bold leading-[0.95] tracking-tight text-text-primary md:text-7xl"
-        }
-      ) }),
-      /* @__PURE__ */ jsx(Reveal, { delay: 0.2, className: "max-w-sm", children: /* @__PURE__ */ jsx("p", { className: "text-text-secondary", children: "Des boutiques Shopify aux plateformes métier. Chaque projet part d'un problème concret et se juge sur ce qu'il change une fois en ligne." }) })
-    ] }) }),
-    useWebGL ? /* @__PURE__ */ jsx("div", { ref: trackRef, className: "relative", style: { height: trackHeight }, children: /* @__PURE__ */ jsxs(
-      "div",
-      {
-        className: "sticky top-0 h-screen overflow-hidden",
-        onMouseMove: trackCursor,
-        children: [
-          /* @__PURE__ */ jsx(Suspense, { fallback: null, children: /* @__PURE__ */ jsx(
-            GalleryScene,
-            {
-              projects,
-              trackRef,
-              onActiveChange: setActive,
-              onHoverChange: setHovering,
-              onSelect: openProject,
-              onUnavailable: () => setFailed(true),
-              infoRef,
-              className: "absolute inset-0"
-            }
-          ) }),
-          /* @__PURE__ */ jsx(
-            "div",
-            {
-              ref: infoRef,
-              className: "pointer-events-none absolute inset-x-0 bottom-0 px-6 pb-10 [@media(max-height:700px)]:pb-5 md:px-12 md:pb-14",
-              children: /* @__PURE__ */ jsxs("div", { className: "mx-auto flex w-full max-w-[1600px] flex-col gap-6 md:flex-row md:items-end md:justify-between", children: [
-                /* @__PURE__ */ jsx("div", { className: "flex min-h-[13rem] flex-1 flex-col justify-end [@media(max-height:700px)]:min-h-0 md:min-h-[14rem]", children: /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: /* @__PURE__ */ jsxs(
-                  motion.div,
-                  {
-                    initial: { opacity: 0, y: 28 },
-                    animate: { opacity: 1, y: 0 },
-                    exit: { opacity: 0, y: -18 },
-                    transition: { duration: 0.5, ease: EASE_OUT },
-                    className: "max-w-2xl",
-                    children: [
-                      /* @__PURE__ */ jsx("div", { className: "mb-4 [@media(max-height:700px)]:mb-2", children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-secondary", children: project.subtitle }) }),
-                      /* @__PURE__ */ jsx(
-                        "h3",
-                        {
-                          className: `font-display font-bold tracking-tight text-accent ${project.title.length > 19 ? "text-3xl md:text-5xl" : "text-4xl md:text-6xl"}`,
-                          children: project.title
-                        }
-                      ),
-                      /* @__PURE__ */ jsx("p", { className: "mt-4 max-w-xl text-text-secondary [@media(max-height:700px)]:mt-2", children: project.description }),
-                      /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-wrap items-center gap-3 [@media(max-height:700px)]:mt-3", children: [
-                        project.tags.map((tag) => /* @__PURE__ */ jsx(
-                          "span",
-                          {
-                            className: "rounded-full border border-surface-border bg-surface-card/60 px-3 py-1 text-[11px] uppercase tracking-wider text-text-secondary backdrop-blur-sm",
-                            children: tag
-                          },
-                          tag
-                        )),
-                        /* @__PURE__ */ jsxs(
-                          Link,
-                          {
-                            to: project.route,
-                            className: "pointer-events-auto ml-1 inline-flex items-center gap-2 font-display text-sm font-semibold text-accent transition-colors hover:text-accent-hover",
-                            children: [
-                              "Voir le projet ",
-                              /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "→" })
-                            ]
-                          }
-                        )
-                      ] })
-                    ]
-                  },
-                  project.id
-                ) }) }),
-                /* @__PURE__ */ jsx("div", { className: "hidden shrink-0 items-center gap-2 pb-1 md:flex", children: projects.map((item2, index) => /* @__PURE__ */ jsx(
-                  "button",
-                  {
-                    type: "button",
-                    onClick: () => goToProject(index),
-                    "aria-label": `Aller au projet ${item2.title}`,
-                    "aria-current": index === active,
-                    className: "pointer-events-auto group flex h-8 items-center px-1",
-                    children: /* @__PURE__ */ jsx(
-                      "span",
-                      {
-                        className: `block h-1.5 rounded-full transition-all duration-500 ${index === active ? "w-10 bg-accent" : "w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary"}`
-                      }
-                    )
-                  },
-                  item2.id
-                )) })
-              ] })
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            motion.div,
-            {
-              className: "pointer-events-none absolute left-0 top-0 z-10 -translate-x-1/2 -translate-y-1/2",
-              style: { x: smoothX, y: smoothY },
-              animate: { scale: hovering ? 1 : 0, opacity: hovering ? 1 : 0 },
-              transition: { duration: 0.25, ease: EASE_OUT },
-              children: /* @__PURE__ */ jsx("span", { className: "block rounded-full bg-accent px-5 py-5 font-display text-[11px] font-bold uppercase tracking-widest text-white", children: "Voir" })
-            }
-          )
-        ]
-      }
-    ) }) : /* @__PURE__ */ jsx(ProjectsIndex, { projects })
-  ] });
-}
+const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
+  "Bonjour Digitalz Dev, j'aimerais vous parler de mon projet de site : "
+)}`;
 const SERVICES$1 = [
   {
     title: "Site vitrine sur mesure",
@@ -1976,586 +1831,381 @@ const SERVICES$1 = [
     ]
   }
 ];
-function ServicesSection() {
-  return /* @__PURE__ */ jsx("section", { id: "services", className: "relative bg-surface py-24 md:py-36", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-6xl px-6", children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between", children: [
-      /* @__PURE__ */ jsxs("div", { className: "max-w-2xl", children: [
-        /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "Nos services" }) }),
-        /* @__PURE__ */ jsx(
-          SplitText,
-          {
-            as: "h2",
-            by: "word",
-            text: "Une agence web qui conçoit, développe et fait connaître votre site",
-            delay: 0.1,
-            className: "mt-5 block font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-4xl lg:text-5xl"
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsx(Reveal, { delay: 0.2, className: "max-w-sm lg:shrink-0", children: /* @__PURE__ */ jsx("p", { className: "leading-relaxed text-text-secondary", children: "Création de site internet, boutique en ligne, refonte, outil métier et campagnes publicitaires. Un projet de site web se juge sur ce qu'il rapporte une fois en ligne, pas sur sa maquette." }) })
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: "mt-14 grid gap-6 md:mt-20 md:grid-cols-2 md:gap-8", children: SERVICES$1.map((service, index) => /* @__PURE__ */ jsxs(
-      motion.article,
-      {
-        className: "flex flex-col rounded-2xl border border-surface-border bg-surface-card p-7 md:h-[22rem] md:p-9",
-        initial: { opacity: 0, y: 40 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: VIEWPORT,
-        transition: { duration: 0.7, delay: index % 2 * 0.1, ease: EASE_OUT },
-        children: [
-          /* @__PURE__ */ jsx("h3", { className: "font-display text-xl font-bold text-text-primary md:text-2xl", children: service.title }),
-          /* @__PURE__ */ jsx("p", { className: "mt-2 font-display text-sm font-semibold text-accent", children: service.lead }),
-          /* @__PURE__ */ jsxs("div", { className: "relative mt-4 min-h-0 flex-1 md:overflow-hidden", children: [
-            /* @__PURE__ */ jsxs("div", { className: "h-full md:overflow-y-auto md:pr-3", children: [
-              /* @__PURE__ */ jsx("p", { className: "leading-relaxed text-text-secondary", children: service.body }),
-              /* @__PURE__ */ jsx("ul", { className: "mt-6 space-y-2 md:pb-6", children: service.points.map((point) => /* @__PURE__ */ jsxs(
-                "li",
-                {
-                  className: "flex items-baseline gap-3 text-sm text-text-secondary",
-                  children: [
-                    /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "text-accent", children: "·" }),
-                    point
-                  ]
-                },
-                point
-              )) })
-            ] }),
-            /* @__PURE__ */ jsx(
-              "div",
-              {
-                "aria-hidden": true,
-                className: "pointer-events-none absolute inset-x-0 bottom-0 hidden h-10 bg-gradient-to-t from-surface-card to-transparent md:block"
-              }
-            )
-          ] })
-        ]
-      },
-      service.title
-    )) }),
-    /* @__PURE__ */ jsxs(Reveal, { delay: 0.1, className: "mt-14 text-center md:mt-20", children: [
-      /* @__PURE__ */ jsx("p", { className: "mx-auto max-w-2xl leading-relaxed text-text-secondary", children: "Vous avez un projet de site internet, une boutique à ouvrir ou un site à refondre ? Décrivez-le en deux minutes, nous revenons vers vous sous 24 à 48 heures avec un devis adapté." }),
-      /* @__PURE__ */ jsx(Magnetic, { className: "mt-8 inline-block", children: /* @__PURE__ */ jsx(
-        Link,
-        {
-          to: "/contact",
-          className: "inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 font-display text-sm font-semibold tracking-wider text-surface transition-opacity hover:opacity-90",
-          children: "DÉCRIRE MON PROJET"
-        }
-      ) })
-    ] })
-  ] }) });
-}
-const testimonials = [
-  {
-    projectId: "kalira",
-    company: "Kalira",
-    sector: "Soins capillaires",
-    delivered: "Boutique Shopify sur mesure autour d'un rituel en trois temps. Direction artistique éditoriale, packs et duos, capture e-mail gamifiée et scénarios Klaviyo. Cinq références en ligne, paiement Shop Pay, PayPal, Klarna et carte.",
-    quote: null,
-    author: null,
-    image: "/screenshots/kalira-hero.webp",
-    route: "/kalira",
-    color: "#7A6A55"
-  },
-  {
-    projectId: "sourcing",
-    company: "The Sourcing",
-    sector: "Sourcing et production",
-    delivered: "Vitrine bilingue français et anglais servie depuis un même arbre de routes Next.js. Sept pôles de services, une méthode en six étapes révélée au scroll, et deux pages dédiées au sourcing en Chine et à la logistique.",
-    quote: null,
-    author: null,
-    image: "/screenshots/sourcing-hero.webp",
-    route: "/the-sourcing",
-    color: "#B8B8B8"
-  },
-  {
-    projectId: "drive",
-    company: "DRIVE",
-    sector: "Réseau de franchisés",
-    delivered: "Portail d'équipement privé pour les dix agences du réseau. Un kit d'ouverture permet d'équiper une nouvelle agence en une seule commande, le reste du catalogue est rangé par zone du point de vente, à tarifs cadrés par la centrale.",
-    quote: null,
-    author: null,
-    image: "/screenshots/drive-hero.webp",
-    route: "/drive",
-    color: "#8A93A0"
-  },
-  {
-    projectId: "neurocare",
-    company: "NeuroCare",
-    sector: "Santé et neurodéveloppement",
-    delivered: "Plateforme d'orientation pour les familles : annuaire de professionnels vérifiés en quatre étapes contre l'Annuaire Santé, forum modéré, simulateur d'aides AEEH, PCH et CESU, carte des lieux adaptés. Hébergé en France, conforme RGPD.",
-    quote: null,
-    author: null,
-    image: "/screenshots/neurocare-hero.webp",
-    route: "/neurocare",
-    color: "#5BA89D"
-  },
-  {
-    projectId: "lissage",
-    company: "Lissage sur Mesure",
-    sector: "Beauté",
-    delivered: "Site vitrine dark luxe pour un salon spécialisé. Animations au scroll, typographie serif, balisage Schema.org pour le référencement local. Le parcours mène de la découverte de la formule à la prise de rendez-vous.",
-    quote: null,
-    author: null,
-    image: "/screenshots/lissage-hero.webp",
-    route: "/lissage",
-    color: "#5B1A3A"
-  },
-  {
-    projectId: "angele",
-    company: "Angèle",
-    sector: "Merchandising artiste",
-    delivered: "Boutique officielle de merchandising : t-shirts, sweats, vinyles et accessoires. Thème Shopify personnalisé, fiches produit avec sélecteur de taille et galerie, livraison européenne, intégrations newsletter et suivi marketing.",
-    quote: null,
-    author: null,
-    image: "/screenshots/angele-hero.webp",
-    route: "/angele",
-    color: "#7ECDB5"
-  },
-  {
-    projectId: "reuni",
-    company: "Reuni",
-    sector: "Mode éthique",
-    delivered: "Plateforme e-commerce avec design system sur mesure. Catalogue à filtres dynamiques, tunnel d'achat optimisé pour la conversion, chargement sous une seconde et demie et score Lighthouse de 98.",
-    quote: null,
-    author: null,
-    image: "/screenshots/reuni-hero.webp",
-    route: "/reuni",
-    color: "#C4A882"
-  },
-  {
-    projectId: "st-agni",
-    company: "St. Agni",
-    sector: "Mode premium",
-    delivered: "Boutique en ligne minimaliste en architecture headless sur Shopify Plus. Visuels plein écran, transitions de page cinématiques, vue produit à 360 degrés et navigation gestuelle sur mobile.",
-    quote: null,
-    author: null,
-    image: "/screenshots/st-agni-hero.webp",
-    route: "/st-agni",
-    color: "#8A8580"
-  }
-];
-const CARD_MAX = 380;
-const GAP = 24;
-const largeurCarte = (cadre) => cadre ? Math.max(220, Math.min(CARD_MAX, cadre - 48)) : CARD_MAX;
-const AUTOPLAY = 6e3;
-function Card({
-  item: item2,
-  index,
-  trackX,
-  viewport,
-  card,
-  step
+function Carte({
+  service,
+  i,
+  n,
+  progression
 }) {
-  const distance = useTransform(trackX, (x) => {
-    if (!viewport) return 0;
-    return index * step + x + card / 2 - viewport / 2;
-  });
-  const normalized = useTransform(
-    distance,
-    (d) => viewport ? clamp(d / (viewport / 2), -1.6, 1.6) : 0
-  );
-  const rotateY = useTransform(normalized, (n) => -n * 22);
-  const scale = useTransform(normalized, (n) => 1 - Math.min(Math.abs(n), 1) * 0.1);
-  const opacity = useTransform(normalized, (n) => 1 - Math.min(Math.abs(n), 1) * 0.55);
-  const z = useTransform(normalized, (n) => -Math.abs(n) * 120);
-  const estTemoignage = item2.quote !== null && item2.author !== null;
-  return /* @__PURE__ */ jsx(
-    motion.li,
+  const echelle = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.035]);
+  const lumiere = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.08]);
+  const filtre = useTransform(lumiere, (l) => `brightness(${l})`);
+  const accent = i === n - 1;
+  return /* @__PURE__ */ jsx("div", { className: "sticky", style: { top: `calc(12vh + ${i * 22}px)` }, children: /* @__PURE__ */ jsx(
+    motion.article,
     {
-      className: "shrink-0",
-      style: {
-        width: card,
-        rotateY,
-        scale,
-        opacity,
-        z,
-        transformStyle: "preserve-3d"
-      },
-      children: /* @__PURE__ */ jsxs("article", { className: "flex h-full flex-col overflow-hidden rounded-2xl border border-surface-border bg-surface-card", children: [
-        /* @__PURE__ */ jsxs("div", { className: "relative h-40 overflow-hidden", children: [
-          /* @__PURE__ */ jsx(
-            "img",
-            {
-              src: item2.image,
-              alt: "",
-              loading: "lazy",
-              draggable: false,
-              className: "h-full w-full object-cover object-top"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            "div",
-            {
-              "aria-hidden": true,
-              className: "absolute inset-0",
-              style: {
-                background: `linear-gradient(to top, rgb(var(--surface-card)) 4%, ${item2.color}22 60%, transparent)`
-              }
-            }
-          )
+      style: { scale: echelle, filter: filtre },
+      className: `origin-top rounded-[1.75rem] p-7 md:min-h-[62vh] md:p-12 ${accent ? "bg-pop text-white" : "bg-surface-card text-text-primary"}`,
+      children: /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-12", children: [
+        /* @__PURE__ */ jsxs("div", { className: "md:col-span-7", children: [
+          /* @__PURE__ */ jsx("h3", { className: "text-3xl font-normal leading-[1] tracking-tight md:text-5xl", children: service.title }),
+          /* @__PURE__ */ jsx("p", { className: `mt-4 text-lg font-medium md:text-xl ${accent ? "text-white" : "text-accent"}`, children: service.lead })
         ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex flex-1 flex-col p-5 sm:p-7", children: [
-          /* @__PURE__ */ jsx("h3", { className: "font-display text-xl font-bold text-text-primary", children: item2.company }),
-          /* @__PURE__ */ jsx("p", { className: "mt-1 font-display text-xs font-semibold uppercase tracking-[0.18em] text-accent", children: item2.sector }),
-          estTemoignage ? /* @__PURE__ */ jsxs("blockquote", { className: "mt-5 flex-1", children: [
-            /* @__PURE__ */ jsxs("p", { className: "leading-relaxed text-text-secondary", children: [
-              "« ",
-              item2.quote,
-              " »"
-            ] }),
-            /* @__PURE__ */ jsxs("footer", { className: "mt-5 text-sm", children: [
-              /* @__PURE__ */ jsx("span", { className: "font-semibold text-text-primary", children: item2.author.name }),
-              /* @__PURE__ */ jsxs("span", { className: "text-text-muted", children: [
-                " · ",
-                item2.author.role
-              ] })
-            ] })
-          ] }) : /* @__PURE__ */ jsx("p", { className: "mt-5 flex-1 leading-relaxed text-text-secondary", children: item2.delivered }),
-          /* @__PURE__ */ jsxs(
-            Link,
+        /* @__PURE__ */ jsxs("div", { className: "md:col-span-5", children: [
+          /* @__PURE__ */ jsx("p", { className: `text-[15px] font-medium leading-relaxed md:text-base ${accent ? "text-white/80" : "text-text-secondary"}`, children: service.body }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-6 space-y-2", children: service.points.map((point) => /* @__PURE__ */ jsx(
+            "li",
             {
-              to: item2.route,
-              className: "relative mt-7 inline-flex w-fit items-center gap-2 font-display text-sm font-semibold text-accent transition-colors before:absolute before:inset-x-0 before:-inset-y-3 before:content-[''] hover:text-accent-hover",
-              children: [
-                "Voir le projet ",
-                /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "→" })
-              ]
-            }
-          )
+              className: `rounded-xl px-4 py-3 text-sm font-medium ${accent ? "bg-white/15" : "bg-surface-light"}`,
+              children: point
+            },
+            point
+          )) })
         ] })
       ] })
     }
-  );
+  ) });
 }
-function TestimonialsSection() {
-  var _a;
-  const navigate = useNavigate();
-  const cadreRef = useRef(null);
-  const glissementRef = useRef(false);
-  const [viewport, setViewport] = useState(0);
-  const [actif, setActif] = useState(0);
-  const [enPause, setEnPause] = useState(false);
-  const reduced = useReducedMotion();
-  const trackX = useMotionValue(0);
-  const doux = useSpring(trackX, { stiffness: 120, damping: 26, mass: 0.6 });
-  const card = largeurCarte(viewport);
-  const step = card + GAP;
-  const largeurTotale = testimonials.length * step - GAP;
-  const minX = Math.min(0, viewport - largeurTotale);
+function ServicesStudio() {
+  const pileRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: pileRef, offset: ["start start", "end end"] });
+  return /* @__PURE__ */ jsx("section", { id: "services", className: "bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+    /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
+      "Une agence web qui conçoit, développe ",
+      /* @__PURE__ */ jsx("span", { className: "text-accent", children: "et fait connaître votre site." })
+    ] }),
+    /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Création de site internet, boutique en ligne, refonte, outil métier et campagnes publicitaires. Un projet de site web se juge sur ce qu'il rapporte une fois en ligne, pas sur sa maquette." }),
+    /* @__PURE__ */ jsx("div", { ref: pileRef, className: "mt-16 space-y-6 md:mt-24 md:space-y-10", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, n: SERVICES$1.length, progression: scrollYProgress }, s.title)) }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12", children: [
+      /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Vous avez un projet de site internet, une boutique à ouvrir ou un site à refondre ? Décrivez-le-nous directement sur WhatsApp." }),
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: WHATSAPP_PROJET,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          "data-curseur": "WhatsApp",
+          className: "inline-flex min-h-[56px] shrink-0 items-center rounded-full bg-accent px-8 text-base font-medium text-surface transition-colors hover:bg-accent-hover",
+          children: "Décrire mon projet"
+        }
+      )
+    ] })
+  ] }) });
+}
+const LEVIERS = [
+  {
+    titre: "Référencement naturel",
+    accroche: "Être trouvé sur ce que cherchent vos clients.",
+    points: [
+      "Articles de fond sur les questions de vos clients",
+      "Pages par spécialité, type de projet ou prestation",
+      "Structure technique, vitesse et balisage soignés",
+      "Suivi mensuel des positions et du trafic"
+    ]
+  },
+  {
+    titre: "Fiche Google",
+    accroche: "Apparaître dans les premiers résultats de Maps.",
+    points: [
+      "Fiche d’établissement complétée et optimisée",
+      "Photos, horaires, domaines et publications régulières",
+      "Collecte et réponse aux avis clients",
+      "Visibilité locale, ville par ville"
+    ]
+  },
+  {
+    titre: "Google Ads",
+    accroche: "En tête des recherches dès la semaine suivante.",
+    points: [
+      "Campagnes sur les recherches qui précèdent un appel",
+      "Annonces, extensions d’appel et de lieu",
+      "Suivi des appels et des formulaires reçus",
+      "Budget piloté sur le coût par demande"
+    ]
+  },
+  {
+    titre: "Meta Ads",
+    accroche: "Montrer votre travail là où il se regarde.",
+    points: [
+      "Diffusion de vos réalisations sur Instagram et Facebook",
+      "Ciblage par zone et par profil de client",
+      "Reciblage des visiteurs de votre site",
+      "Formulaires de contact intégrés aux publicités"
+    ]
+  }
+];
+const REQUETE = "avocat droit des affaires lyon";
+const NOTE_DEBUT = 3;
+const NOTE_FIN = 5;
+const CONCURRENTS = [
+  { titre: "Cabinet Durand & Associés · Avocats Lyon", url: "durand-avocats.fr", texte: "Conseil et contentieux des entreprises. Prise de rendez-vous par téléphone." },
+  { titre: "Avocat affaires Lyon : annuaire des cabinets", url: "annuaire-juridique.com", texte: "Comparez 240 avocats en droit des affaires à Lyon et dans le Rhône." },
+  { titre: "Lefèvre Avocats · Droit commercial", url: "lefevre-avocats.com", texte: "Création de société, baux commerciaux, recouvrement de créances." },
+  { titre: "Droit des affaires : trouver un avocat", url: "forum-entrepreneurs.fr", texte: "Discussion · 38 réponses · Quel avocat choisir pour une levée de fonds ?" }
+];
+const CLIENT = {
+  titre: "Martin Avocats · Droit des affaires à Lyon",
+  url: "martin-avocats.fr",
+  texte: "Cabinet dédié aux entreprises : création, contrats, levées de fonds. Premier rendez-vous sous 48 h."
+};
+function useHauteurLigne() {
+  const [h, setH] = useState(84);
   useEffect(() => {
-    const el = cadreRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver(
-      ([entry]) => setViewport(entry.contentRect.width)
-    );
-    observer.observe(el);
-    setViewport(el.getBoundingClientRect().width);
-    return () => observer.disconnect();
+    const requete = window.matchMedia("(max-width: 767px)");
+    const suivre = () => setH(requete.matches ? 104 : 84);
+    suivre();
+    requete.addEventListener("change", suivre);
+    return () => requete.removeEventListener("change", suivre);
   }, []);
-  const positionDe = useCallback(
-    (index) => clamp(viewport / 2 - index * step - card / 2, minX, 0),
-    [viewport, minX, step, card]
-  );
-  const allerA = useCallback(
-    (index) => {
-      const cible = clamp(index, 0, testimonials.length - 1);
-      setActif(cible);
-      trackX.set(positionDe(cible));
-    },
-    [positionDe, trackX]
-  );
-  useMotionValueEvent(doux, "change", (x) => {
-    if (!viewport) return;
-    const index = Math.round((viewport / 2 - x - card / 2) / step);
-    const borne = clamp(index, 0, testimonials.length - 1);
-    setActif((precedent) => precedent === borne ? precedent : borne);
+  return h;
+}
+function Etoiles$1({ note }) {
+  return /* @__PURE__ */ jsxs("span", { className: "relative inline-flex text-[#dadce0]", "aria-label": `${note.toFixed(1)} sur 5`, children: [
+    "★★★★★",
+    /* @__PURE__ */ jsx("span", { className: "absolute inset-0 overflow-hidden text-[#fbbc04]", style: { width: `${note / 5 * 100}%` }, children: "★★★★★" })
+  ] });
+}
+function LogoGoogle$1({ className = "" }) {
+  return /* @__PURE__ */ jsxs("span", { className: `font-medium tracking-tight ${className}`, "aria-label": "Google", children: [
+    /* @__PURE__ */ jsx("span", { className: "text-[#4285f4]", children: "G" }),
+    /* @__PURE__ */ jsx("span", { className: "text-[#ea4335]", children: "o" }),
+    /* @__PURE__ */ jsx("span", { className: "text-[#fbbc05]", children: "o" }),
+    /* @__PURE__ */ jsx("span", { className: "text-[#4285f4]", children: "g" }),
+    /* @__PURE__ */ jsx("span", { className: "text-[#34a853]", children: "l" }),
+    /* @__PURE__ */ jsx("span", { className: "text-[#ea4335]", children: "e" })
+  ] });
+}
+function Ligne({
+  i,
+  position,
+  r,
+  h
+}) {
+  const y = useTransform(position, (p) => (i + Math.min(1, Math.max(0, i + 1 - p))) * h);
+  return /* @__PURE__ */ jsx(motion.div, { className: "absolute inset-x-0 top-0 px-1", style: { y }, children: /* @__PURE__ */ jsx(Resultat, { ...r }) });
+}
+function Resultat({
+  titre,
+  url,
+  texte,
+  client = false,
+  note,
+  avis
+}) {
+  return /* @__PURE__ */ jsxs("div", { className: `rounded-xl px-3 py-2.5 ${client ? "bg-white shadow-[0_8px_30px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5" : ""}`, children: [
+    /* @__PURE__ */ jsx("p", { className: "truncate text-xs text-[#4d5156]", children: url }),
+    /* @__PURE__ */ jsx("p", { className: `truncate text-[15px] leading-snug md:text-[17px] ${client ? "text-[#1a0dab]" : "text-[#1a0dab]/80"}`, children: titre }),
+    note !== void 0 && /* @__PURE__ */ jsxs("p", { className: "mt-0.5 flex items-center gap-1.5 text-xs text-[#4d5156] md:hidden", children: [
+      /* @__PURE__ */ jsx("span", { className: "tabular-nums text-[#202124]", children: note.toFixed(1).replace(".", ",") }),
+      /* @__PURE__ */ jsx(Etoiles$1, { note }),
+      /* @__PURE__ */ jsxs("span", { className: "tabular-nums", children: [
+        "(",
+        avis,
+        ")"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("p", { className: "line-clamp-2 text-xs text-[#4d5156] md:text-[13px]", children: texte })
+  ] });
+}
+const COULEURS = ["#4285f4", "#ea4335", "#fbbc05", "#34a853", "#a142f4", "#ff6d01"];
+function Eclat({ cle }) {
+  return /* @__PURE__ */ jsxs("span", { "aria-hidden": true, className: "pointer-events-none absolute inset-0", children: [
+    COULEURS.concat(COULEURS).map((c, i) => {
+      const angle = i / 12 * Math.PI * 2;
+      const distance = 34 + i % 3 * 10;
+      return /* @__PURE__ */ jsx(
+        motion.span,
+        {
+          className: "absolute left-1/2 top-1/2 h-1.5 w-1.5 rounded-full",
+          style: { backgroundColor: c },
+          initial: { x: 0, y: 0, scale: 0, opacity: 1 },
+          animate: {
+            x: Math.cos(angle) * distance,
+            y: Math.sin(angle) * distance,
+            scale: [0, 1.4, 0],
+            opacity: [1, 1, 0]
+          },
+          transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+        },
+        i
+      );
+    }),
+    [
+      { c: "#fbbc05", cls: "-right-2 -top-2" },
+      { c: "#4285f4", cls: "-bottom-2 -left-1" }
+    ].map((e, i) => /* @__PURE__ */ jsx(
+      motion.svg,
+      {
+        viewBox: "0 0 24 24",
+        className: `absolute h-4 w-4 ${e.cls}`,
+        initial: { scale: 0, rotate: -30, opacity: 0 },
+        animate: { scale: [0, 1.2, 0.9, 1.1, 0], rotate: [-30, 0, 20, 0, 30], opacity: [0, 1, 1, 1, 0] },
+        transition: { duration: 1.4, delay: 0.15 + i * 0.2 },
+        children: /* @__PURE__ */ jsx("path", { fill: e.c, d: "M12 0l2.6 9.4L24 12l-9.4 2.6L12 24l-2.6-9.4L0 12l9.4-2.6z" })
+      },
+      i
+    ))
+  ] }, cle);
+}
+function useEclat(progression, seuil) {
+  const [cle, setCle] = useState(0);
+  const [visible, setVisible] = useState(false);
+  useMotionValueEvent(progression, "change", (v) => {
+    const dedans = v >= seuil;
+    if (dedans && !visible) setCle((c) => c + 1);
+    if (dedans !== visible) setVisible(dedans);
   });
-  useEffect(() => {
-    if (viewport) trackX.set(positionDe(actif));
-  }, [viewport, positionDe, trackX]);
-  useEffect(() => {
-    if (reduced || enPause || !viewport) return;
-    const id = window.setInterval(() => {
-      setActif((precedent) => {
-        const suivant = (precedent + 1) % testimonials.length;
-        trackX.set(positionDe(suivant));
-        return suivant;
-      });
-    }, AUTOPLAY);
-    return () => window.clearInterval(id);
-  }, [reduced, enPause, viewport, positionDe, trackX]);
-  const ouvrirDepuisClic = (event) => {
-    if (glissementRef.current || !viewport) return;
-    const cadre = cadreRef.current;
-    if (!cadre) return;
-    const x = event.clientX - cadre.getBoundingClientRect().left - doux.get();
-    const index = Math.floor(x / step);
-    if (x - index * step > card) return;
-    if (index < 0 || index >= testimonials.length) return;
-    navigate(testimonials[index].route);
-  };
-  const teinte = ((_a = testimonials[actif]) == null ? void 0 : _a.color) ?? "#7A6047";
+  return visible ? cle : 0;
+}
+function Badge({
+  progression,
+  debut,
+  className,
+  titre,
+  detail
+}) {
+  const opacite = useTransform(progression, [debut, debut + 0.08], [0, 1]);
+  const y = useTransform(progression, [debut, debut + 0.08], [24, 0]);
+  const eclat = useEclat(progression, debut + 0.02);
   return /* @__PURE__ */ jsxs(
-    "section",
+    motion.div,
     {
-      id: "avis",
-      className: "relative overflow-hidden bg-surface py-24 md:py-36",
-      onMouseEnter: () => setEnPause(true),
-      onMouseLeave: () => setEnPause(false),
-      onFocusCapture: () => setEnPause(true),
-      onBlurCapture: () => setEnPause(false),
+      className: `rounded-xl bg-white px-3 py-2 shadow-[0_18px_40px_-14px_rgba(0,0,0,0.4)] ring-1 ring-black/5 lg:rounded-2xl lg:px-4 lg:py-3 ${className}`,
+      style: { opacity: opacite, y },
       children: [
-        /* @__PURE__ */ jsx(
-          motion.div,
-          {
-            "aria-hidden": true,
-            className: "pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[140px]",
-            animate: { backgroundColor: teinte, opacity: 0.14 },
-            transition: { duration: 1.2, ease: EASE_OUT }
-          }
-        ),
-        /* @__PURE__ */ jsxs("div", { className: "relative", children: [
-          /* @__PURE__ */ jsxs("div", { className: "mx-auto mb-14 max-w-6xl px-6 md:mb-20", children: [
-            /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "Ils nous ont fait confiance" }) }),
-            /* @__PURE__ */ jsx(
-              SplitText,
-              {
-                as: "h2",
-                by: "word",
-                text: "Des marques qui nous ont confié leur site",
-                delay: 0.1,
-                className: "mt-5 block max-w-3xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-5xl"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsx(
-            "div",
-            {
-              ref: cadreRef,
-              className: "cursor-pointer overflow-hidden active:cursor-grabbing",
-              style: { perspective: 1400 },
-              children: /* @__PURE__ */ jsx(
-                motion.ul,
-                {
-                  className: "flex items-stretch",
-                  style: { x: doux, gap: GAP, transformStyle: "preserve-3d" },
-                  drag: reduced ? false : "x",
-                  dragConstraints: { left: minX, right: 0 },
-                  dragElastic: 0.08,
-                  onDragStart: () => {
-                    glissementRef.current = true;
-                    setEnPause(true);
-                  },
-                  onDragEnd: () => {
-                    setEnPause(false);
-                    window.setTimeout(() => {
-                      glissementRef.current = false;
-                    }, 0);
-                  },
-                  onClick: ouvrirDepuisClic,
-                  initial: false,
-                  children: testimonials.map((item2, index) => /* @__PURE__ */ jsx(
-                    Card,
-                    {
-                      item: item2,
-                      index,
-                      trackX: doux,
-                      viewport,
-                      card,
-                      step
-                    },
-                    item2.projectId
-                  ))
-                }
-              )
-            }
-          ),
-          /* @__PURE__ */ jsxs("div", { className: "mx-auto mt-10 flex max-w-6xl flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6", children: [
-            /* @__PURE__ */ jsx("div", { className: "flex flex-wrap items-center gap-1 sm:gap-2", children: testimonials.map((item2, index) => /* @__PURE__ */ jsx(
-              "button",
-              {
-                type: "button",
-                onClick: () => allerA(index),
-                "aria-label": `Voir ${item2.company}`,
-                "aria-current": index === actif,
-                className: "group flex h-11 items-center px-1",
-                children: /* @__PURE__ */ jsx(
-                  "span",
-                  {
-                    className: `block h-1.5 rounded-full transition-all duration-500 ${index === actif ? "w-10 bg-accent" : "w-5 bg-text-muted group-hover:w-8 group-hover:bg-text-secondary"}`
-                  }
-                )
-              },
-              item2.projectId
-            )) }),
-            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx(
-                "button",
-                {
-                  type: "button",
-                  onClick: () => allerA(actif - 1),
-                  disabled: actif === 0,
-                  "aria-label": "Client précédent",
-                  className: "flex h-11 w-11 items-center justify-center rounded-full border border-surface-border text-text-secondary transition-colors hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-30",
-                  children: /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "←" })
-                }
-              ),
-              /* @__PURE__ */ jsx(
-                "button",
-                {
-                  type: "button",
-                  onClick: () => allerA(actif + 1),
-                  disabled: actif === testimonials.length - 1,
-                  "aria-label": "Client suivant",
-                  className: "flex h-11 w-11 items-center justify-center rounded-full border border-surface-border text-text-secondary transition-colors hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-30",
-                  children: /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "→" })
-                }
-              )
-            ] })
-          ] })
-        ] })
+        eclat > 0 && /* @__PURE__ */ jsx(Eclat, { cle: eclat }),
+        /* @__PURE__ */ jsx("p", { className: "text-[13px] font-medium text-text-primary lg:text-sm", children: titre }),
+        /* @__PURE__ */ jsx("p", { className: "text-[10px] text-text-secondary lg:text-xs", children: detail })
       ]
     }
   );
 }
-const CALENDLY_URL = "https://calendly.com/zakariya-neurocare/call-decouverte-20min?hide_gdpr_banner=1";
-const SCRIPT_SRC = "https://assets.calendly.com/assets/external/widget.js";
-let chargement = null;
-function chargerCalendly() {
-  if (chargement) return chargement;
-  chargement = new Promise((resolve, reject) => {
-    if (document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
-      resolve();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = SCRIPT_SRC;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("script Calendly injoignable"));
-    document.head.appendChild(script);
+function RechercheGoogle() {
+  const ref = useRef(null);
+  const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
+  const [lettres, setLettres] = useState(0);
+  const [note, setNote] = useState(NOTE_DEBUT);
+  const [avis, setAvis] = useState(12);
+  useMotionValueEvent(p, "change", (v) => {
+    setLettres(Math.round(Math.min(1, Math.max(0, v / 0.18)) * REQUETE.length));
+    const t = Math.min(1, Math.max(0, (v - 0.3) / 0.5));
+    setNote(Math.round((NOTE_DEBUT + t * (NOTE_FIN - NOTE_DEBUT)) * 10) / 10);
+    setAvis(Math.round(12 + t * 136));
   });
-  return chargement;
-}
-function CalendlyModal({ open, onClose }) {
-  const conteneur = useRef(null);
-  const fermer = useCallback(() => {
-    if (conteneur.current) conteneur.current.innerHTML = "";
-    onClose();
-  }, [onClose]);
-  useEffect(() => {
-    if (!open) return;
-    const gererTouche = (e) => {
-      if (e.key === "Escape") fermer();
-    };
-    window.addEventListener("keydown", gererTouche);
-    const defilementInitial = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", gererTouche);
-      document.body.style.overflow = defilementInitial;
-    };
-  }, [open, fermer]);
-  useEffect(() => {
-    if (!open) return;
-    let annule = false;
-    void chargerCalendly().then(() => {
-      const cible = conteneur.current;
-      const fenetre = window;
-      if (annule || !cible || !fenetre.Calendly) return;
-      cible.innerHTML = "";
-      fenetre.Calendly.initInlineWidget({
-        url: CALENDLY_URL,
-        parentElement: cible
-      });
-    }).catch((err) => console.error("[calendly]", err));
-    return () => {
-      annule = true;
-    };
-  }, [open]);
-  return /* @__PURE__ */ jsx(AnimatePresence, { children: open && /* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[60] flex items-end justify-center sm:items-center", children: [
-    /* @__PURE__ */ jsx(
-      motion.div,
-      {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-        transition: { duration: 0.2 },
-        onClick: fermer,
-        className: "absolute inset-0 bg-text-primary/50 backdrop-blur-sm",
-        "aria-hidden": true
-      }
-    ),
-    /* @__PURE__ */ jsxs(
-      motion.div,
-      {
-        role: "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "calendly-titre",
-        initial: { y: 40, opacity: 0, scale: 0.98 },
-        animate: { y: 0, opacity: 1, scale: 1 },
-        exit: { y: 40, opacity: 0, scale: 0.98 },
-        transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
-        className: "relative z-10 flex max-h-[94vh] w-full flex-col overflow-hidden rounded-t-2xl border border-surface-border bg-surface-card sm:max-h-[92vh] sm:max-w-3xl sm:rounded-2xl",
-        children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 px-6 pb-4 pt-6", children: [
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(
-                "h2",
-                {
-                  id: "calendly-titre",
-                  className: "font-display text-xl font-bold text-text-primary sm:text-2xl",
-                  children: "Parlons de votre projet"
-                }
-              ),
-              /* @__PURE__ */ jsx("p", { className: "mt-2 max-w-xl text-sm leading-relaxed text-text-secondary", children: "Un appel court pour comprendre ce que vous voulez mettre en place, ce dont vous disposez déjà, et ce que ça représente. Vous repartez avec un devis précis, sans engagement." })
-            ] }),
+  const position = useTransform(p, [0.2, 0.75], [CONCURRENTS.length, 0], { clamp: true });
+  const H = useHauteurLigne();
+  const yClient = useTransform(position, (v) => v * H);
+  const resultatsOpacite = useTransform(p, [0.14, 0.22], [0, 1]);
+  const sponsorise = useTransform(p, [0.78, 0.86], [0, 1]);
+  return /* @__PURE__ */ jsx("section", { ref, className: "relative h-[240vh] bg-surface md:h-[280vh]", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 flex h-[100svh] flex-col items-center justify-start gap-4 overflow-hidden px-4 pt-16 md:gap-6 md:px-10 md:pt-28", children: [
+    /* @__PURE__ */ jsx(Badge, { progression: p, debut: 0.3, className: "absolute left-1 top-[36%] z-20 lg:left-[4%] lg:top-[22%]", titre: "Optimisation SEO", detail: "Positions suivies chaque mois" }),
+    /* @__PURE__ */ jsx(Badge, { progression: p, debut: 0.5, className: "absolute right-1 top-[55%] z-20 lg:right-[4%] lg:top-[30%]", titre: "Google Ads", detail: "+214 % de clics qualifiés" }),
+    /* @__PURE__ */ jsx(Badge, { progression: p, debut: 0.66, className: "absolute bottom-[10%] left-1 z-20 lg:bottom-[16%] lg:left-[6%]", titre: "Meta Ads", detail: "Vos réalisations sur Instagram" }),
+    /* @__PURE__ */ jsxs("h2", { className: "w-full max-w-4xl text-center text-[7vw] text-text-primary md:text-4xl lg:text-[2.6rem]", children: [
+      "Un beau site ne suffit pas. ",
+      /* @__PURE__ */ jsx("span", { className: "text-accent", children: "Il doit être trouvé." })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "relative w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-[0_40px_90px_-40px_rgba(0,0,0,0.35)] ring-1 ring-black/5", children: [
+      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 bg-[#f1f3f4] px-4 py-2.5", children: [
+        /* @__PURE__ */ jsx("span", { className: "h-2.5 w-2.5 rounded-full bg-[#ff5f57]" }),
+        /* @__PURE__ */ jsx("span", { className: "h-2.5 w-2.5 rounded-full bg-[#febc2e]" }),
+        /* @__PURE__ */ jsx("span", { className: "h-2.5 w-2.5 rounded-full bg-[#28c840]" }),
+        /* @__PURE__ */ jsx("span", { className: "ml-3 truncate rounded-md bg-white px-3 py-1 text-[11px] text-[#5f6368]", children: "google.fr/search" })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "px-4 pb-6 pt-4 md:px-8", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
+          /* @__PURE__ */ jsx(LogoGoogle$1, { className: "hidden text-2xl md:inline" }),
+          /* @__PURE__ */ jsxs("div", { className: "flex min-h-[44px] flex-1 items-center rounded-full bg-white px-5 text-[15px] text-[#202124] shadow-[0_1px_6px_rgba(32,33,36,0.28)]", children: [
+            REQUETE.slice(0, lettres),
             /* @__PURE__ */ jsx(
-              "button",
+              motion.span,
               {
-                type: "button",
-                onClick: fermer,
-                "aria-label": "Fermer",
-                className: "-m-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-surface-light hover:text-text-primary",
-                children: /* @__PURE__ */ jsx(
-                  "svg",
-                  {
-                    className: "h-5 w-5",
-                    fill: "none",
-                    stroke: "currentColor",
-                    viewBox: "0 0 24 24",
-                    strokeWidth: 1.5,
-                    "aria-hidden": true,
-                    children: /* @__PURE__ */ jsx(
-                      "path",
-                      {
-                        strokeLinecap: "round",
-                        strokeLinejoin: "round",
-                        d: "M6 18L18 6M6 6l12 12"
-                      }
-                    )
-                  }
-                )
+                "aria-hidden": true,
+                className: "ml-0.5 inline-block h-5 w-px bg-[#202124]",
+                animate: { opacity: [1, 0, 1] },
+                transition: { duration: 1, repeat: Infinity }
               }
             )
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs(motion.div, { className: "mt-5 grid gap-6 md:grid-cols-[1fr_15rem]", style: { opacity: resultatsOpacite }, children: [
+          /* @__PURE__ */ jsxs("div", { className: "relative", style: { height: (CONCURRENTS.length + 1) * H }, children: [
+            CONCURRENTS.map((r, i) => /* @__PURE__ */ jsx(Ligne, { i, position, r, h: H }, r.url)),
+            /* @__PURE__ */ jsx(motion.div, { className: "absolute inset-x-0 top-0 z-10 px-1", style: { y: yClient }, children: /* @__PURE__ */ jsxs("div", { className: "relative", children: [
+              /* @__PURE__ */ jsx(
+                motion.span,
+                {
+                  className: "absolute -top-2 right-3 rounded-md bg-[#1a73e8] px-2 py-0.5 text-[10px] font-medium text-white",
+                  style: { opacity: sponsorise },
+                  children: "Sponsorisé"
+                }
+              ),
+              /* @__PURE__ */ jsx(Resultat, { ...CLIENT, client: true, note, avis })
+            ] }) })
           ] }),
-          /* @__PURE__ */ jsx("div", { className: "flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6", children: /* @__PURE__ */ jsx(
-            "div",
-            {
-              ref: conteneur,
-              className: "h-[68vh] min-h-[560px] w-full overflow-hidden rounded-xl bg-white"
-            }
-          ) })
-        ]
-      }
-    )
+          /* @__PURE__ */ jsxs("div", { className: "hidden self-start rounded-xl p-4 ring-1 ring-black/10 md:block", children: [
+            /* @__PURE__ */ jsx("div", { className: "h-24 rounded-lg bg-gradient-to-br from-[#e8eaed] to-[#c9ccd1]" }),
+            /* @__PURE__ */ jsx("p", { className: "mt-3 text-[17px] text-[#202124]", children: "Martin Avocats" }),
+            /* @__PURE__ */ jsxs("p", { className: "mt-0.5 flex items-center gap-1.5 text-sm text-[#4d5156]", children: [
+              /* @__PURE__ */ jsx("span", { className: "tabular-nums text-[#202124]", children: note.toFixed(1).replace(".", ",") }),
+              /* @__PURE__ */ jsx(Etoiles$1, { note }),
+              /* @__PURE__ */ jsxs("span", { className: "tabular-nums", children: [
+                "(",
+                avis,
+                ")"
+              ] })
+            ] }),
+            /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-[#4d5156]", children: "Avocat · Lyon 2e · Ouvert" }),
+            /* @__PURE__ */ jsxs("div", { className: "mt-3 grid grid-cols-3 gap-1.5 text-center text-[11px] text-[#1a73e8]", children: [
+              /* @__PURE__ */ jsx("span", { className: "rounded-full py-1.5 ring-1 ring-black/10", children: "Itinéraire" }),
+              /* @__PURE__ */ jsx("span", { className: "rounded-full py-1.5 ring-1 ring-black/10", children: "Site" }),
+              /* @__PURE__ */ jsx("span", { className: "rounded-full py-1.5 ring-1 ring-black/10", children: "Appeler" })
+            ] })
+          ] })
+        ] })
+      ] })
+    ] })
   ] }) });
+}
+const EASE$4 = [0.22, 1, 0.36, 1];
+const LARGEURS = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
+function AcquisitionStudio() {
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { id: "acquisition", children: /* @__PURE__ */ jsx(RechercheGoogle, {}) }),
+    /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-8 md:px-10 md:pb-10", children: /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("div", { className: "grid gap-4 md:grid-cols-6", children: LEVIERS.map((levier, i) => /* @__PURE__ */ jsxs(
+      motion.article,
+      {
+        className: `group flex flex-col justify-between rounded-[1.75rem] bg-surface-card p-7 transition-colors duration-500 [@media(hover:hover)]:hover:bg-accent md:min-h-[24rem] md:p-10 ${LARGEURS[i]}`,
+        initial: { opacity: 0, y: 40 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$4 },
+        children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-accent transition-colors duration-500 [@media(hover:hover)]:group-hover:text-surface", children: levier.titre }),
+            /* @__PURE__ */ jsx("h3", { className: "mt-4 text-2xl font-normal leading-[1.05] tracking-tight text-text-primary transition-colors duration-500 [@media(hover:hover)]:group-hover:text-surface md:text-3xl", children: levier.accroche })
+          ] }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-8 space-y-2", children: levier.points.map((point) => /* @__PURE__ */ jsxs(
+            "li",
+            {
+              className: "flex gap-3 text-[15px] font-medium text-text-secondary transition-colors duration-500 [@media(hover:hover)]:group-hover:text-surface",
+              children: [
+                /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pop transition-colors duration-500 [@media(hover:hover)]:group-hover:bg-surface" }),
+                point
+              ]
+            },
+            point
+          )) })
+        ]
+      },
+      levier.titre
+    )) }) }) })
+  ] });
 }
 const MEMBERS = [
   {
     initials: "ZN",
-    name: "Zakariya Nebbache",
+    name: "Zakariya N.",
     role: "Développement",
     pitch: "Développeur fullstack. Je prends le projet du premier commit à la mise en ligne : interface, back-office, intégrations et applications iOS.",
     disciplines: [
@@ -2570,7 +2220,7 @@ const MEMBERS = [
   },
   {
     initials: "AN",
-    name: "Anissa Nebbache",
+    name: "Anissa N.",
     role: "Direction de projet, marketing & design",
     pitch: "Cheffe de projet et directrice marketing et design. Je cadre le besoin, dessine le parcours et pilote le projet jusqu'à la livraison, puis ce qu'il produit une fois en ligne : campagnes Meta Ads et Google Ads, suivi des conversions, itérations.",
     disciplines: [
@@ -2596,133 +2246,426 @@ const SERVICES = [
   { title: "Meta Ads et Google Ads", body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
   { title: "Mesure et conversions", body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." }
 ];
-function MemberCard({ member, index }) {
-  return /* @__PURE__ */ jsx(
-    motion.article,
-    {
-      className: "relative",
-      initial: { opacity: 0, y: 48 },
-      whileInView: { opacity: 1, y: 0 },
-      viewport: VIEWPORT,
-      transition: { duration: 0.8, delay: index * 0.12, ease: EASE_OUT },
-      children: /* @__PURE__ */ jsxs("div", { className: "flex h-full flex-col rounded-2xl border border-surface-border bg-surface-card p-7 md:p-9", children: [
-        /* @__PURE__ */ jsx("div", { className: "flex items-start gap-4", children: /* @__PURE__ */ jsx(
-          "div",
-          {
-            "aria-hidden": true,
-            className: "relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 md:h-20 md:w-20",
-            children: /* @__PURE__ */ jsx("span", { className: "font-display text-lg font-bold tracking-widest text-accent md:text-xl", children: member.initials })
-          }
-        ) }),
-        /* @__PURE__ */ jsx("h3", { className: "mt-6 font-display text-2xl font-bold tracking-tight text-text-primary md:text-3xl", children: member.name }),
-        /* @__PURE__ */ jsx("p", { className: "mt-1 font-display text-xs font-semibold uppercase tracking-[0.2em] text-accent", children: member.role }),
-        /* @__PURE__ */ jsx("p", { className: "mt-5 leading-relaxed text-text-secondary", children: member.pitch }),
-        /* @__PURE__ */ jsx("ul", { className: "mt-7 flex flex-wrap gap-2", children: member.disciplines.map((discipline, i) => /* @__PURE__ */ jsx(
-          motion.li,
-          {
-            className: "rounded-full border border-surface-border px-3 py-1 text-[11px] uppercase tracking-wider text-text-secondary",
-            initial: { opacity: 0, y: 10 },
-            whileInView: { opacity: 1, y: 0 },
-            viewport: VIEWPORT,
-            transition: { duration: 0.4, delay: 0.25 + i * 0.04, ease: EASE_OUT },
-            children: discipline
-          },
-          discipline
-        )) }),
-        /* @__PURE__ */ jsx("div", { className: "mt-auto pt-8", children: /* @__PURE__ */ jsxs(
-          "a",
-          {
-            href: member.linkedin,
-            target: "_blank",
-            rel: "noopener noreferrer",
-            className: "group/link inline-flex min-h-[44px] items-center gap-2 font-display text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:text-accent",
-            children: [
-              /* @__PURE__ */ jsx("svg", { className: "h-4 w-4", fill: "currentColor", viewBox: "0 0 24 24", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" }) }),
-              "Profil LinkedIn",
-              /* @__PURE__ */ jsx(
-                "span",
-                {
-                  "aria-hidden": true,
-                  className: "transition-transform duration-300 group-hover/link:translate-x-0.5",
-                  children: "↗"
-                }
-              )
-            ]
-          }
-        ) })
-      ] })
-    }
-  );
+const EASE$3 = [0.22, 1, 0.36, 1];
+function Chiffre({ valeur }) {
+  const ref = useRef(null);
+  const vu = useInView(ref, { once: true, margin: "-60px" });
+  const cible = parseInt(valeur, 10);
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!vu || Number.isNaN(cible)) return;
+    const debut = performance.now();
+    let f = 0;
+    const tick = (t) => {
+      const p = Math.min(1, (t - debut) / 1200);
+      setN(Math.round((1 - Math.pow(1 - p, 3)) * cible));
+      if (p < 1) f = requestAnimationFrame(tick);
+    };
+    f = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(f);
+  }, [vu, cible]);
+  return /* @__PURE__ */ jsx("span", { ref, children: Number.isNaN(cible) ? valeur : n });
 }
-function TeamSection() {
-  const [rdvOuvert, setRdvOuvert] = useState(false);
-  return /* @__PURE__ */ jsxs("section", { id: "agence", className: "relative overflow-hidden bg-surface-light py-24 md:py-36", children: [
-    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-6xl px-6", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between", children: [
-        /* @__PURE__ */ jsxs("div", { className: "max-w-2xl", children: [
-          /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "L'agence" }) }),
+function EquipeStudio() {
+  return /* @__PURE__ */ jsx("section", { id: "agence", className: "bg-surface-light px-5 py-10 md:px-10 md:py-14", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+    /* @__PURE__ */ jsxs("div", { className: "grid gap-10 lg:grid-cols-12", children: [
+      /* @__PURE__ */ jsx("div", { className: "lg:col-span-7", children: /* @__PURE__ */ jsxs("h2", { className: "text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
+        "Une équipe restreinte, ",
+        /* @__PURE__ */ jsx("span", { className: "text-accent", children: "deux métiers complets." })
+      ] }) }),
+      /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5", children: "Pas de chaîne d'intermédiaires : vous parlez directement aux deux personnes qui conçoivent et qui développent. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "mt-16 grid gap-4 md:mt-24 md:grid-cols-2", children: MEMBERS.map((m, i) => /* @__PURE__ */ jsxs(
+      motion.article,
+      {
+        className: "flex flex-col rounded-[1.75rem] bg-surface-card p-8 md:p-10",
+        initial: { opacity: 0, y: 40 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.8, delay: i * 0.1, ease: EASE$3 },
+        children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
+            /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: m.initials }),
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight text-text-primary md:text-3xl", children: m.name }),
+              /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-accent", children: m.role })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-text-secondary", children: m.pitch }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: m.disciplines.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-surface-light px-3 py-1.5 text-xs font-medium text-text-secondary", children: d }, d)) }),
           /* @__PURE__ */ jsx(
-            SplitText,
+            "a",
             {
-              as: "h2",
-              by: "word",
-              text: "Une équipe restreinte, deux métiers complets",
-              delay: 0.1,
-              className: "mt-5 block font-display text-3xl font-bold leading-[1.02] tracking-tight text-text-primary md:text-5xl lg:text-6xl"
+              href: m.linkedin,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "mt-6 inline-flex min-h-[44px] w-fit items-center text-sm font-medium text-text-primary transition-colors hover:text-accent",
+              children: "Profil LinkedIn ↗"
             }
           )
-        ] }),
-        /* @__PURE__ */ jsx(Reveal, { delay: 0.2, className: "max-w-sm lg:shrink-0", children: /* @__PURE__ */ jsx("p", { className: "leading-relaxed text-text-secondary", children: "Pas de chaîne d'intermédiaires : vous parlez directement aux deux personnes qui conçoivent et qui développent. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." }) })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "mt-14 grid gap-3 md:mt-20 md:grid-cols-3", children: SERVICES.map((service, index) => /* @__PURE__ */ jsxs(
-        motion.div,
-        {
-          className: "rounded-2xl bg-surface-light p-6 md:p-8",
-          initial: { opacity: 0, y: 28 },
-          whileInView: { opacity: 1, y: 0 },
-          viewport: VIEWPORT,
-          transition: { duration: 0.6, delay: index * 0.1, ease: EASE_OUT },
-          children: [
-            /* @__PURE__ */ jsx("h3", { className: "font-display text-base font-bold text-text-primary md:text-lg", children: service.title }),
-            /* @__PURE__ */ jsx("p", { className: "mt-3 text-sm leading-relaxed text-text-secondary", children: service.body })
-          ]
-        },
-        service.title
-      )) }),
-      /* @__PURE__ */ jsx("div", { className: "mt-14 grid gap-6 md:mt-20 md:grid-cols-2 md:gap-8", children: MEMBERS.map((member, index) => /* @__PURE__ */ jsx(MemberCard, { member, index }, member.name)) }),
-      /* @__PURE__ */ jsx("div", { className: "mt-16 grid grid-cols-3 gap-4 md:mt-24", children: FACTS.map((fact, index) => /* @__PURE__ */ jsxs(
-        motion.div,
-        {
-          className: "text-center md:text-left",
-          initial: { opacity: 0, y: 24 },
-          whileInView: { opacity: 1, y: 0 },
-          viewport: VIEWPORT,
-          transition: { duration: 0.6, delay: index * 0.1, ease: EASE_OUT },
-          children: [
-            /* @__PURE__ */ jsx(
-              Counter,
-              {
-                value: fact.value,
-                className: "block font-display text-4xl font-bold text-accent md:text-6xl"
-              }
-            ),
-            /* @__PURE__ */ jsx("div", { className: "mt-2 text-xs uppercase tracking-wider text-text-muted md:text-sm", children: fact.label })
-          ]
-        },
-        fact.label
-      )) })
-    ] }),
-    /* @__PURE__ */ jsx("div", { className: "mx-auto mt-16 max-w-6xl px-6 text-center md:mt-20", children: /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx(Magnetic, { className: "inline-block", children: /* @__PURE__ */ jsx(
-      "button",
+        ]
+      },
+      m.name
+    )) }),
+    /* @__PURE__ */ jsx("div", { className: "mt-4 grid gap-4 md:grid-cols-3", children: SERVICES.map((r, i) => /* @__PURE__ */ jsxs(
+      motion.div,
       {
-        type: "button",
-        onClick: () => setRdvOuvert(true),
-        className: "inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-4 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:gap-3 sm:px-8 sm:text-sm sm:tracking-wider",
-        children: "PARLONS DE VOTRE PROJET"
+        className: "rounded-[1.75rem] bg-surface-card p-7",
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$3 },
+        children: [
+          /* @__PURE__ */ jsx("h3", { className: "text-lg font-normal text-text-primary", children: r.title }),
+          /* @__PURE__ */ jsx("p", { className: "mt-2 text-sm font-medium leading-relaxed text-text-secondary", children: r.body })
+        ]
+      },
+      r.title
+    )) }),
+    /* @__PURE__ */ jsx("div", { className: "mt-16 grid grid-cols-3 gap-4 md:mt-24", children: FACTS.map((f) => /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
+      /* @__PURE__ */ jsx("p", { className: "text-[13vw] font-extrabold leading-none tracking-[-0.04em] text-pop md:text-[6vw] lg:text-[min(6vw,104px)]", children: /* @__PURE__ */ jsx(Chiffre, { valeur: f.value }) }),
+      /* @__PURE__ */ jsx("p", { className: "mt-3 text-xs font-medium uppercase tracking-[0.18em] text-text-secondary md:text-sm", children: f.label })
+    ] }, f.label)) })
+  ] }) });
+}
+const EASE$2 = [0.22, 1, 0.36, 1];
+const DUREES = { sonne: 2600, decroche: 900 };
+function Combine({ className = "" }) {
+  return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", className, fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z" }) });
+}
+function AppelEntrant() {
+  const ref = useRef(null);
+  const visible = useInView(ref, { amount: 0.6 });
+  const [etape, setEtape] = useState("sonne");
+  const [secondes, setSecondes] = useState(0);
+  const pisteRef = useRef(null);
+  const [course, setCourse] = useState(0);
+  useLayoutEffect(() => {
+    const piste = pisteRef.current;
+    if (!piste) return;
+    const mesurer = () => setCourse(piste.clientWidth - 56);
+    mesurer();
+    const obs = new ResizeObserver(mesurer);
+    obs.observe(piste);
+    return () => obs.disconnect();
+  }, [etape]);
+  useEffect(() => {
+    if (!visible) {
+      setEtape("sonne");
+      setSecondes(0);
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setEtape("enligne");
+      return;
+    }
+    const t1 = window.setTimeout(() => setEtape("decroche"), DUREES.sonne);
+    const t2 = window.setTimeout(() => setEtape("enligne"), DUREES.sonne + DUREES.decroche);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [visible]);
+  useEffect(() => {
+    if (etape !== "enligne") return;
+    const t = window.setInterval(() => setSecondes((s) => s + 1), 1e3);
+    return () => window.clearInterval(t);
+  }, [etape]);
+  const duree = `${String(Math.floor(secondes / 60)).padStart(2, "0")}:${String(secondes % 60).padStart(2, "0")}`;
+  const sonne = etape === "sonne";
+  return /* @__PURE__ */ jsxs("div", { ref, className: "relative mx-auto flex h-[30rem] w-full items-center justify-center md:h-[34rem]", children: [
+    /* @__PURE__ */ jsx(AnimatePresence, { children: sonne && [0, 1, 2].map((i) => /* @__PURE__ */ jsx(
+      motion.span,
+      {
+        "aria-hidden": true,
+        className: "absolute h-64 w-64 rounded-full border border-accent/40",
+        initial: { scale: 0.8, opacity: 0 },
+        animate: { scale: [0.8, 1.9], opacity: [0.5, 0] },
+        exit: { opacity: 0 },
+        transition: { duration: 2.2, delay: i * 0.6, repeat: Infinity, ease: "easeOut" }
+      },
+      i
+    )) }),
+    /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        className: "relative h-[27rem] w-[13.5rem] rounded-[2.6rem] bg-[#1d1d1f] p-[7px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] md:h-[31rem] md:w-[15.5rem]",
+        animate: sonne ? { rotate: [0, -3, 3, -3, 3, -2, 2, 0, 0, 0], x: [0, -2, 2, -2, 2, -1, 1, 0, 0, 0] } : { rotate: 0, x: 0, y: etape === "decroche" ? -8 : 0 },
+        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$2 },
+        children: /* @__PURE__ */ jsxs("div", { className: "relative flex h-full w-full flex-col overflow-hidden rounded-[2.2rem] bg-gradient-to-b from-[#3a3d42] via-[#26282c] to-[#161718] px-5 pb-8 pt-12 text-white", children: [
+          /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "absolute left-1/2 top-2.5 h-5 w-20 -translate-x-1/2 rounded-full bg-black" }),
+          /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: etape !== "enligne" ? /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              className: "flex h-full flex-col items-center",
+              exit: { opacity: 0, y: -10 },
+              transition: { duration: 0.35 },
+              children: [
+                /* @__PURE__ */ jsx("p", { className: "text-xs text-white/60", children: "Appel entrant…" }),
+                /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
+                /* @__PURE__ */ jsx("p", { className: "mt-3 text-xl", children: "Nouveau client" }),
+                /* @__PURE__ */ jsx("p", { className: "text-sm text-white/60", children: "via digitalzdev.com" }),
+                /* @__PURE__ */ jsx("div", { className: "mt-auto w-full", children: /* @__PURE__ */ jsxs("div", { ref: pisteRef, className: "relative h-14 w-full overflow-hidden rounded-full bg-white/15", children: [
+                  /* @__PURE__ */ jsx(
+                    motion.p,
+                    {
+                      className: "absolute inset-0 flex items-center justify-center pl-12 text-[11px] text-white/70 md:text-xs",
+                      animate: { opacity: etape === "decroche" ? 0 : [0.4, 1, 0.4] },
+                      transition: etape === "decroche" ? { duration: 0.2 } : { duration: 1.8, repeat: Infinity },
+                      children: "faire glisser pour répondre"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx(
+                    motion.span,
+                    {
+                      className: "absolute left-1 top-1 flex h-12 w-12 items-center justify-center rounded-full bg-[#34c759]",
+                      animate: { x: etape === "decroche" ? course : 0 },
+                      transition: { duration: 0.7, ease: EASE$2 },
+                      children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5" })
+                    }
+                  )
+                ] }) })
+              ]
+            },
+            "entrant"
+          ) : /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              className: "flex h-full flex-col items-center",
+              initial: { opacity: 0, y: 10 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.45, ease: EASE$2 },
+              children: [
+                /* @__PURE__ */ jsx("p", { className: "text-sm tabular-nums text-[#34c759]", children: duree }),
+                /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
+                /* @__PURE__ */ jsx("p", { className: "mt-3 text-xl", children: "Nouveau client" }),
+                /* @__PURE__ */ jsx("p", { className: "text-sm text-white/60", children: "« Bonjour, j'ai vu votre site… »" }),
+                /* @__PURE__ */ jsx("div", { className: "mt-auto grid w-full grid-cols-3 gap-3", children: ["Silence", "Clavier", "HP"].map((l) => /* @__PURE__ */ jsxs("span", { className: "flex flex-col items-center gap-1 text-[10px] text-white/60", children: [
+                  /* @__PURE__ */ jsx("span", { className: "h-11 w-11 rounded-full bg-white/15" }),
+                  l
+                ] }, l)) }),
+                /* @__PURE__ */ jsx("span", { className: "mt-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff3b30]", children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5 rotate-[135deg]" }) })
+              ]
+            },
+            "enligne"
+          ) })
+        ] })
       }
-    ) }) }) }),
+    )
+  ] });
+}
+function FinalStudio() {
+  const ref = useRef(null);
+  const boutonRef = useRef(null);
+  const [rdvOuvert, setRdvOuvert] = useState(false);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+  const ligne1 = useTransform(scrollYProgress, [0, 0.6], ["-12%", "0%"]);
+  const ligne2 = useTransform(scrollYProgress, [0, 0.6], ["12%", "0%"]);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 150, damping: 15 });
+  const sy = useSpring(my, { stiffness: 150, damping: 15 });
+  const attirer = (e) => {
+    if (e.pointerType !== "mouse" || !boutonRef.current) return;
+    const r = boutonRef.current.getBoundingClientRect();
+    mx.set((e.clientX - (r.left + r.width / 2)) * 0.3);
+    my.set((e.clientY - (r.top + r.height / 2)) * 0.3);
+  };
+  const relacher = () => {
+    mx.set(0);
+    my.set(0);
+  };
+  return /* @__PURE__ */ jsxs("section", { ref, className: "overflow-hidden bg-surface px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+      /* @__PURE__ */ jsxs("h2", { className: "text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: [
+        /* @__PURE__ */ jsx(motion.span, { className: "block", style: { x: ligne1 }, children: "Nous vendons plus qu'un site." }),
+        /* @__PURE__ */ jsx(motion.span, { className: "block text-[#25D366]", style: { x: ligne2 }, children: "Nous vendons des appels." })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant, {}) }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center gap-10 text-center md:mt-8", children: [
+        /* @__PURE__ */ jsx("p", { className: "max-w-md text-xl leading-snug text-text-secondary md:text-2xl", children: "Commandez le site qui vous apportera vos prochains prospects." }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-6", onPointerMove: attirer, onPointerLeave: relacher, children: [
+          /* @__PURE__ */ jsx(
+            motion.button,
+            {
+              ref: boutonRef,
+              type: "button",
+              onClick: () => setRdvOuvert(true),
+              style: { x: sx, y: sy },
+              whileTap: { scale: 0.94 },
+              className: "flex h-32 w-32 items-center justify-center rounded-full bg-[#25D366] p-6 text-center text-lg font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:text-lg",
+              children: "Réserver un call"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: WHATSAPP_PROJET,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "inline-flex min-h-[44px] items-center text-base font-medium text-text-primary transition-colors hover:text-accent",
+              children: "ou WhatsApp ↗"
+            }
+          )
+        ] })
+      ] })
+    ] }),
     /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
   ] });
+}
+const CLE$1 = "digitalz-prechargeur-vu";
+const DUREE_MS = 1100;
+const EASE$1 = [0.76, 0, 0.24, 1];
+function Prechargeur() {
+  const [visible, setVisible] = useState(false);
+  const [compte, setCompte] = useState(0);
+  useEffect(() => {
+    let dejaVu = false;
+    try {
+      dejaVu = sessionStorage.getItem(CLE$1) === "1";
+    } catch {
+    }
+    const sobre = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (dejaVu || sobre) return;
+    setVisible(true);
+    const debut = performance.now();
+    let frame = 0;
+    let sortie = 0;
+    const tick = (t) => {
+      const p = Math.min(1, (t - debut) / DUREE_MS);
+      setCompte(Math.round((1 - Math.pow(1 - p, 3)) * 100));
+      if (p < 1) frame = requestAnimationFrame(tick);
+      else {
+        try {
+          sessionStorage.setItem(CLE$1, "1");
+        } catch {
+        }
+        sortie = window.setTimeout(() => setVisible(false), 180);
+      }
+    };
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(sortie);
+    };
+  }, []);
+  return /* @__PURE__ */ jsx(AnimatePresence, { children: visible && /* @__PURE__ */ jsxs(
+    motion.div,
+    {
+      className: "fixed inset-0 z-[90] flex flex-col justify-between bg-pop p-6 text-white md:p-10",
+      initial: { y: 0 },
+      exit: { y: "-100%" },
+      transition: { duration: 0.8, ease: EASE$1 },
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx("img", { src: "/logo-studio.png", alt: "", className: "h-10 w-10 rounded-full ring-2 ring-surface" }),
+          /* @__PURE__ */ jsx("span", { className: "text-lg font-normal tracking-tight", children: "Digitalz Dev" })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-end justify-between gap-6", children: [
+          /* @__PURE__ */ jsx("p", { className: "max-w-[14rem] text-sm font-medium leading-snug", children: "Sites internet pour avocats, architectes et métiers de l'image." }),
+          /* @__PURE__ */ jsx("span", { className: "text-[28vw] font-normal leading-[0.8] tracking-[-0.06em] md:text-[18vw]", children: compte })
+        ] })
+      ]
+    }
+  ) });
+}
+const avisGoogle = [];
+const ficheGoogle = {
+  note: null,
+  total: null,
+  lien: null
+};
+function Etoiles({ note }) {
+  return /* @__PURE__ */ jsx("div", { className: "flex gap-0.5", "aria-label": `${note} sur 5`, children: Array.from({ length: 5 }, (_, i) => /* @__PURE__ */ jsx(
+    "svg",
+    {
+      viewBox: "0 0 20 20",
+      className: `h-4 w-4 ${i < Math.round(note) ? "text-accent" : "text-surface-border"}`,
+      fill: "currentColor",
+      "aria-hidden": true,
+      children: /* @__PURE__ */ jsx("path", { d: "M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9L10 1.5z" })
+    },
+    i
+  )) });
+}
+function LogoGoogle({ className = "" }) {
+  return /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 24 24", className, "aria-hidden": true, children: [
+    /* @__PURE__ */ jsx("path", { fill: "#4285F4", d: "M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" }),
+    /* @__PURE__ */ jsx("path", { fill: "#34A853", d: "M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" }),
+    /* @__PURE__ */ jsx("path", { fill: "#FBBC05", d: "M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2L6.4 14z" }),
+    /* @__PURE__ */ jsx("path", { fill: "#EA4335", d: "M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z" })
+  ] });
+}
+const EXEMPLES = [
+  { auteur: "Maître Sarah M.", note: 5, texte: "Un site sobre, clair sur nos domaines d'intervention, et des demandes de premier rendez-vous qui arrivent désormais par le formulaire plutôt que par hasard.", date: "il y a 2 semaines" },
+  { auteur: "Karim B., architecte", note: 5, texte: "Nos projets sont enfin montrés en grand, sans perte de qualité. Les maîtres d'ouvrage nous parlent du site dès le premier échange.", date: "il y a 1 mois" },
+  { auteur: "Julie R., photographe", note: 5, texte: "Galeries rapides, vidéos en pleine qualité et une fiche Google optimisée : je reçois des demandes de devis chaque semaine.", date: "il y a 2 mois" }
+];
+function horsProduction() {
+  if (typeof window === "undefined") return false;
+  return !/(^|\.)digitalzdev\.com$/.test(window.location.hostname);
+}
+function AvisGoogleSection() {
+  const [exemplesPermis, setExemplesPermis] = useState(false);
+  useEffect(() => setExemplesPermis(horsProduction()), []);
+  const enExemple = avisGoogle.length === 0;
+  if (enExemple && !exemplesPermis) return null;
+  const liste = enExemple ? EXEMPLES : avisGoogle;
+  const fiche = enExemple ? { note: 4.9, total: null, lien: null } : ficheGoogle;
+  return /* @__PURE__ */ jsx("section", { id: "avis-google", className: "relative overflow-hidden bg-surface py-10 md:py-14", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-6xl px-6", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-8 md:flex-row md:items-end md:justify-between", children: [
+      /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsx(
+          SplitText,
+          {
+            as: "h2",
+            by: "word",
+            text: "Nos clients en parlent mieux que nous.",
+            delay: 0.1,
+            className: "block max-w-3xl font-display text-4xl md:text-6xl"
+          }
+        ),
+        enExemple && /* @__PURE__ */ jsx("p", { className: "mt-4 text-sm text-text-muted", children: "Avis d'exemple" })
+      ] }),
+      fiche.note !== null && /* @__PURE__ */ jsx(Reveal, { delay: 0.2, children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4 rounded-3xl bg-surface-card px-6 py-5", children: [
+        /* @__PURE__ */ jsx(LogoGoogle, { className: "h-9 w-9" }),
+        /* @__PURE__ */ jsxs("div", { children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-baseline gap-2", children: [
+            /* @__PURE__ */ jsx("span", { className: "font-display text-4xl font-normal text-text-primary", children: fiche.note.toLocaleString("fr-FR") }),
+            /* @__PURE__ */ jsx(Etoiles, { note: fiche.note })
+          ] }),
+          fiche.total !== null
+        ] })
+      ] }) })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "mt-14 grid gap-4 md:mt-20 md:grid-cols-3", children: liste.map((avis, index) => /* @__PURE__ */ jsxs(
+      motion.figure,
+      {
+        className: "flex flex-col rounded-3xl bg-surface-card p-7",
+        initial: { opacity: 0, y: 32 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: VIEWPORT,
+        transition: { duration: 0.6, delay: index * 0.08, ease: EASE_OUT },
+        children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+            /* @__PURE__ */ jsx(Etoiles, { note: avis.note }),
+            /* @__PURE__ */ jsx(LogoGoogle, { className: "h-5 w-5" })
+          ] }),
+          /* @__PURE__ */ jsxs("blockquote", { className: "mt-5 flex-1 text-base leading-relaxed text-text-primary", children: [
+            "« ",
+            avis.texte,
+            " »"
+          ] }),
+          /* @__PURE__ */ jsxs("figcaption", { className: "mt-6", children: [
+            /* @__PURE__ */ jsx("span", { className: "block font-display font-medium text-text-primary", children: avis.auteur }),
+            /* @__PURE__ */ jsx("span", { className: "text-sm text-text-muted", children: avis.date })
+          ] })
+        ]
+      },
+      `${avis.auteur}-${index}`
+    )) }),
+    fiche.lien
+  ] }) });
 }
 const FAQ = [
   {
@@ -2773,26 +2716,23 @@ function FaqSection() {
       script.remove();
     };
   }, []);
-  return /* @__PURE__ */ jsx("section", { id: "faq", className: "relative bg-surface-light py-24 md:py-36", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-3xl px-6", children: [
-    /* @__PURE__ */ jsxs("div", { className: "mb-14 text-center md:mb-20", children: [
-      /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "Questions fréquentes" }) }),
-      /* @__PURE__ */ jsx(
-        SplitText,
-        {
-          as: "h2",
-          by: "word",
-          text: "Ce qu’on nous demande avant de se lancer",
-          delay: 0.1,
-          className: "mx-auto mt-5 block font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-5xl"
-        }
-      )
-    ] }),
+  return /* @__PURE__ */ jsx("section", { id: "faq", className: "relative bg-surface-light py-10 md:py-14", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-3xl px-6", children: [
+    /* @__PURE__ */ jsx("div", { className: "mb-14 text-center md:mb-20", children: /* @__PURE__ */ jsx(
+      SplitText,
+      {
+        as: "h2",
+        by: "word",
+        text: "Ce qu’on nous demande avant de se lancer",
+        delay: 0.1,
+        className: "mx-auto block font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-5xl"
+      }
+    ) }),
     /* @__PURE__ */ jsx("dl", { children: FAQ.map((item2, index) => {
       const estOuverte = ouverte === index;
       return /* @__PURE__ */ jsxs(
         motion.div,
         {
-          className: "mb-3 rounded-2xl bg-surface-card px-5 md:px-7",
+          className: "mb-3 rounded-2xl bg-surface-card px-5 last:mb-0 md:px-7",
           initial: { opacity: 0, y: 20 },
           whileInView: { opacity: 1, y: 0 },
           viewport: VIEWPORT,
@@ -2807,7 +2747,7 @@ function FaqSection() {
                 "aria-controls": `faq-reponse-${index}`,
                 className: "flex w-full items-center justify-between gap-6 py-6 text-left",
                 children: [
-                  /* @__PURE__ */ jsx("span", { className: "font-display text-base font-semibold text-text-primary md:text-lg", children: item2.question }),
+                  /* @__PURE__ */ jsx("span", { className: "font-display text-base font-medium text-text-primary md:text-lg", children: item2.question }),
                   /* @__PURE__ */ jsx(
                     motion.span,
                     {
@@ -2861,7 +2801,7 @@ function MissionSection() {
     "section",
     {
       ref: sectionRef,
-      className: "relative overflow-hidden bg-surface py-24 md:py-36",
+      className: "relative overflow-hidden bg-surface py-10 md:py-14",
       children: [
         /* @__PURE__ */ jsx(
           motion.div,
@@ -2873,7 +2813,6 @@ function MissionSection() {
         ),
         /* @__PURE__ */ jsxs("div", { className: "relative mx-auto max-w-6xl px-6", children: [
           /* @__PURE__ */ jsxs("div", { className: "mb-16 text-center md:mb-24", children: [
-            /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "Notre mission" }) }),
             /* @__PURE__ */ jsx(
               SplitText,
               {
@@ -2881,7 +2820,7 @@ function MissionSection() {
                 by: "word",
                 text: "Chaque projet finance une cause",
                 delay: 0.1,
-                className: "mx-auto mt-5 block max-w-3xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-text-primary md:text-6xl"
+                className: "mx-auto block max-w-3xl font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-6xl"
               }
             ),
             /* @__PURE__ */ jsx(Reveal, { delay: 0.25, className: "mx-auto mt-8 max-w-2xl", children: /* @__PURE__ */ jsxs("p", { className: "text-lg leading-relaxed text-text-secondary", children: [
@@ -2893,7 +2832,7 @@ function MissionSection() {
                   href: "https://neuro-care.fr",
                   target: "_blank",
                   rel: "noopener noreferrer",
-                  className: "font-semibold text-accent underline-offset-4 hover:underline",
+                  className: "font-medium text-accent underline-offset-4 hover:underline",
                   children: "NeuroCare"
                 }
               ),
@@ -2914,7 +2853,7 @@ function MissionSection() {
               /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" })
             ] }) }),
             /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(Reveal, { from: "right", distance: 50, children: /* @__PURE__ */ jsx("h3", { className: "mb-6 font-display text-2xl font-bold text-text-primary md:text-3xl", children: "NeuroCare : bien plus qu'une plateforme" }) }),
+              /* @__PURE__ */ jsx(Reveal, { from: "right", distance: 50, children: /* @__PURE__ */ jsx("h3", { className: "mb-6 font-display text-2xl font-medium text-text-primary md:text-3xl", children: "NeuroCare : bien plus qu'une plateforme" }) }),
               /* @__PURE__ */ jsxs("div", { className: "space-y-4 leading-relaxed text-text-secondary", children: [
                 PARAGRAPHS.map((paragraph, index) => /* @__PURE__ */ jsx(Reveal, { from: "right", distance: 40, delay: 0.1 + index * 0.1, children: /* @__PURE__ */ jsx("p", { children: paragraph }) }, index)),
                 /* @__PURE__ */ jsx(Reveal, { from: "right", distance: 40, delay: 0.3, children: /* @__PURE__ */ jsx("p", { className: "font-medium text-text-primary", children: "Plus qu'une plateforme, nous guidons et accompagnons les familles dans leur parcours." }) })
@@ -2932,7 +2871,7 @@ function MissionSection() {
                       Counter,
                       {
                         value: stat.value,
-                        className: "block font-display text-xl font-bold text-accent sm:text-2xl"
+                        className: "block font-display text-xl font-medium text-accent sm:text-2xl"
                       }
                     ),
                     /* @__PURE__ */ jsx("div", { className: "mt-1 text-xs leading-snug text-text-muted", children: stat.label })
@@ -2946,9 +2885,9 @@ function MissionSection() {
                   href: "https://neuro-care.fr",
                   target: "_blank",
                   rel: "noopener noreferrer",
-                  className: "inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm sm:tracking-wider",
+                  className: "inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-medium text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm",
                   children: [
-                    "DÉCOUVRIR NEUROCARE",
+                    "Découvrir NeuroCare",
                     /* @__PURE__ */ jsx(
                       "svg",
                       {
@@ -2978,6 +2917,154 @@ function MissionSection() {
     }
   );
 }
+const QUIZ = "https://quiz.digitalzdev.com";
+const CLE = "digitalz-accueil-vu";
+const EASE = [0.32, 0.72, 0, 1];
+function AccueilPopup() {
+  const [ouverte, setOuverte] = useState(false);
+  useEffect(() => {
+    let dejaVue = false;
+    try {
+      dejaVue = sessionStorage.getItem(CLE) === "1";
+    } catch {
+    }
+    if (dejaVue) return;
+    const t = window.setTimeout(() => setOuverte(true), 3500);
+    return () => window.clearTimeout(t);
+  }, []);
+  const fermer = () => {
+    setOuverte(false);
+    try {
+      sessionStorage.setItem(CLE, "1");
+    } catch {
+    }
+  };
+  useEffect(() => {
+    if (!ouverte) return;
+    const auClavier = (e) => {
+      if (e.key === "Escape") fermer();
+    };
+    window.addEventListener("keydown", auClavier);
+    return () => window.removeEventListener("keydown", auClavier);
+  }, [ouverte]);
+  return /* @__PURE__ */ jsx(AnimatePresence, { children: ouverte && /* @__PURE__ */ jsxs(
+    motion.div,
+    {
+      className: "fixed inset-0 z-[70] flex items-end justify-center p-3 sm:items-center sm:p-6",
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+      transition: { duration: 0.3 },
+      children: [
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            "aria-label": "Fermer",
+            onClick: fermer,
+            className: "absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm"
+          }
+        ),
+        /* @__PURE__ */ jsxs(
+          motion.div,
+          {
+            role: "dialog",
+            "aria-modal": "true",
+            "aria-labelledby": "accueil-titre",
+            className: "relative w-full max-w-xl overflow-hidden rounded-[2rem] bg-surface px-7 pb-7 pt-12 text-center shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] sm:px-12 sm:pb-10 sm:pt-14",
+            initial: { opacity: 0, y: 40, scale: 0.96 },
+            animate: { opacity: 1, y: 0, scale: 1 },
+            exit: { opacity: 0, y: 24, scale: 0.98 },
+            transition: { duration: 0.5, ease: EASE },
+            children: [
+              /* @__PURE__ */ jsx(
+                "button",
+                {
+                  type: "button",
+                  onClick: fermer,
+                  "aria-label": "Fermer",
+                  className: "absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-surface-card text-text-primary transition-colors hover:bg-accent hover:text-surface",
+                  children: /* @__PURE__ */ jsx("svg", { className: "h-4 w-4", viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M3 3l10 10M13 3L3 13" }) })
+                }
+              ),
+              /* @__PURE__ */ jsxs(
+                "h2",
+                {
+                  id: "accueil-titre",
+                  className: "text-[2.6rem] leading-[0.98] sm:text-6xl",
+                  children: [
+                    /* @__PURE__ */ jsx(
+                      motion.span,
+                      {
+                        className: "block text-text-primary",
+                        initial: { opacity: 0, y: 16 },
+                        animate: { opacity: 1, y: 0 },
+                        transition: { duration: 0.5, delay: 0.15, ease: EASE },
+                        children: "Votre site à votre image."
+                      }
+                    ),
+                    /* @__PURE__ */ jsx(
+                      motion.span,
+                      {
+                        className: "mt-1 block text-accent",
+                        initial: { opacity: 0, y: 16 },
+                        animate: { opacity: 1, y: 0 },
+                        transition: { duration: 0.5, delay: 0.28, ease: EASE },
+                        children: "Un aperçu en 60 secondes."
+                      }
+                    )
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                motion.p,
+                {
+                  className: "mx-auto mt-5 max-w-sm text-base text-text-secondary",
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.5, delay: 0.42 },
+                  children: "Répondez à quelques questions, nous générons une démo de votre site. Gratuit, sans engagement."
+                }
+              ),
+              /* @__PURE__ */ jsxs(
+                motion.div,
+                {
+                  className: "mt-8 flex flex-col items-center gap-3",
+                  initial: { opacity: 0, y: 12 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.5, delay: 0.5, ease: EASE },
+                  children: [
+                    /* @__PURE__ */ jsxs(
+                      "a",
+                      {
+                        href: QUIZ,
+                        onClick: fermer,
+                        className: "group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-full bg-accent px-8 font-display text-base font-medium text-surface transition-colors hover:bg-accent-hover sm:w-auto",
+                        children: [
+                          "Voir mon aperçu",
+                          /* @__PURE__ */ jsx("svg", { className: "h-5 w-5 transition-transform duration-300 group-hover:translate-x-1", viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M3 8h10M9 4l4 4-4 4" }) })
+                        ]
+                      }
+                    ),
+                    /* @__PURE__ */ jsx(
+                      "button",
+                      {
+                        type: "button",
+                        onClick: fermer,
+                        className: "min-h-[44px] px-4 text-sm font-medium text-text-muted transition-colors hover:text-text-primary",
+                        children: "Plus tard"
+                      }
+                    )
+                  ]
+                }
+              )
+            ]
+          }
+        )
+      ]
+    }
+  ) });
+}
 const RACCOURCIS = [
   { to: "/#services", label: "Nos services" },
   { to: "/#projets", label: "Nos réalisations" },
@@ -2988,152 +3075,88 @@ const RACCOURCIS = [
   // repart avec un aperçu de son site en une minute.
   { to: "https://quiz.digitalzdev.com", label: "Générer ma démo gratuite", externe: true }
 ];
+const RESEAUX = [
+  { href: "https://www.instagram.com/digitalzdev/", label: "Instagram" },
+  { href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/", label: "LinkedIn" },
+  { href: "mailto:zdigitalzdev@gmail.com", label: "zdigitalzdev@gmail.com" }
+];
+const lien = "inline-block py-2 text-[15px] font-medium text-text-secondary transition-colors hover:text-accent";
 function Footer() {
-  return /* @__PURE__ */ jsx("footer", { className: "bg-surface py-16 px-6", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto", children: [
-    /* @__PURE__ */ jsxs("div", { className: "flex flex-col md:flex-row items-center justify-between gap-8", children: [
-      /* @__PURE__ */ jsxs(Link, { to: "/", className: "flex min-h-[44px] items-center gap-3", children: [
-        /* @__PURE__ */ jsx(
-          "img",
-          {
-            src: "/logo.png",
-            alt: "Digitalz Dev",
-            className: "w-10 h-10 rounded-full"
-          }
-        ),
-        /* @__PURE__ */ jsx("span", { className: "font-display font-semibold text-sm tracking-[0.15em]", children: "DIGITALZ DEV" })
+  return /* @__PURE__ */ jsxs("footer", { className: "overflow-hidden bg-surface px-5 pt-10 md:px-10 md:pt-14", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+      /* @__PURE__ */ jsxs("nav", { "aria-label": "Plan du site", className: "grid gap-10 sm:grid-cols-2 lg:grid-cols-12", children: [
+        /* @__PURE__ */ jsxs("div", { className: "lg:col-span-3", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-text-muted", children: "Le site" }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-4", children: RACCOURCIS.map((l) => /* @__PURE__ */ jsx("li", { children: l.externe ? /* @__PURE__ */ jsx("a", { href: l.to, className: lien, children: l.label }) : /* @__PURE__ */ jsx(Link, { to: l.to, className: lien, children: l.label }) }, l.to)) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "lg:col-span-6", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-text-muted", children: "Réalisations" }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-4 grid gap-x-6 sm:grid-cols-2", children: projects.map((p) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(Link, { to: p.route, className: lien, children: [
+            p.title,
+            /* @__PURE__ */ jsxs("span", { className: "font-medium text-text-muted", children: [
+              " · ",
+              p.subtitle
+            ] })
+          ] }) }, p.id)) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "lg:col-span-3", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-text-muted", children: "Nous suivre" }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-4", children: RESEAUX.map((r) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: r.href,
+              target: r.href.startsWith("http") ? "_blank" : void 0,
+              rel: r.href.startsWith("http") ? "noopener noreferrer" : void 0,
+              className: lien,
+              children: r.label
+            }
+          ) }, r.href)) })
+        ] })
       ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1 sm:gap-2", children: [
-        /* @__PURE__ */ jsx(
-          "a",
-          {
-            href: "https://www.instagram.com/digitalzdev/",
-            target: "_blank",
-            rel: "noopener noreferrer",
-            className: "flex h-11 w-11 items-center justify-center text-text-secondary transition-colors hover:text-accent",
-            "aria-label": "Instagram",
-            children: /* @__PURE__ */ jsx("svg", { className: "w-5 h-5", fill: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsx("path", { d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" }) })
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "a",
-          {
-            href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/",
-            target: "_blank",
-            rel: "noopener noreferrer",
-            className: "flex h-11 w-11 items-center justify-center text-text-secondary transition-colors hover:text-accent",
-            "aria-label": "LinkedIn",
-            children: /* @__PURE__ */ jsx("svg", { className: "w-5 h-5", fill: "currentColor", viewBox: "0 0 24 24", children: /* @__PURE__ */ jsx("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" }) })
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "a",
-          {
-            href: "mailto:zdigitalzdev@gmail.com",
-            className: "flex h-11 w-11 items-center justify-center text-text-secondary transition-colors hover:text-accent",
-            "aria-label": "Email",
-            children: /* @__PURE__ */ jsx(
-              "svg",
-              {
-                className: "w-5 h-5",
-                fill: "none",
-                stroke: "currentColor",
-                viewBox: "0 0 24 24",
-                strokeWidth: 1.5,
-                children: /* @__PURE__ */ jsx(
-                  "path",
-                  {
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round",
-                    d: "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                  }
-                )
-              }
-            )
-          }
-        )
+      /* @__PURE__ */ jsxs("div", { className: "mt-14 flex flex-col gap-3 text-sm font-medium text-text-muted md:flex-row md:items-center md:justify-between", children: [
+        /* @__PURE__ */ jsxs("p", { children: [
+          "Digitalz Dev © ",
+          (/* @__PURE__ */ new Date()).getFullYear(),
+          " · Tous droits réservés"
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-6", children: [
+          /* @__PURE__ */ jsx(Link, { to: "/mentions-legales", className: "py-2 transition-colors hover:text-accent", children: "Mentions légales" }),
+          /* @__PURE__ */ jsx(Link, { to: "/politique-confidentialite", className: "py-2 transition-colors hover:text-accent", children: "Politique de confidentialité" })
+        ] })
       ] })
     ] }),
-    /* @__PURE__ */ jsxs(
-      "nav",
+    /* @__PURE__ */ jsx("div", { className: "mt-10 overflow-hidden", children: /* @__PURE__ */ jsxs(
+      motion.p,
       {
-        "aria-label": "Plan du site",
-        className: "mt-12 grid gap-8 sm:grid-cols-2 md:grid-cols-3",
+        "aria-hidden": true,
+        className: "whitespace-nowrap pb-[0.06em] text-center text-[13vw] font-normal leading-[1.05] tracking-[-0.06em] text-text-primary",
+        initial: { y: "60%" },
+        whileInView: { y: "0%" },
+        viewport: { once: true },
+        transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
         children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("h2", { className: "font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary", children: "Le site" }),
-            /* @__PURE__ */ jsx("ul", { className: "mt-4 lg:space-y-2", children: RACCOURCIS.map((lien) => /* @__PURE__ */ jsx("li", { children: lien.externe ? /* @__PURE__ */ jsx(
-              "a",
-              {
-                href: lien.to,
-                className: "inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0",
-                children: lien.label
-              }
-            ) : /* @__PURE__ */ jsx(
-              Link,
-              {
-                to: lien.to,
-                className: "inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0",
-                children: lien.label
-              }
-            ) }, lien.to)) })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "sm:col-span-2", children: [
-            /* @__PURE__ */ jsx("h2", { className: "font-display text-xs font-semibold uppercase tracking-[0.2em] text-text-primary", children: "Réalisations" }),
-            /* @__PURE__ */ jsx("ul", { className: "mt-4 grid gap-x-6 sm:grid-cols-2 lg:gap-y-2", children: projects.map((project) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(
-              Link,
-              {
-                to: project.route,
-                className: "inline-block py-3.5 text-sm text-text-secondary transition-colors hover:text-accent lg:py-0",
-                children: [
-                  project.title,
-                  /* @__PURE__ */ jsxs("span", { className: "text-text-muted", children: [
-                    " · ",
-                    project.subtitle
-                  ] })
-                ]
-              }
-            ) }, project.id)) })
-          ] })
+          "Digitalz ",
+          /* @__PURE__ */ jsx("span", { className: "text-accent", children: "Dev" })
         ]
       }
-    ),
-    /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col md:flex-row items-center justify-between gap-4", children: [
-      /* @__PURE__ */ jsxs("p", { className: "text-text-muted text-sm", children: [
-        "Digitalz Dev © ",
-        (/* @__PURE__ */ new Date()).getFullYear(),
-        " · Tous droits réservés"
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-6", children: [
-        /* @__PURE__ */ jsx(
-          Link,
-          {
-            to: "/mentions-legales",
-            className: "inline-block py-3.5 text-sm text-text-muted transition-colors hover:text-accent lg:py-0",
-            children: "Mentions légales"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          Link,
-          {
-            to: "/politique-confidentialite",
-            className: "inline-block py-3.5 text-sm text-text-muted transition-colors hover:text-accent lg:py-0",
-            children: "Politique de confidentialité"
-          }
-        )
-      ] })
-    ] })
-  ] }) });
+    ) })
+  ] });
 }
 function Home() {
   return /* @__PURE__ */ jsxs("main", { children: [
-    /* @__PURE__ */ jsx(Hero, {}),
-    /* @__PURE__ */ jsx(ProjectsSection, {}),
-    /* @__PURE__ */ jsx(ServicesSection, {}),
-    /* @__PURE__ */ jsx(TestimonialsSection, {}),
-    /* @__PURE__ */ jsx(TeamSection, {}),
+    /* @__PURE__ */ jsx(Prechargeur, {}),
+    /* @__PURE__ */ jsx(HeroStudio, {}),
+    /* @__PURE__ */ jsx(ManifesteStudio, {}),
+    /* @__PURE__ */ jsx(TravauxStudio, {}),
+    /* @__PURE__ */ jsx(FinalStudio, {}),
+    /* @__PURE__ */ jsx(AcquisitionStudio, {}),
+    /* @__PURE__ */ jsx(ServicesStudio, {}),
+    /* @__PURE__ */ jsx(AvisGoogleSection, {}),
+    /* @__PURE__ */ jsx(EquipeStudio, {}),
     /* @__PURE__ */ jsx(FaqSection, {}),
     /* @__PURE__ */ jsx(MissionSection, {}),
-    /* @__PURE__ */ jsx(Footer, {})
+    /* @__PURE__ */ jsx(Footer, {}),
+    /* @__PURE__ */ jsx(AccueilPopup, {})
   ] });
 }
 function ContactForm() {
@@ -3146,15 +3169,15 @@ function ContactForm() {
       viewport: { once: true },
       transition: { duration: 0.8 },
       children: [
-        /* @__PURE__ */ jsx("span", { className: "text-accent font-display font-semibold text-sm tracking-[0.2em] uppercase", children: "Contact" }),
-        /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-3xl md:text-4xl text-text-primary mt-4 mb-4", children: "Un projet en tête ?" }),
+        /* @__PURE__ */ jsx("span", { className: "text-accent font-display font-medium text-sm tracking-[0.2em] uppercase", children: "Contact" }),
+        /* @__PURE__ */ jsx("h2", { className: "font-display font-medium text-3xl md:text-4xl text-text-primary mt-4 mb-4", children: "Un projet en tête ?" }),
         /* @__PURE__ */ jsx("p", { className: "text-text-secondary mb-8", children: "Répondez à huit questions et repartez avec un aperçu de votre site, généré pour votre marque. Gratuit, en moins d'une minute." }),
         /* @__PURE__ */ jsx(
           "a",
           {
             href: "https://quiz.digitalzdev.com",
-            className: "inline-block px-8 py-4 bg-accent text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all",
-            children: "GÉNÉRER MA DÉMO GRATUITE"
+            className: "inline-block px-8 py-4 bg-accent text-surface font-display font-medium rounded-lg hover:opacity-90 transition-all",
+            children: "Générer ma démo gratuite"
           }
         )
       ]
@@ -3203,7 +3226,7 @@ function NextProject({ current }) {
   const index = projects.findIndex((p) => p.id === current.id);
   const next = projects[(index + 1) % projects.length];
   return /* @__PURE__ */ jsx("section", { className: "bg-surface", children: /* @__PURE__ */ jsx(Link, { to: next.route, className: "group block", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-6xl px-6 py-20 md:py-28", children: [
-    /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-text-muted", children: "Projet suivant" }) }),
+    /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-medium uppercase tracking-[0.3em] text-text-muted", children: "Projet suivant" }) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col gap-8 md:flex-row md:items-center md:justify-between", children: [
       /* @__PURE__ */ jsx(
         SplitText,
@@ -3211,7 +3234,7 @@ function NextProject({ current }) {
           as: "h2",
           by: "char",
           text: next.title,
-          className: `block font-display font-bold tracking-tight text-text-primary transition-colors group-hover:text-accent ${// La vignette de survol occupe 224 px de la ligne à partir
+          className: `block font-display font-medium tracking-tight text-text-primary transition-colors group-hover:text-accent ${// La vignette de survol occupe 224 px de la ligne à partir
           // de `md` : le corps ne repasse au maximum qu'à `lg`, sinon
           // le nom de domaine se cassait en trois lignes à 768 px.
           next.title.length > 19 ? "text-2xl sm:text-3xl md:text-4xl lg:text-5xl" : "text-2xl sm:text-4xl md:text-5xl lg:text-7xl"}`
@@ -3244,124 +3267,93 @@ function ProjectPage({ project }) {
     damping: 30,
     restDelta: 1e-3
   });
-  const imageY = useTransform(smooth, [0, 1], ["0%", "22%"]);
-  const imageScale = useTransform(smooth, [0, 1], [1, 1.15]);
-  const contentY = useTransform(smooth, [0, 1], ["0%", "-40%"]);
-  const contentOpacity = useTransform(smooth, [0, 0.75], [1, 0]);
-  const overlayOpacity = useTransform(smooth, [0, 1], [1, 1.4]);
+  const contentY = useTransform(smooth, [0, 1], ["0%", "-30%"]);
+  const contentOpacity = useTransform(smooth, [0, 0.85], [1, 0]);
   return /* @__PURE__ */ jsxs("main", { className: "bg-surface", children: [
-    /* @__PURE__ */ jsxs(
+    /* @__PURE__ */ jsx(
       "section",
       {
         ref: heroRef,
-        className: "relative h-[88vh] min-h-[560px] overflow-hidden bg-surface md:h-screen md:min-h-[620px]",
-        children: [
-          /* @__PURE__ */ jsxs(
-            motion.div,
-            {
-              className: "absolute inset-x-0 -top-[8%] h-[118%]",
-              style: { y: imageY, scale: imageScale },
-              children: [
-                /* @__PURE__ */ jsx("div", { className: `absolute inset-0 bg-gradient-to-br ${project.gradient}` }),
-                /* @__PURE__ */ jsx(
-                  "img",
-                  {
-                    src: project.heroImage,
-                    alt: "",
-                    className: "absolute inset-0 h-full w-full object-cover object-top"
-                  }
-                )
-              ]
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            motion.div,
-            {
-              "aria-hidden": true,
-              className: "absolute inset-0 bg-gradient-to-t from-surface from-38% via-surface/90 via-72% to-surface/25 md:from-20% md:via-surface/85 md:via-58% md:to-surface/20",
-              style: { opacity: overlayOpacity }
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            motion.div,
-            {
-              className: "absolute inset-x-0 bottom-0 z-10 px-6 pb-14 md:px-14 md:pb-20",
-              style: { y: contentY, opacity: contentOpacity },
-              children: /* @__PURE__ */ jsxs("div", { className: "mx-auto w-full max-w-5xl", children: [
-                /* @__PURE__ */ jsx(
-                  motion.div,
-                  {
-                    initial: { opacity: 0, x: -16 },
-                    animate: { opacity: 1, x: 0 },
-                    transition: { duration: 0.6, delay: 0.15 },
-                    children: /* @__PURE__ */ jsxs(
-                      Link,
+        className: "relative overflow-hidden bg-surface pt-32 md:pt-44",
+        children: /* @__PURE__ */ jsx(
+          motion.div,
+          {
+            className: "relative z-10 px-6 pb-14 md:px-14 md:pb-20",
+            style: { y: contentY, opacity: contentOpacity },
+            children: /* @__PURE__ */ jsxs("div", { className: "mx-auto w-full max-w-5xl", children: [
+              /* @__PURE__ */ jsx(
+                motion.div,
+                {
+                  initial: { opacity: 0, x: -16 },
+                  animate: { opacity: 1, x: 0 },
+                  transition: { duration: 0.6, delay: 0.15 },
+                  children: /* @__PURE__ */ jsxs(
+                    Link,
+                    {
+                      to: "/#projets",
+                      className: "group -my-2 inline-flex min-h-[44px] items-center gap-2 py-2 text-sm font-medium text-text-primary transition-colors hover:text-accent",
+                      children: [
+                        /* @__PURE__ */ jsx("span", { className: "transition-transform duration-300 group-hover:-translate-x-1", children: "←" }),
+                        "Retour aux projets"
+                      ]
+                    }
+                  )
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                SplitText,
+                {
+                  as: "h1",
+                  by: "char",
+                  immediate: true,
+                  text: project.title,
+                  delay: 0.35,
+                  className: `mt-8 block font-display font-normal leading-[0.92] tracking-tight text-text-primary ${titleScale(
+                    project.title
+                  )}`
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                motion.p,
+                {
+                  className: "mt-5 max-w-2xl text-base font-medium text-text-secondary sm:text-lg md:text-xl",
+                  initial: { opacity: 0, y: 24 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.8, delay: 0.6, ease: EASE_OUT },
+                  children: project.description
+                }
+              ),
+              /* @__PURE__ */ jsxs(
+                motion.div,
+                {
+                  className: "mt-8 flex flex-wrap items-center gap-4",
+                  initial: { opacity: 0, y: 20 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.8, delay: 0.75, ease: EASE_OUT },
+                  children: [
+                    /* @__PURE__ */ jsx(Magnetic, { children: /* @__PURE__ */ jsxs(
+                      "a",
                       {
-                        to: "/#projets",
-                        className: "group -my-2 inline-flex min-h-[44px] items-center gap-2 py-2 text-sm font-semibold text-text-primary transition-colors hover:text-accent",
+                        href: project.url,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        className: "inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-medium text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm",
                         children: [
-                          /* @__PURE__ */ jsx("span", { className: "transition-transform duration-300 group-hover:-translate-x-1", children: "←" }),
-                          "Retour aux projets"
+                          "Voir le site en ligne",
+                          /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "↗" })
                         ]
                       }
-                    )
-                  }
-                ),
-                /* @__PURE__ */ jsx(
-                  SplitText,
-                  {
-                    as: "h1",
-                    by: "char",
-                    immediate: true,
-                    text: project.title,
-                    delay: 0.35,
-                    className: `mt-8 block font-display font-black leading-[0.92] tracking-tight text-text-primary ${titleScale(
-                      project.title
-                    )}`
-                  }
-                ),
-                /* @__PURE__ */ jsx(
-                  motion.p,
-                  {
-                    className: "mt-5 max-w-2xl text-base font-medium text-text-secondary sm:text-lg md:text-xl",
-                    initial: { opacity: 0, y: 24 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { duration: 0.8, delay: 0.6, ease: EASE_OUT },
-                    children: project.description
-                  }
-                ),
-                /* @__PURE__ */ jsxs(
-                  motion.div,
-                  {
-                    className: "mt-8 flex flex-wrap items-center gap-4",
-                    initial: { opacity: 0, y: 20 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { duration: 0.8, delay: 0.75, ease: EASE_OUT },
-                    children: [
-                      /* @__PURE__ */ jsx(Magnetic, { children: /* @__PURE__ */ jsxs(
-                        "a",
-                        {
-                          href: project.url,
-                          target: "_blank",
-                          rel: "noopener noreferrer",
-                          className: "inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-semibold tracking-wide text-surface transition-opacity hover:opacity-90 sm:px-7 sm:text-sm sm:tracking-wider",
-                          children: [
-                            "VOIR LE SITE EN LIGNE",
-                            /* @__PURE__ */ jsx("span", { "aria-hidden": true, children: "↗" })
-                          ]
-                        }
-                      ) }),
-                      project.access && /* @__PURE__ */ jsx("span", { className: "rounded-full border border-surface-border px-4 py-2 text-xs text-text-muted", children: project.access })
-                    ]
-                  }
-                )
-              ] })
-            }
-          )
-        ]
+                    ) }),
+                    project.access && /* @__PURE__ */ jsx("span", { className: "rounded-full border border-surface-border px-4 py-2 text-xs text-text-muted", children: project.access })
+                  ]
+                }
+              )
+            ] })
+          }
+        )
       }
     ),
-    /* @__PURE__ */ jsx("div", { className: "bg-surface-light px-6 py-6", children: /* @__PURE__ */ jsx("ul", { className: "mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-2 font-display text-[11px] font-semibold uppercase tracking-[0.3em] text-text-secondary", children: project.stack.map((techno) => /* @__PURE__ */ jsx("li", { children: techno }, techno)) }) }),
+    /* @__PURE__ */ jsx("div", { className: "bg-surface-light px-6 py-6", children: /* @__PURE__ */ jsx("ul", { className: "mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-8 gap-y-2 font-display text-[11px] font-medium uppercase tracking-[0.3em] text-text-secondary", children: project.stack.map((techno) => /* @__PURE__ */ jsx("li", { children: techno }, techno)) }) }),
     /* @__PURE__ */ jsx("section", { className: "bg-surface px-6 py-16 md:py-20", children: /* @__PURE__ */ jsx("div", { className: "mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-3", children: project.metrics.map((metric, index) => /* @__PURE__ */ jsxs(
       motion.div,
       {
@@ -3375,7 +3367,7 @@ function ProjectPage({ project }) {
             Counter,
             {
               value: metric.value,
-              className: "block font-display text-4xl font-bold text-accent md:text-6xl"
+              className: "block font-display text-4xl font-medium text-accent md:text-6xl"
             }
           ),
           /* @__PURE__ */ jsx("div", { className: "mt-2 text-sm text-text-secondary", children: metric.label })
@@ -3400,7 +3392,7 @@ function ProjectPage({ project }) {
       {
         className: "grid gap-8 md:grid-cols-[220px_1fr] md:gap-16",
         children: [
-          /* @__PURE__ */ jsx("div", { className: "md:sticky md:top-32 md:h-fit", children: /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: block.label }) }) }),
+          /* @__PURE__ */ jsx("div", { className: "md:sticky md:top-32 md:h-fit", children: /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-medium uppercase tracking-[0.3em] text-accent", children: block.label }) }) }),
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx(
               SplitText,
@@ -3408,7 +3400,7 @@ function ProjectPage({ project }) {
                 as: "h2",
                 by: "word",
                 text: block.title,
-                className: "block font-display text-2xl font-bold tracking-tight text-text-primary md:text-4xl"
+                className: "block font-display text-2xl font-medium tracking-tight text-text-primary md:text-4xl"
               }
             ),
             /* @__PURE__ */ jsx(Reveal, { delay: 0.15, children: /* @__PURE__ */ jsx("p", { className: "mt-6 text-base leading-relaxed text-text-secondary md:text-lg", children: block.body }) })
@@ -3419,7 +3411,7 @@ function ProjectPage({ project }) {
     )) }) }),
     /* @__PURE__ */ jsx("section", { className: "bg-surface-light px-6 py-16 md:py-28", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-4xl", children: [
       /* @__PURE__ */ jsxs("div", { className: "mb-12 text-center", children: [
-        /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "Technique" }) }),
+        /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-medium uppercase tracking-[0.3em] text-accent", children: "Technique" }) }),
         /* @__PURE__ */ jsx(
           SplitText,
           {
@@ -3427,7 +3419,7 @@ function ProjectPage({ project }) {
             by: "word",
             text: "Caractéristiques clés",
             delay: 0.1,
-            className: "mt-4 block font-display text-2xl font-bold tracking-tight text-text-primary md:text-4xl"
+            className: "mt-4 block font-display text-2xl font-medium tracking-tight text-text-primary md:text-4xl"
           }
         )
       ] }),
@@ -3449,7 +3441,7 @@ function ProjectPage({ project }) {
     ] }) }),
     /* @__PURE__ */ jsx("section", { className: "bg-surface px-6 py-16 md:py-28", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-5xl", children: [
       /* @__PURE__ */ jsxs("div", { className: "mb-14 text-center", children: [
-        /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-semibold uppercase tracking-[0.3em] text-accent", children: "Aperçus" }) }),
+        /* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx("span", { className: "font-display text-xs font-medium uppercase tracking-[0.3em] text-accent", children: "Aperçus" }) }),
         /* @__PURE__ */ jsx(
           SplitText,
           {
@@ -3457,7 +3449,7 @@ function ProjectPage({ project }) {
             by: "word",
             text: "Les écrans clés",
             delay: 0.1,
-            className: "mt-4 block font-display text-2xl font-bold tracking-tight text-text-primary md:text-4xl"
+            className: "mt-4 block font-display text-2xl font-medium tracking-tight text-text-primary md:text-4xl"
           }
         )
       ] }),
@@ -3592,7 +3584,7 @@ function Contact() {
       /* @__PURE__ */ jsx(
         motion.span,
         {
-          className: "text-accent font-display font-semibold text-sm tracking-[0.2em] uppercase",
+          className: "text-accent font-display font-medium text-sm tracking-[0.2em] uppercase",
           initial: { opacity: 0, y: 20 },
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.6, delay: 0.1 },
@@ -3602,7 +3594,7 @@ function Contact() {
       /* @__PURE__ */ jsx(
         motion.h1,
         {
-          className: "font-display font-black text-5xl md:text-8xl lg:text-9xl text-text-primary mt-4 mb-6",
+          className: "font-display font-normal text-5xl md:text-8xl lg:text-9xl text-text-primary mt-4 mb-6",
           initial: { opacity: 0, y: 30 },
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
@@ -3631,8 +3623,8 @@ function Contact() {
         transition: { duration: 0.5, delay: 0.3 },
         children: [
           /* @__PURE__ */ jsxs("fieldset", { className: "space-y-5", children: [
-            /* @__PURE__ */ jsxs("legend", { className: "font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold", children: "1" }),
+            /* @__PURE__ */ jsxs("legend", { className: "font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3", children: [
+              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium", children: "1" }),
               "Vos coordonnées"
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [
@@ -3695,8 +3687,8 @@ function Contact() {
             ] })
           ] }),
           /* @__PURE__ */ jsxs("fieldset", { className: "space-y-4", children: [
-            /* @__PURE__ */ jsxs("legend", { className: "font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold", children: "2" }),
+            /* @__PURE__ */ jsxs("legend", { className: "font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3", children: [
+              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium", children: "2" }),
               "Votre projet"
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
@@ -3751,8 +3743,8 @@ function Contact() {
             ] })
           ] }),
           /* @__PURE__ */ jsxs("fieldset", { className: "space-y-4", children: [
-            /* @__PURE__ */ jsxs("legend", { className: "font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold", children: "3" }),
+            /* @__PURE__ */ jsxs("legend", { className: "font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3", children: [
+              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium", children: "3" }),
               "Budget & délai"
             ] }),
             /* @__PURE__ */ jsxs("div", { children: [
@@ -3783,8 +3775,8 @@ function Contact() {
             ] })
           ] }),
           /* @__PURE__ */ jsxs("fieldset", { className: "space-y-4", children: [
-            /* @__PURE__ */ jsxs("legend", { className: "font-display font-bold text-lg text-text-primary mb-4 flex items-center gap-3", children: [
-              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-bold", children: "4" }),
+            /* @__PURE__ */ jsxs("legend", { className: "font-display font-medium text-lg text-text-primary mb-4 flex items-center gap-3", children: [
+              /* @__PURE__ */ jsx("span", { className: "w-8 h-8 rounded-full bg-accent/10 text-accent flex items-center justify-center text-sm font-medium", children: "4" }),
               "Décrivez votre projet"
             ] }),
             /* @__PURE__ */ jsx(
@@ -3836,7 +3828,7 @@ function Contact() {
             {
               type: "submit",
               disabled: sending,
-              className: "w-full py-4 bg-accent text-surface font-display font-semibold tracking-wider rounded-lg hover:opacity-90 transition-all text-lg disabled:opacity-60 disabled:cursor-not-allowed",
+              className: "w-full py-4 bg-accent text-surface font-display font-medium tracking-wider rounded-lg hover:opacity-90 transition-all text-lg disabled:opacity-60 disabled:cursor-not-allowed",
               whileHover: sending ? {} : { scale: 1.01 },
               whileTap: sending ? {} : { scale: 0.98 },
               children: sending ? "ENVOI EN COURS..." : "ENVOYER LA DEMANDE"
@@ -3872,13 +3864,13 @@ function Contact() {
               )
             }
           ) }),
-          /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-3xl text-text-primary mb-3", children: "Demande envoyée !" }),
+          /* @__PURE__ */ jsx("h2", { className: "font-display font-medium text-3xl text-text-primary mb-3", children: "Demande envoyée !" }),
           /* @__PURE__ */ jsx("p", { className: "text-text-secondary text-lg mb-8", children: "Nous analysons votre projet et revenons vers vous sous 24 à 48h." }),
           /* @__PURE__ */ jsx(
             Link,
             {
               to: "/",
-              className: "px-8 py-3 bg-accent text-surface rounded-full font-display font-semibold inline-block hover:opacity-90 transition-all",
+              className: "px-8 py-3 bg-accent text-surface rounded-full font-display font-medium inline-block hover:opacity-90 transition-all",
               children: "Retour à l'accueil"
             }
           )
@@ -4187,15 +4179,18 @@ function NotFound() {
     )
   ] }) });
 }
-const Login = lazy(() => import("./assets/Login-BRA0lzkU.js"));
+const Login = lazy(() => import("./assets/Login-DIbTS8yc.js"));
 const ClientPortal = lazy(() => import("./assets/ClientPortal-Cyb14TnS.js"));
-const DashboardLayout = lazy(() => import("./assets/DashboardLayout-Cc3cuLcf.js"));
+const DashboardLayout = lazy(() => import("./assets/DashboardLayout-oy6br7e7.js"));
 function RouteFallback() {
   return /* @__PURE__ */ jsx("div", { className: "flex min-h-screen items-center justify-center bg-surface", children: /* @__PURE__ */ jsx("span", { className: "h-8 w-8 animate-spin rounded-full border-2 border-surface-border border-t-accent" }) });
 }
 function App() {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard") || location.pathname === "/login" || location.pathname.startsWith("/espace/");
+  useEffect(() => {
+    document.documentElement.classList.toggle("studio", !isDashboard);
+  }, [isDashboard]);
   if (isDashboard) {
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx(ScrollToTop, {}),
@@ -4236,7 +4231,8 @@ function App() {
       )),
       /* @__PURE__ */ jsx(Route, { path: "*", element: /* @__PURE__ */ jsx(NotFound, {}) })
     ] }) }, location.pathname) }),
-    /* @__PURE__ */ jsx(CookieBanner, {})
+    /* @__PURE__ */ jsx(CookieBanner, {}),
+    /* @__PURE__ */ jsx(Curseur, {})
   ] });
 }
 function render(url) {
@@ -4245,18 +4241,7 @@ function render(url) {
   );
 }
 export {
-  createRenderLoop as a,
-  clamp as b,
-  createRenderer as c,
-  disposeScene as d,
-  scrollState as e,
-  isWebGLAvailable as i,
-  lerp as l,
-  observeResize as o,
-  pixelRatio as p,
-  readPalette as r,
   render,
   supabase as s,
-  useAuth as u,
-  watchTheme as w
+  useAuth as u
 };
