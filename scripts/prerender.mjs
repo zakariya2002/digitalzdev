@@ -182,7 +182,11 @@ for (const page of pages) {
 // mesure pendant le rendu plutôt qu'en relisant le fichier.
 if (rendre) {
   // La page d'erreur tient en trois lignes, c'est sa nature.
-  const maigres = mesures.filter((m) => m.path !== '/404' && m.taille < 500)
+  // Les pages publicitaires se construisent dans le navigateur (formulaire
+  // interactif, hors de l'index) : leur corps pré-rendu est volontairement court.
+  const maigres = mesures.filter(
+    (m) => m.path !== '/404' && !PAGES_NOINDEX.includes(m.path) && m.taille < 500
+  )
   if (maigres.length > 0) {
     throw new Error(
       `Pré-rendu : ${maigres.length} page(s) rendues presque vides : ` +
