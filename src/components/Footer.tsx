@@ -36,7 +36,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl">
         <nav aria-label="Plan du site" className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-3">
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Le site</p>
+            <p className="text-sm font-medium text-text-muted">Le site</p>
             <ul className="mt-4">
               {RACCOURCIS.map((l) => (
                 <li key={l.to}>
@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-6">
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Réalisations</p>
+            <p className="text-sm font-medium text-text-muted">Réalisations</p>
             <ul className="mt-4 grid gap-x-6 sm:grid-cols-2">
               {projects.map((p) => (
                 <li key={p.id}>
@@ -65,7 +65,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-3">
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Nous suivre</p>
+            <p className="text-sm font-medium text-text-muted">Nous suivre</p>
             <ul className="mt-4">
               {RESEAUX.map((r) => (
                 <li key={r.href}>
@@ -100,7 +100,7 @@ export default function Footer() {
       <div className="mt-10 overflow-hidden">
         <motion.p
           aria-hidden
-          className="whitespace-nowrap text-center text-[17.5vw] font-normal leading-[0.78] tracking-[-0.065em] text-text-primary"
+          className="whitespace-nowrap text-center text-[13vw] font-normal leading-[0.8] tracking-[-0.06em] text-text-primary"
           initial={{ y: '60%' }}
           whileInView={{ y: '8%' }}
           viewport={{ once: true }}

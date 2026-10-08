@@ -53,23 +53,22 @@
     --text-muted: 85 85 85;
   }
 
-  /* Thème « studio » du site public : graphite et acier, dans le registre
-     d'Apple. Aucune couleur vive : le relief vient du gris, de la lumière et
-     des boutons chromés. Une seule police, Nunito, en graisses fines. La
-     classe est posée sur <html> par App, uniquement hors de l'espace client
-     et du tableau de bord, qui gardent la charte d'origine. */
+  /* Thème « studio » du site public : fond blanc et gris acier, dans le
+     registre d'Apple. Aucune couleur vive ni effet de matière : un gris acier
+     uni porte les boutons et les accents. Une seule police, Nunito. La classe
+     est posée sur <html> par App, uniquement hors de l'espace client et du
+     tableau de bord, qui gardent la charte d'origine. */
   html.studio {
-    --surface: 17 17 19;
-    --surface-light: 27 27 30;
-    --surface-card: 36 36 40;
-    --surface-border: 58 58 63;
-    --accent: 142 142 147;
-    --accent-hover: 174 174 178;
-    --accent-muted: 99 99 104;
-    --text-primary: 245 245 247;
-    --text-secondary: 161 161 166;
-    --text-muted: 110 110 115;
-    color-scheme: dark;
+    --surface: 255 255 255;
+    --surface-light: 245 245 247;
+    --surface-card: 240 240 242;
+    --surface-border: 222 222 226;
+    --accent: 110 113 119;
+    --accent-hover: 88 91 97;
+    --accent-muted: 152 155 161;
+    --text-primary: 29 29 31;
+    --text-secondary: 99 99 104;
+    --text-muted: 142 142 147;
   }
 
   html.studio body,
@@ -78,34 +77,17 @@
     font-family: 'Nunito', system-ui, sans-serif;
   }
 
-  /* Pas de gras : les grands titres en graisse normale, très serrés. */
+  /* Les grands titres en graisse normale, serrés. */
+  /* Les citations portent la classe font-extrabold et gardent leur gras. */
+  html.studio h1:not(.font-extrabold),
+  html.studio h2:not(.font-extrabold) {
+    font-weight: 400;
+  }
+
   html.studio h1,
   html.studio h2 {
-    font-weight: 400;
-    letter-spacing: -0.04em;
-    line-height: 1;
-  }
-
-  /* Le chrome : tout ce qui portait la couleur d'accent devient une plaque
-     d'acier poli. Un dégradé clair en haut, cassé à mi-hauteur, puis plus
-     clair vers le bas : c'est ce qui fait le métal et non le plastique. */
-  html.studio .bg-accent {
-    background-color: #c9cace;
-    background-image: linear-gradient(180deg, #fbfbfc 0%, #dcdde1 44%, #a7a8ae 52%, #cfd0d4 100%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.95),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-      0 6px 18px -8px rgba(0, 0, 0, 0.6);
-  }
-
-  /* Le reflet plus clair au survol, réservé aux appareils à souris : sur un
-     écran tactile, l'état de survol reste collé après le toucher. */
-  @media (hover: hover) {
-    html.studio .hover\:bg-accent-hover:hover,
-    html.studio .\[\@media\(hover\:hover\)\]\:hover\:bg-accent:hover {
-      background-color: #d8d9dc;
-      background-image: linear-gradient(180deg, #ffffff 0%, #e7e8eb 44%, #b5b6bb 52%, #dcdde0 100%);
-    }
+    letter-spacing: -0.035em;
+    line-height: 1.02;
   }
 
   html.studio ::selection {
@@ -113,14 +95,6 @@
     color: rgb(var(--surface));
   }
 
-  /* Le curseur personnalisé remplace le pointeur sur ordinateur. */
-  @media (hover: hover) and (pointer: fine) {
-    html.studio.curseur-actif,
-    html.studio.curseur-actif a,
-    html.studio.curseur-actif button {
-      cursor: none;
-    }
-  }
 
   * {
     margin: 0;

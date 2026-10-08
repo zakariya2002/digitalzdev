@@ -54,6 +54,11 @@ function Heure() {
  */
 export default function Navbar() {
   const [defile, setDefile] = useState(false)
+  // Comme sur butter.video : au survol des trois points, la pastille se
+  // déplie et montre les liens ; un clic la garde ouverte.
+  const [survol, setSurvol] = useState(false)
+  const [epingle, setEpingle] = useState(false)
+  const liensVisibles = !defile || survol || epingle
   const [ouvert, setOuvert] = useState(false)
   const location = useLocation()
   const { scrollY } = useScroll()
@@ -87,6 +92,7 @@ export default function Navbar() {
         <nav
           aria-label="Navigation principale"
           className="pointer-events-auto flex items-center rounded-2xl bg-surface-card/75 py-1.5 pl-3 pr-1.5 backdrop-blur-xl md:pl-4"
+          onPointerLeave={() => setSurvol(false)}
         >
           <Link to="/" onClick={fermer} className="group flex min-h-[44px] items-center gap-2.5 pr-2">
             <img
@@ -100,13 +106,13 @@ export default function Navbar() {
           <motion.div
             className="hidden overflow-hidden lg:block"
             initial={false}
-            animate={{ width: defile ? 0 : 'auto', opacity: defile ? 0 : 1 }}
+            animate={{ width: liensVisibles ? 'auto' : 0, opacity: liensVisibles ? 1 : 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
             <ul className="flex items-center gap-1 whitespace-nowrap pl-4">
               {LIENS.filter((l) => l.vers !== '/').map((lien) => {
                 const classe =
-                  'inline-flex min-h-[40px] items-center rounded-xl px-3 text-[15px] text-text-secondary transition-colors hover:bg-surface-border/60 hover:text-text-primary'
+                  'inline-flex min-h-[40px] items-center rounded-xl px-3 text-[15px] text-text-primary transition-colors hover:text-text-muted'
                 return (
                   <li key={lien.libelle}>
                     {lien.interne ? (
@@ -122,7 +128,13 @@ export default function Navbar() {
 
           <button
             type="button"
-            onClick={() => setOuvert((o) => !o)}
+            onPointerEnter={(e) => e.pointerType === 'mouse' && setSurvol(true)}
+            onClick={() => {
+              // Sur grand écran, les trois points déplient la barre ; en
+              // dessous, ils ouvrent le menu plein écran.
+              if (window.matchMedia('(min-width: 1024px)').matches) setEpingle((v) => !v)
+              else setOuvert((o) => !o)
+            }}
             aria-expanded={ouvert}
             aria-controls="menu-plein-ecran"
             aria-label={ouvert ? 'Fermer le menu' : 'Ouvrir le menu'}

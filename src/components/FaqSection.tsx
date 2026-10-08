@@ -80,11 +80,6 @@ export default function FaqSection() {
     <section id="faq" className="relative bg-surface-light py-16 md:py-24">
       <div className="mx-auto max-w-3xl px-6">
         <div className="mb-14 text-center md:mb-20">
-          <Reveal>
-            <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
-              Questions fréquentes
-            </span>
-          </Reveal>
           <SplitText
             as="h2"
             by="word"

@@ -39,11 +39,6 @@ export default function MissionSection() {
 
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mb-16 text-center md:mb-24">
-          <Reveal>
-            <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
-              Notre mission
-            </span>
-          </Reveal>
 
           <SplitText
             as="h2"

@@ -1,7 +1,6 @@
 import HeroStudio from '../components/studio/HeroStudio'
 import ManifesteStudio from '../components/studio/ManifesteStudio'
 import TravauxStudio from '../components/studio/TravauxStudio'
-import ExpertisesStudio from '../components/studio/ExpertisesStudio'
 import ServicesStudio from '../components/studio/ServicesStudio'
 import AcquisitionStudio from '../components/studio/AcquisitionStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
@@ -18,7 +17,7 @@ import Footer from '../components/Footer'
  *
  * Le récit suit la mécanique des portfolios primés : un titre et une vidéo
  * qui prend l'écran, le manifeste éclairé au défilement, les projets tout de
- * suite, puis les métiers servis, les services en cartes empilées, les
+ * suite, puis les services en cartes empilées, les
  * leviers d'acquisition, les preuves, l'équipe et l'appel final.
  */
 export default function Home() {
@@ -28,7 +27,6 @@ export default function Home() {
       <HeroStudio />
       <ManifesteStudio />
       <TravauxStudio />
-      <ExpertisesStudio />
       <ServicesStudio />
       <AcquisitionStudio />
       <AvisGoogleSection />

@@ -30,7 +30,7 @@ function CarteProjet({ projet, className = '' }: { projet: (typeof projects)[num
       </div>
       <div className="mt-4 flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-2xl font-normal tracking-tight text-text-primary md:text-4xl">
+          <h3 className="text-xl font-normal tracking-tight text-text-primary md:text-2xl">
             {projet.title}
           </h3>
           <p className="mt-1 text-sm font-medium text-text-secondary md:text-base">{projet.subtitle}</p>
@@ -70,9 +70,7 @@ function Selection() {
       <section ref={sectionRef} className="relative hidden h-[260vh] lg:block">
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
           <div className="mb-8 flex items-end justify-between px-10">
-            <h2 className="text-[7vw] text-text-primary">
-              Sélection<span className="text-accent">.</span>
-            </h2>
+            <div />
             <div className="mb-4 w-64">
               <p className="text-right text-sm font-medium text-text-secondary">
                 {projects.length} sites en ligne
@@ -91,11 +89,8 @@ function Selection() {
       </section>
 
       {/* Mobile et tablette : carrousel natif */}
-      <section className="py-20 lg:hidden">
-        <h2 className="px-5 text-[15vw] text-text-primary">
-          Sélection<span className="text-accent">.</span>
-        </h2>
-        <div className="mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]">
+      <section className="pb-10 pt-16 lg:hidden">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]">
           {SELECTION.map((p) => (
             <CarteProjet key={p.id} projet={p} className="w-[82vw] snap-center sm:w-[60vw]" />
           ))}
@@ -123,9 +118,6 @@ function Index() {
       }}
     >
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">
-          Toutes nos réalisations
-        </p>
         <p className="mt-4 max-w-xl text-lg font-medium text-text-secondary">
           Des boutiques Shopify aux plateformes métier. Chaque projet part d'un
           problème concret et se juge sur ce qu'il change une fois en ligne.
@@ -152,7 +144,7 @@ function Index() {
                   loading="lazy"
                   className="h-14 w-20 shrink-0 rounded-lg object-cover object-top md:hidden"
                 />
-                <span className="min-w-0 flex-1 truncate text-3xl font-normal tracking-tight text-text-primary md:text-6xl lg:text-7xl">
+                <span className="min-w-0 flex-1 truncate text-2xl font-normal tracking-tight text-text-primary md:text-4xl lg:text-5xl">
                   {p.title}
                 </span>
                 <span className="hidden shrink-0 text-right text-sm font-medium text-text-secondary md:block">

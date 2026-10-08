@@ -33,12 +33,11 @@ function Chiffre({ valeur }: { valeur: string }) {
  */
 export default function EquipeStudio() {
   return (
-    <section id="agence" className="bg-surface-light px-5 py-24 md:px-10 md:py-36">
+    <section id="agence" className="bg-surface-light px-5 py-20 md:px-10 md:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">L'agence</p>
-            <h2 className="mt-6 text-[12vw] text-text-primary md:text-7xl lg:text-8xl">
+            <h2 className="mt-6 text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
               Une équipe restreinte, <span className="text-accent">deux métiers complets.</span>
             </h2>
           </div>
@@ -108,7 +107,7 @@ export default function EquipeStudio() {
         <div className="mt-16 grid grid-cols-3 gap-4 md:mt-24">
           {FACTS.map((f) => (
             <div key={f.label} className="text-center">
-              <p className="text-[18vw] font-normal leading-none tracking-[-0.06em] text-accent md:text-[10vw] lg:text-[min(10vw,180px)]">
+              <p className="text-[13vw] font-normal leading-none tracking-[-0.05em] text-accent md:text-[6vw] lg:text-[min(6vw,104px)]">
                 <Chiffre valeur={f.value} />
               </p>
               <p className="mt-3 text-xs font-medium uppercase tracking-[0.18em] text-text-secondary md:text-sm">

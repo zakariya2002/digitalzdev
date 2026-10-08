@@ -43,19 +43,9 @@ export default function ManifesteStudio() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'end 0.45'] })
 
   return (
-    <section className="bg-surface px-5 py-24 md:px-10 md:py-40">
+    <section className="bg-surface px-5 py-20 md:px-10 md:py-28">
       <div ref={ref} className="mx-auto max-w-7xl">
-        {/* Sur mobile, le texte d'accroche du haut de page vient ici : la
-            carte vidéo lui laissait trop peu de place. */}
-        <p className="mb-16 text-lg font-medium leading-relaxed text-text-secondary md:hidden">
-          Cabinets d'avocats, agences d'architecture, photographes et
-          vidéastes : nous concevons des sites sobres et rapides, qui
-          inspirent confiance et font venir les bons clients.
-        </p>
-        <p className="text-center text-xs font-medium uppercase tracking-[0.25em] text-text-muted">
-          Notre approche
-        </p>
-        <h2 className="mx-auto mt-8 max-w-6xl text-center text-[9.5vw] uppercase leading-[1.02] md:text-[6.4vw] lg:text-[min(6vw,112px)]">
+        <h2 className="mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]">
           {MOTS.map((m, i) => (
             <Mot key={`${m.mot}-${i}`} mot={m.mot} accent={m.accent} p={scrollYProgress} i={i} n={MOTS.length} />
           ))}

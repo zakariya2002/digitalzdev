@@ -73,11 +73,6 @@ export default function AvisGoogleSection() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <Reveal>
-              <span className="font-display text-xs font-medium uppercase tracking-[0.3em] text-accent">
-                Avis Google
-              </span>
-            </Reveal>
             <SplitText
               as="h2"
               by="word"

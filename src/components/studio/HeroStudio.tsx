@@ -117,15 +117,7 @@ export default function HeroStudio() {
           className="relative z-10 flex h-full flex-col justify-start px-5 pt-28 md:px-10 md:pt-32"
           style={{ opacity: titreOpacite, y: titreY }}
         >
-          <motion.p
-            className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Agence web · Avocats, architectes, métiers de l'image
-          </motion.p>
-          <h1 className="mt-5 text-[12.5vw] text-text-primary md:text-[8.6vw] lg:text-[min(8.6vw,170px)]">
+          <h1 className="text-[11vw] text-text-primary md:text-[6vw] lg:text-[min(6vw,108px)]">
             <Ligne delai={0.25}>Des sites à la</Ligne>
             <Ligne delai={0.35}>hauteur de votre</Ligne>
             <Ligne delai={0.45}>

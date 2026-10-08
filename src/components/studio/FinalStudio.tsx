@@ -35,8 +35,7 @@ export default function FinalStudio() {
   return (
     <section ref={ref} className="overflow-hidden bg-surface px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-40">
       <div className="mx-auto max-w-7xl">
-        <p className="text-center text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Notre engagement</p>
-        <h2 className="mt-8 text-center text-[9vw] uppercase leading-[1.02] text-text-primary md:text-[6.4vw] lg:text-[min(6vw,112px)]">
+        <h2 className="text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]">
           <motion.span className="block" style={{ x: ligne1 }}>
             Nous vendons plus qu'un site.
           </motion.span>
@@ -57,7 +56,7 @@ export default function FinalStudio() {
               onClick={() => setRdvOuvert(true)}
               style={{ x: sx, y: sy }}
               whileTap={{ scale: 0.94 }}
-              className="flex h-40 w-40 items-center justify-center rounded-full bg-accent p-6 text-center text-lg font-normal leading-tight text-surface transition-colors hover:bg-accent-hover md:h-52 md:w-52 md:text-xl"
+              className="flex h-32 w-32 items-center justify-center rounded-full bg-accent p-6 text-center text-lg font-normal leading-tight text-surface transition-colors hover:bg-accent-hover md:h-40 md:w-40 md:text-lg"
             >
               Réserver un call
             </motion.button>

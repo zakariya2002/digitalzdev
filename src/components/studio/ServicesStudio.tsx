@@ -34,7 +34,7 @@ function Carte({
       >
         <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-7">
-            <h3 className="text-4xl font-normal leading-[0.95] tracking-tight md:text-7xl">
+            <h3 className="text-3xl font-normal leading-[1] tracking-tight md:text-5xl">
               {service.title}
             </h3>
             <p className={`mt-4 text-lg font-medium md:text-xl ${accent ? 'text-surface' : 'text-accent'}`}>
@@ -75,8 +75,7 @@ export default function ServicesStudio() {
   return (
     <section id="services" className="bg-surface px-5 pb-24 pt-24 md:px-10 md:pb-36 md:pt-36">
       <div className="mx-auto max-w-7xl">
-        <p className="text-xs font-medium uppercase tracking-[0.25em] text-text-muted">Nos services</p>
-        <h2 className="mt-6 max-w-5xl text-[11vw] text-text-primary md:text-7xl lg:text-8xl">
+        <h2 className="mt-6 max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
           Une agence web qui conçoit, développe <span className="text-accent">et fait connaître votre site.</span>
         </h2>
         <p className="mt-6 max-w-2xl text-lg font-medium text-text-secondary">
