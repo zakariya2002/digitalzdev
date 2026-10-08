@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import CalendlyModal from '../CalendlyModal'
+import AppelEntrant from './AppelEntrant'
 import { WHATSAPP_PROJET } from '../ServicesSection'
 
 /**
@@ -33,7 +34,7 @@ export default function FinalStudio() {
   }
 
   return (
-    <section ref={ref} className="overflow-hidden bg-surface px-5 pb-16 pt-28 md:px-10 md:pb-24 md:pt-40">
+    <section ref={ref} className="overflow-hidden bg-surface px-5 py-14 md:px-10 md:py-20">
       <div className="mx-auto max-w-7xl">
         <h2 className="text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]">
           <motion.span className="block" style={{ x: ligne1 }}>
@@ -44,7 +45,12 @@ export default function FinalStudio() {
           </motion.span>
         </h2>
 
-        <div className="mt-12 flex flex-col items-center gap-10 text-center md:mt-16">
+        {/* Le téléphone qui sonne puis décroche : la promesse, en image. */}
+        <div className="mt-6 md:mt-10">
+          <AppelEntrant />
+        </div>
+
+        <div className="mt-6 flex flex-col items-center gap-10 text-center md:mt-8">
           <p className="max-w-md text-xl leading-snug text-text-secondary md:text-2xl">
             Commandez le site qui vous apportera vos prochains prospects.
           </p>

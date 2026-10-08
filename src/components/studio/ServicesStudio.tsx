@@ -73,7 +73,7 @@ export default function ServicesStudio() {
   const { scrollYProgress } = useScroll({ target: pileRef, offset: ['start start', 'end end'] })
 
   return (
-    <section id="services" className="bg-surface px-5 pb-24 pt-24 md:px-10 md:pb-36 md:pt-36">
+    <section id="services" className="bg-surface px-5 pb-12 pt-16 md:px-10 md:pb-16 md:pt-20">
       <div className="mx-auto max-w-7xl">
         <h2 className="mt-6 max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
           Une agence web qui conçoit, développe <span className="text-accent">et fait connaître votre site.</span>
@@ -90,7 +90,7 @@ export default function ServicesStudio() {
           ))}
         </div>
 
-        <div className="mt-20 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-28 md:flex-row md:items-center md:justify-between md:p-12">
+        <div className="mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12">
           <p className="max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl">
             Vous avez un projet de site internet, une boutique à ouvrir ou un site
             à refondre ? Décrivez-le-nous directement sur WhatsApp.

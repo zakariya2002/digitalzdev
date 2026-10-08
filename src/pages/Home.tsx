@@ -27,13 +27,13 @@ export default function Home() {
       <HeroStudio />
       <ManifesteStudio />
       <TravauxStudio />
+      <FinalStudio />
       <ServicesStudio />
       <AcquisitionStudio />
       <AvisGoogleSection />
       <EquipeStudio />
       <FaqSection />
       <MissionSection />
-      <FinalStudio />
       <Footer />
       <AccueilPopup />
     </main>

@@ -10,7 +10,7 @@ import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion
  */
 const PHRASE = [
   { texte: 'Pas seulement esthétique.', accent: false },
-  { texte: 'Pensé pour être choisi.', accent: true },
+  { texte: 'Pensé pour le référencement.', accent: true },
 ]
 
 const MOTS = PHRASE.flatMap((p) =>
@@ -43,7 +43,7 @@ export default function ManifesteStudio() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.85', 'end 0.45'] })
 
   return (
-    <section className="bg-surface px-5 py-20 md:px-10 md:py-28">
+    <section className="bg-surface px-5 py-12 md:px-10 md:py-16">
       <div ref={ref} className="mx-auto max-w-7xl">
         <h2 className="mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]">
           {MOTS.map((m, i) => (

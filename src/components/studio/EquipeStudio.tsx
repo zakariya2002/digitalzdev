@@ -33,7 +33,7 @@ function Chiffre({ valeur }: { valeur: string }) {
  */
 export default function EquipeStudio() {
   return (
-    <section id="agence" className="bg-surface-light px-5 py-20 md:px-10 md:py-28">
+    <section id="agence" className="bg-surface-light px-5 py-12 md:px-10 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-7">
