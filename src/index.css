@@ -94,6 +94,16 @@
     line-height: 1.02;
   }
 
+  /* Les boutons passent en noir ; le gris acier reste pour les textes. */
+  html.studio .bg-accent {
+    background-color: #1d1d1f;
+  }
+  @media (hover: hover) {
+    html.studio .hover\:bg-accent-hover:hover {
+      background-color: #3a3a3c;
+    }
+  }
+
   html.studio ::selection {
     background-color: rgb(var(--text-primary));
     color: rgb(var(--surface));
