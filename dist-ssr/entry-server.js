@@ -884,8 +884,8 @@ const LIENS = [
   { libelle: "L'agence", vers: "/#agence", interne: false },
   { libelle: "Contact", vers: "/contact", interne: true }
 ];
-const QUIZ$2 = "https://quiz.digitalzdev.com";
-const EASE$6 = [0.76, 0, 0.24, 1];
+const QUIZ$1 = "https://quiz.digitalzdev.com";
+const EASE$5 = [0.76, 0, 0.24, 1];
 function estCourant(lien2, chemin) {
   if (lien2.vers === "/") return chemin === "/";
   if (lien2.vers.startsWith("/#")) return false;
@@ -998,7 +998,7 @@ function Navbar() {
         /* @__PURE__ */ jsxs(
           "a",
           {
-            href: QUIZ$2,
+            href: QUIZ$1,
             className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
             children: [
               /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Démo gratuite" }),
@@ -1016,7 +1016,7 @@ function Navbar() {
         initial: { clipPath: "inset(0% 0% 100% 0%)" },
         animate: { clipPath: "inset(0% 0% 0% 0%)" },
         exit: { clipPath: "inset(0% 0% 100% 0%)" },
-        transition: { duration: 0.7, ease: EASE$6 },
+        transition: { duration: 0.7, ease: EASE$5 },
         children: [
           /* @__PURE__ */ jsx("nav", { "aria-label": "Menu", children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien2, i) => {
             const courant = estCourant(lien2, location.pathname);
@@ -1079,7 +1079,7 @@ function Navbar() {
                 /* @__PURE__ */ jsx(
                   "a",
                   {
-                    href: QUIZ$2,
+                    href: QUIZ$1,
                     className: "inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto",
                     children: "Générer ma démo gratuite →"
                   }
@@ -1489,8 +1489,8 @@ const SERVICES$1 = [
     ]
   }
 ];
-const EASE$5 = [0.22, 1, 0.36, 1];
-const QUIZ$1 = "https://quiz.digitalzdev.com";
+const EASE$4 = [0.22, 1, 0.36, 1];
+const QUIZ = "https://quiz.digitalzdev.com";
 function Ligne$1({ children, delai }) {
   return /* @__PURE__ */ jsx("span", { className: "block overflow-hidden pb-[0.06em]", children: /* @__PURE__ */ jsx(
     motion.span,
@@ -1498,7 +1498,7 @@ function Ligne$1({ children, delai }) {
       className: "block",
       initial: { y: "110%" },
       animate: { y: 0 },
-      transition: { duration: 1, delay: delai, ease: EASE$5 },
+      transition: { duration: 1, delay: delai, ease: EASE$4 },
       children
     }
   ) });
@@ -1590,7 +1590,7 @@ function HeroStudio() {
               className: "mt-6 max-w-sm md:absolute md:bottom-[7%] md:left-10 md:mt-0",
               initial: { opacity: 0, y: 20 },
               animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.8, delay: 0.8, ease: EASE$5 },
+              transition: { duration: 0.8, delay: 0.8, ease: EASE$4 },
               children: [
                 /* @__PURE__ */ jsx("p", { className: "hidden text-[15px] font-medium leading-relaxed text-text-secondary md:block", children: "Cabinets d'avocats, agences d'architecture, photographes et vidéastes : nous concevons des sites sobres et rapides, qui inspirent confiance et font venir les bons clients." }),
                 /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap gap-2 md:mt-5", children: [
@@ -1607,7 +1607,7 @@ function HeroStudio() {
                   /* @__PURE__ */ jsx(
                     "a",
                     {
-                      href: QUIZ$1,
+                      href: QUIZ,
                       className: "inline-flex min-h-[46px] items-center rounded-full bg-surface-card px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-border md:min-h-[48px] md:px-6 md:text-[15px]",
                       children: "Voir un aperçu"
                     }
@@ -1632,7 +1632,7 @@ function HeroStudio() {
           /* @__PURE__ */ jsx(
             "a",
             {
-              href: QUIZ$1,
+              href: QUIZ,
               "data-curseur": "Go",
               className: "inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover",
               children: "Voir mon aperçu →"
@@ -2076,7 +2076,7 @@ function RechercheGoogle() {
     ] })
   ] }) });
 }
-const EASE$4 = [0.22, 1, 0.36, 1];
+const EASE$3 = [0.22, 1, 0.36, 1];
 const LARGEURS = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
 const SURVOL = [
   { carte: "[@media(hover:hover)]:hover:bg-[#1d1d1f]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
@@ -2094,7 +2094,7 @@ function AcquisitionStudio() {
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$4 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$3 },
         children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("p", { className: `text-sm font-medium text-accent transition-colors duration-500 ${SURVOL[i].texte}`, children: levier.titre }),
@@ -2158,7 +2158,7 @@ const PHOTOS = [
   { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[28rem]" },
   { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "aspect-[4/3] md:col-span-5 md:aspect-auto md:h-[28rem]" }
 ];
-const EASE$3 = [0.22, 1, 0.36, 1];
+const EASE$2 = [0.22, 1, 0.36, 1];
 function Chiffre({ valeur }) {
   const ref = useRef(null);
   const vu = useInView(ref, { once: true, margin: "-60px" });
@@ -2194,7 +2194,7 @@ function EquipeStudio() {
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$3 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$2 },
         children: /* @__PURE__ */ jsx(
           "img",
           {
@@ -2216,7 +2216,7 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, ease: EASE$3 },
+          transition: { duration: 0.8, ease: EASE$2 },
           children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
               /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: FONDATEUR.initials }),
@@ -2250,7 +2250,7 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, delay: 0.1, ease: EASE$3 },
+          transition: { duration: 0.8, delay: 0.1, ease: EASE$2 },
           children: [
             /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight md:text-3xl", children: "L'équipe" }),
             /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-white/75", children: "Direction de projet, design et marketing" }),
@@ -2267,7 +2267,7 @@ function EquipeStudio() {
         initial: { opacity: 0, y: 30 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$3 },
+        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$2 },
         children: [
           /* @__PURE__ */ jsx("h3", { className: "text-lg font-normal text-text-primary", children: r.title }),
           /* @__PURE__ */ jsx("p", { className: "mt-2 text-sm font-medium leading-relaxed text-text-secondary", children: r.body })
@@ -2281,7 +2281,7 @@ function EquipeStudio() {
     ] }, f.label)) })
   ] }) });
 }
-const EASE$2 = [0.22, 1, 0.36, 1];
+const EASE$1 = [0.22, 1, 0.36, 1];
 const DUREES = { sonne: 2600, decroche: 900 };
 function Combine({ className = "" }) {
   return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", className, fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z" }) });
@@ -2349,7 +2349,7 @@ function AppelEntrant() {
       {
         className: "relative h-[27rem] w-[13.5rem] rounded-[2.6rem] bg-[#1d1d1f] p-[7px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] md:h-[31rem] md:w-[15.5rem]",
         animate: sonne ? { rotate: [0, -3, 3, -3, 3, -2, 2, 0, 0, 0], x: [0, -2, 2, -2, 2, -1, 1, 0, 0, 0] } : { rotate: 0, x: 0, y: etape === "decroche" ? -8 : 0 },
-        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$2 },
+        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$1 },
         children: /* @__PURE__ */ jsxs("div", { className: "relative flex h-full w-full flex-col overflow-hidden rounded-[2.2rem] bg-gradient-to-b from-[#3a3d42] via-[#26282c] to-[#161718] px-5 pb-8 pt-12 text-white", children: [
           /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "absolute left-1/2 top-2.5 h-5 w-20 -translate-x-1/2 rounded-full bg-black" }),
           /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: etape !== "enligne" ? /* @__PURE__ */ jsxs(
@@ -2378,7 +2378,7 @@ function AppelEntrant() {
                     {
                       className: "absolute left-1 top-1 flex h-12 w-12 items-center justify-center rounded-full bg-[#34c759]",
                       animate: { x: etape === "decroche" ? course : 0 },
-                      transition: { duration: 0.7, ease: EASE$2 },
+                      transition: { duration: 0.7, ease: EASE$1 },
                       children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5" })
                     }
                   )
@@ -2392,7 +2392,7 @@ function AppelEntrant() {
               className: "flex h-full flex-col items-center",
               initial: { opacity: 0, y: 10 },
               animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.45, ease: EASE$2 },
+              transition: { duration: 0.45, ease: EASE$1 },
               children: [
                 /* @__PURE__ */ jsx("p", { className: "text-sm tabular-nums text-[#34c759]", children: duree }),
                 /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
@@ -2456,16 +2456,16 @@ function FinalStudio() {
     ] })
   ] }) });
 }
-const CLE$1 = "digitalz-prechargeur-vu";
+const CLE = "digitalz-prechargeur-vu";
 const DUREE_MS = 1100;
-const EASE$1 = [0.76, 0, 0.24, 1];
+const EASE = [0.76, 0, 0.24, 1];
 function Prechargeur() {
   const [visible, setVisible] = useState(false);
   const [compte, setCompte] = useState(0);
   useEffect(() => {
     let dejaVu = false;
     try {
-      dejaVu = sessionStorage.getItem(CLE$1) === "1";
+      dejaVu = sessionStorage.getItem(CLE) === "1";
     } catch {
     }
     const sobre = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2480,7 +2480,7 @@ function Prechargeur() {
       if (p < 1) frame = requestAnimationFrame(tick);
       else {
         try {
-          sessionStorage.setItem(CLE$1, "1");
+          sessionStorage.setItem(CLE, "1");
         } catch {
         }
         sortie = window.setTimeout(() => setVisible(false), 180);
@@ -2498,7 +2498,7 @@ function Prechargeur() {
       className: "fixed inset-0 z-[90] flex flex-col justify-between bg-pop p-6 text-white md:p-10",
       initial: { y: 0 },
       exit: { y: "-100%" },
-      transition: { duration: 0.8, ease: EASE$1 },
+      transition: { duration: 0.8, ease: EASE },
       children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
           /* @__PURE__ */ jsx("img", { src: "/logo-studio.png", alt: "", className: "h-10 w-10 rounded-full ring-2 ring-surface" }),
@@ -2860,154 +2860,6 @@ function MissionSection() {
     }
   );
 }
-const QUIZ = "https://quiz.digitalzdev.com";
-const CLE = "digitalz-accueil-vu";
-const EASE = [0.32, 0.72, 0, 1];
-function AccueilPopup() {
-  const [ouverte, setOuverte] = useState(false);
-  useEffect(() => {
-    let dejaVue = false;
-    try {
-      dejaVue = sessionStorage.getItem(CLE) === "1";
-    } catch {
-    }
-    if (dejaVue) return;
-    const t = window.setTimeout(() => setOuverte(true), 3500);
-    return () => window.clearTimeout(t);
-  }, []);
-  const fermer = () => {
-    setOuverte(false);
-    try {
-      sessionStorage.setItem(CLE, "1");
-    } catch {
-    }
-  };
-  useEffect(() => {
-    if (!ouverte) return;
-    const auClavier = (e) => {
-      if (e.key === "Escape") fermer();
-    };
-    window.addEventListener("keydown", auClavier);
-    return () => window.removeEventListener("keydown", auClavier);
-  }, [ouverte]);
-  return /* @__PURE__ */ jsx(AnimatePresence, { children: ouverte && /* @__PURE__ */ jsxs(
-    motion.div,
-    {
-      className: "fixed inset-0 z-[70] flex items-end justify-center p-3 sm:items-center sm:p-6",
-      initial: { opacity: 0 },
-      animate: { opacity: 1 },
-      exit: { opacity: 0 },
-      transition: { duration: 0.3 },
-      children: [
-        /* @__PURE__ */ jsx(
-          "button",
-          {
-            type: "button",
-            "aria-label": "Fermer",
-            onClick: fermer,
-            className: "absolute inset-0 cursor-default bg-black/70 backdrop-blur-sm"
-          }
-        ),
-        /* @__PURE__ */ jsxs(
-          motion.div,
-          {
-            role: "dialog",
-            "aria-modal": "true",
-            "aria-labelledby": "accueil-titre",
-            className: "relative w-full max-w-xl overflow-hidden rounded-[2rem] bg-surface px-7 pb-7 pt-12 text-center shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] sm:px-12 sm:pb-10 sm:pt-14",
-            initial: { opacity: 0, y: 40, scale: 0.96 },
-            animate: { opacity: 1, y: 0, scale: 1 },
-            exit: { opacity: 0, y: 24, scale: 0.98 },
-            transition: { duration: 0.5, ease: EASE },
-            children: [
-              /* @__PURE__ */ jsx(
-                "button",
-                {
-                  type: "button",
-                  onClick: fermer,
-                  "aria-label": "Fermer",
-                  className: "absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-surface-card text-text-primary transition-colors hover:bg-accent hover:text-surface",
-                  children: /* @__PURE__ */ jsx("svg", { className: "h-4 w-4", viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M3 3l10 10M13 3L3 13" }) })
-                }
-              ),
-              /* @__PURE__ */ jsxs(
-                "h2",
-                {
-                  id: "accueil-titre",
-                  className: "text-[2.6rem] leading-[0.98] sm:text-6xl",
-                  children: [
-                    /* @__PURE__ */ jsx(
-                      motion.span,
-                      {
-                        className: "block text-text-primary",
-                        initial: { opacity: 0, y: 16 },
-                        animate: { opacity: 1, y: 0 },
-                        transition: { duration: 0.5, delay: 0.15, ease: EASE },
-                        children: "Votre site à votre image."
-                      }
-                    ),
-                    /* @__PURE__ */ jsx(
-                      motion.span,
-                      {
-                        className: "mt-1 block font-bold text-accent",
-                        initial: { opacity: 0, y: 16 },
-                        animate: { opacity: 1, y: 0 },
-                        transition: { duration: 0.5, delay: 0.28, ease: EASE },
-                        children: "Un aperçu en 60 secondes."
-                      }
-                    )
-                  ]
-                }
-              ),
-              /* @__PURE__ */ jsx(
-                motion.p,
-                {
-                  className: "mx-auto mt-5 max-w-sm text-base text-text-secondary",
-                  initial: { opacity: 0 },
-                  animate: { opacity: 1 },
-                  transition: { duration: 0.5, delay: 0.42 },
-                  children: "Répondez à quelques questions, nous générons une démo de votre site. Gratuit, sans engagement."
-                }
-              ),
-              /* @__PURE__ */ jsxs(
-                motion.div,
-                {
-                  className: "mt-8 flex flex-col items-center gap-3",
-                  initial: { opacity: 0, y: 12 },
-                  animate: { opacity: 1, y: 0 },
-                  transition: { duration: 0.5, delay: 0.5, ease: EASE },
-                  children: [
-                    /* @__PURE__ */ jsxs(
-                      "a",
-                      {
-                        href: QUIZ,
-                        onClick: fermer,
-                        className: "group inline-flex min-h-[58px] w-full items-center justify-center gap-2 rounded-full bg-accent px-8 font-display text-base font-medium text-surface transition-colors hover:bg-accent-hover sm:w-auto",
-                        children: [
-                          "Voir mon aperçu",
-                          /* @__PURE__ */ jsx("svg", { className: "h-5 w-5 transition-transform duration-300 group-hover:translate-x-1", viewBox: "0 0 16 16", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M3 8h10M9 4l4 4-4 4" }) })
-                        ]
-                      }
-                    ),
-                    /* @__PURE__ */ jsx(
-                      "button",
-                      {
-                        type: "button",
-                        onClick: fermer,
-                        className: "min-h-[44px] px-4 text-sm font-medium text-text-muted transition-colors hover:text-text-primary",
-                        children: "Plus tard"
-                      }
-                    )
-                  ]
-                }
-              )
-            ]
-          }
-        )
-      ]
-    }
-  ) });
-}
 const RACCOURCIS = [
   { to: "/#services", label: "Nos services" },
   { to: "/#projets", label: "Nos réalisations" },
@@ -3098,8 +2950,7 @@ function Home() {
     /* @__PURE__ */ jsx(EquipeStudio, {}),
     /* @__PURE__ */ jsx(FaqSection, {}),
     /* @__PURE__ */ jsx(MissionSection, {}),
-    /* @__PURE__ */ jsx(Footer, {}),
-    /* @__PURE__ */ jsx(AccueilPopup, {})
+    /* @__PURE__ */ jsx(Footer, {})
   ] });
 }
 function ContactForm() {

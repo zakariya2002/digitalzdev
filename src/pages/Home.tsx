@@ -9,7 +9,6 @@ import Prechargeur from '../components/studio/Prechargeur'
 import AvisGoogleSection from '../components/AvisGoogleSection'
 import FaqSection from '../components/FaqSection'
 import MissionSection from '../components/MissionSection'
-import AccueilPopup from '../components/AccueilPopup'
 import Footer from '../components/Footer'
 
 /**
@@ -35,7 +34,6 @@ export default function Home() {
       <FaqSection />
       <MissionSection />
       <Footer />
-      <AccueilPopup />
     </main>
   )
 }
