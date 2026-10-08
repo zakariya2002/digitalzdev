@@ -1,78 +1,90 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import { SERVICES, WHATSAPP_PROJET } from '../ServicesSection'
 
 type Service = (typeof SERVICES)[number]
 
 /**
- * Une carte de la pile. Elle s'accroche en haut de l'écran, un peu plus bas
- * que la précédente, et recule à mesure que les suivantes la recouvrent.
+ * Point de départ de chaque carte, avant qu'elle ne se range : décalée vers
+ * le centre du paquet et inclinée, comme un jeu de cartes jeté sur la table.
+ * Les valeurs sont en pourcentage de la carte (x, y) et en degrés (r).
+ */
+const DEPART = [
+  { x: 55, y: 30, r: -9 },
+  { x: 0, y: 10, r: 3 },
+  { x: -55, y: 35, r: 8 },
+  { x: 45, y: -40, r: 6 },
+  { x: 0, y: -60, r: -5 },
+  { x: -45, y: -35, r: -8 },
+]
+
+/** Fonds alternés, gris clair et bleu très pâle, comme chez Cuberto. */
+const FONDS = ['bg-surface-card', 'bg-[#e8eefc]']
+
+/**
+ * Une carte de service : elle part de sa position « en vrac » et rejoint sa
+ * place dans la grille à mesure que la section entre à l'écran.
  */
 function Carte({
   service,
   i,
-  n,
   progression,
+  amplitude,
 }: {
   service: Service
   i: number
-  n: number
   progression: MotionValue<number>
+  amplitude: number
 }) {
-  const echelle = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.035])
-  // Un voile noir dont on anime l'opacité assombrit la carte sans forcer le
-  // navigateur à la redessiner à chaque image, contrairement à un filtre.
-  const voile = useTransform(progression, [i / n, 1], [0, (n - 1 - i) * 0.08])
-  const accent = i === n - 1
+  const d = DEPART[i % DEPART.length]
+  const x = useTransform(progression, [0, 1], [`${d.x * amplitude}%`, '0%'])
+  const y = useTransform(progression, [0, 1], [`${d.y * amplitude}%`, '0%'])
+  const rotate = useTransform(progression, [0, 1], [d.r, 0])
 
   return (
-    <div className="sticky" style={{ top: `calc(12svh + ${i * 22}px)` }}>
-      <motion.article
-        style={{ scale: echelle }}
-        className={`relative origin-top overflow-hidden rounded-[1.75rem] will-change-transform p-7 md:min-h-[62vh] md:p-12 ${
-          accent ? 'bg-pop text-white' : 'bg-surface-card text-text-primary'
-        }`}
-      >
-        <motion.div aria-hidden className="pointer-events-none absolute inset-0 z-10 bg-black" style={{ opacity: voile }} />
-        <div className="grid gap-8 md:grid-cols-12">
-          <div className="md:col-span-7">
-            <h3 className="text-3xl font-normal leading-[1] tracking-tight md:text-5xl">
-              {service.title}
-            </h3>
-            <p className={`mt-4 text-lg font-medium md:text-xl ${accent ? 'text-white' : 'text-accent'}`}>
-              {service.lead}
-            </p>
-          </div>
-          <div className="md:col-span-5">
-            <p className={`text-[15px] font-medium leading-relaxed md:text-base ${accent ? 'text-white/80' : 'text-text-secondary'}`}>
-              {service.body}
-            </p>
-            <ul className="mt-6 space-y-2">
-              {service.points.map((point) => (
-                <li
-                  key={point}
-                  className={`rounded-xl px-4 py-3 text-sm font-medium ${accent ? 'bg-white/15' : 'bg-surface-light'}`}
-                >
-                  {point}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </motion.article>
-    </div>
+    <motion.article
+      style={{ x, y, rotate, zIndex: 10 - i }}
+      className={`relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % 2]}`}
+    >
+      <span aria-hidden className="text-5xl leading-none text-text-muted/50">❞</span>
+      <h3 className="mt-4 text-2xl font-normal leading-tight tracking-tight text-text-primary md:text-3xl">
+        {service.title}
+      </h3>
+      <p className="mt-2 text-[15px] font-medium text-pop">{service.lead}</p>
+      <p className="mt-4 text-[15px] leading-relaxed text-text-secondary">{service.body}</p>
+      <ul className="mt-6 space-y-1.5">
+        {service.points.map((point) => (
+          <li key={point} className="flex gap-2.5 text-sm text-text-primary">
+            <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pop" />
+            {point}
+          </li>
+        ))}
+      </ul>
+    </motion.article>
   )
 }
 
 /**
- * Les services, en cartes empilées.
+ * Les services, en cartes jetées puis rangées au défilement (inspiré de
+ * cuberto.com).
  *
  * Le texte de chaque service est celui de la section d'origine : seul le
  * dispositif change.
  */
 export default function ServicesStudio() {
-  const pileRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: pileRef, offset: ['start start', 'end end'] })
+  const grilleRef = useRef<HTMLDivElement>(null)
+  // Les cartes se rangent pendant que la grille monte du bas de l'écran
+  // jusqu'à son quart supérieur.
+  const { scrollYProgress } = useScroll({ target: grilleRef, offset: ['start 0.95', 'start 0.2'] })
+  // Sur mobile, une seule colonne : le désordre reste plus discret.
+  const [amplitude, setAmplitude] = useState(1)
+  useEffect(() => {
+    const requete = window.matchMedia('(max-width: 767px)')
+    const suivre = () => setAmplitude(requete.matches ? 0.35 : 1)
+    suivre()
+    requete.addEventListener('change', suivre)
+    return () => requete.removeEventListener('change', suivre)
+  }, [])
 
   return (
     <section id="services" className="bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
@@ -86,9 +98,9 @@ export default function ServicesStudio() {
           rapporte une fois en ligne, pas sur sa maquette.
         </p>
 
-        <div ref={pileRef} className="mt-16 space-y-6 md:mt-24 md:space-y-10">
+        <div ref={grilleRef} className="mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
-            <Carte key={s.title} service={s} i={i} n={SERVICES.length} progression={scrollYProgress} />
+            <Carte key={s.title} service={s} i={i} progression={scrollYProgress} amplitude={amplitude} />
           ))}
         </div>
 

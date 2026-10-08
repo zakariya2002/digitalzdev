@@ -1738,53 +1738,61 @@ function Selection() {
 function TravauxStudio() {
   return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, {}) });
 }
+const DEPART = [
+  { x: 55, y: 30, r: -9 },
+  { x: 0, y: 10, r: 3 },
+  { x: -55, y: 35, r: 8 },
+  { x: 45, y: -40, r: 6 },
+  { x: 0, y: -60, r: -5 },
+  { x: -45, y: -35, r: -8 }
+];
+const FONDS = ["bg-surface-card", "bg-[#e8eefc]"];
 function Carte({
   service,
   i,
-  n,
-  progression
+  progression,
+  amplitude
 }) {
-  const echelle = useTransform(progression, [i / n, 1], [1, 1 - (n - 1 - i) * 0.035]);
-  const voile = useTransform(progression, [i / n, 1], [0, (n - 1 - i) * 0.08]);
-  const accent = i === n - 1;
-  return /* @__PURE__ */ jsx("div", { className: "sticky", style: { top: `calc(12svh + ${i * 22}px)` }, children: /* @__PURE__ */ jsxs(
+  const d = DEPART[i % DEPART.length];
+  const x = useTransform(progression, [0, 1], [`${d.x * amplitude}%`, "0%"]);
+  const y = useTransform(progression, [0, 1], [`${d.y * amplitude}%`, "0%"]);
+  const rotate = useTransform(progression, [0, 1], [d.r, 0]);
+  return /* @__PURE__ */ jsxs(
     motion.article,
     {
-      style: { scale: echelle },
-      className: `relative origin-top overflow-hidden rounded-[1.75rem] will-change-transform p-7 md:min-h-[62vh] md:p-12 ${accent ? "bg-pop text-white" : "bg-surface-card text-text-primary"}`,
+      style: { x, y, rotate, zIndex: 10 - i },
+      className: `relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % 2]}`,
       children: [
-        /* @__PURE__ */ jsx(motion.div, { "aria-hidden": true, className: "pointer-events-none absolute inset-0 z-10 bg-black", style: { opacity: voile } }),
-        /* @__PURE__ */ jsxs("div", { className: "grid gap-8 md:grid-cols-12", children: [
-          /* @__PURE__ */ jsxs("div", { className: "md:col-span-7", children: [
-            /* @__PURE__ */ jsx("h3", { className: "text-3xl font-normal leading-[1] tracking-tight md:text-5xl", children: service.title }),
-            /* @__PURE__ */ jsx("p", { className: `mt-4 text-lg font-medium md:text-xl ${accent ? "text-white" : "text-accent"}`, children: service.lead })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "md:col-span-5", children: [
-            /* @__PURE__ */ jsx("p", { className: `text-[15px] font-medium leading-relaxed md:text-base ${accent ? "text-white/80" : "text-text-secondary"}`, children: service.body }),
-            /* @__PURE__ */ jsx("ul", { className: "mt-6 space-y-2", children: service.points.map((point) => /* @__PURE__ */ jsx(
-              "li",
-              {
-                className: `rounded-xl px-4 py-3 text-sm font-medium ${accent ? "bg-white/15" : "bg-surface-light"}`,
-                children: point
-              },
-              point
-            )) })
-          ] })
-        ] })
+        /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "text-5xl leading-none text-text-muted/50", children: "❞" }),
+        /* @__PURE__ */ jsx("h3", { className: "mt-4 text-2xl font-normal leading-tight tracking-tight text-text-primary md:text-3xl", children: service.title }),
+        /* @__PURE__ */ jsx("p", { className: "mt-2 text-[15px] font-medium text-pop", children: service.lead }),
+        /* @__PURE__ */ jsx("p", { className: "mt-4 text-[15px] leading-relaxed text-text-secondary", children: service.body }),
+        /* @__PURE__ */ jsx("ul", { className: "mt-6 space-y-1.5", children: service.points.map((point) => /* @__PURE__ */ jsxs("li", { className: "flex gap-2.5 text-sm text-text-primary", children: [
+          /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pop" }),
+          point
+        ] }, point)) })
       ]
     }
-  ) });
+  );
 }
 function ServicesStudio() {
-  const pileRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: pileRef, offset: ["start start", "end end"] });
+  const grilleRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: grilleRef, offset: ["start 0.95", "start 0.2"] });
+  const [amplitude, setAmplitude] = useState(1);
+  useEffect(() => {
+    const requete = window.matchMedia("(max-width: 767px)");
+    const suivre = () => setAmplitude(requete.matches ? 0.35 : 1);
+    suivre();
+    requete.addEventListener("change", suivre);
+    return () => requete.removeEventListener("change", suivre);
+  }, []);
   return /* @__PURE__ */ jsx("section", { id: "services", className: "bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
       "Une agence web qui conçoit, développe ",
       /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "et fait connaître votre site." })
     ] }),
     /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Création de site internet, boutique en ligne, refonte, outil métier et campagnes publicitaires. Un projet de site web se juge sur ce qu'il rapporte une fois en ligne, pas sur sa maquette." }),
-    /* @__PURE__ */ jsx("div", { ref: pileRef, className: "mt-16 space-y-6 md:mt-24 md:space-y-10", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, n: SERVICES$1.length, progression: scrollYProgress }, s.title)) }),
+    /* @__PURE__ */ jsx("div", { ref: grilleRef, className: "mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, progression: scrollYProgress, amplitude }, s.title)) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12", children: [
       /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Vous avez un projet de site internet, une boutique à ouvrir ou un site à refondre ? Décrivez-le-nous directement sur WhatsApp." }),
       /* @__PURE__ */ jsx(
