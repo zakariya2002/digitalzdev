@@ -70,7 +70,7 @@ function Selection({ titre }: { titre?: string }) {
       >
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden">
           {titre && (
-            <h2 className="mb-8 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary">
+            <h2 className="mb-14 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary">
               {titre}
             </h2>
           )}
@@ -85,7 +85,7 @@ function Selection({ titre }: { titre?: string }) {
       {/* Mobile et tablette : carrousel natif */}
       <section className="pb-6 pt-24 lg:hidden">
         {titre && (
-          <h2 className="mb-6 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary">
+          <h2 className="mb-10 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary">
             {titre}
           </h2>
         )}

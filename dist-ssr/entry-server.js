@@ -1736,13 +1736,13 @@ function Selection({ titre }) {
         className: "relative hidden lg:block",
         style: { height: `calc(100vh + ${course}px)` },
         children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 flex h-screen flex-col justify-center overflow-hidden", children: [
-          titre && /* @__PURE__ */ jsx("h2", { className: "mb-8 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
+          titre && /* @__PURE__ */ jsx("h2", { className: "mb-14 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
           /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10 will-change-transform", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[36vw] max-w-[640px]" }, p.id)) })
         ] })
       }
     ),
     /* @__PURE__ */ jsxs("section", { className: "pb-6 pt-24 lg:hidden", children: [
-      titre && /* @__PURE__ */ jsx("h2", { className: "mb-6 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
+      titre && /* @__PURE__ */ jsx("h2", { className: "mb-10 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
       /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[72vw] snap-center sm:w-[50vw]" }, p.id)) })
     ] })
   ] });
