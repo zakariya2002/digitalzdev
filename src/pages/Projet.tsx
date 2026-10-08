@@ -381,7 +381,7 @@ export default function Projet() {
               <button
                 type="submit"
                 disabled={envoi}
-                className="mt-8 inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a] disabled:opacity-60"
+                className="mt-8 inline-flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-pop px-8 text-base font-semibold text-white transition-colors hover:bg-[#2a46e0] disabled:opacity-60"
               >
                 {envoi ? 'Envoi…' : 'Contactez-nous'}
               </button>
