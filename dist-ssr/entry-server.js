@@ -1751,15 +1751,19 @@ function Carte({
   service,
   i,
   progression,
-  amplitude
+  mobile
 }) {
-  const d = DEPART[i % DEPART.length];
-  const x = useTransform(progression, [0, 1], [`${d.x * amplitude}%`, "0%"]);
-  const y = useTransform(progression, [0, 1], [`${d.y * amplitude}%`, "0%"]);
-  const rotate = useTransform(progression, [0, 1], [d.r, 0]);
+  const carteRef = useRef(null);
+  const { scrollYProgress: propre } = useScroll({ target: carteRef, offset: ["start 1", "start 0.5"] });
+  const p = mobile ? propre : progression;
+  const d = mobile ? { x: i % 2 === 0 ? 28 : -28, y: 12, r: i % 2 === 0 ? 7 : -7 } : DEPART[i % DEPART.length];
+  const x = useTransform(p, [0, 1], [`${d.x}%`, "0%"]);
+  const y = useTransform(p, [0, 1], [`${d.y}%`, "0%"]);
+  const rotate = useTransform(p, [0, 1], [d.r, 0]);
   return /* @__PURE__ */ jsxs(
     motion.article,
     {
+      ref: carteRef,
       style: { x, y, rotate, zIndex: 10 - i },
       className: `relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % FONDS.length]}`,
       children: [
@@ -1778,21 +1782,21 @@ function Carte({
 function ServicesStudio() {
   const grilleRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: grilleRef, offset: ["start 0.95", "start 0.2"] });
-  const [amplitude, setAmplitude] = useState(1);
+  const [mobile, setMobile] = useState(false);
   useEffect(() => {
     const requete = window.matchMedia("(max-width: 767px)");
-    const suivre = () => setAmplitude(requete.matches ? 0.35 : 1);
+    const suivre = () => setMobile(requete.matches);
     suivre();
     requete.addEventListener("change", suivre);
     return () => requete.removeEventListener("change", suivre);
   }, []);
-  return /* @__PURE__ */ jsx("section", { id: "services", className: "bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+  return /* @__PURE__ */ jsx("section", { id: "services", className: "overflow-x-clip bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
       "Une agence web qui conçoit, développe ",
       /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "et fait connaître votre site." })
     ] }),
     /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Création de site internet, boutique en ligne, refonte, outil métier et campagnes publicitaires. Un projet de site web se juge sur ce qu'il rapporte une fois en ligne, pas sur sa maquette." }),
-    /* @__PURE__ */ jsx("div", { ref: grilleRef, className: "mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, progression: scrollYProgress, amplitude }, s.title)) }),
+    /* @__PURE__ */ jsx("div", { ref: grilleRef, className: "mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, progression: scrollYProgress, mobile }, s.title)) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12", children: [
       /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Vous avez un projet de site internet, une boutique à ouvrir ou un site à refondre ? Décrivez-le-nous directement sur WhatsApp." }),
       /* @__PURE__ */ jsx(

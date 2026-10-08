@@ -32,20 +32,28 @@ function Carte({
   service,
   i,
   progression,
-  amplitude,
+  mobile,
 }: {
   service: Service
   i: number
   progression: MotionValue<number>
-  amplitude: number
+  mobile: boolean
 }) {
-  const d = DEPART[i % DEPART.length]
-  const x = useTransform(progression, [0, 1], [`${d.x * amplitude}%`, '0%'])
-  const y = useTransform(progression, [0, 1], [`${d.y * amplitude}%`, '0%'])
-  const rotate = useTransform(progression, [0, 1], [d.r, 0])
+  // Sur mobile, chaque carte a sa propre progression, calculée sur sa propre
+  // entrée à l'écran, et arrive en alternance de la droite et de la gauche.
+  const carteRef = useRef<HTMLElement>(null)
+  const { scrollYProgress: propre } = useScroll({ target: carteRef, offset: ['start 1', 'start 0.5'] })
+  const p = mobile ? propre : progression
+  const d = mobile
+    ? { x: i % 2 === 0 ? 28 : -28, y: 12, r: i % 2 === 0 ? 7 : -7 }
+    : DEPART[i % DEPART.length]
+  const x = useTransform(p, [0, 1], [`${d.x}%`, '0%'])
+  const y = useTransform(p, [0, 1], [`${d.y}%`, '0%'])
+  const rotate = useTransform(p, [0, 1], [d.r, 0])
 
   return (
     <motion.article
+      ref={carteRef}
       style={{ x, y, rotate, zIndex: 10 - i }}
       className={`relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % FONDS.length]}`}
     >
@@ -79,18 +87,17 @@ export default function ServicesStudio() {
   // Les cartes se rangent pendant que la grille monte du bas de l'écran
   // jusqu'à son quart supérieur.
   const { scrollYProgress } = useScroll({ target: grilleRef, offset: ['start 0.95', 'start 0.2'] })
-  // Sur mobile, une seule colonne : le désordre reste plus discret.
-  const [amplitude, setAmplitude] = useState(1)
+  const [mobile, setMobile] = useState(false)
   useEffect(() => {
     const requete = window.matchMedia('(max-width: 767px)')
-    const suivre = () => setAmplitude(requete.matches ? 0.35 : 1)
+    const suivre = () => setMobile(requete.matches)
     suivre()
     requete.addEventListener('change', suivre)
     return () => requete.removeEventListener('change', suivre)
   }, [])
 
   return (
-    <section id="services" className="bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
+    <section id="services" className="overflow-x-clip bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="mx-auto max-w-7xl">
         <h2 className="max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
           Une agence web qui conçoit, développe <span className="font-bold text-pop">et fait connaître votre site.</span>
@@ -103,7 +110,7 @@ export default function ServicesStudio() {
 
         <div ref={grilleRef} className="mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
-            <Carte key={s.title} service={s} i={i} progression={scrollYProgress} amplitude={amplitude} />
+            <Carte key={s.title} service={s} i={i} progression={scrollYProgress} mobile={mobile} />
           ))}
         </div>
 
