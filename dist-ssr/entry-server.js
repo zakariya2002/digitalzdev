@@ -1625,26 +1625,20 @@ function HeroStudio() {
         ]
       }
     ),
-    /* @__PURE__ */ jsxs(
+    /* @__PURE__ */ jsx(
       motion.div,
       {
         className: "absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14",
         style: { opacity: accrocheOpacite, y: accrocheY },
-        children: [
-          /* @__PURE__ */ jsxs("h2", { className: "max-w-3xl text-5xl text-white md:text-7xl", children: [
-            "Votre site à votre image.",
-            /* @__PURE__ */ jsx("span", { className: "block font-extrabold text-[#1d1d1f]", children: "Un aperçu en 60 secondes." })
-          ] }),
-          /* @__PURE__ */ jsx(
-            "a",
-            {
-              href: QUIZ,
-              "data-curseur": "Go",
-              className: "inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover",
-              children: "Voir mon aperçu →"
-            }
-          )
-        ]
+        children: /* @__PURE__ */ jsx(
+          "a",
+          {
+            href: QUIZ,
+            "data-curseur": "Go",
+            className: "inline-flex min-h-[56px] w-fit items-center gap-2 rounded-full bg-accent px-8 text-base font-semibold text-surface transition-colors hover:bg-accent-hover",
+            children: "Voir mon aperçu →"
+          }
+        )
       }
     ),
     /* @__PURE__ */ jsx(

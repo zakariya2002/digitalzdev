@@ -161,10 +161,6 @@ export default function HeroStudio() {
           className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-5 pb-10 md:flex-row md:items-end md:justify-between md:px-10 md:pb-14"
           style={{ opacity: accrocheOpacite, y: accrocheY }}
         >
-          <h2 className="max-w-3xl text-5xl text-white md:text-7xl">
-            Votre site à votre image.
-            <span className="block font-extrabold text-[#1d1d1f]">Un aperçu en 60 secondes.</span>
-          </h2>
           <a
             href={QUIZ}
             data-curseur="Go"
