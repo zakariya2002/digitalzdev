@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { u as useAuth } from "../entry-server.js";
 import "react-dom/server";
 import "react-router-dom/server.mjs";
+import "@supabase/supabase-js";
 import "framer-motion";
 import "lenis";
 import "@emailjs/browser";

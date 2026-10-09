@@ -7,6 +7,7 @@ import RechercheGoogle from '../components/studio/RechercheGoogle'
 import FinalStudio from '../components/studio/FinalStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
 import Footer from '../components/Footer'
+import CalendlyModal from '../components/CalendlyModal'
 
 /**
  * Page d'atterrissage des publicités Meta : quatre questions, les
@@ -135,6 +136,7 @@ export default function Projet() {
   const [touche, setTouche] = useState(false)
   const [envoi, setEnvoi] = useState(false)
   const [lienWhatsapp, setLienWhatsapp] = useState<string | null>(null)
+  const [rdvOuvert, setRdvOuvert] = useState(false)
   const [mobile, setMobile] = useState(false)
   useEffect(() => {
     setMobile(window.matchMedia('(max-width: 767px)').matches)
@@ -268,14 +270,25 @@ export default function Projet() {
                   nous revenons vers vous rapidement. Si l'application ne s'est pas
                   ouverte, utilisez le bouton ci-dessous.
                 </p>
-                <a
-                  href={lienWhatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]"
-                >
-                  Ouvrir WhatsApp
-                </a>
+                <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <a
+                    href={lienWhatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]"
+                  >
+                    Ouvrir WhatsApp
+                  </a>
+                  {/* Pour qui préfère un appel calé dans l'agenda plutôt que
+                      d'écrire : le même créneau que sur l'accueil. */}
+                  <button
+                    type="button"
+                    onClick={() => setRdvOuvert(true)}
+                    className="inline-flex min-h-[56px] items-center rounded-full border border-surface-border px-8 text-base font-semibold text-text-primary transition-colors hover:bg-surface-light"
+                  >
+                    Réserver un créneau
+                  </button>
+                </div>
               </div>
 
             </motion.div>
@@ -428,6 +441,7 @@ export default function Projet() {
           <Footer />
         </div>
       )}
+      <CalendlyModal open={rdvOuvert} onClose={() => setRdvOuvert(false)} />
     </main>
   )
 }

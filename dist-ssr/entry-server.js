@@ -2,19 +2,17 @@ var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
-import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, useMemo, lazy, Suspense, StrictMode } from "react";
+import { createContext, useContext, useState, useEffect, Component, useLayoutEffect, useRef, useCallback, useMemo, lazy, Suspense, StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
+import { createClient } from "@supabase/supabase-js";
 import { useLocation, Link, Navigate, Routes, Route } from "react-router-dom";
 import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useInView, useMotionTemplate } from "framer-motion";
 import Lenis from "lenis";
 import emailjs from "@emailjs/browser";
-const supabase = new Proxy({}, {
-  get: () => () => {
-    console.warn("Supabase not configured: set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY");
-    return { data: null, error: null };
-  }
-});
+const supabaseUrl = "https://uipxlesrpdocqpblmrrr.supabase.co";
+const supabaseAnonKey = "sb_publishable_9xAZPEmBviPFiunZ8vwifw_ZIo493WC";
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const AuthContext = createContext(void 0);
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -893,7 +891,7 @@ const LIENS = [
   { libelle: "Contact", vers: "/contact", interne: true }
 ];
 const PROJET = "/projet";
-const EASE$6 = [0.76, 0, 0.24, 1];
+const EASE$7 = [0.76, 0, 0.24, 1];
 function estCourant(lien2, chemin) {
   if (lien2.vers === "/") return chemin === "/";
   if (lien2.vers.startsWith("/#")) return false;
@@ -1024,7 +1022,7 @@ function Navbar() {
         initial: { clipPath: "inset(0% 0% 100% 0%)" },
         animate: { clipPath: "inset(0% 0% 0% 0%)" },
         exit: { clipPath: "inset(0% 0% 100% 0%)" },
-        transition: { duration: 0.7, ease: EASE$6 },
+        transition: { duration: 0.7, ease: EASE$7 },
         children: [
           /* @__PURE__ */ jsx("nav", { "aria-label": "Menu", children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien2, i) => {
             const courant = estCourant(lien2, location.pathname);
@@ -1497,7 +1495,7 @@ const SERVICES$1 = [
     ]
   }
 ];
-const EASE$5 = [0.22, 1, 0.36, 1];
+const EASE$6 = [0.22, 1, 0.36, 1];
 function Ligne$1({ children, delai }) {
   return /* @__PURE__ */ jsx("span", { className: "-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]", children: /* @__PURE__ */ jsx(
     motion.span,
@@ -1505,7 +1503,7 @@ function Ligne$1({ children, delai }) {
       className: "block",
       initial: { y: "110%" },
       animate: { y: 0 },
-      transition: { duration: 1, delay: delai, ease: EASE$5 },
+      transition: { duration: 1, delay: delai, ease: EASE$6 },
       children
     }
   ) });
@@ -1603,7 +1601,7 @@ function HeroStudio() {
                   className: "mt-8 inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black md:mt-10",
                   initial: { opacity: 0, y: 16 },
                   animate: { opacity: 1, y: 0 },
-                  transition: { duration: 0.8, delay: 0.7, ease: EASE$5 },
+                  transition: { duration: 0.8, delay: 0.7, ease: EASE$6 },
                   children: "Prendre rendez-vous"
                 }
               )
@@ -1789,6 +1787,139 @@ function ServicesStudio() {
         }
       )
     ] })
+  ] }) });
+}
+const CALENDLY_URL = "https://calendly.com/zakariya-neurocare/call-decouverte-20min?hide_gdpr_banner=1";
+const SCRIPT_SRC = "https://assets.calendly.com/assets/external/widget.js";
+let chargement = null;
+function chargerCalendly() {
+  if (chargement) return chargement;
+  chargement = new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${SCRIPT_SRC}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = SCRIPT_SRC;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("script Calendly injoignable"));
+    document.head.appendChild(script);
+  });
+  return chargement;
+}
+function CalendlyModal({ open, onClose }) {
+  const conteneur = useRef(null);
+  const fermer = useCallback(() => {
+    if (conteneur.current) conteneur.current.innerHTML = "";
+    onClose();
+  }, [onClose]);
+  useEffect(() => {
+    if (!open) return;
+    const gererTouche = (e) => {
+      if (e.key === "Escape") fermer();
+    };
+    window.addEventListener("keydown", gererTouche);
+    const defilementInitial = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", gererTouche);
+      document.body.style.overflow = defilementInitial;
+    };
+  }, [open, fermer]);
+  useEffect(() => {
+    if (!open) return;
+    let annule = false;
+    void chargerCalendly().then(() => {
+      const cible = conteneur.current;
+      const fenetre = window;
+      if (annule || !cible || !fenetre.Calendly) return;
+      cible.innerHTML = "";
+      fenetre.Calendly.initInlineWidget({
+        url: CALENDLY_URL,
+        parentElement: cible
+      });
+    }).catch((err) => console.error("[calendly]", err));
+    return () => {
+      annule = true;
+    };
+  }, [open]);
+  return /* @__PURE__ */ jsx(AnimatePresence, { children: open && /* @__PURE__ */ jsxs("div", { className: "fixed inset-0 z-[60] flex items-end justify-center sm:items-center", children: [
+    /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+        transition: { duration: 0.2 },
+        onClick: fermer,
+        className: "absolute inset-0 bg-text-primary/50 backdrop-blur-sm",
+        "aria-hidden": true
+      }
+    ),
+    /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "calendly-titre",
+        initial: { y: 40, opacity: 0, scale: 0.98 },
+        animate: { y: 0, opacity: 1, scale: 1 },
+        exit: { y: 40, opacity: 0, scale: 0.98 },
+        transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+        className: "relative z-10 flex max-h-[94vh] w-full flex-col overflow-hidden rounded-t-2xl border border-surface-border bg-surface-card sm:max-h-[92vh] sm:max-w-3xl sm:rounded-2xl",
+        children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between gap-4 px-6 pb-4 pt-6", children: [
+            /* @__PURE__ */ jsxs("div", { children: [
+              /* @__PURE__ */ jsx(
+                "h2",
+                {
+                  id: "calendly-titre",
+                  className: "font-display text-xl font-bold text-text-primary sm:text-2xl",
+                  children: "Parlons de votre projet"
+                }
+              ),
+              /* @__PURE__ */ jsx("p", { className: "mt-2 max-w-xl text-sm leading-relaxed text-text-secondary", children: "Un appel court pour comprendre ce que vous voulez mettre en place, ce dont vous disposez déjà, et ce que ça représente. Vous repartez avec un devis précis, sans engagement." })
+            ] }),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: fermer,
+                "aria-label": "Fermer",
+                className: "-m-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-secondary transition-colors hover:bg-surface-light hover:text-text-primary",
+                children: /* @__PURE__ */ jsx(
+                  "svg",
+                  {
+                    className: "h-5 w-5",
+                    fill: "none",
+                    stroke: "currentColor",
+                    viewBox: "0 0 24 24",
+                    strokeWidth: 1.5,
+                    "aria-hidden": true,
+                    children: /* @__PURE__ */ jsx(
+                      "path",
+                      {
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        d: "M6 18L18 6M6 6l12 12"
+                      }
+                    )
+                  }
+                )
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "flex-1 overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6", children: /* @__PURE__ */ jsx(
+            "div",
+            {
+              ref: conteneur,
+              className: "h-[68vh] min-h-[560px] w-full overflow-hidden rounded-xl bg-white"
+            }
+          ) })
+        ]
+      }
+    )
   ] }) });
 }
 const LEVIERS = [
@@ -2086,7 +2217,7 @@ function RechercheGoogle() {
     ] })
   ] }) });
 }
-const EASE$4 = [0.22, 1, 0.36, 1];
+const EASE$5 = [0.22, 1, 0.36, 1];
 const LARGEURS = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
 const SURVOL = [
   { carte: "[@media(hover:hover)]:hover:bg-[#1d1d1f]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
@@ -2104,7 +2235,7 @@ function AcquisitionStudio() {
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$4 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$5 },
         children: [
           /* @__PURE__ */ jsxs("div", { children: [
             /* @__PURE__ */ jsx("p", { className: `text-sm font-medium text-accent transition-colors duration-500 ${SURVOL[i].texte}`, children: levier.titre }),
@@ -2168,7 +2299,7 @@ const PHOTOS = [
   { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[28rem]" },
   { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "hidden md:block md:col-span-5 md:h-[28rem]" }
 ];
-const EASE$3 = [0.22, 1, 0.36, 1];
+const EASE$4 = [0.22, 1, 0.36, 1];
 function Chiffre({ valeur }) {
   const ref = useRef(null);
   const vu = useInView(ref, { once: true, margin: "-60px" });
@@ -2204,7 +2335,7 @@ function EquipeStudio() {
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$3 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$4 },
         children: /* @__PURE__ */ jsx(
           "img",
           {
@@ -2226,7 +2357,7 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, ease: EASE$3 },
+          transition: { duration: 0.8, ease: EASE$4 },
           children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
               /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: FONDATEUR.initials }),
@@ -2260,7 +2391,7 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, delay: 0.1, ease: EASE$3 },
+          transition: { duration: 0.8, delay: 0.1, ease: EASE$4 },
           children: [
             /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight md:text-3xl", children: "L'équipe" }),
             /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-white/75", children: "Direction de projet, design et marketing" }),
@@ -2277,7 +2408,7 @@ function EquipeStudio() {
         initial: { opacity: 0, y: 30 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$3 },
+        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$4 },
         children: [
           /* @__PURE__ */ jsx("h3", { className: "text-lg font-normal text-text-primary", children: r.title }),
           /* @__PURE__ */ jsx("p", { className: "mt-2 text-sm font-medium leading-relaxed text-text-secondary", children: r.body })
@@ -2291,7 +2422,7 @@ function EquipeStudio() {
     ] }, f.label)) })
   ] }) });
 }
-const EASE$2 = [0.22, 1, 0.36, 1];
+const EASE$3 = [0.22, 1, 0.36, 1];
 const DUREES = { sonne: 2600, decroche: 900 };
 function Combine({ className = "" }) {
   return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", className, fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z" }) });
@@ -2359,7 +2490,7 @@ function AppelEntrant() {
       {
         className: "relative h-[27rem] w-[13.5rem] rounded-[2.6rem] bg-[#1d1d1f] p-[7px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] md:h-[31rem] md:w-[15.5rem]",
         animate: sonne ? { rotate: [0, -3, 3, -3, 3, -2, 2, 0, 0, 0], x: [0, -2, 2, -2, 2, -1, 1, 0, 0, 0] } : { rotate: 0, x: 0, y: etape === "decroche" ? -8 : 0 },
-        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$2 },
+        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$3 },
         children: /* @__PURE__ */ jsxs("div", { className: "relative flex h-full w-full flex-col overflow-hidden rounded-[2.2rem] bg-gradient-to-b from-[#3a3d42] via-[#26282c] to-[#161718] px-5 pb-8 pt-12 text-white", children: [
           /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "absolute left-1/2 top-2.5 h-5 w-20 -translate-x-1/2 rounded-full bg-black" }),
           /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: etape !== "enligne" ? /* @__PURE__ */ jsxs(
@@ -2388,7 +2519,7 @@ function AppelEntrant() {
                     {
                       className: "absolute left-1 top-1 flex h-12 w-12 items-center justify-center rounded-full bg-[#34c759]",
                       animate: { x: etape === "decroche" ? course : 0 },
-                      transition: { duration: 0.7, ease: EASE$2 },
+                      transition: { duration: 0.7, ease: EASE$3 },
                       children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5" })
                     }
                   )
@@ -2402,7 +2533,7 @@ function AppelEntrant() {
               className: "flex h-full flex-col items-center",
               initial: { opacity: 0, y: 10 },
               animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.45, ease: EASE$2 },
+              transition: { duration: 0.45, ease: EASE$3 },
               children: [
                 /* @__PURE__ */ jsx("p", { className: "text-sm tabular-nums text-[#34c759]", children: duree }),
                 /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
@@ -2465,6 +2596,58 @@ function FinalStudio() {
       ) })
     ] })
   ] }) });
+}
+const EASE$2 = [0.22, 1, 0.36, 1];
+function RendezVousStudio() {
+  const [rdvOuvert, setRdvOuvert] = useState(false);
+  return /* @__PURE__ */ jsxs("section", { className: "bg-surface py-24 md:py-32", children: [
+    /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        className: "mx-auto flex max-w-4xl flex-col items-center px-5 text-center md:px-10",
+        initial: { opacity: 0, y: 32 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-15% 0px" },
+        transition: { duration: 0.8, ease: EASE$2 },
+        children: [
+          /* @__PURE__ */ jsxs(
+            "h2",
+            {
+              className: "text-[10vw] leading-[1.02] tracking-[-0.03em] text-text-primary md:text-[5vw] lg:text-[min(4.6vw,76px)]",
+              style: { fontFamily: "'Inter Tight', system-ui, sans-serif" },
+              children: [
+                "Parlons de votre ",
+                /* @__PURE__ */ jsx("span", { className: "text-pop", children: "projet." })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsx("p", { className: "mt-5 max-w-lg text-base leading-relaxed text-text-secondary md:text-lg", children: "Réservez un appel de vingt minutes dans notre agenda, ou écrivez-nous directement sur WhatsApp. On répond dans la journée." }),
+          /* @__PURE__ */ jsxs("div", { className: "mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row", children: [
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setRdvOuvert(true),
+                className: "inline-flex h-[52px] w-full items-center justify-center rounded-xl bg-[#0f0f0f] px-8 text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black sm:w-auto",
+                children: "Réserver un créneau"
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "a",
+              {
+                href: WHATSAPP_PROJET,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-8 text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-[#1ebe5a] sm:w-auto",
+                children: "Écrire sur WhatsApp"
+              }
+            )
+          ] })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
+  ] });
 }
 const CLE = "digitalz-prechargeur-vu";
 const DUREE_MS = 1100;
@@ -2952,6 +3135,7 @@ function Home() {
     /* @__PURE__ */ jsx(HeroStudio, {}),
     /* @__PURE__ */ jsx(ManifesteStudio, {}),
     /* @__PURE__ */ jsx(TravauxStudio, {}),
+    /* @__PURE__ */ jsx(RendezVousStudio, {}),
     /* @__PURE__ */ jsx(FinalStudio, {}),
     /* @__PURE__ */ jsx(AcquisitionStudio, {}),
     /* @__PURE__ */ jsx(ServicesStudio, {}),
@@ -3343,10 +3527,10 @@ function Contact() {
     };
     try {
       await emailjs.send(
-        void 0,
-        void 0,
+        "service_jpu9w4m",
+        "template_uf32b6j",
         templateParams,
-        void 0
+        "_sQi0ifLC4W46LEvs"
       );
       setSubmitted(true);
     } catch {
@@ -4078,6 +4262,7 @@ function Projet() {
   const [touche, setTouche] = useState(false);
   const [envoi, setEnvoi] = useState(false);
   const [lienWhatsapp, setLienWhatsapp] = useState(null);
+  const [rdvOuvert, setRdvOuvert] = useState(false);
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
     setMobile(window.matchMedia("(max-width: 767px)").matches);
@@ -4186,16 +4371,27 @@ function Projet() {
         /* @__PURE__ */ jsx("span", { className: "text-[#25D366]", children: "WhatsApp" })
       ] }),
       /* @__PURE__ */ jsx("p", { className: "mx-auto mt-4 max-w-md text-text-secondary", children: "Votre message est prêt dans WhatsApp : appuyez sur « Envoyer » et nous revenons vers vous rapidement. Si l'application ne s'est pas ouverte, utilisez le bouton ci-dessous." }),
-      /* @__PURE__ */ jsx(
-        "a",
-        {
-          href: lienWhatsapp,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          className: "mt-6 inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]",
-          children: "Ouvrir WhatsApp"
-        }
-      )
+      /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row", children: [
+        /* @__PURE__ */ jsx(
+          "a",
+          {
+            href: lienWhatsapp,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: "inline-flex min-h-[56px] items-center rounded-full bg-[#25D366] px-8 text-base font-semibold text-white transition-colors hover:bg-[#1ebe5a]",
+            children: "Ouvrir WhatsApp"
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => setRdvOuvert(true),
+            className: "inline-flex min-h-[56px] items-center rounded-full border border-surface-border px-8 text-base font-semibold text-text-primary transition-colors hover:bg-surface-light",
+            children: "Réserver un créneau"
+          }
+        )
+      ] })
     ] }) }, "fin") : question ? /* @__PURE__ */ jsxs(
       motion.div,
       {
@@ -4350,12 +4546,13 @@ function Projet() {
       /* @__PURE__ */ jsx(FinalStudio, {}),
       /* @__PURE__ */ jsx(EquipeStudio, {}),
       /* @__PURE__ */ jsx(Footer, {})
-    ] })
+    ] }),
+    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
   ] });
 }
-const Login = lazy(() => import("./assets/Login-CzCSMGCF.js"));
-const ClientPortal = lazy(() => import("./assets/ClientPortal-B93RoSxd.js"));
-const DashboardLayout = lazy(() => import("./assets/DashboardLayout-D-TddZCM.js"));
+const Login = lazy(() => import("./assets/Login-DIbTS8yc.js"));
+const ClientPortal = lazy(() => import("./assets/ClientPortal-Cyb14TnS.js"));
+const DashboardLayout = lazy(() => import("./assets/DashboardLayout-oy6br7e7.js"));
 function RouteFallback() {
   return /* @__PURE__ */ jsx("div", { className: "flex min-h-screen items-center justify-center bg-surface", children: /* @__PURE__ */ jsx("span", { className: "h-8 w-8 animate-spin rounded-full border-2 border-surface-border border-t-accent" }) });
 }

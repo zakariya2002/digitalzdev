@@ -5,6 +5,7 @@ import ServicesStudio from '../components/studio/ServicesStudio'
 import AcquisitionStudio from '../components/studio/AcquisitionStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
 import FinalStudio from '../components/studio/FinalStudio'
+import RendezVousStudio from '../components/studio/RendezVousStudio'
 import Prechargeur from '../components/studio/Prechargeur'
 import AvisGoogleSection from '../components/AvisGoogleSection'
 import FaqSection from '../components/FaqSection'
@@ -26,6 +27,7 @@ export default function Home() {
       <HeroStudio />
       <ManifesteStudio />
       <TravauxStudio />
+      <RendezVousStudio />
       <FinalStudio />
       <AcquisitionStudio />
       <ServicesStudio />
