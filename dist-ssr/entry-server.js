@@ -888,8 +888,9 @@ const LIENS = [
   { libelle: "Projets", vers: "/#projets", interne: false },
   { libelle: "Services", vers: "/#services", interne: false },
   { libelle: "L'agence", vers: "/#agence", interne: false },
-  { libelle: "Contact", vers: "/contact", interne: true }
+  { libelle: "Contact", vers: "/projet", interne: true }
 ];
+const QUIZ = "https://quiz.digitalzdev.com/quiz";
 const PROJET = "/projet";
 const EASE$7 = [0.76, 0, 0.24, 1];
 function estCourant(lien2, chemin) {
@@ -996,7 +997,7 @@ function Navbar() {
         /* @__PURE__ */ jsx(
           Link,
           {
-            to: "/contact",
+            to: PROJET,
             className: "hidden min-h-[40px] items-center rounded-xl px-4 text-[15px] text-text-primary transition-colors hover:bg-surface-border/60 sm:inline-flex",
             children: "Contact"
           }
@@ -1004,11 +1005,11 @@ function Navbar() {
         /* @__PURE__ */ jsxs(
           "a",
           {
-            href: PROJET,
+            href: QUIZ,
             className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
             children: [
-              /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Mon projet" }),
-              /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Démarrer mon projet" })
+              /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Ma démo" }),
+              /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Générer une démo" })
             ]
           }
         )
@@ -1085,9 +1086,9 @@ function Navbar() {
                 /* @__PURE__ */ jsx(
                   "a",
                   {
-                    href: PROJET,
+                    href: QUIZ,
                     className: "inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto",
-                    children: "Démarrer mon projet →"
+                    children: "Générer une démo →"
                   }
                 )
               ]
@@ -2556,6 +2557,7 @@ function AppelEntrant() {
 function FinalStudio() {
   const ref = useRef(null);
   const boutonRef = useRef(null);
+  const [rdvOuvert, setRdvOuvert] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
   const ligne1 = useTransform(scrollYProgress, [0, 0.6], ["-12%", "0%"]);
   const ligne2 = useTransform(scrollYProgress, [0, 0.6], ["12%", "0%"]);
@@ -2573,29 +2575,43 @@ function FinalStudio() {
     mx.set(0);
     my.set(0);
   };
-  return /* @__PURE__ */ jsx("section", { ref, className: "overflow-hidden bg-surface px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
-    /* @__PURE__ */ jsxs("h2", { className: "text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: [
-      /* @__PURE__ */ jsx(motion.span, { className: "block", style: { x: ligne1 }, children: "Nous vendons plus qu'un site." }),
-      /* @__PURE__ */ jsx(motion.span, { className: "block text-[#25D366]", style: { x: ligne2 }, children: "Nous vendons des appels." })
+  return /* @__PURE__ */ jsxs("section", { ref, className: "overflow-hidden bg-surface px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+      /* @__PURE__ */ jsxs("h2", { className: "text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: [
+        /* @__PURE__ */ jsx(motion.span, { className: "block", style: { x: ligne1 }, children: "Nous vendons plus qu'un site." }),
+        /* @__PURE__ */ jsx(motion.span, { className: "block text-[#25D366]", style: { x: ligne2 }, children: "Nous vendons des appels." })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant, {}) }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center gap-10 text-center md:mt-8", children: [
+        /* @__PURE__ */ jsx("p", { className: "max-w-md text-xl leading-snug text-text-secondary md:text-2xl", children: "Commandez le site qui vous apportera vos prochains prospects." }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-6", onPointerMove: attirer, onPointerLeave: relacher, children: [
+          /* @__PURE__ */ jsx(
+            motion.button,
+            {
+              ref: boutonRef,
+              type: "button",
+              onClick: () => setRdvOuvert(true),
+              style: { x: sx, y: sy },
+              whileTap: { scale: 0.94 },
+              className: "flex h-28 w-28 items-center justify-center rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg",
+              children: "Prendre un RDV"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: WHATSAPP_PROJET,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "inline-flex min-h-[44px] items-center text-base text-text-muted underline-offset-4 transition-colors hover:text-text-primary hover:underline",
+              children: "Parlons-en sur WhatsApp"
+            }
+          )
+        ] })
+      ] })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant, {}) }),
-    /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center gap-10 text-center md:mt-8", children: [
-      /* @__PURE__ */ jsx("p", { className: "max-w-md text-xl leading-snug text-text-secondary md:text-2xl", children: "Commandez le site qui vous apportera vos prochains prospects." }),
-      /* @__PURE__ */ jsx("div", { className: "flex flex-col items-center gap-6", onPointerMove: attirer, onPointerLeave: relacher, children: /* @__PURE__ */ jsx(
-        motion.a,
-        {
-          ref: boutonRef,
-          href: WHATSAPP_PROJET,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          style: { x: sx, y: sy },
-          whileTap: { scale: 0.94 },
-          className: "flex h-28 w-28 items-center justify-center whitespace-nowrap rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg",
-          children: "Parlons-en"
-        }
-      ) })
-    ] })
-  ] }) });
+    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
+  ] });
 }
 const EASE$2 = [0.22, 1, 0.36, 1];
 function RendezVousStudio() {

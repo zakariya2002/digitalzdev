@@ -1,6 +1,7 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 import AppelEntrant from './AppelEntrant'
+import CalendlyModal from '../CalendlyModal'
 import { WHATSAPP_PROJET } from '../ServicesSection'
 
 /**
@@ -9,7 +10,8 @@ import { WHATSAPP_PROJET } from '../ServicesSection'
  */
 export default function FinalStudio() {
   const ref = useRef<HTMLElement>(null)
-  const boutonRef = useRef<HTMLAnchorElement>(null)
+  const boutonRef = useRef<HTMLButtonElement>(null)
+  const [rdvOuvert, setRdvOuvert] = useState(false)
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] })
   const ligne1 = useTransform(scrollYProgress, [0, 0.6], ['-12%', '0%'])
@@ -54,21 +56,30 @@ export default function FinalStudio() {
           </p>
 
           <div className="flex flex-col items-center gap-6" onPointerMove={attirer} onPointerLeave={relacher}>
-            <motion.a
+            <motion.button
               ref={boutonRef}
+              type="button"
+              onClick={() => setRdvOuvert(true)}
+              style={{ x: sx, y: sy }}
+              whileTap={{ scale: 0.94 }}
+              className="flex h-28 w-28 items-center justify-center rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg"
+            >
+              Prendre un RDV
+            </motion.button>
+            {/* Pour qui préfère écrire plutôt que caler un appel. */}
+            <a
               href={WHATSAPP_PROJET}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ x: sx, y: sy }}
-              whileTap={{ scale: 0.94 }}
-              className="flex h-28 w-28 items-center justify-center whitespace-nowrap rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg"
+              className="inline-flex min-h-[44px] items-center text-base text-text-muted underline-offset-4 transition-colors hover:text-text-primary hover:underline"
             >
-              Parlons-en
-            </motion.a>
+              Parlons-en sur WhatsApp
+            </a>
           </div>
         </div>
       </div>
 
+      <CalendlyModal open={rdvOuvert} onClose={() => setRdvOuvert(false)} />
     </section>
   )
 }
