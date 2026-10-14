@@ -11,6 +11,7 @@ const pageTitles: Record<string, string> = {
   '/dashboard/kanban': 'Kanban',
   '/dashboard/calendar': 'Calendrier',
   '/dashboard/clients': 'Leads & Clients',
+  '/dashboard/tunnel': 'Tunnel du quiz',
   '/dashboard/sms-templates': 'Templates SMS',
   '/dashboard/quotes': 'Devis',
   '/dashboard/quotes/new': 'Nouveau devis',

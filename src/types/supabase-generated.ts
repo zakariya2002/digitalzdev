@@ -2342,6 +2342,29 @@ export type Database = {
       next_sequence_number: { Args: { seq_id: string }; Returns: string }
       open_direct_conversation: { Args: { p_other: string }; Returns: string }
       punch: { Args: { p_note?: string }; Returns: Json }
+      quiz_parcours: {
+        Args: { p_depuis?: string }
+        Returns: {
+          visiteur: string
+          debut: string
+          dernier: string
+          rang_max: number | null
+          dernier_ecran: string | null
+          ecrans: string[] | null
+          erreur: boolean
+          campagne: string | null
+          creation: string | null
+          depuis_meta: boolean | null
+          email: string | null
+          telephone: string | null
+          marque: string | null
+          client_id: string | null
+        }[]
+      }
+      quiz_tunnel: {
+        Args: { p_depuis?: string; p_meta_seulement?: boolean }
+        Returns: { rang: number; etape: string; visiteurs: number }[]
+      }
       record_share_response: {
         Args: { p_name: string; p_response: string; p_token: string }
         Returns: Json

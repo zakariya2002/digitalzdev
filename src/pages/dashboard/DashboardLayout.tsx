@@ -28,6 +28,7 @@ import ProposalDetailPage from './ProposalDetailPage'
 import ProjectsPage from './ProjectsPage'
 import ProjectDetailPage from './ProjectDetailPage'
 import AutomationPage from './AutomationPage'
+import TunnelPage from './TunnelPage'
 import { useEffect } from 'react'
 
 export default function DashboardLayout() {
@@ -54,6 +55,7 @@ export default function DashboardLayout() {
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="clients" element={<ClientsPage />} />
               <Route path="clients/:id" element={<ClientDetailPage />} />
+              <Route path="tunnel" element={<TunnelPage />} />
               <Route path="sms-templates" element={<SmsTemplatesPage />} />
               <Route path="quotes" element={<QuotesPage />} />
               <Route path="quotes/new" element={<QuoteDetailPage />} />
