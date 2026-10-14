@@ -56,6 +56,17 @@ const QUESTIONS: Question[] = [
 
 type Reponses = Partial<Record<Question['cle'], string>>
 
+const LONGUEURS_NATIONALES: Array<[string, RegExp]> = [
+  ['+33', /^[1-9]\d{8}$/],
+  ['+32', /^[1-9]\d{7,8}$/],
+  ['+41', /^[1-9]\d{8}$/],
+  ['+352', /^\d{6,11}$/],
+  ['+212', /^[5-7]\d{8}$/],
+  ['+213', /^[2-7]\d{7,8}$/],
+  ['+216', /^[2-9]\d{7}$/],
+  ['+1', /^[2-9]\d{9}$/],
+]
+
 /** Numéro au format international, ou null s'il est invalide ou manifestement inventé. */
 function normaliserTelephone(brut: string): string | null {
   const chiffres = brut.replace(/[^\d+]/g, '')
@@ -66,6 +77,13 @@ function normaliserTelephone(brut: string): string | null {
       ? n
       : null
   if (!international) return null
+  // Bon nombre de chiffres après l'indicatif : même règle que l'API (lib/sanitize.ts du quiz).
+  for (const [indicatif, motif] of LONGUEURS_NATIONALES) {
+    if (international.startsWith(indicatif)) {
+      if (!motif.test(international.slice(indicatif.length))) return null
+      break
+    }
+  }
   if (international.startsWith('+33')) {
     const national = international.slice(3)
     if (new Set(national).size <= 2) return null
