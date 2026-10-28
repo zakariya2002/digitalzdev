@@ -5,7 +5,8 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion'
-import { WHATSAPP_PROJET } from '../ServicesSection'
+import { Link } from 'react-router-dom'
+import Trousseau from './Trousseau'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -121,25 +122,27 @@ export default function HeroStudio() {
           className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center"
           style={{ opacity: titreOpacite, y: titreY, fontFamily: "'Inter Tight', system-ui, sans-serif" }}
         >
-          {/* Trousseau 3D masqué pour l'instant : <Trousseau className="pointer-events-none absolute inset-0 -z-10" /> */}
+          <Trousseau className="pointer-events-none absolute inset-0 -z-10" />
           <h1 className="text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]">
             <Ligne delai={0.25}>Créons un site</Ligne>
             <Ligne delai={0.35}>
-              à la hauteur de votre <span className="text-pop">image.</span>
+              à la hauteur de vos <span className="text-pop">projets.</span>
             </Ligne>
           </h1>
 
-          <motion.a
-            href={WHATSAPP_PROJET}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-8 inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black md:mt-10"
+          <motion.div
+            className="mt-8 md:mt-10"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
           >
-            Prendre rendez-vous
-          </motion.a>
+            <Link
+              to="/projet"
+              className="inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black"
+            >
+              Prendre rendez-vous
+            </Link>
+          </motion.div>
         </motion.div>
 
         <motion.button

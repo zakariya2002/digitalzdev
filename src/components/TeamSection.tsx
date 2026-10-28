@@ -24,7 +24,7 @@ export const MEMBERS: Member[] = [
       'React & Next.js',
       'TypeScript / Node',
       'iOS',
-      'Shopify & Liquid',
+      'SEO technique',
       'PostgreSQL & Supabase',
       'WebGL',
     ],
@@ -34,14 +34,14 @@ export const MEMBERS: Member[] = [
 
 /** Chiffres tirés du portfolio publié sur cette page, rien de déclaratif. */
 export const FACTS = [
-  { value: '8', label: 'projets en ligne' },
-  { value: '6', label: 'secteurs couverts' },
+  { value: '5', label: 'projets en ligne' },
+  { value: '3', label: "agences d'architecture" },
   { value: '2', label: 'métiers réunis' },
 ]
 
 /** Ce que l'agence prend en charge, au-delà de la seule mise en ligne. */
 export const SERVICES = [
-  { title: 'Conception et développement', body: "Sites vitrines, boutiques Shopify, plateformes métier et applications iOS. Du cadrage à la mise en ligne." },
+  { title: 'Conception et développement', body: "Sites d'agences d'architecture, portfolios de réalisations et espaces client. Du cadrage à la mise en ligne." },
   { title: 'Meta Ads et Google Ads', body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
   { title: 'Mesure et conversions', body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." },
 ]

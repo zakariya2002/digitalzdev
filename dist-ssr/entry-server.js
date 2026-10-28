@@ -7,7 +7,7 @@ import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
 import { createClient } from "@supabase/supabase-js";
 import { useLocation, Link, Navigate, Routes, Route } from "react-router-dom";
-import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useInView, useMotionTemplate } from "framer-motion";
+import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate, useInView } from "framer-motion";
 import Lenis from "lenis";
 import emailjs from "@emailjs/browser";
 const supabaseUrl = "https://uipxlesrpdocqpblmrrr.supabase.co";
@@ -294,116 +294,6 @@ const projects = [
     ]
   },
   {
-    id: "determines",
-    title: "lesdetermines.fr",
-    subtitle: "Programme d’entrepreneuriat",
-    year: "2026",
-    tags: ["Association", "Site institutionnel", "Candidatures"],
-    stack: ["Site institutionnel", "Formulaires", "Vidéo"],
-    description: "Site des Déterminés, programme d'accompagnement à l'entrepreneuriat présent dans près de 20 villes : programmes, événements, actualités et candidatures en ligne.",
-    url: "https://www.lesdetermines.fr",
-    route: "/les-determines",
-    color: "#1E40FF",
-    gradient: "from-[#E7ECFF] via-[#B9C6FF] to-[#1E40FF]",
-    heroImage: "/screenshots/determines-hero.webp",
-    brief: "Les Déterminés devaient parler à des publics très différents (candidats, partenaires, formateurs) et donner envie de postuler aux habitants des quartiers prioritaires et des zones rurales, avec une identité forte et engagée.",
-    solution: "Un site à l'identité affirmée : vidéo en ouverture, typographie condensée, programmes présentés en cartes de couleur, actualités, et des parcours clairs pour candidater, devenir partenaire ou formateur.",
-    features: [
-      "Vidéo et accroche en ouverture",
-      "Programmes en cartes de couleur",
-      "Candidature en ligne",
-      "Espaces partenaires et formateurs",
-      "Actualités et événements",
-      "Identité typographique forte"
-    ],
-    metrics: [
-      { value: "20", label: "villes en France" },
-      { value: "3", label: "programmes" },
-      { value: "100%", label: "gratuit pour les candidats" }
-    ],
-    mockups: [
-      {
-        title: "Accueil",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Accroche et vidéo",
-        image: "/screenshots/determines-hero.webp"
-      },
-      {
-        title: "Programmes",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Cartes de couleur",
-        image: "/screenshots/determines-2.webp"
-      },
-      {
-        title: "Actualités",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Dernières nouvelles",
-        image: "/screenshots/determines-3.webp"
-      },
-      {
-        title: "Rejoindre",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Candidats, partenaires, formateurs",
-        image: "/screenshots/determines-4.webp"
-      }
-    ]
-  },
-  {
-    id: "nouvelle-garde",
-    title: "lanouvellegarde.com",
-    subtitle: "Groupe de brasseries",
-    year: "2026",
-    tags: ["Site vitrine", "Bilingue", "Restauration"],
-    stack: ["WordPress", "Elementor", "PHP", "SEO technique"],
-    description: "Vitrine bilingue de la Nouvelle Garde, douze brasseries et un bar entre Paris, la province et Londres. Une page d'accueil en grille d'objets, une adresse par page, et sa propre couleur à chacune.",
-    url: "https://lanouvellegarde.com/fr/",
-    route: "/la-nouvelle-garde",
-    color: "#C8961F",
-    gradient: "from-[#FBF8F1] via-[#C8961F] to-[#3F5D33]",
-    heroImage: "/screenshots/nouvelle-garde-hero.webp",
-    brief: "La Nouvelle Garde tient douze brasseries et un bar, de la Gare du Nord à Sloane Square, en passant par Lille, Marseille, Lyon, Bordeaux et Neuilly. Un groupe de cette taille a un problème que n'ont pas les autres restaurants : chaque adresse a sa salle, sa carte, sa clientèle et son caractère, et pourtant elles appartiennent toutes à la même maison. Un site unique aplatit les différences, douze sites séparés dissolvent le groupe. Il fallait tenir les deux.",
-    solution: "La page d'accueil ne liste rien : elle pose douze objets sur du blanc, une assiette, une chaise de terrasse, un moulin à poivre, un pichet en forme de coq, chacun portant le nom d'une brasserie en lettrage dessiné. On choisit une adresse comme on choisirait une table. Derrière, chaque brasserie a sa page et sa couleur, son logo, son quartier, son équipe en photo. La réservation se sépare de la privatisation au seuil de vingt-cinq couverts, là où le métier change vraiment, et les capacités assises et cocktail sont annoncées adresse par adresse. Le tout en français et en anglais.",
-    features: [
-      "Page d'accueil en grille d'objets, une par adresse",
-      "Une page par brasserie, avec sa couleur et son lettrage",
-      "Réservation et privatisation séparées au seuil de 25 couverts",
-      "Capacités assises et cocktail, devis et brochure par adresse",
-      "Site intégralement bilingue français et anglais",
-      "FAQ, charte maison et lettre d’information"
-    ],
-    metrics: [
-      { value: "12", label: "brasseries et un bar" },
-      { value: "2", label: "pays, France et Royaume-Uni" },
-      { value: "FR / EN", label: "entièrement bilingue" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#FBF8F1] to-[#F2E9D6]",
-        content: "Douze objets sur fond blanc, une par adresse",
-        image: "/screenshots/nouvelle-garde-hero.webp"
-      },
-      {
-        title: "Une brasserie",
-        gradient: "from-[#F2E9D6] to-[#C8961F]",
-        content: "Son lettrage, son adresse, sa couleur",
-        image: "/screenshots/nouvelle-garde-2.webp"
-      },
-      {
-        title: "Réserver ou privatiser",
-        gradient: "from-[#C8961F] to-[#6F7F4A]",
-        content: "L'équipe en photo, et le choix à 25 couverts",
-        image: "/screenshots/nouvelle-garde-3.webp"
-      },
-      {
-        title: "Groupes et privatisation",
-        gradient: "from-[#6F7F4A] to-[#3F5D33]",
-        content: "Capacités, devis et brochure par adresse",
-        image: "/screenshots/nouvelle-garde-4.webp"
-      }
-    ]
-  },
-  {
     id: "st-agni",
     title: "st-agni.com",
     subtitle: "Minimalisme premium",
@@ -457,228 +347,6 @@ const projects = [
         image: "/screenshots/stagni-4.webp"
       }
     ]
-  },
-  {
-    id: "soeur",
-    title: "soeur.fr",
-    subtitle: "Prêt-à-porter parisien",
-    year: "2026",
-    tags: ["E-commerce", "Mode", "Shopify"],
-    stack: ["Shopify", "Liquid", "JavaScript"],
-    description: "Boutique en ligne de la maison parisienne Soeur : prêt-à-porter femme et enfant, sacs, chaussures, seconde main et archives, dans un univers éditorial sobre.",
-    url: "https://www.soeur.fr",
-    route: "/soeur",
-    color: "#8C7A62",
-    gradient: "from-[#EDE8E0] via-[#DDD6CB] to-[#C9C0B2]",
-    heroImage: "/screenshots/soeur-hero.webp",
-    brief: "Soeur avait besoin d'une boutique à la hauteur de ses campagnes : des collections présentées comme dans un lookbook, un catalogue large (prêt-à-porter, enfant, sacs, chaussures) facile à parcourir, et des rubriques à part pour la seconde main et les archives.",
-    solution: "Une boutique Shopify où l'image domine : visuels de campagne plein écran, grilles produits aérées sur fond neutre, navigation par familles et par catégories, et un parcours d'achat court sur mobile comme sur ordinateur.",
-    features: [
-      "Visuels de campagne plein écran",
-      "Grilles produits épurées par catégorie",
-      "Rubriques seconde main et archives",
-      "Navigation par familles et sous-catégories",
-      "Parcours d’achat optimisé mobile",
-      "Thème Shopify sur mesure"
-    ],
-    metrics: [
-      { value: "Shopify", label: "boutique sur mesure" },
-      { value: "2", label: "univers : femme et enfant" },
-      { value: "100%", label: "responsive" }
-    ],
-    mockups: [
-      {
-        title: "Accueil",
-        gradient: "from-[#EDE8E0] to-[#DDD6CB]",
-        content: "Campagne plein écran",
-        image: "/screenshots/soeur-hero.webp"
-      },
-      {
-        title: "Collection",
-        gradient: "from-[#DDD6CB] to-[#CFC7BA]",
-        content: "Grille produits sur fond neutre",
-        image: "/screenshots/soeur-2.webp"
-      },
-      {
-        title: "Catalogue",
-        gradient: "from-[#CFC7BA] to-[#C1B8AA]",
-        content: "Familles et sous-catégories",
-        image: "/screenshots/soeur-3.webp"
-      },
-      {
-        title: "Nouveautés",
-        gradient: "from-[#C1B8AA] to-[#B3A99A]",
-        content: "Parcours fluide jusqu’au panier",
-        image: "/screenshots/soeur-4.webp"
-      }
-    ]
-  },
-  {
-    id: "neurocare",
-    title: "neuro-care.fr",
-    subtitle: "Santé & neurodéveloppement",
-    year: "2026",
-    tags: ["Plateforme", "Annuaire vérifié", "Communauté"],
-    stack: ["Next.js", "React", "PostgreSQL", "RGPD"],
-    description: "Plateforme d'orientation pour les familles concernées par les troubles du neurodéveloppement : annuaire de professionnels vérifiés, forum d'entraide, simulateur d'aides et carte des lieux adaptés. Gratuit, sans inscription.",
-    url: "https://neuro-care.fr",
-    route: "/neurocare",
-    color: "#5BA89D",
-    gradient: "from-[#5BA89D] via-[#2C7A70] to-[#134B45]",
-    heroImage: "/screenshots/neurocare-hero.webp",
-    brief: "Trouver un orthophoniste, un psychomotricien ou un éducateur formé aux TND relève souvent du parcours du combattant : listes obsolètes, diplômes invérifiables, délais à rallonge. NeuroCare devait répondre à trois besoins d'un coup : trouver le bon professionnel, comprendre à quelles aides on a droit, et ne pas rester seul dans les démarches. Le tout gratuitement pour les familles, et conforme au RGPD sur des données de santé.",
-    solution: "La plateforme s'est élargie bien au-delà de l'annuaire initial. Chaque professionnel passe désormais une vérification en quatre étapes, avec croisement du numéro RPPS / ADELI contre l'Annuaire Santé avant d'obtenir le badge « Vérifié ». Autour, nous avons ouvert un forum modéré, un simulateur d'aides financières (AEEH, PCH, CESU), une carte des lieux adaptés, un espace structures pour les cabinets et associations, un blog et des annonces. Hébergement en France, échanges chiffrés.",
-    features: [
-      "Vérification en 4 étapes, RPPS / ADELI contrôlés",
-      "Recherche par spécialité, trouble ou ville",
-      "Forum communautaire modéré, lecture libre",
-      "Simulateur d’aides : AEEH, PCH, CESU",
-      "Carte des lieux adaptés et annonces familles",
-      "Espace structures : cabinets et associations",
-      "Espace pro avec agenda et demandes de RDV",
-      "Hébergé en France, RGPD, échanges chiffrés"
-    ],
-    metrics: [
-      { value: "100%", label: "gratuit pour les familles" },
-      { value: "4", label: "étapes de vérification" },
-      { value: "30+", label: "villes couvertes" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#134B45] to-[#2C7A70]",
-        content: "Recherche en trois étapes, sans inscription",
-        image: "/screenshots/neurocare-hero.webp"
-      },
-      {
-        title: "Recherche",
-        gradient: "from-[#2C7A70] to-[#5BA89D]",
-        content: "Filtres par spécialité, trouble et ville",
-        image: "/screenshots/neurocare-2.webp"
-      },
-      {
-        title: "Forum",
-        gradient: "from-[#5BA89D] to-[#2C7A70]",
-        content: "Conseils, témoignages, questions, ressources",
-        image: "/screenshots/neurocare-3.webp"
-      },
-      {
-        title: "Simulateur d’aides",
-        gradient: "from-[#2C7A70] to-[#134B45]",
-        content: "AEEH, PCH et CESU en deux minutes",
-        image: "/screenshots/neurocare-4.webp"
-      }
-    ]
-  },
-  {
-    id: "kalira",
-    title: "kaliracare.com",
-    subtitle: "Soins capillaires premium",
-    year: "2026",
-    tags: ["E-commerce", "Shopify", "Direction artistique"],
-    stack: ["Shopify", "Liquid", "JavaScript", "Klaviyo"],
-    description: "Boutique Shopify pour la marque de soins capillaires Kalira. Un rituel en trois temps (Clean, Care, Protect), servi par une direction artistique éditoriale et un tunnel d'achat taillé pour la conversion.",
-    url: "https://kaliracare.com",
-    route: "/kalira",
-    color: "#7A6A55",
-    gradient: "from-[#F5F0E8] via-[#D8CEC0] to-[#7A6A55]",
-    heroImage: "/screenshots/kalira-hero.webp",
-    brief: "Kalira est née de plusieurs années passées derrière un fauteuil de coiffure : des centaines de femmes, des cheveux et des attentes toutes différentes. La marque arrivait avec une gamme construite (kératine, acide hyaluronique, collagène) mais sans vitrine à sa hauteur. Il fallait un site qui rende lisible un rituel en trois étapes, qui donne envie de toucher le produit à travers l'écran, et qui transforme une visite Instagram en commande.",
-    solution: "Nous avons bâti un thème Shopify sur mesure autour d'une grille éditoriale : hero plein écran en diptyque, numérotation romaine des trois soins (I-Clean, II-Care, III-Protect) qui structure toute la navigation, et une section « Scroll & Shop » qui rejoue les codes du feed social directement dans la page. Le tunnel est réduit au strict nécessaire, la roue de fidélisation capte l'e-mail dès la première visite et Klaviyo prend le relais.",
-    features: [
-      "Thème Shopify sur mesure, typographie éditoriale",
-      "Rituel en 3 temps comme colonne vertébrale du site",
-      "Section « Scroll & Shop » inspirée du feed social",
-      "Packs et duos avec prix barrés et upsell panier",
-      "Capture e-mail gamifiée et scénarios Klaviyo",
-      "Paiement Shop Pay, PayPal, Klarna et CB"
-    ],
-    metrics: [
-      { value: "3", label: "soins, un rituel" },
-      { value: "5", label: "références en ligne" },
-      { value: "100%", label: "mobile-first" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#F5F0E8] to-[#D8CEC0]",
-        content: "Hero diptyque égérie / packshot",
-        image: "/screenshots/kalira-hero.webp"
-      },
-      {
-        title: "Collection",
-        gradient: "from-[#D8CEC0] to-[#C4B8A6]",
-        content: "Toute la gamme, packs en tête",
-        image: "/screenshots/kalira-2.webp"
-      },
-      {
-        title: "Fiche produit",
-        gradient: "from-[#C4B8A6] to-[#A89880]",
-        content: "Pack hair-care, bénéfices et ajout panier",
-        image: "/screenshots/kalira-3.webp"
-      },
-      {
-        title: "Univers de marque",
-        gradient: "from-[#A89880] to-[#7A6A55]",
-        content: "Actifs, formulation et Scroll & Shop",
-        image: "/screenshots/kalira-4.webp"
-      }
-    ]
-  },
-  {
-    id: "angele",
-    title: "angele.store",
-    subtitle: "Merch artiste Shopify",
-    year: "2025",
-    tags: ["E-commerce", "Shopify", "Musique"],
-    stack: ["Shopify", "Liquid", "GTM", "Meta Pixel"],
-    description: "Boutique e-commerce Shopify pour l'artiste belge Angèle. Merchandising officiel : T-shirts, hoodies, vinyles et accessoires, dans un univers pop assumé.",
-    url: "https://angele.store",
-    route: "/angele",
-    color: "#7ECDB5",
-    gradient: "from-[#7ECDB5] via-[#A8E6CF] to-[#C5F0DC]",
-    heroImage: "/screenshots/angele-hero.webp",
-    brief: "L'artiste belge Angèle avait besoin d'une boutique en ligne officielle pour sa ligne de merchandising : vêtements, vinyles et accessoires. Le site devait refléter son univers pop et coloré tout en offrant une expérience d'achat fluide et rapide pour ses fans à travers l'Europe.",
-    solution: "Nous avons développé une boutique Shopify sur mesure avec un thème personnalisé. Navigation par catégories (T-shirts, Sweatshirts, CD & Vinyles, Accessoires), fiches produit détaillées avec sélecteur de taille, galerie d'images et gestion des stocks. Le tout optimisé pour le mobile et intégré aux outils marketing (newsletter, Facebook Pixel, Google Analytics).",
-    features: [
-      "Thème Shopify entièrement personnalisé",
-      "Catalogue multi-catégories avec carrousel",
-      "Fiches produit avec sélecteur taille et galerie",
-      "Panier et checkout Shopify optimisés",
-      "Intégration newsletter et marketing (Pixel, GTM)",
-      "Design responsive mobile-first"
-    ],
-    metrics: [
-      { value: "4", label: "univers produits" },
-      { value: "EU", label: "livraison européenne" },
-      { value: "100%", label: "mobile-first" }
-    ],
-    mockups: [
-      {
-        title: "Page d'accueil",
-        gradient: "from-[#7ECDB5] to-[#A8E6CF]",
-        content: "Catalogue T-shirts avec carrousel par catégorie",
-        image: "/screenshots/angele-hero.webp"
-      },
-      {
-        title: "Sweatshirts & Joggings",
-        gradient: "from-[#A8E6CF] to-[#7ECDB5]",
-        content: "Grille produits hoodies, crewnecks et joggings",
-        image: "/screenshots/angele-2.webp"
-      },
-      {
-        title: "Fiche produit",
-        gradient: "from-[#7ECDB5] to-[#C5F0DC]",
-        content: "Galerie photos, sélecteur taille et ajout panier",
-        image: "/screenshots/angele-3.webp"
-      },
-      {
-        title: "CD & Vinyles",
-        gradient: "from-[#C5F0DC] to-[#7ECDB5]",
-        content: "Collection vinyles et CD album Nonante-Cinq",
-        image: "/screenshots/angele-4.webp"
-      }
-    ]
   }
 ];
 const SITE_URL = "https://digitalzdev.com";
@@ -686,20 +354,20 @@ const SITE_NAME = "Digitalz Dev";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 const HOME = {
   path: "/",
-  title: "Agence web pour avocats, architectes et photographes | Digitalz Dev",
-  description: "Sites internet sur mesure pour cabinets d'avocats, agences d'architecture, photographes et vidéastes : design sobre, référencement local et campagnes. Devis sous 48 h."
+  title: "Agence web pour architectes et agences d'architecture | Digitalz Dev",
+  description: "Sites internet sur mesure pour architectes et agences d'architecture : vos réalisations mises en valeur, référencement local et demandes de particuliers. Devis sous 48 h."
 };
 const STATIC_PAGES = [
   HOME,
   {
     path: "/contact",
-    title: "Devis gratuit pour votre projet de site internet | Digitalz Dev",
-    description: "Décrivez votre projet de site internet en deux minutes : type de site, budget, délais. Réponse sous 24 à 48 h avec un devis adapté par notre agence web."
+    title: "Devis gratuit pour le site de votre agence d'architecture | Digitalz Dev",
+    description: "Architectes : décrivez le site de votre agence en deux minutes (réalisations, budget, délais). Réponse sous 24 à 48 h avec un devis adapté."
   },
   {
     path: "/projet",
     title: "Parlons de votre site | Digitalz Dev",
-    description: "Quatre questions sur votre projet de site internet, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
+    description: "Architectes : quatre questions sur votre agence et votre site, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
     noindex: true
   },
   {
@@ -719,7 +387,7 @@ const PROJECT_PAGES = projects.map((project) => ({
   // La description du projet est déjà rédigée pour être lue : on la reprend,
   // en la bornant à la longueur qu'un extrait Google affiche réellement.
   description: truncate(
-    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web.`,
+    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web pour architectes.`,
     158
   )
 }));
@@ -890,7 +558,6 @@ const LIENS = [
   { libelle: "L'agence", vers: "/#agence", interne: false },
   { libelle: "Contact", vers: "/projet", interne: true }
 ];
-const QUIZ = "https://quiz.digitalzdev.com/quiz";
 const PROJET = "/projet";
 const EASE$7 = [0.76, 0, 0.24, 1];
 function estCourant(lien2, chemin) {
@@ -976,7 +643,7 @@ function Navbar() {
                 type: "button",
                 onPointerEnter: (e) => e.pointerType === "mouse" && setSurvol(true),
                 onClick: () => {
-                  if (window.matchMedia("(min-width: 1024px)").matches) setEpingle((v) => !v);
+                  if (window.matchMedia("(min-width: 1024px)").matches) setEpingle((v2) => !v2);
                   else setOuvert((o) => !o);
                 },
                 "aria-expanded": ouvert,
@@ -993,27 +660,17 @@ function Navbar() {
           ]
         }
       ),
-      /* @__PURE__ */ jsxs("div", { className: "pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl", children: [
-        /* @__PURE__ */ jsx(
-          Link,
-          {
-            to: PROJET,
-            className: "hidden min-h-[40px] items-center rounded-xl px-4 text-[15px] text-text-primary transition-colors hover:bg-surface-border/60 sm:inline-flex",
-            children: "Contact"
-          }
-        ),
-        /* @__PURE__ */ jsxs(
-          "a",
-          {
-            href: QUIZ,
-            className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
-            children: [
-              /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Ma démo" }),
-              /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Générer une démo" })
-            ]
-          }
-        )
-      ] })
+      /* @__PURE__ */ jsx("div", { className: "pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl", children: /* @__PURE__ */ jsxs(
+        Link,
+        {
+          to: PROJET,
+          className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
+          children: [
+            /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Mon projet" }),
+            /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Démarrer mon projet" })
+          ]
+        }
+      ) })
     ] }),
     /* @__PURE__ */ jsx(AnimatePresence, { children: ouvert && /* @__PURE__ */ jsxs(
       motion.div,
@@ -1084,11 +741,12 @@ function Navbar() {
                   )
                 ] }),
                 /* @__PURE__ */ jsx(
-                  "a",
+                  Link,
                   {
-                    href: QUIZ,
+                    to: PROJET,
+                    onClick: fermer,
                     className: "inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto",
-                    children: "Générer une démo →"
+                    children: "Démarrer mon projet →"
                   }
                 )
               ]
@@ -1199,6 +857,739 @@ function ProtectedRoute({ children }) {
     return /* @__PURE__ */ jsx(Navigate, { to: "/login", replace: true });
   }
   return /* @__PURE__ */ jsx(Fragment, { children });
+}
+const v = (x = 0, y = 0, z = 0) => ({ x, y, z });
+function Trousseau({ className = "" }) {
+  const hoteRef = useRef(null);
+  useEffect(() => {
+    const hote = hoteRef.current;
+    if (!hote) return;
+    let arret = false;
+    let nettoyer = () => {
+    };
+    (async () => {
+      const THREE = await import("three");
+      const { RoomEnvironment } = await import("three/examples/jsm/environments/RoomEnvironment.js");
+      const { RoundedBoxGeometry } = await import("three/examples/jsm/geometries/RoundedBoxGeometry.js");
+      const { TextGeometry } = await import("three/examples/jsm/geometries/TextGeometry.js");
+      const { FontLoader } = await import("three/examples/jsm/loaders/FontLoader.js");
+      const police = await new FontLoader().loadAsync("/fonts/nunito-black.typeface.json");
+      if (arret) return;
+      const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const rendu = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      rendu.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      rendu.outputColorSpace = THREE.SRGBColorSpace;
+      rendu.toneMapping = THREE.ACESFilmicToneMapping;
+      rendu.toneMappingExposure = 1.05;
+      rendu.domElement.style.cssText = "width:100%;height:100%;display:block;pointer-events:none";
+      hote.appendChild(rendu.domElement);
+      const scene = new THREE.Scene();
+      const pmrem = new THREE.PMREMGenerator(rendu);
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      const soleil = new THREE.DirectionalLight(16777215, 1.6);
+      soleil.position.set(3, 6, 8);
+      scene.add(soleil);
+      const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+      camera.position.set(0, 0, 14);
+      const chrome = new THREE.MeshPhysicalMaterial({ color: 15329774, metalness: 1, roughness: 0.12 });
+      const bleu = new THREE.MeshPhysicalMaterial({ color: 3560692, metalness: 0.55, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.15 });
+      const citron = new THREE.MeshPhysicalMaterial({ color: 14283866, metalness: 0, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.2 });
+      const noir = new THREE.MeshPhysicalMaterial({ color: 1907999, metalness: 0.2, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.25 });
+      const sombre = new THREE.MeshStandardMaterial({ color: 1118484, roughness: 0.6 });
+      const led = new THREE.MeshStandardMaterial({ color: 3560692, emissive: 3560692, emissiveIntensity: 1.4 });
+      const anneauPetit = () => new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.028, 12, 32), chrome);
+      const fabriquer = {
+        mousqueton() {
+          const g = new THREE.Group();
+          const courbe = new THREE.CatmullRomCurve3(
+            [v(0, 0), v(0.3, -0.1), v(0.36, -0.7), v(0.22, -1.32), v(0, -1.42), v(-0.22, -1.3), v(-0.3, -0.7), v(-0.26, -0.12)].map(
+              (p) => new THREE.Vector3(p.x, p.y, p.z)
+            ),
+            true
+          );
+          g.add(new THREE.Mesh(new THREE.TubeGeometry(courbe, 120, 0.075, 16, true), bleu));
+          const doigt = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 12), chrome);
+          doigt.position.set(-0.18, -0.68, 0.02);
+          doigt.rotation.z = -0.08;
+          g.add(doigt);
+          return g;
+        },
+        logo() {
+          const g = new THREE.Group();
+          const a = anneauPetit();
+          a.position.y = -0.1;
+          g.add(a);
+          const plaque = new THREE.Mesh(new RoundedBoxGeometry(1.05, 1.05, 0.28, 5, 0.22), noir);
+          plaque.position.y = -0.74;
+          g.add(plaque);
+          const trois = new TextGeometry("3", { font: police, size: 0.72, depth: 0.16, curveSegments: 10, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 4 });
+          trois.computeBoundingBox();
+          const bb = trois.boundingBox;
+          trois.translate(-(bb.max.x + bb.min.x) / 2, -(bb.max.y + bb.min.y) / 2, 0);
+          const m = new THREE.Mesh(trois, chrome);
+          m.position.set(0, -0.74, 0.12);
+          g.add(m);
+          return g;
+        },
+        usb() {
+          const g = new THREE.Group();
+          const a = anneauPetit();
+          a.position.y = -0.1;
+          g.add(a);
+          const corps = new THREE.Mesh(new RoundedBoxGeometry(0.62, 1.12, 0.26, 5, 0.1), noir);
+          corps.position.y = -0.8;
+          g.add(corps);
+          const voyant = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.02), led);
+          voyant.position.set(0.16, -0.42, 0.135);
+          g.add(voyant);
+          const bande = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.1, 0.262), bleu);
+          bande.position.y = -1.2;
+          g.add(bande);
+          const prise = new THREE.Mesh(new RoundedBoxGeometry(0.46, 0.5, 0.15, 3, 0.02), chrome);
+          prise.position.y = -1.6;
+          g.add(prise);
+          for (const x of [-0.1, 0.1]) {
+            const trou = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.02), sombre);
+            trou.position.set(x, -1.68, 0.075);
+            g.add(trou);
+          }
+          return g;
+        },
+        cle() {
+          const g = new THREE.Group();
+          const tete = new THREE.Shape();
+          tete.absarc(0, -0.3, 0.42, 0, Math.PI * 2, false);
+          const oeil = new THREE.Path();
+          oeil.absarc(0, -0.12, 0.11, 0, Math.PI * 2, true);
+          tete.holes.push(oeil);
+          const lame = new THREE.Shape();
+          lame.moveTo(-0.11, -0.6);
+          lame.lineTo(-0.11, -2.05);
+          lame.lineTo(0.02, -2.18);
+          lame.lineTo(0.13, -2.05);
+          for (let i = 0; i < 5; i++) {
+            const y = -1.95 + i * 0.22;
+            lame.lineTo(0.13, y);
+            lame.lineTo(0.24, y + 0.07);
+            lame.lineTo(0.24, y + 0.13);
+            lame.lineTo(0.13, y + 0.18);
+          }
+          lame.lineTo(0.13, -0.6);
+          lame.lineTo(-0.11, -0.6);
+          const reglages = { depth: 0.09, bevelEnabled: true, bevelThickness: 0.025, bevelSize: 0.02, bevelSegments: 3, curveSegments: 40 };
+          for (const s of [tete, lame]) {
+            const geo = new THREE.ExtrudeGeometry(s, reglages);
+            geo.translate(0, 0.12, -0.045);
+            g.add(new THREE.Mesh(geo, chrome));
+          }
+          const a = anneauPetit();
+          a.rotation.y = Math.PI / 2;
+          g.add(a);
+          return g;
+        },
+        texte() {
+          const g = new THREE.Group();
+          const a = anneauPetit();
+          a.position.y = -0.1;
+          g.add(a);
+          const geo = new TextGeometry("digitalzdev", { font: police, size: 0.27, depth: 0.2, curveSegments: 10, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 4 });
+          geo.computeBoundingBox();
+          const bb = geo.boundingBox;
+          geo.translate(-bb.min.x, -(bb.max.y + bb.min.y) / 2, -0.1);
+          geo.rotateZ(-Math.PI / 2);
+          const m = new THREE.Mesh(geo, citron);
+          m.position.y = -0.2;
+          g.add(m);
+          return g;
+        }
+      };
+      const trousseau = new THREE.Group();
+      scene.add(trousseau);
+      const anneau = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.05, 16, 64), chrome);
+      trousseau.add(anneau);
+      const PAS = 0.28;
+      const NB = 30;
+      const LONGUEUR = PAS * (NB - 1);
+      const chaine = Array.from({ length: NB }, () => ({ pos: v(), prec: v() }));
+      const maillons = Array.from({ length: NB - 1 }, (_, i) => {
+        const m = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.028, 10, 28), chrome);
+        m.scale.set(1, 1.6, 1);
+        m.userData.alterne = i % 2;
+        trousseau.add(m);
+        return m;
+      });
+      const objets = [
+        { mesh: fabriquer.mousqueton(), pivot: v(-0.4, -0.18, 0.06), longueur: 0.75, rayon: 0.42, repos: 0.6 },
+        { mesh: fabriquer.logo(), pivot: v(-0.22, -0.36, 0.16), longueur: 0.78, rayon: 0.62, repos: 0.05 },
+        { mesh: fabriquer.usb(), pivot: v(0, -0.43, -0.1), longueur: 0.95, rayon: 0.45, repos: -0.2 },
+        { mesh: fabriquer.cle(), pivot: v(0.22, -0.36, 0.12), longueur: 1.05, rayon: 0.42, repos: -0.4 },
+        { mesh: fabriquer.texte(), pivot: v(0.4, -0.18, -0.06), longueur: 1.25, rayon: 0.34, repos: -0.15 }
+      ];
+      const pendules = objets.map((o) => {
+        trousseau.add(o.mesh);
+        return { pivot: o.pivot, pos: v(), prec: v(), longueur: o.longueur, rayon: o.rayon, lacet: o.repos, lacetV: 0, lacetRepos: o.repos };
+      });
+      let demiH = 1;
+      let demiL = 1;
+      let ancreX = 0;
+      let anneauY = 0;
+      let echelle = 1;
+      const redimensionner = () => {
+        const l = hote.clientWidth;
+        const h = hote.clientHeight;
+        rendu.setSize(l, h, false);
+        camera.aspect = l / h;
+        camera.updateProjectionMatrix();
+        demiH = Math.tan(camera.fov * Math.PI / 360) * camera.position.z;
+        demiL = demiH * camera.aspect;
+        const mobile = l < 768;
+        echelle = mobile ? 0.5 : 0.95;
+        ancreX = mobile ? demiL * 0.62 : demiL * 0.68;
+        anneauY = demiH * (1 - 2 * (mobile ? 0.2 : 0.14));
+        trousseau.scale.setScalar(echelle);
+      };
+      redimensionner();
+      window.addEventListener("resize", redimensionner);
+      const ancreFinale = () => v(ancreX / echelle, anneauY / echelle + LONGUEUR, 0);
+      const debut = performance.now();
+      const DELAI = reduit ? 0 : 350;
+      const CHUTE = 0.75;
+      const REMONTEE = 0.9;
+      const DEPASSE = -2.2;
+      const decalage = () => {
+        if (reduit) return 0;
+        const t = (performance.now() - debut - DELAI) / 1e3;
+        if (t <= 0) return 12;
+        if (t < CHUTE) {
+          const e2 = t / CHUTE;
+          return 12 + (DEPASSE - 12) * (e2 * e2 * (3 - 2 * e2));
+        }
+        const u = Math.min(1, (t - CHUTE) / REMONTEE);
+        const e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+        return DEPASSE * (1 - e);
+      };
+      const ancre = () => {
+        const f = ancreFinale();
+        return v(f.x, f.y + decalage(), f.z);
+      };
+      {
+        const a = ancre();
+        chaine.forEach((n, i) => {
+          n.pos = v(a.x, a.y - i * PAS, 0);
+          n.prec = { ...n.pos };
+        });
+        const c = chaine[NB - 1].pos;
+        pendules.forEach((p) => {
+          p.pos = v(c.x + p.pivot.x, c.y + p.pivot.y - p.longueur, c.z + p.pivot.z);
+          p.prec = { ...p.pos };
+        });
+      }
+      const souris = { x: 99, y: 99, vx: 0, vy: 0, actif: false };
+      let dernier = { x: 99, y: 99, t: performance.now() };
+      const bouger = (e) => {
+        const r = hote.getBoundingClientRect();
+        if (e.clientY < r.top || e.clientY > r.bottom) return;
+        const x = ((e.clientX - r.left) / r.width * 2 - 1) * demiL / echelle;
+        const y = -((e.clientY - r.top) / r.height * 2 - 1) * demiH / echelle;
+        const t = performance.now();
+        const dt = Math.max(8, t - dernier.t) / 1e3;
+        souris.vx = (x - dernier.x) / dt;
+        souris.vy = (y - dernier.y) / dt;
+        souris.x = x;
+        souris.y = y;
+        souris.actif = true;
+        dernier = { x, y, t };
+      };
+      window.addEventListener("pointermove", bouger, { passive: true });
+      const rayon = new THREE.Raycaster();
+      const ndc = new THREE.Vector2();
+      let saisi = -1;
+      const toucher = (e) => {
+        const r = hote.getBoundingClientRect();
+        ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+        rayon.setFromCamera(ndc, camera);
+        for (let i = 0; i < objets.length; i++)
+          if (rayon.intersectObject(objets[i].mesh, true).length) return i;
+        if (rayon.intersectObject(anneau).length) return objets.length;
+        return -1;
+      };
+      const appuyer = (e) => {
+        const i = toucher(e);
+        if (i < 0) return;
+        saisi = i;
+        bouger(e);
+        souris.vx = souris.vy = 0;
+        e.preventDefault();
+        document.documentElement.style.cursor = "grabbing";
+        document.body.style.userSelect = "none";
+      };
+      const relacher = () => {
+        if (saisi < 0) return;
+        saisi = -1;
+        document.documentElement.style.cursor = "";
+        document.body.style.userSelect = "";
+      };
+      const survoler = (e) => {
+        if (saisi >= 0 || e.pointerType !== "mouse") return;
+        document.documentElement.style.cursor = toucher(e) >= 0 ? "grab" : "";
+      };
+      const bloquerDefilement = (e) => {
+        if (saisi >= 0) e.preventDefault();
+      };
+      let doigtX = 0;
+      let doigtY = 0;
+      let elan = 0;
+      const debutDoigt = (e) => {
+        doigtX = e.touches[0].clientX;
+        doigtY = e.touches[0].clientY;
+      };
+      const glisser = (e) => {
+        if (saisi >= 0) return;
+        const t = e.touches[0];
+        const r = hote.getBoundingClientRect();
+        if (t.clientY < r.top || t.clientY > r.bottom) return;
+        const dx = t.clientX - doigtX;
+        const dy = t.clientY - doigtY;
+        doigtX = t.clientX;
+        doigtY = t.clientY;
+        if (Math.abs(dx) > Math.abs(dy)) elan += dx / r.width * 6;
+      };
+      const balayer = (e) => {
+        if (saisi >= 0 || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+        const r = hote.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        elan -= e.deltaX / r.width * 7;
+      };
+      window.addEventListener("wheel", balayer, { passive: true });
+      window.addEventListener("touchstart", debutDoigt, { passive: true });
+      window.addEventListener("touchmove", glisser, { passive: true });
+      window.addEventListener("pointerdown", appuyer);
+      window.addEventListener("pointerup", relacher);
+      window.addEventListener("pointercancel", relacher);
+      window.addEventListener("pointermove", survoler, { passive: true });
+      window.addEventListener("touchmove", bloquerDefilement, { passive: false });
+      const GRAVITE = -14;
+      const AMORTI = 0.984;
+      const contraindre = (a, b, longueur, poidsA) => {
+        const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
+        const d = Math.hypot(dx, dy, dz) || 1e-6;
+        const k = (d - longueur) / d;
+        a.x += dx * k * poidsA;
+        a.y += dy * k * poidsA;
+        a.z += dz * k * poidsA;
+        b.x -= dx * k * (1 - poidsA);
+        b.y -= dy * k * (1 - poidsA);
+        b.z -= dz * k * (1 - poidsA);
+      };
+      const integrer = (n, dt, vent) => {
+        const vx = (n.pos.x - n.prec.x) * AMORTI;
+        const vy = (n.pos.y - n.prec.y) * AMORTI;
+        const vz = (n.pos.z - n.prec.z) * AMORTI;
+        n.prec = { ...n.pos };
+        n.pos.x += vx + vent * dt * dt;
+        n.pos.y += vy + GRAVITE * dt * dt;
+        n.pos.z += vz;
+      };
+      const pas = (dt, temps) => {
+        const vent = 0;
+        const a = ancre();
+        chaine[0].pos = a;
+        chaine[0].prec = { ...a };
+        for (let i = 1; i < NB; i++) integrer(chaine[i], dt, vent * 0.4);
+        pendules.forEach((p) => integrer(p, dt, vent));
+        if (souris.actif && saisi < 0) {
+          pendules.forEach((p) => {
+            const d = Math.hypot(p.pos.x - souris.x, p.pos.y - souris.y);
+            const portee = p.rayon + 0.55;
+            if (d < portee) {
+              const f = (1 - d / portee) * dt * 0.9;
+              p.prec.x -= souris.vx * f * 0.06;
+              p.prec.y -= souris.vy * f * 0.04;
+              p.prec.z -= (Math.abs(souris.vx) + Math.abs(souris.vy)) * f * 0.02 * (p.pivot.z >= 0 ? 1 : -1);
+              p.lacetV += souris.vx * f * 1.3;
+            }
+          });
+          souris.vx *= 0.85;
+          souris.vy *= 0.85;
+        }
+        if (elan !== 0) {
+          const e = elan * 0.25;
+          pendules.forEach((p, i) => {
+            p.prec.x -= e * dt * (1 + i * 0.12);
+            p.lacetV += e * 4 * dt;
+          });
+          const c = chaine[NB - 1];
+          c.prec.x -= e * dt * 0.6;
+          elan -= e;
+          if (Math.abs(elan) < 1e-3) elan = 0;
+        }
+        if (saisi >= 0) {
+          const cible = saisi < pendules.length ? pendules[saisi].pos : chaine[NB - 1].pos;
+          cible.x += (souris.x - cible.x) * 0.35;
+          cible.y += (souris.y - cible.y) * 0.35;
+          if (saisi < pendules.length) pendules[saisi].lacetV += souris.vx * dt * 0.8;
+        }
+        for (let it = 0; it < 14; it++) {
+          for (let i = 0; i < NB - 1; i++) contraindre(chaine[i].pos, chaine[i + 1].pos, PAS, i === 0 ? 0 : 0.5);
+          const c = chaine[NB - 1].pos;
+          pendules.forEach((p, i) => {
+            const piv = v(c.x + p.pivot.x, c.y + p.pivot.y, c.z + p.pivot.z);
+            const avant2 = { ...piv };
+            const tenu = i === saisi;
+            contraindre(piv, p.pos, p.longueur, tenu ? 0.95 : 0.12);
+            const k = tenu ? 1 : 0.6;
+            c.x += (piv.x - avant2.x) * k;
+            c.y += (piv.y - avant2.y) * k;
+            c.z += (piv.z - avant2.z) * k;
+          });
+          for (let i = 0; i < pendules.length; i++)
+            for (let j = i + 1; j < pendules.length; j++) {
+              const A = pendules[i].pos, B = pendules[j].pos;
+              const min = (pendules[i].rayon + pendules[j].rayon) * 0.95;
+              const dx = B.x - A.x, dy = B.y - A.y, dz = B.z - A.z;
+              const d = Math.hypot(dx, dy, dz) || 1e-6;
+              if (d < min) {
+                const k = (min - d) / d * 0.5;
+                A.x -= dx * k;
+                A.y -= dy * k;
+                A.z -= dz * k;
+                B.x += dx * k;
+                B.y += dy * k;
+                B.z += dz * k;
+              }
+            }
+        }
+        for (let i = 1; i < NB; i++) {
+          const a2 = chaine[i - 1].pos, b = chaine[i].pos;
+          const dx = b.x - a2.x, dy = b.y - a2.y, dz = b.z - a2.z;
+          const d = Math.hypot(dx, dy, dz);
+          if (d > PAS) {
+            const k = PAS / d;
+            const nx = a2.x + dx * k, ny = a2.y + dy * k, nz = a2.z + dz * k;
+            const n = chaine[i];
+            n.prec.x += nx - b.x;
+            n.prec.y += ny - b.y;
+            n.prec.z += nz - b.z;
+            b.x = nx;
+            b.y = ny;
+            b.z = nz;
+          }
+        }
+        pendules.forEach((p) => {
+          p.lacetV += -(p.lacet - p.lacetRepos) * 6 * dt;
+          p.lacetV *= 0.97;
+          p.lacet += p.lacetV * dt;
+        });
+      };
+      const haut = new THREE.Vector3(0, 1, 0);
+      const bas = new THREE.Vector3(0, -1, 0);
+      const dir = new THREE.Vector3();
+      const qA = new THREE.Quaternion();
+      const qB = new THREE.Quaternion();
+      const afficher = () => {
+        for (let i = 0; i < NB - 1; i++) {
+          const a = chaine[i].pos, b = chaine[i + 1].pos;
+          const m = maillons[i];
+          m.position.set((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
+          dir.set(b.x - a.x, b.y - a.y, b.z - a.z).normalize();
+          qA.setFromUnitVectors(haut, dir.multiplyScalar(-1));
+          qB.setFromAxisAngle(haut, m.userData.alterne ? Math.PI / 2 : 0);
+          m.quaternion.copy(qA).multiply(qB);
+        }
+        const c = chaine[NB - 1].pos;
+        anneau.position.set(c.x, c.y - 0.1, c.z);
+        anneau.rotation.set(0, 0.5, 0);
+        pendules.forEach((p, i) => {
+          const m = objets[i].mesh;
+          const piv = v(c.x + p.pivot.x, c.y + p.pivot.y, c.z + p.pivot.z);
+          m.position.set(piv.x, piv.y, piv.z);
+          dir.set(p.pos.x - piv.x, p.pos.y - piv.y, p.pos.z - piv.z).normalize();
+          qA.setFromUnitVectors(bas, dir);
+          qB.setFromAxisAngle(haut, p.lacet);
+          m.quaternion.copy(qA).multiply(qB);
+        });
+      };
+      let visible = true;
+      const obs = new IntersectionObserver(([e]) => visible = e.isIntersecting);
+      obs.observe(hote);
+      let raf = 0;
+      let avant = performance.now();
+      let reste = 0;
+      const PAS_FIXE = 1 / 120;
+      const boucle = (t) => {
+        raf = requestAnimationFrame(boucle);
+        const ecoule = Math.min(0.05, (t - avant) / 1e3);
+        avant = t;
+        if (!visible || document.hidden) return;
+        reste += ecoule;
+        while (reste >= PAS_FIXE) {
+          pas(PAS_FIXE);
+          reste -= PAS_FIXE;
+        }
+        afficher();
+        rendu.render(scene, camera);
+      };
+      if (reduit) {
+        for (let i = 0; i < 600; i++) pas(PAS_FIXE);
+        afficher();
+        rendu.render(scene, camera);
+      } else {
+        raf = requestAnimationFrame(boucle);
+      }
+      nettoyer = () => {
+        cancelAnimationFrame(raf);
+        obs.disconnect();
+        window.removeEventListener("resize", redimensionner);
+        window.removeEventListener("pointermove", bouger);
+        window.removeEventListener("pointerdown", appuyer);
+        window.removeEventListener("pointerup", relacher);
+        window.removeEventListener("pointercancel", relacher);
+        window.removeEventListener("pointermove", survoler);
+        window.removeEventListener("touchmove", bloquerDefilement);
+        window.removeEventListener("touchstart", debutDoigt);
+        window.removeEventListener("wheel", balayer);
+        window.removeEventListener("touchmove", glisser);
+        document.documentElement.style.cursor = "";
+        scene.traverse((o) => {
+          const m = o;
+          if (m.isMesh) m.geometry.dispose();
+        });
+        [chrome, bleu, citron, noir, sombre, led].forEach((m) => m.dispose());
+        pmrem.dispose();
+        rendu.dispose();
+        rendu.domElement.remove();
+      };
+    })();
+    return () => {
+      arret = true;
+      nettoyer();
+    };
+  }, []);
+  return /* @__PURE__ */ jsx("div", { ref: hoteRef, "aria-hidden": true, className });
+}
+const EASE$6 = [0.22, 1, 0.36, 1];
+function Ligne$1({ children, delai }) {
+  return /* @__PURE__ */ jsx("span", { className: "-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]", children: /* @__PURE__ */ jsx(
+    motion.span,
+    {
+      className: "block",
+      initial: { y: "110%" },
+      animate: { y: 0 },
+      transition: { duration: 1, delay: delai, ease: EASE$6 },
+      children
+    }
+  ) });
+}
+function HeroStudio() {
+  const sectionRef = useRef(null);
+  const videoRef = useRef(null);
+  const [son, setSon] = useState(false);
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const requete = window.matchMedia("(max-width: 767px)");
+    const suivre2 = () => setMobile(requete.matches);
+    suivre2();
+    requete.addEventListener("change", suivre2);
+    return () => requete.removeEventListener("change", suivre2);
+  }, []);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const obs = new IntersectionObserver(
+      ([e]) => e.isIntersecting ? void video.play().catch(() => {
+      }) : video.pause(),
+      { threshold: 0.1 }
+    );
+    obs.observe(video);
+    return () => obs.disconnect();
+  }, []);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"]
+  });
+  const cote = mobile ? 5 : 18;
+  const haut = useTransform(scrollYProgress, [0, 0.02, 0.3, 0.7], [100, 100, mobile ? 40 : 34, 0]);
+  const droite = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0]);
+  const bas = useTransform(scrollYProgress, [0, 0.3, 0.7], [4, 4, 0]);
+  const gauche = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0]);
+  const rayon = useTransform(scrollYProgress, [0, 0.3, 0.7], [mobile ? 18 : 28, mobile ? 18 : 28, 0]);
+  const decoupe = useMotionTemplate`inset(${haut}% ${droite}% ${bas}% ${gauche}% round ${rayon}px)`;
+  const zoom = useTransform(scrollYProgress, [0, 0.7], [1.15, 1]);
+  const sonOpacite = useTransform(scrollYProgress, [0.08, 0.25], [0, 1]);
+  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
+  const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-18%"]);
+  const basculerSon = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setSon(!video.muted);
+    if (video.paused) void video.play().catch(() => {
+    });
+  };
+  return /* @__PURE__ */ jsx("section", { ref: sectionRef, className: "relative h-[190vh] bg-surface md:h-[240vh]", children: /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: "sticky top-0 h-[100svh] overflow-hidden",
+      style: { background: "linear-gradient(#d6d6d6 0%, #fafafa 100%)" },
+      children: [
+        /* @__PURE__ */ jsxs(motion.div, { className: "absolute inset-0 z-20", style: { clipPath: decoupe }, children: [
+          /* @__PURE__ */ jsx(
+            motion.video,
+            {
+              ref: videoRef,
+              className: "h-full w-full object-cover",
+              style: { scale: zoom },
+              src: mobile ? "/videos/presentation-mobile.mp4" : "/videos/presentation.mp4",
+              poster: mobile ? "/videos/presentation-mobile-poster.jpg" : "/videos/presentation-poster.jpg",
+              muted: true,
+              loop: true,
+              playsInline: true,
+              preload: "metadata",
+              "aria-label": "Vidéo de présentation de Digitalz Dev"
+            }
+          ),
+          /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" })
+        ] }),
+        /* @__PURE__ */ jsxs(
+          motion.div,
+          {
+            className: "relative z-10 flex h-full flex-col items-center justify-center px-5 text-center",
+            style: { opacity: titreOpacite, y: titreY, fontFamily: "'Inter Tight', system-ui, sans-serif" },
+            children: [
+              /* @__PURE__ */ jsx(Trousseau, { className: "pointer-events-none absolute inset-0 -z-10" }),
+              /* @__PURE__ */ jsxs("h1", { className: "text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]", children: [
+                /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Créons un site" }),
+                /* @__PURE__ */ jsxs(Ligne$1, { delai: 0.35, children: [
+                  "à la hauteur de vos ",
+                  /* @__PURE__ */ jsx("span", { className: "text-pop", children: "projets." })
+                ] })
+              ] }),
+              /* @__PURE__ */ jsx(
+                motion.div,
+                {
+                  className: "mt-8 md:mt-10",
+                  initial: { opacity: 0, y: 16 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.8, delay: 0.7, ease: EASE$6 },
+                  children: /* @__PURE__ */ jsx(
+                    Link,
+                    {
+                      to: "/projet",
+                      className: "inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black",
+                      children: "Prendre rendez-vous"
+                    }
+                  )
+                }
+              )
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          motion.button,
+          {
+            type: "button",
+            style: { opacity: sonOpacite },
+            onClick: basculerSon,
+            "aria-label": son ? "Couper le son" : "Activer le son",
+            className: "absolute bottom-[6%] right-[8%] z-30 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28",
+            children: son ? "Son activé" : "Son coupé"
+          }
+        )
+      ]
+    }
+  ) });
+}
+const PHRASE = [
+  { texte: "Pas seulement esthétique.", accent: false },
+  { texte: "Pensé pour le référencement.", accent: true }
+];
+const MOTS = PHRASE.flatMap(
+  (p) => p.texte.split(" ").map((mot) => ({ mot, accent: p.accent }))
+);
+function Mot({
+  mot,
+  accent,
+  p,
+  i,
+  n
+}) {
+  const opacite = useTransform(p, [i / n, (i + 1) / n], [0.14, 1]);
+  return /* @__PURE__ */ jsxs(motion.span, { style: { opacity: opacite }, className: accent ? "text-pop" : "text-text-primary", children: [
+    mot,
+    " "
+  ] });
+}
+function ManifesteStudio() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.6"] });
+  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS.map((m, i) => /* @__PURE__ */ jsx(Mot, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS.length }, `${m.mot}-${i}`)) }) }) });
+}
+function CarteProjet({ projet, className = "" }) {
+  return /* @__PURE__ */ jsxs(
+    Link,
+    {
+      to: projet.route,
+      "data-curseur": "Voir",
+      className: `group block shrink-0 ${className}`,
+      children: [
+        /* @__PURE__ */ jsx("div", { className: "relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-[16/10] lg:h-auto", children: /* @__PURE__ */ jsx(
+          "img",
+          {
+            src: projet.heroImage,
+            alt: `Site ${projet.title}`,
+            loading: "eager",
+            decoding: "async",
+            className: "h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+          }
+        ) }),
+        /* @__PURE__ */ jsxs("div", { className: "mt-4 flex items-start justify-between gap-4", children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("h3", { className: "text-xl font-normal tracking-tight text-text-primary md:text-2xl", children: projet.title }),
+            /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm font-medium text-text-secondary md:text-base", children: projet.subtitle })
+          ] }),
+          /* @__PURE__ */ jsx("span", { className: "mt-2 shrink-0 rounded-full bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary", children: projet.year })
+        ] })
+      ]
+    }
+  );
+}
+function Selection({ titre }) {
+  const sectionRef = useRef(null);
+  const pisteRef = useRef(null);
+  const [course, setCourse] = useState(0);
+  useEffect(() => {
+    const mesurer = () => {
+      const piste = pisteRef.current;
+      if (piste) setCourse(Math.max(0, piste.scrollWidth - window.innerWidth));
+    };
+    mesurer();
+    window.addEventListener("resize", mesurer);
+    return () => window.removeEventListener("resize", mesurer);
+  }, []);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -course]);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(
+      "section",
+      {
+        ref: sectionRef,
+        className: "relative hidden lg:block",
+        style: { height: `calc(100vh + ${course}px)` },
+        children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 flex h-screen flex-col justify-center overflow-hidden", children: [
+          titre && /* @__PURE__ */ jsx("h2", { className: "mb-14 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
+          /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10 will-change-transform", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[36vw] max-w-[640px]" }, p.id)) })
+        ] })
+      }
+    ),
+    /* @__PURE__ */ jsxs("section", { className: "pb-6 pt-24 lg:hidden", children: [
+      titre && /* @__PURE__ */ jsx("h2", { className: "mb-10 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
+      /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[72vw] snap-center sm:w-[50vw]" }, p.id)) })
+    ] })
+  ] });
+}
+function TravauxStudio({ titre } = {}) {
+  return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, { titre }) });
 }
 const offsetFor = (from, distance) => {
   switch (from) {
@@ -1426,34 +1817,34 @@ function Magnetic({ children, className, strength = 0.35 }) {
   );
 }
 const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
-  "Bonjour Digitalz Dev, j'aimerais vous parler de mon projet de site : "
+  "Bonjour Digitalz Dev, je suis architecte et j'aimerais vous parler du site de mon agence : "
 )}`;
 const SERVICES$1 = [
   {
-    title: "Site vitrine sur mesure",
-    lead: "Pour présenter une activité et déclencher la prise de contact.",
-    body: "Nous concevons un site internet taillé pour votre métier plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une intention de recherche précise et mène à une action claire, appel, formulaire ou prise de rendez-vous.",
+    title: "Site d'agence d'architecture",
+    lead: "Pour présenter votre agence et déclencher la prise de contact.",
+    body: "Nous concevons un site taillé pour votre agence plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise, « architecte maison contemporaine », « extension », « rénovation », et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
     points: [
       "Maquettes validées avant la première ligne de code",
-      "Rédaction et structure orientées référencement naturel",
-      "Formulaire de contact et suivi des demandes",
+      "Pages par type de projet et par ville, rédigées pour Google",
+      "Formulaire de contact qui qualifie les demandes",
       "Formation à la prise en main, vous restez autonome"
     ]
   },
   {
-    title: "Boutique e-commerce Shopify",
-    lead: "Pour vendre en ligne sans se battre contre son propre site.",
-    body: "Thème Shopify développé sur mesure, fiches produits pensées pour la conversion, tunnel d'achat réduit au strict nécessaire et paiements Shop Pay, PayPal, Klarna et carte bancaire. Nous branchons ensuite vos outils marketing pour que chaque visite compte.",
+    title: "Portfolio de réalisations",
+    lead: "Pour que vos projets parlent avant vous.",
+    body: "Vos réalisations montrées en grand, sans perte de qualité et sans ralentir le site : galeries plein écran, fiches projet avec programme, surface, lieu et photos avant-après. Vous ajoutez vous-même chaque nouveau chantier livré.",
     points: [
-      "Thème sur mesure, pas de gabarit du commerce",
-      "Fiches produits, packs et ventes additionnelles",
-      "Capture e-mail et scénarios automatisés",
-      "Suivi des ventes et des conversions"
+      "Galeries haute définition, chargement rapide",
+      "Fiche par projet : programme, surface, lieu, année",
+      "Filtres par type : neuf, extension, rénovation, intérieur",
+      "Mise en avant des prix et publications"
     ]
   },
   {
     title: "Refonte de site internet",
-    lead: "Pour un site qui ne convertit plus, ou qui ne suit plus.",
+    lead: "Pour un site d'agence qui ne montre plus ce que vous faites.",
     body: "Nous partons de l'existant : ce qui fonctionne, ce qui coince, ce que disent vos statistiques. La refonte préserve votre référencement acquis grâce à un plan de redirections complet, et corrige ce qui vous coûtait des visiteurs, notamment la lenteur et le confort de lecture sur mobile.",
     points: [
       "Audit du site actuel, contenus et performances",
@@ -1463,19 +1854,19 @@ const SERVICES$1 = [
     ]
   },
   {
-    title: "Application web et dashboard",
-    lead: "Pour outiller une activité que les tableurs ne suivent plus.",
-    body: "Quand le besoin dépasse le site web, nous développons l'outil métier : espace client, back-office, tableau de bord, facturation, automatisations. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre agence et prestataire technique.",
+    title: "Espace client maîtres d'ouvrage",
+    lead: "Pour suivre vos chantiers sans multiplier les e-mails.",
+    body: "Un espace privé où vos maîtres d'ouvrage retrouvent plans, comptes rendus de chantier, photos d'avancement et documents à signer. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre agence et prestataire technique.",
     points: [
-      "Espaces client et back-office sur mesure",
-      "Tableaux de bord et indicateurs métier",
-      "Automatisations et intégrations tierces",
-      "Applications iOS lorsque le mobile est central"
+      "Plans et documents partagés par projet",
+      "Comptes rendus et photos d'avancement",
+      "Validation des étapes par le client",
+      "Accès sécurisé, sur ordinateur et mobile"
     ]
   },
   {
     title: "Meta Ads et Google Ads",
-    lead: "Pour aller chercher le trafic que le site ne capte pas seul.",
+    lead: "Pour toucher les particuliers qui cherchent un architecte maintenant.",
     body: "Un site sans visiteurs ne sert à rien. Nous mettons en place et pilotons vos campagnes : structure des comptes, audiences, rédaction et création des annonces, arbitrages de budget. Les conversions sont mesurées, pour savoir ce qui rapporte et ce qui coûte.",
     points: [
       "Création et structuration des comptes publicitaires",
@@ -1486,7 +1877,7 @@ const SERVICES$1 = [
   },
   {
     title: "Référencement naturel",
-    lead: "Pour exister sur Google au-delà de votre propre nom.",
+    lead: "Pour être trouvé sur « architecte » + votre ville, pas seulement sur votre nom.",
     body: "Le référencement se construit dès la conception : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus qui répondent aux questions réelles de vos clients. Nous livrons un site déjà prêt, puis nous suivons les positions.",
     points: [
       "Architecture et balisage optimisés dès le départ",
@@ -1496,225 +1887,6 @@ const SERVICES$1 = [
     ]
   }
 ];
-const EASE$6 = [0.22, 1, 0.36, 1];
-function Ligne$1({ children, delai }) {
-  return /* @__PURE__ */ jsx("span", { className: "-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]", children: /* @__PURE__ */ jsx(
-    motion.span,
-    {
-      className: "block",
-      initial: { y: "110%" },
-      animate: { y: 0 },
-      transition: { duration: 1, delay: delai, ease: EASE$6 },
-      children
-    }
-  ) });
-}
-function HeroStudio() {
-  const sectionRef = useRef(null);
-  const videoRef = useRef(null);
-  const [son, setSon] = useState(false);
-  const [mobile, setMobile] = useState(false);
-  useEffect(() => {
-    const requete = window.matchMedia("(max-width: 767px)");
-    const suivre2 = () => setMobile(requete.matches);
-    suivre2();
-    requete.addEventListener("change", suivre2);
-    return () => requete.removeEventListener("change", suivre2);
-  }, []);
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const obs = new IntersectionObserver(
-      ([e]) => e.isIntersecting ? void video.play().catch(() => {
-      }) : video.pause(),
-      { threshold: 0.1 }
-    );
-    obs.observe(video);
-    return () => obs.disconnect();
-  }, []);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"]
-  });
-  const cote = mobile ? 5 : 18;
-  const haut = useTransform(scrollYProgress, [0, 0.02, 0.3, 0.7], [100, 100, mobile ? 40 : 34, 0]);
-  const droite = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0]);
-  const bas = useTransform(scrollYProgress, [0, 0.3, 0.7], [4, 4, 0]);
-  const gauche = useTransform(scrollYProgress, [0, 0.3, 0.7], [cote, cote, 0]);
-  const rayon = useTransform(scrollYProgress, [0, 0.3, 0.7], [mobile ? 18 : 28, mobile ? 18 : 28, 0]);
-  const decoupe = useMotionTemplate`inset(${haut}% ${droite}% ${bas}% ${gauche}% round ${rayon}px)`;
-  const zoom = useTransform(scrollYProgress, [0, 0.7], [1.15, 1]);
-  const sonOpacite = useTransform(scrollYProgress, [0.08, 0.25], [0, 1]);
-  const titreOpacite = useTransform(scrollYProgress, [0.05, 0.3], [1, 0]);
-  const titreY = useTransform(scrollYProgress, [0, 0.4], ["0%", "-18%"]);
-  const basculerSon = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = !video.muted;
-    setSon(!video.muted);
-    if (video.paused) void video.play().catch(() => {
-    });
-  };
-  return /* @__PURE__ */ jsx("section", { ref: sectionRef, className: "relative h-[190vh] bg-surface md:h-[240vh]", children: /* @__PURE__ */ jsxs(
-    "div",
-    {
-      className: "sticky top-0 h-[100svh] overflow-hidden",
-      style: { background: "linear-gradient(#d6d6d6 0%, #fafafa 100%)" },
-      children: [
-        /* @__PURE__ */ jsxs(motion.div, { className: "absolute inset-0 z-20", style: { clipPath: decoupe }, children: [
-          /* @__PURE__ */ jsx(
-            motion.video,
-            {
-              ref: videoRef,
-              className: "h-full w-full object-cover",
-              style: { scale: zoom },
-              src: mobile ? "/videos/presentation-mobile.mp4" : "/videos/presentation.mp4",
-              poster: mobile ? "/videos/presentation-mobile-poster.jpg" : "/videos/presentation-poster.jpg",
-              muted: true,
-              loop: true,
-              playsInline: true,
-              preload: "metadata",
-              "aria-label": "Vidéo de présentation de Digitalz Dev"
-            }
-          ),
-          /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" })
-        ] }),
-        /* @__PURE__ */ jsxs(
-          motion.div,
-          {
-            className: "relative z-10 flex h-full flex-col items-center justify-center px-5 text-center",
-            style: { opacity: titreOpacite, y: titreY, fontFamily: "'Inter Tight', system-ui, sans-serif" },
-            children: [
-              /* @__PURE__ */ jsxs("h1", { className: "text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]", children: [
-                /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Créons un site" }),
-                /* @__PURE__ */ jsxs(Ligne$1, { delai: 0.35, children: [
-                  "à la hauteur de votre ",
-                  /* @__PURE__ */ jsx("span", { className: "text-pop", children: "image." })
-                ] })
-              ] }),
-              /* @__PURE__ */ jsx(
-                motion.a,
-                {
-                  href: WHATSAPP_PROJET,
-                  target: "_blank",
-                  rel: "noopener noreferrer",
-                  className: "mt-8 inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black md:mt-10",
-                  initial: { opacity: 0, y: 16 },
-                  animate: { opacity: 1, y: 0 },
-                  transition: { duration: 0.8, delay: 0.7, ease: EASE$6 },
-                  children: "Prendre rendez-vous"
-                }
-              )
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          motion.button,
-          {
-            type: "button",
-            style: { opacity: sonOpacite },
-            onClick: basculerSon,
-            "aria-label": son ? "Couper le son" : "Activer le son",
-            className: "absolute bottom-[6%] right-[8%] z-30 inline-flex min-h-[40px] items-center rounded-full bg-black/50 px-4 text-xs font-medium text-white backdrop-blur transition-colors hover:bg-black/70 md:bottom-auto md:right-10 md:top-28",
-            children: son ? "Son activé" : "Son coupé"
-          }
-        )
-      ]
-    }
-  ) });
-}
-const PHRASE = [
-  { texte: "Pas seulement esthétique.", accent: false },
-  { texte: "Pensé pour le référencement.", accent: true }
-];
-const MOTS = PHRASE.flatMap(
-  (p) => p.texte.split(" ").map((mot) => ({ mot, accent: p.accent }))
-);
-function Mot({
-  mot,
-  accent,
-  p,
-  i,
-  n
-}) {
-  const opacite = useTransform(p, [i / n, (i + 1) / n], [0.14, 1]);
-  return /* @__PURE__ */ jsxs(motion.span, { style: { opacity: opacite }, className: accent ? "text-pop" : "text-text-primary", children: [
-    mot,
-    " "
-  ] });
-}
-function ManifesteStudio() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.6"] });
-  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS.map((m, i) => /* @__PURE__ */ jsx(Mot, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS.length }, `${m.mot}-${i}`)) }) }) });
-}
-function CarteProjet({ projet, className = "" }) {
-  return /* @__PURE__ */ jsxs(
-    Link,
-    {
-      to: projet.route,
-      "data-curseur": "Voir",
-      className: `group block shrink-0 ${className}`,
-      children: [
-        /* @__PURE__ */ jsx("div", { className: "relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-card md:aspect-[16/10] lg:aspect-[16/10] lg:h-auto", children: /* @__PURE__ */ jsx(
-          "img",
-          {
-            src: projet.heroImage,
-            alt: `Site ${projet.title}`,
-            loading: "eager",
-            decoding: "async",
-            className: "h-full w-full object-cover object-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-          }
-        ) }),
-        /* @__PURE__ */ jsxs("div", { className: "mt-4 flex items-start justify-between gap-4", children: [
-          /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("h3", { className: "text-xl font-normal tracking-tight text-text-primary md:text-2xl", children: projet.title }),
-            /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm font-medium text-text-secondary md:text-base", children: projet.subtitle })
-          ] }),
-          /* @__PURE__ */ jsx("span", { className: "mt-2 shrink-0 rounded-full bg-surface-card px-3 py-1 text-xs font-medium text-text-secondary", children: projet.year })
-        ] })
-      ]
-    }
-  );
-}
-function Selection({ titre }) {
-  const sectionRef = useRef(null);
-  const pisteRef = useRef(null);
-  const [course, setCourse] = useState(0);
-  useEffect(() => {
-    const mesurer = () => {
-      const piste = pisteRef.current;
-      if (piste) setCourse(Math.max(0, piste.scrollWidth - window.innerWidth));
-    };
-    mesurer();
-    window.addEventListener("resize", mesurer);
-    return () => window.removeEventListener("resize", mesurer);
-  }, []);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const x = useTransform(scrollYProgress, [0, 1], [0, -course]);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(
-      "section",
-      {
-        ref: sectionRef,
-        className: "relative hidden lg:block",
-        style: { height: `calc(100vh + ${course}px)` },
-        children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 flex h-screen flex-col justify-center overflow-hidden", children: [
-          titre && /* @__PURE__ */ jsx("h2", { className: "mb-14 px-10 text-5xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
-          /* @__PURE__ */ jsx(motion.div, { ref: pisteRef, className: "flex gap-8 px-10 will-change-transform", style: { x }, children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[36vw] max-w-[640px]" }, p.id)) })
-        ] })
-      }
-    ),
-    /* @__PURE__ */ jsxs("section", { className: "pb-6 pt-24 lg:hidden", children: [
-      titre && /* @__PURE__ */ jsx("h2", { className: "mb-10 px-5 text-4xl font-extrabold uppercase tracking-tight text-text-primary", children: titre }),
-      /* @__PURE__ */ jsx("div", { className: "flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 [scrollbar-width:none]", children: projects.map((p) => /* @__PURE__ */ jsx(CarteProjet, { projet: p, className: "w-[72vw] snap-center sm:w-[50vw]" }, p.id)) })
-    ] })
-  ] });
-}
-function TravauxStudio({ titre } = {}) {
-  return /* @__PURE__ */ jsx("div", { id: "projets", children: /* @__PURE__ */ jsx(Selection, { titre }) });
-}
 const DEPART = [
   { x: 55, y: 30, r: -9 },
   { x: 0, y: 10, r: 3 },
@@ -1770,12 +1942,12 @@ function ServicesStudio() {
   return /* @__PURE__ */ jsx("section", { id: "services", className: "overflow-x-clip bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
       "Une agence web qui conçoit, développe ",
-      /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "et fait connaître votre site." })
+      /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "et fait connaître votre agence d'architecture." })
     ] }),
-    /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Création de site internet, boutique en ligne, refonte, outil métier et campagnes publicitaires. Un projet de site web se juge sur ce qu'il rapporte une fois en ligne, pas sur sa maquette." }),
+    /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Site d'agence, portfolio de réalisations, refonte, référencement local et campagnes publicitaires, pour les architectes. Un site se juge sur les projets qu'il vous apporte une fois en ligne, pas sur sa maquette." }),
     /* @__PURE__ */ jsx("div", { ref: grilleRef, className: "mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, progression: scrollYProgress, mobile }, s.title)) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12", children: [
-      /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Vous avez un projet de site internet, une boutique à ouvrir ou un site à refondre ? Décrivez-le-nous directement sur WhatsApp." }),
+      /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Votre agence n'a pas encore de site, ou votre site ne montre pas vos réalisations ? Décrivez-nous votre agence directement sur WhatsApp." }),
       /* @__PURE__ */ jsx(
         "a",
         {
@@ -1965,19 +2137,19 @@ const LEVIERS = [
     ]
   }
 ];
-const REQUETE = "avocat droit des affaires lyon";
+const REQUETE = "architecte maison contemporaine lyon";
 const NOTE_DEBUT = 3;
 const NOTE_FIN = 5;
 const CONCURRENTS = [
-  { titre: "Cabinet Durand & Associés · Avocats Lyon", url: "durand-avocats.fr", texte: "Conseil et contentieux des entreprises. Prise de rendez-vous par téléphone." },
-  { titre: "Avocat affaires Lyon : annuaire des cabinets", url: "annuaire-juridique.com", texte: "Comparez 240 avocats en droit des affaires à Lyon et dans le Rhône." },
-  { titre: "Lefèvre Avocats · Droit commercial", url: "lefevre-avocats.com", texte: "Création de société, baux commerciaux, recouvrement de créances." },
-  { titre: "Droit des affaires : trouver un avocat", url: "forum-entrepreneurs.fr", texte: "Discussion · 38 réponses · Quel avocat choisir pour une levée de fonds ?" }
+  { titre: "Atelier Durand Architectes · Lyon", url: "atelier-durand.fr", texte: "Maisons individuelles, extensions et rénovations. Permis de construire." },
+  { titre: "Architecte Lyon : annuaire des agences", url: "annuaire-architectes.com", texte: "Comparez 310 architectes à Lyon et dans le Rhône. Devis gratuits." },
+  { titre: "Lefèvre Architecture · Rénovation", url: "lefevre-architecture.com", texte: "Réhabilitation, surélévation et aménagement de combles." },
+  { titre: "Faire construire : trouver un architecte", url: "forum-construire.fr", texte: "Discussion · 52 réponses · Quel architecte pour une maison contemporaine ?" }
 ];
 const CLIENT = {
-  titre: "Martin Avocats · Droit des affaires à Lyon",
-  url: "martin-avocats.fr",
-  texte: "Cabinet dédié aux entreprises : création, contrats, levées de fonds. Premier rendez-vous sous 48 h."
+  titre: "Martin Architectes · Maisons contemporaines à Lyon",
+  url: "martin-architectes.fr",
+  texte: "De l'esquisse au chantier : maisons neuves, extensions, rénovations. Premier rendez-vous sous 48 h."
 };
 function useHauteurLigne() {
   const [h, setH] = useState(84);
@@ -2076,8 +2248,8 @@ function Eclat({ cle }) {
 function useEclat(progression, seuil) {
   const [cle, setCle] = useState(0);
   const [visible, setVisible] = useState(false);
-  useMotionValueEvent(progression, "change", (v) => {
-    const dedans = v >= seuil;
+  useMotionValueEvent(progression, "change", (v2) => {
+    const dedans = v2 >= seuil;
     if (dedans && !visible) setCle((c) => c + 1);
     if (dedans !== visible) setVisible(dedans);
   });
@@ -2139,17 +2311,17 @@ function RechercheGoogle() {
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const texteRequete = useTransform(
     p,
-    (v) => REQUETE.slice(0, Math.round(Math.min(1, Math.max(0, v / 0.18)) * REQUETE.length))
+    (v2) => REQUETE.slice(0, Math.round(Math.min(1, Math.max(0, v2 / 0.18)) * REQUETE.length))
   );
   const t = useTransform(p, [0.3, 0.8], [0, 1], { clamp: true });
   const fiche = {
-    note: useTransform(t, (v) => (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)).toFixed(1).replace(".", ",")),
-    avis: useTransform(t, (v) => `(${Math.round(12 + v * 136)})`),
-    remplissage: useTransform(t, (v) => `inset(0 ${100 - (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)) * 20}% 0 0)`)
+    note: useTransform(t, (v2) => (NOTE_DEBUT + v2 * (NOTE_FIN - NOTE_DEBUT)).toFixed(1).replace(".", ",")),
+    avis: useTransform(t, (v2) => `(${Math.round(12 + v2 * 136)})`),
+    remplissage: useTransform(t, (v2) => `inset(0 ${100 - (NOTE_DEBUT + v2 * (NOTE_FIN - NOTE_DEBUT)) * 20}% 0 0)`)
   };
   const position = useTransform(p, [0.2, 0.75], [CONCURRENTS.length, 0], { clamp: true });
   const H = useHauteurLigne();
-  const yClient = useTransform(position, (v) => v * H);
+  const yClient = useTransform(position, (v2) => v2 * H);
   const resultatsOpacite = useTransform(p, [0.14, 0.22], [0, 1]);
   const sponsorise = useTransform(p, [0.78, 0.86], [0, 1]);
   return /* @__PURE__ */ jsx("section", { ref, className: "relative h-[240vh] bg-surface md:h-[280vh]", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 flex h-[100svh] flex-col items-center justify-start gap-4 overflow-hidden px-4 pt-16 md:gap-6 md:px-10 md:pt-28", children: [
@@ -2200,13 +2372,13 @@ function RechercheGoogle() {
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "hidden self-start rounded-xl p-4 ring-1 ring-black/10 md:block", children: [
             /* @__PURE__ */ jsx("div", { className: "h-24 rounded-lg bg-gradient-to-br from-[#e8eaed] to-[#c9ccd1]" }),
-            /* @__PURE__ */ jsx("p", { className: "mt-3 text-[17px] text-[#202124]", children: "Martin Avocats" }),
+            /* @__PURE__ */ jsx("p", { className: "mt-3 text-[17px] text-[#202124]", children: "Martin Architectes" }),
             /* @__PURE__ */ jsxs("p", { className: "mt-0.5 flex items-center gap-1.5 text-sm text-[#4d5156]", children: [
               /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums text-[#202124]", children: fiche.note }),
               /* @__PURE__ */ jsx(Etoiles$1, { remplissage: fiche.remplissage }),
               /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums", children: fiche.avis })
             ] }),
-            /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-[#4d5156]", children: "Avocat · Lyon 2e · Ouvert" }),
+            /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-[#4d5156]", children: "Architecte · Lyon 6e · Ouvert" }),
             /* @__PURE__ */ jsxs("div", { className: "mt-3 grid grid-cols-3 gap-1.5 text-center text-[11px] text-[#1a73e8]", children: [
               /* @__PURE__ */ jsx("span", { className: "rounded-full py-1.5 ring-1 ring-black/10", children: "Itinéraire" }),
               /* @__PURE__ */ jsx("span", { className: "rounded-full py-1.5 ring-1 ring-black/10", children: "Site" }),
@@ -2269,7 +2441,7 @@ const MEMBERS = [
       "React & Next.js",
       "TypeScript / Node",
       "iOS",
-      "Shopify & Liquid",
+      "SEO technique",
       "PostgreSQL & Supabase",
       "WebGL"
     ],
@@ -2277,12 +2449,12 @@ const MEMBERS = [
   }
 ];
 const FACTS = [
-  { value: "8", label: "projets en ligne" },
-  { value: "6", label: "secteurs couverts" },
+  { value: "5", label: "projets en ligne" },
+  { value: "3", label: "agences d'architecture" },
   { value: "2", label: "métiers réunis" }
 ];
 const SERVICES = [
-  { title: "Conception et développement", body: "Sites vitrines, boutiques Shopify, plateformes métier et applications iOS. Du cadrage à la mise en ligne." },
+  { title: "Conception et développement", body: "Sites d'agences d'architecture, portfolios de réalisations et espaces client. Du cadrage à la mise en ligne." },
   { title: "Meta Ads et Google Ads", body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
   { title: "Mesure et conversions", body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." }
 ];
@@ -2290,7 +2462,7 @@ const FONDATEUR = MEMBERS[0];
 const DISCIPLINES_EQUIPE = [
   "Direction artistique",
   "UX / UI",
-  "Stratégie de marque",
+  "Valorisation de portfolio",
   "Meta Ads",
   "Google Ads",
   "Tracking & conversions",
@@ -2594,7 +2766,7 @@ function FinalStudio() {
               style: { x: sx, y: sy },
               whileTap: { scale: 0.94 },
               className: "flex h-28 w-28 items-center justify-center rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg",
-              children: "Prendre un RDV"
+              children: "Appelez-moi"
             }
           ),
           /* @__PURE__ */ jsx(
@@ -2714,7 +2886,7 @@ function Prechargeur() {
           /* @__PURE__ */ jsx("span", { className: "text-lg font-normal tracking-tight", children: "Digitalz Dev" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-end justify-between gap-6", children: [
-          /* @__PURE__ */ jsx("p", { className: "max-w-[14rem] text-sm font-medium leading-snug", children: "Sites internet pour avocats, architectes et métiers de l'image." }),
+          /* @__PURE__ */ jsx("p", { className: "max-w-[14rem] text-sm font-medium leading-snug", children: "Sites internet pour architectes et agences d'architecture." }),
           /* @__PURE__ */ jsx("span", { className: "text-[28vw] font-normal leading-[0.8] tracking-[-0.06em] md:text-[18vw]", children: compte })
         ] })
       ]
@@ -2749,9 +2921,9 @@ function LogoGoogle({ className = "" }) {
   ] });
 }
 const EXEMPLES = [
-  { auteur: "Maître Sarah M.", note: 5, texte: "Un site sobre, clair sur nos domaines d'intervention, et des demandes de premier rendez-vous qui arrivent désormais par le formulaire plutôt que par hasard.", date: "il y a 2 semaines" },
+  { auteur: "Claire D., agence d'architecture", note: 5, texte: "Un site sobre, clair sur nos types de projets, et des demandes de premier rendez-vous qui arrivent désormais par le formulaire plutôt que par hasard.", date: "il y a 2 semaines" },
   { auteur: "Karim B., architecte", note: 5, texte: "Nos projets sont enfin montrés en grand, sans perte de qualité. Les maîtres d'ouvrage nous parlent du site dès le premier échange.", date: "il y a 1 mois" },
-  { auteur: "Julie R., photographe", note: 5, texte: "Galeries rapides, vidéos en pleine qualité et une fiche Google optimisée : je reçois des demandes de devis chaque semaine.", date: "il y a 2 mois" }
+  { auteur: "Thomas L., architecte d'intérieur", note: 5, texte: "Galeries rapides, photos en pleine qualité et une fiche Google optimisée : je reçois des demandes de projets chaque semaine.", date: "il y a 2 mois" }
 ];
 function horsProduction() {
   if (typeof window === "undefined") return false;
@@ -2821,24 +2993,28 @@ function AvisGoogleSection() {
 }
 const FAQ = [
   {
-    question: "Combien coûte la création d’un site internet ?",
-    reponse: "Un site vitrine démarre autour de 1 500 € et un projet e-commerce ou une application métier se situe plus haut, selon le nombre de pages, les fonctionnalités et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route."
+    question: "Combien coûte le site d’une agence d’architecture ?",
+    reponse: "Un site d'architecte démarre autour de 1 500 € ; un site avec portfolio complet, pages par ville et espace client se situe plus haut, selon le nombre de projets à mettre en ligne et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route."
+  },
+  {
+    question: "Comment mettre en valeur nos réalisations ?",
+    reponse: "Chaque projet a sa fiche : photos en haute définition, programme, surface, lieu, année et, si vous le souhaitez, plans et photos avant-après. Les images sont optimisées pour rester nettes sans ralentir le site, et vos prix ou publications sont mis en avant. Pas de photos professionnelles ? Nous vous orientons vers des photographes d'architecture."
   },
   {
     question: "Combien de temps prend un projet de site web ?",
-    reponse: "Comptez trois à six semaines pour un site vitrine, six à douze semaines pour une boutique e-commerce ou un outil métier. Le calendrier dépend surtout de la disponibilité de vos contenus, textes et photos, qui est le premier facteur de retard sur ce type de projet."
+    reponse: "Comptez trois à six semaines pour un site d'agence, six à dix semaines avec un portfolio complet et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus, photos de réalisations et descriptifs de projets, qui sont le premier facteur de retard."
   },
   {
     question: "Le site sera-t-il visible sur Google ?",
-    reponse: "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour répondre aux recherches réelles de vos clients. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads."
+    reponse: "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients : « architecte maison », « extension », « rénovation » suivis de votre ville. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads."
   },
   {
     question: "Puis-je modifier mon site moi-même ensuite ?",
-    reponse: "Oui. Selon le projet, vous administrez vos contenus depuis Shopify, depuis un back-office sur mesure ou depuis un espace d'administration dédié. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite."
+    reponse: "Oui. Vous ajoutez vous-même vos nouvelles réalisations, photos et actualités depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite."
   },
   {
     question: "Travaillez-vous partout en France ?",
-    reponse: "Oui, dans toute la France et à l'international. Nos réalisations vont d'une marque de mode australienne à une maison de prêt-à-porter parisienne. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique."
+    reponse: "Oui, dans toute la France et à l'international. Nous avons travaillé pour des agences d'architecture de toutes tailles, de l'architecte indépendant aux agences internationales. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique."
   },
   {
     question: "Que se passe-t-il après la mise en ligne ?",
@@ -2932,143 +3108,6 @@ function FaqSection() {
     }) })
   ] }) });
 }
-const PARAGRAPHS = [
-  "Ce projet est né d'un constat simple mais désolant : il n'y a pas suffisamment de places dans les établissements spécialisés, et beaucoup de familles se retrouvent à domicile, sans solution.",
-  "NeuroCare met en relation des professionnels spécialisés en troubles du neurodéveloppement (autisme, TDAH, troubles DYS…) avec les personnes concernées et leurs familles."
-];
-const STATS = [
-  { value: "100%", label: "des revenus réinvestis" },
-  { value: "4", label: "étapes de vérification" },
-  { value: "30+", label: "villes couvertes" }
-];
-function MissionSection() {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
-  const auraScale = useTransform(scrollYProgress, [0, 1], [0.8, 1.35]);
-  const auraOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 0.06, 0]);
-  return /* @__PURE__ */ jsxs(
-    "section",
-    {
-      ref: sectionRef,
-      className: "relative overflow-hidden bg-surface py-10 md:py-14",
-      children: [
-        /* @__PURE__ */ jsx(
-          motion.div,
-          {
-            "aria-hidden": true,
-            className: "pointer-events-none absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent blur-[130px] will-change-transform",
-            style: { scale: auraScale, opacity: auraOpacity }
-          }
-        ),
-        /* @__PURE__ */ jsxs("div", { className: "relative mx-auto max-w-6xl px-6", children: [
-          /* @__PURE__ */ jsxs("div", { className: "mb-16 text-center md:mb-24", children: [
-            /* @__PURE__ */ jsx(
-              SplitText,
-              {
-                as: "h2",
-                by: "word",
-                text: "Chaque projet finance une cause",
-                delay: 0.1,
-                className: "mx-auto block max-w-3xl font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-6xl"
-              }
-            ),
-            /* @__PURE__ */ jsx(Reveal, { delay: 0.25, className: "mx-auto mt-8 max-w-2xl", children: /* @__PURE__ */ jsxs("p", { className: "text-lg leading-relaxed text-text-secondary", children: [
-              "100% des revenus générés par Digitalz Dev sont réinvestis dans",
-              " ",
-              /* @__PURE__ */ jsx(
-                "a",
-                {
-                  href: "https://neuro-care.fr",
-                  target: "_blank",
-                  rel: "noopener noreferrer",
-                  className: "font-medium text-accent underline-offset-4 hover:underline",
-                  children: "NeuroCare"
-                }
-              ),
-              ", une plateforme dédiée aux personnes en situation de handicap."
-            ] }) })
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "grid items-center gap-12 md:grid-cols-2 md:gap-16", children: [
-            /* @__PURE__ */ jsx(Reveal, { from: "left", distance: 60, duration: 1, children: /* @__PURE__ */ jsxs("div", { className: "relative overflow-hidden rounded-2xl shadow-xl", children: [
-              /* @__PURE__ */ jsx(Parallax, { speed: 0.06, zoom: true, children: /* @__PURE__ */ jsx(
-                "img",
-                {
-                  src: "/screenshots/neurocare-hero.webp",
-                  alt: "NeuroCare, plateforme dédiée au neurodéveloppement",
-                  loading: "lazy",
-                  className: "h-full w-full object-cover"
-                }
-              ) }),
-              /* @__PURE__ */ jsx("div", { className: "pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" })
-            ] }) }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx(Reveal, { from: "right", distance: 50, children: /* @__PURE__ */ jsx("h3", { className: "mb-6 font-display text-2xl font-medium text-text-primary md:text-3xl", children: "NeuroCare : bien plus qu'une plateforme" }) }),
-              /* @__PURE__ */ jsxs("div", { className: "space-y-4 leading-relaxed text-text-secondary", children: [
-                PARAGRAPHS.map((paragraph, index) => /* @__PURE__ */ jsx(Reveal, { from: "right", distance: 40, delay: 0.1 + index * 0.1, children: /* @__PURE__ */ jsx("p", { children: paragraph }) }, index)),
-                /* @__PURE__ */ jsx(Reveal, { from: "right", distance: 40, delay: 0.3, children: /* @__PURE__ */ jsx("p", { className: "font-medium text-text-primary", children: "Plus qu'une plateforme, nous guidons et accompagnons les familles dans leur parcours." }) })
-              ] }),
-              /* @__PURE__ */ jsx("div", { className: "mt-10 grid grid-cols-3 gap-2 sm:gap-3", children: STATS.map((stat, index) => /* @__PURE__ */ jsxs(
-                motion.div,
-                {
-                  className: "rounded-xl border border-surface-border bg-surface-card p-3 sm:p-4",
-                  initial: { opacity: 0, y: 24 },
-                  whileInView: { opacity: 1, y: 0 },
-                  viewport: VIEWPORT,
-                  transition: { duration: 0.6, delay: index * 0.1, ease: EASE_OUT },
-                  children: [
-                    /* @__PURE__ */ jsx(
-                      Counter,
-                      {
-                        value: stat.value,
-                        className: "block font-display text-xl font-medium text-accent sm:text-2xl"
-                      }
-                    ),
-                    /* @__PURE__ */ jsx("div", { className: "mt-1 text-xs leading-snug text-text-muted", children: stat.label })
-                  ]
-                },
-                stat.label
-              )) }),
-              /* @__PURE__ */ jsx(Reveal, { delay: 0.2, className: "mt-10", children: /* @__PURE__ */ jsx(Magnetic, { className: "inline-block", children: /* @__PURE__ */ jsxs(
-                "a",
-                {
-                  href: "https://neuro-care.fr",
-                  target: "_blank",
-                  rel: "noopener noreferrer",
-                  className: "inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 py-3 font-display text-xs font-medium text-surface transition-colors hover:bg-accent-hover sm:px-8 sm:text-sm",
-                  children: [
-                    "Découvrir NeuroCare",
-                    /* @__PURE__ */ jsx(
-                      "svg",
-                      {
-                        className: "h-4 w-4",
-                        fill: "none",
-                        stroke: "currentColor",
-                        viewBox: "0 0 24 24",
-                        strokeWidth: 2,
-                        "aria-hidden": true,
-                        children: /* @__PURE__ */ jsx(
-                          "path",
-                          {
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round",
-                            d: "M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                          }
-                        )
-                      }
-                    )
-                  ]
-                }
-              ) }) })
-            ] })
-          ] })
-        ] })
-      ]
-    }
-  );
-}
 const RACCOURCIS = [
   { to: "/#services", label: "Nos services" },
   { to: "/#projets", label: "Nos réalisations" },
@@ -3158,7 +3197,6 @@ function Home() {
     /* @__PURE__ */ jsx(AvisGoogleSection, {}),
     /* @__PURE__ */ jsx(EquipeStudio, {}),
     /* @__PURE__ */ jsx(FaqSection, {}),
-    /* @__PURE__ */ jsx(MissionSection, {}),
     /* @__PURE__ */ jsx(Footer, {})
   ] });
 }
@@ -3485,11 +3523,11 @@ function ProjectPage({ project }) {
   ] });
 }
 const PROJECT_TYPES = [
-  "Site vitrine",
-  "E-commerce",
-  "Application web",
-  "Dashboard / SaaS",
+  "Site d'agence / portfolio",
   "Refonte de site",
+  "Référencement local",
+  "Espace client maîtres d'ouvrage",
+  "Campagnes Google / Meta",
   "Autre"
 ];
 const BUDGETS = [
@@ -3601,7 +3639,7 @@ function Contact() {
           initial: { opacity: 0, y: 30 },
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
-          children: "Parlons de votre projet"
+          children: "Parlons de votre agence"
         }
       ),
       /* @__PURE__ */ jsx(
@@ -3646,7 +3684,7 @@ function Contact() {
                 )
               ] }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("label", { className: "block text-sm text-text-secondary mb-1.5 font-display", children: "Entreprise" }),
+                /* @__PURE__ */ jsx("label", { className: "block text-sm text-text-secondary mb-1.5 font-display", children: "Agence / cabinet" }),
                 /* @__PURE__ */ jsx(
                   "input",
                   {
@@ -3654,7 +3692,7 @@ function Contact() {
                     value: form.company,
                     onChange: (e) => update("company", e.target.value),
                     className: "w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors",
-                    placeholder: "Nom de l'entreprise"
+                    placeholder: "Nom de votre agence"
                   }
                 )
               ] })
@@ -3670,7 +3708,7 @@ function Contact() {
                     value: form.email,
                     onChange: (e) => update("email", e.target.value),
                     className: "w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors",
-                    placeholder: "jean@entreprise.com"
+                    placeholder: "jean@agence-archi.fr"
                   }
                 )
               ] }),
@@ -3790,7 +3828,7 @@ function Contact() {
                 value: form.description,
                 onChange: (e) => update("description", e.target.value),
                 className: "w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors resize-none",
-                placeholder: "Décrivez votre projet, vos objectifs, votre cible, les fonctionnalités souhaitées, des sites de référence que vous aimez..."
+                placeholder: "Votre agence, les projets que vous voulez attirer (maisons neuves, extensions, rénovations…), des sites d'architectes que vous aimez..."
               }
             )
           ] }),
@@ -4189,13 +4227,18 @@ const EASE = [0.22, 1, 0.36, 1];
 const QUESTIONS = [
   {
     cle: "metier",
-    titre: "Quel est votre métier ?",
-    options: ["Avocat / cabinet", "Architecte / agence", "Photographe / vidéaste", "Autre activité"]
+    titre: "Comment exercez-vous ?",
+    options: ["Architecte indépendant", "Agence de 2 à 10 personnes", "Agence de plus de 10 personnes", "Architecte d'intérieur"]
   },
   {
     cle: "besoin",
-    titre: "De quoi avez-vous besoin ?",
-    options: ["Créer mon site", "Refaire mon site actuel", "Être plus visible sur Google", "Un site et des publicités"]
+    titre: "Où en est votre site aujourd'hui ?",
+    options: [
+      "Je n'ai pas encore de site",
+      "Mon site ne met pas mes réalisations en valeur",
+      "Mon site ne m'apporte aucun nouveau projet",
+      "Je veux être trouvé sur Google par des particuliers"
+    ]
   },
   {
     cle: "budget",
@@ -4208,11 +4251,27 @@ const QUESTIONS = [
     options: ["Dès que possible", "Dans 1 à 3 mois", "Plus tard, je me renseigne"]
   }
 ];
+const LONGUEURS_NATIONALES = [
+  ["+33", /^[1-9]\d{8}$/],
+  ["+32", /^[1-9]\d{7,8}$/],
+  ["+41", /^[1-9]\d{8}$/],
+  ["+352", /^\d{6,11}$/],
+  ["+212", /^[5-7]\d{8}$/],
+  ["+213", /^[2-7]\d{7,8}$/],
+  ["+216", /^[2-9]\d{7}$/],
+  ["+1", /^[2-9]\d{9}$/]
+];
 function normaliserTelephone(brut) {
   const chiffres = brut.replace(/[^\d+]/g, "");
   const n = chiffres.startsWith("00") ? `+${chiffres.slice(2)}` : chiffres;
   const international = /^0[1-9]\d{8}$/.test(n) ? `+33${n.slice(1)}` : /^\+[1-9]\d{7,14}$/.test(n) ? n : null;
   if (!international) return null;
+  for (const [indicatif, motif] of LONGUEURS_NATIONALES) {
+    if (international.startsWith(indicatif)) {
+      if (!motif.test(international.slice(indicatif.length))) return null;
+      break;
+    }
+  }
   if (international.startsWith("+33")) {
     const national = international.slice(3);
     if (new Set(national).size <= 2) return null;
@@ -4223,7 +4282,7 @@ function normaliserTelephone(brut) {
 function chargerPixel() {
   const w = window;
   if (w.fbq) return;
-  (function(f, b, e, v) {
+  (function(f, b, e, v2) {
     if (f.fbq) return;
     const n = f.fbq = function() {
       n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
@@ -4235,7 +4294,7 @@ function chargerPixel() {
     n.queue = [];
     const t = b.createElement(e);
     t.async = true;
-    t.src = v;
+    t.src = v2;
     const s = b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t, s);
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
@@ -4254,15 +4313,15 @@ function lireCookie(nom) {
 function lireAttribution() {
   var _a, _b;
   const q = new URLSearchParams(window.location.search);
-  const v = (k) => {
+  const v2 = (k) => {
     var _a2;
     return ((_a2 = q.get(k)) == null ? void 0 : _a2.slice(0, 200)) || null;
   };
   return {
-    utm_source: v("utm_source"),
-    utm_medium: v("utm_medium"),
-    utm_campaign: v("utm_campaign"),
-    utm_content: v("utm_content"),
+    utm_source: v2("utm_source"),
+    utm_medium: v2("utm_medium"),
+    utm_campaign: v2("utm_campaign"),
+    utm_content: v2("utm_content"),
     fbclid: ((_a = q.get("fbclid")) == null ? void 0 : _a.slice(0, 300)) || null,
     // Google Ads : gclid, ou gbraid / wbraid sur iOS.
     gclid: ((_b = q.get("gclid") || q.get("gbraid") || q.get("wbraid")) == null ? void 0 : _b.slice(0, 300)) || null
@@ -4312,15 +4371,15 @@ function Projet() {
       message: message.trim().slice(0, 1e3) || null
     };
     const texte = [
-      "Bonjour Digitalz Dev, je viens de remplir le formulaire de votre site.",
+      "Bonjour Digitalz Dev, je suis architecte et je viens de remplir le formulaire de votre site.",
       "",
-      `• Métier : ${ligne.metier}`,
-      `• Besoin : ${ligne.besoin}`,
+      `• Structure : ${ligne.metier}`,
+      `• Site actuel : ${ligne.besoin}`,
       `• Budget : ${ligne.budget}`,
       `• Délai : ${ligne.delai}`,
       `• Nom : ${ligne.nom}`,
-      ligne.activite ? `• Activité / site : ${ligne.activite}` : null,
-      ligne.message ? `• Projet : ${ligne.message}` : null
+      ligne.activite ? `• Agence / site : ${ligne.activite}` : null,
+      ligne.message ? `• Projets visés : ${ligne.message}` : null
     ].filter((l) => l !== null).join("\n");
     const lien2 = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texte)}`;
     window.open(lien2, "_blank", "noopener");
@@ -4416,7 +4475,7 @@ function Projet() {
         exit: { opacity: 0, x: -24 },
         transition: { duration: 0.3, ease: EASE },
         children: [
-          etape === 0 && /* @__PURE__ */ jsx("p", { className: "mb-4 text-text-secondary", children: "Quatre questions sur votre projet, puis on en parle directement sur WhatsApp." }),
+          etape === 0 && /* @__PURE__ */ jsx("p", { className: "mb-4 text-text-secondary", children: "Architectes : quatre questions sur votre agence, puis on en parle directement sur WhatsApp." }),
           /* @__PURE__ */ jsx("h1", { className: "text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl", children: question.titre }),
           /* @__PURE__ */ jsx("div", { className: "mt-8 grid gap-3", children: question.options.map((o) => {
             const actif = reponses[question.cle] === o;
@@ -4486,7 +4545,7 @@ function Projet() {
               touche && !telValide && /* @__PURE__ */ jsx("span", { className: "text-sm text-red-600", children: "Indiquez un numéro valide pour qu'on puisse vous répondre." })
             ] }),
             /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
-              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Votre activité ou votre site actuel (facultatif)" }),
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Le nom de votre agence ou votre site actuel (facultatif)" }),
               /* @__PURE__ */ jsx(
                 "input",
                 {
@@ -4497,7 +4556,7 @@ function Projet() {
               )
             ] }),
             /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
-              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Votre projet en quelques mots (facultatif)" }),
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Les projets que vous voulez attirer : maisons neuves, extensions, rénovations… (facultatif)" }),
               /* @__PURE__ */ jsx(
                 "textarea",
                 {
@@ -4568,7 +4627,7 @@ function Projet() {
 }
 const Login = lazy(() => import("./assets/Login-DIbTS8yc.js"));
 const ClientPortal = lazy(() => import("./assets/ClientPortal-Cyb14TnS.js"));
-const DashboardLayout = lazy(() => import("./assets/DashboardLayout-oy6br7e7.js"));
+const DashboardLayout = lazy(() => import("./assets/DashboardLayout-B12nLCyN.js"));
 function RouteFallback() {
   return /* @__PURE__ */ jsx("div", { className: "flex min-h-screen items-center justify-center bg-surface", children: /* @__PURE__ */ jsx("span", { className: "h-8 w-8 animate-spin rounded-full border-2 border-surface-border border-t-accent" }) });
 }

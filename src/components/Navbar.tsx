@@ -15,8 +15,7 @@ const LIENS = [
 
 type Lien = (typeof LIENS)[number]
 
-/** Le quiz qui génère une démo de site, et le formulaire de contact. */
-const QUIZ = 'https://quiz.digitalzdev.com/quiz'
+/** Le formulaire en quelques questions, réservé aux architectes. */
 const PROJET = '/projet'
 const EASE = [0.76, 0, 0.24, 1] as const
 
@@ -159,17 +158,11 @@ export default function Navbar() {
         <div className="pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl">
           <Link
             to={PROJET}
-            className="hidden min-h-[40px] items-center rounded-xl px-4 text-[15px] text-text-primary transition-colors hover:bg-surface-border/60 sm:inline-flex"
-          >
-            Contact
-          </Link>
-          <a
-            href={QUIZ}
             className="inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover"
           >
-            <span className="sm:hidden">Ma démo</span>
-            <span className="hidden sm:inline">Générer une démo</span>
-          </a>
+            <span className="sm:hidden">Mon projet</span>
+            <span className="hidden sm:inline">Démarrer mon projet</span>
+          </Link>
         </div>
       </header>
 
@@ -254,12 +247,13 @@ export default function Navbar() {
                   LinkedIn
                 </a>
               </div>
-              <a
-                href={QUIZ}
+              <Link
+                to={PROJET}
+                onClick={fermer}
                 className="inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto"
               >
-                Générer une démo →
-              </a>
+                Démarrer mon projet →
+              </Link>
             </motion.div>
           </motion.div>
         )}

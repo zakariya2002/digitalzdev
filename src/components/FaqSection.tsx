@@ -10,29 +10,34 @@ interface QuestionReponse {
 
 export const FAQ: QuestionReponse[] = [
   {
-    question: 'Combien coûte la création d’un site internet ?',
+    question: 'Combien coûte le site d’une agence d’architecture ?',
     reponse:
-      "Un site vitrine démarre autour de 1 500 € et un projet e-commerce ou une application métier se situe plus haut, selon le nombre de pages, les fonctionnalités et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route.",
+      "Un site d'architecte démarre autour de 1 500 € ; un site avec portfolio complet, pages par ville et espace client se situe plus haut, selon le nombre de projets à mettre en ligne et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route.",
+  },
+  {
+    question: 'Comment mettre en valeur nos réalisations ?',
+    reponse:
+      "Chaque projet a sa fiche : photos en haute définition, programme, surface, lieu, année et, si vous le souhaitez, plans et photos avant-après. Les images sont optimisées pour rester nettes sans ralentir le site, et vos prix ou publications sont mis en avant. Pas de photos professionnelles ? Nous vous orientons vers des photographes d'architecture.",
   },
   {
     question: 'Combien de temps prend un projet de site web ?',
     reponse:
-      "Comptez trois à six semaines pour un site vitrine, six à douze semaines pour une boutique e-commerce ou un outil métier. Le calendrier dépend surtout de la disponibilité de vos contenus, textes et photos, qui est le premier facteur de retard sur ce type de projet.",
+      "Comptez trois à six semaines pour un site d'agence, six à dix semaines avec un portfolio complet et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus, photos de réalisations et descriptifs de projets, qui sont le premier facteur de retard.",
   },
   {
     question: 'Le site sera-t-il visible sur Google ?',
     reponse:
-      "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour répondre aux recherches réelles de vos clients. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads.",
+      "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients : « architecte maison », « extension », « rénovation » suivis de votre ville. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads.",
   },
   {
     question: 'Puis-je modifier mon site moi-même ensuite ?',
     reponse:
-      "Oui. Selon le projet, vous administrez vos contenus depuis Shopify, depuis un back-office sur mesure ou depuis un espace d'administration dédié. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite.",
+      "Oui. Vous ajoutez vous-même vos nouvelles réalisations, photos et actualités depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite.",
   },
   {
     question: 'Travaillez-vous partout en France ?',
     reponse:
-      "Oui, dans toute la France et à l'international. Nos réalisations vont d'une marque de mode australienne à une maison de prêt-à-porter parisienne. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
+      "Oui, dans toute la France et à l'international. Nous avons travaillé pour des agences d'architecture de toutes tailles, de l'architecte indépendant aux agences internationales. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
   },
   {
     question: 'Que se passe-t-il après la mise en ligne ?',

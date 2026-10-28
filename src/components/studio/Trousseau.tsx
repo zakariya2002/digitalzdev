@@ -235,9 +235,9 @@ export default function Trousseau({ className = '' }: { className?: string }) {
         demiL = demiH * camera.aspect
         const mobile = l < 768
         echelle = mobile ? 0.5 : 0.95
-        ancreX = mobile ? demiL * 0.56 : demiL * 0.46
-        // L'anneau vers le tiers de la hauteur : le trousseau finit à côté du titre.
-        anneauY = demiH * (1 - 2 * (mobile ? 0.39 : 0.3))
+        ancreX = mobile ? demiL * 0.62 : demiL * 0.68
+        // L'anneau assez haut pour que le trousseau pende au-dessus du titre sans le masquer.
+        anneauY = demiH * (1 - 2 * (mobile ? 0.2 : 0.14))
         trousseau.scale.setScalar(echelle)
       }
       redimensionner()

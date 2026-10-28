@@ -25,24 +25,24 @@ export interface PageSeo {
 /** Titre affiché dans l'onglet et en résultat de recherche. Viser 50 à 60 signes. */
 const HOME: PageSeo = {
   path: '/',
-  title: 'Agence web pour avocats, architectes et photographes | Digitalz Dev',
+  title: "Agence web pour architectes et agences d'architecture | Digitalz Dev",
   description:
-    "Sites internet sur mesure pour cabinets d'avocats, agences d'architecture, photographes et vidéastes : design sobre, référencement local et campagnes. Devis sous 48 h.",
+    "Sites internet sur mesure pour architectes et agences d'architecture : vos réalisations mises en valeur, référencement local et demandes de particuliers. Devis sous 48 h.",
 }
 
 const STATIC_PAGES: PageSeo[] = [
   HOME,
   {
     path: '/contact',
-    title: 'Devis gratuit pour votre projet de site internet | Digitalz Dev',
+    title: "Devis gratuit pour le site de votre agence d'architecture | Digitalz Dev",
     description:
-      "Décrivez votre projet de site internet en deux minutes : type de site, budget, délais. Réponse sous 24 à 48 h avec un devis adapté par notre agence web.",
+      "Architectes : décrivez le site de votre agence en deux minutes (réalisations, budget, délais). Réponse sous 24 à 48 h avec un devis adapté.",
   },
   {
     path: '/projet',
     title: 'Parlons de votre site | Digitalz Dev',
     description:
-      "Quatre questions sur votre projet de site internet, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
+      "Architectes : quatre questions sur votre agence et votre site, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
     noindex: true,
   },
   {
@@ -66,7 +66,7 @@ const PROJECT_PAGES: PageSeo[] = projects.map((project) => ({
   // La description du projet est déjà rédigée pour être lue : on la reprend,
   // en la bornant à la longueur qu'un extrait Google affiche réellement.
   description: truncate(
-    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web.`,
+    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web pour architectes.`,
     158
   ),
 }))

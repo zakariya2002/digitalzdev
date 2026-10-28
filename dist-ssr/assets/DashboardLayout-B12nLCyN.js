@@ -185,6 +185,7 @@ const navSections = [
     items: [
       { to: "/dashboard", label: "Dashboard", icon: DashboardIcon, end: true },
       { to: "/dashboard/clients", label: "Leads & Clients", icon: ClientsIcon },
+      { to: "/dashboard/tunnel", label: "Tunnel du quiz", icon: TunnelIcon },
       { to: "/dashboard/proposals", label: "Propositions", icon: ProposalIcon },
       { to: "/dashboard/quotes", label: "Devis", icon: QuoteIcon },
       { to: "/dashboard/invoices", label: "Factures", icon: InvoiceIcon }
@@ -314,6 +315,9 @@ function CalendarIcon() {
 }
 function ClientsIcon() {
   return /* @__PURE__ */ jsx("svg", { className: "w-5 h-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 1.5, children: /* @__PURE__ */ jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" }) });
+}
+function TunnelIcon() {
+  return /* @__PURE__ */ jsx("svg", { className: "w-5 h-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 1.5, children: /* @__PURE__ */ jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" }) });
 }
 function ProposalIcon() {
   return /* @__PURE__ */ jsx("svg", { className: "w-5 h-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", strokeWidth: 1.5, children: /* @__PURE__ */ jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" }) });
@@ -764,6 +768,7 @@ const pageTitles = {
   "/dashboard/kanban": "Kanban",
   "/dashboard/calendar": "Calendrier",
   "/dashboard/clients": "Leads & Clients",
+  "/dashboard/tunnel": "Tunnel du quiz",
   "/dashboard/sms-templates": "Templates SMS",
   "/dashboard/quotes": "Devis",
   "/dashboard/quotes/new": "Nouveau devis",
@@ -13186,6 +13191,181 @@ function AutomationPage() {
     )
   ] });
 }
+const PERIODES = [
+  { label: "Aujourd'hui", jours: 0 },
+  { label: "7 jours", jours: 7 },
+  { label: "30 jours", jours: 30 }
+];
+const ETAPE_ATTEINTE = {
+  1: "Parti sur l'accueil",
+  2: "Arrêté au type de site",
+  3: "Arrêté au secteur",
+  4: "Arrêté au nom de la marque",
+  5: "Arrêté aux coordonnées",
+  6: "Démo lancée, pas affichée",
+  7: "A vu sa démo",
+  8: "A regardé sa démo",
+  9: "A demandé un contact"
+};
+function couleurEtape(rang) {
+  if (!rang) return "bg-gray-500/20 text-gray-400";
+  if (rang >= 7) return "bg-green-500/20 text-green-400";
+  if (rang >= 5) return "bg-yellow-500/20 text-yellow-400";
+  return "bg-red-500/15 text-red-300";
+}
+function debutPeriode(jours) {
+  const d = /* @__PURE__ */ new Date();
+  if (jours === 0) d.setHours(0, 0, 0, 0);
+  else d.setDate(d.getDate() - jours);
+  return d.toISOString();
+}
+function TunnelPage() {
+  var _a, _b;
+  const [jours, setJours] = useState(7);
+  const [metaSeulement, setMetaSeulement] = useState(false);
+  const [etapes, setEtapes] = useState([]);
+  const [parcours, setParcours] = useState([]);
+  const [chargement, setChargement] = useState(true);
+  const [error, setError] = useState(null);
+  const charger = useCallback(async () => {
+    var _a2;
+    setChargement(true);
+    const depuis = debutPeriode(jours);
+    const [t, p] = await Promise.all([
+      supabase.rpc("quiz_tunnel", { p_depuis: depuis, p_meta_seulement: metaSeulement }),
+      supabase.rpc("quiz_parcours", { p_depuis: depuis })
+    ]);
+    if (t.error || p.error) {
+      setError(((_a2 = t.error ?? p.error) == null ? void 0 : _a2.message) ?? "Erreur de chargement");
+    } else {
+      setEtapes(t.data ?? []);
+      const lignes = p.data ?? [];
+      setParcours(metaSeulement ? lignes.filter((l) => l.depuis_meta) : lignes);
+    }
+    setChargement(false);
+  }, [jours, metaSeulement]);
+  useEffect(() => {
+    void charger();
+  }, [charger]);
+  const arrivees = ((_a = etapes[0]) == null ? void 0 : _a.visiteurs) ?? 0;
+  const pireFuite = useMemo(() => {
+    let pire = null;
+    for (let i = 1; i < etapes.length; i++) {
+      const avant = etapes[i - 1].visiteurs;
+      if (avant === 0) continue;
+      const perte = (avant - etapes[i].visiteurs) / avant;
+      if (!pire || perte > pire.perte) pire = { etape: etapes[i].etape, perte };
+    }
+    return pire;
+  }, [etapes]);
+  const leads = ((_b = etapes.find((e) => e.rang === 6)) == null ? void 0 : _b.visiteurs) ?? 0;
+  return /* @__PURE__ */ jsxs("div", { className: "p-4 sm:p-6", children: [
+    /* @__PURE__ */ jsx(ErrorBanner, { message: error, onDismiss: () => setError(null) }),
+    /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap items-center gap-2 mb-6", children: [
+      PERIODES.map((p) => /* @__PURE__ */ jsx(
+        "button",
+        {
+          onClick: () => setJours(p.jours),
+          className: `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${jours === p.jours ? "bg-blue-600 text-white" : "bg-gray-900 text-gray-400 hover:text-white"}`,
+          children: p.label
+        },
+        p.jours
+      )),
+      /* @__PURE__ */ jsxs("label", { className: "ml-auto flex items-center gap-2 text-sm text-gray-400 cursor-pointer", children: [
+        /* @__PURE__ */ jsx(
+          "input",
+          {
+            type: "checkbox",
+            checked: metaSeulement,
+            onChange: (e) => setMetaSeulement(e.target.checked),
+            className: "accent-blue-600"
+          }
+        ),
+        "Venus des pubs Meta seulement"
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6", children: [
+      /* @__PURE__ */ jsxs("div", { className: "bg-gray-900 border border-gray-800 rounded-xl p-4", children: [
+        /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-500 uppercase tracking-wider mb-1", children: "Visiteurs" }),
+        /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-white", children: arrivees })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "bg-gray-900 border border-gray-800 rounded-xl p-4", children: [
+        /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-500 uppercase tracking-wider mb-1", children: "Démos lancées" }),
+        /* @__PURE__ */ jsx("p", { className: "text-2xl font-bold text-blue-400", children: leads })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "bg-gray-900 border border-gray-800 rounded-xl p-4", children: [
+        /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-500 uppercase tracking-wider mb-1", children: "Taux de conversion" }),
+        /* @__PURE__ */ jsxs("p", { className: "text-2xl font-bold text-green-400", children: [
+          arrivees ? Math.round(leads / arrivees * 100) : 0,
+          "%"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "bg-gray-900 border border-gray-800 rounded-xl p-4", children: [
+        /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-500 uppercase tracking-wider mb-1", children: "Plus grosse fuite" }),
+        /* @__PURE__ */ jsx("p", { className: "text-sm font-semibold text-red-300 leading-snug", children: pireFuite && pireFuite.perte > 0 ? `${pireFuite.etape} : −${Math.round(pireFuite.perte * 100)}%` : "—" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-6 mb-6", children: [
+      /* @__PURE__ */ jsx("h2", { className: "text-sm font-semibold text-white mb-4", children: "Jusqu'où vont les visiteurs" }),
+      /* @__PURE__ */ jsxs("div", { className: "space-y-3", children: [
+        etapes.map((e, i) => {
+          const pct = arrivees ? e.visiteurs / arrivees * 100 : 0;
+          const avant = i > 0 ? etapes[i - 1].visiteurs : 0;
+          const perdus = i > 0 ? avant - e.visiteurs : 0;
+          return /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-baseline justify-between gap-3 text-sm mb-1", children: [
+              /* @__PURE__ */ jsx("span", { className: "text-gray-300", children: e.etape }),
+              /* @__PURE__ */ jsxs("span", { className: "text-gray-400 tabular-nums whitespace-nowrap", children: [
+                /* @__PURE__ */ jsx("span", { className: "text-white font-semibold", children: e.visiteurs }),
+                arrivees ? ` · ${Math.round(pct)}%` : "",
+                perdus > 0 ? /* @__PURE__ */ jsxs("span", { className: "text-red-300", children: [
+                  " · −",
+                  perdus
+                ] }) : null
+              ] })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "h-2 rounded-full bg-gray-800 overflow-hidden", children: /* @__PURE__ */ jsx("div", { className: "h-full rounded-full bg-blue-500", style: { width: `${pct}%` } }) })
+          ] }, e.rang);
+        }),
+        !chargement && arrivees === 0 ? /* @__PURE__ */ jsx("p", { className: "text-sm text-gray-500", children: "Aucun visiteur sur la période. Le suivi écran par écran a démarré le 14 octobre 2026." }) : null
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "bg-gray-900 border border-gray-800 rounded-xl overflow-x-auto", children: [
+      /* @__PURE__ */ jsx("h2", { className: "text-sm font-semibold text-white px-4 pt-4 pb-2", children: "Chaque visiteur" }),
+      /* @__PURE__ */ jsxs("table", { className: "w-full min-w-[720px]", children: [
+        /* @__PURE__ */ jsx("thead", { children: /* @__PURE__ */ jsxs("tr", { children: [
+          /* @__PURE__ */ jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider", children: "Quand" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider", children: "Arrêté à" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider", children: "Prospect" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell", children: "Origine" }),
+          /* @__PURE__ */ jsx("th", { className: "text-left px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell", children: "Durée" })
+        ] }) }),
+        /* @__PURE__ */ jsx("tbody", { children: parcours.length === 0 ? /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", { colSpan: 5, className: "px-4 py-8 text-center text-sm text-gray-500", children: chargement ? "Chargement…" : "Aucun visiteur sur la période" }) }) : parcours.map((p, i) => {
+          const duree = Math.max(0, (new Date(p.dernier).getTime() - new Date(p.debut).getTime()) / 1e3);
+          return /* @__PURE__ */ jsxs("tr", { className: i % 2 === 0 ? "bg-gray-950/40" : "", children: [
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-sm text-gray-400 whitespace-nowrap", children: formatDistanceToNow(new Date(p.debut), { addSuffix: true, locale: fr }) }),
+            /* @__PURE__ */ jsxs("td", { className: "px-4 py-3", children: [
+              /* @__PURE__ */ jsx("span", { className: `inline-block px-2 py-0.5 rounded-full text-xs font-medium ${couleurEtape(p.rang_max)}`, children: p.rang_max ? ETAPE_ATTEINTE[p.rang_max] : "Inconnu" }),
+              p.erreur ? /* @__PURE__ */ jsx("span", { className: "ml-2 text-xs text-red-400", children: "erreur de génération" }) : null
+            ] }),
+            /* @__PURE__ */ jsxs("td", { className: "px-4 py-3 text-sm", children: [
+              p.email ? p.client_id ? /* @__PURE__ */ jsx(Link, { to: `/dashboard/clients/${p.client_id}`, className: "text-blue-400 hover:underline", children: p.marque ?? p.email }) : /* @__PURE__ */ jsx("span", { className: "text-white", children: p.marque ?? p.email }) : /* @__PURE__ */ jsx("span", { className: "text-gray-500", children: "Anonyme" }),
+              p.email ? /* @__PURE__ */ jsxs("p", { className: "text-xs text-gray-500", children: [
+                p.email,
+                p.telephone ? ` · ${p.telephone}` : ""
+              ] }) : null
+            ] }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-sm text-gray-400 hidden md:table-cell", children: p.depuis_meta ? /* @__PURE__ */ jsxs(Fragment, { children: [
+              /* @__PURE__ */ jsx("span", { className: "text-indigo-400", children: "Meta" }),
+              p.creation ? /* @__PURE__ */ jsx("p", { className: "text-xs text-gray-500", children: p.creation }) : null
+            ] }) : "Direct / organique" }),
+            /* @__PURE__ */ jsx("td", { className: "px-4 py-3 text-sm text-gray-400 tabular-nums hidden lg:table-cell", children: duree < 60 ? `${Math.round(duree)} s` : `${Math.round(duree / 60)} min` })
+          ] }, p.visiteur);
+        }) })
+      ] })
+    ] })
+  ] });
+}
 function DashboardLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
@@ -13202,6 +13382,7 @@ function DashboardLayout() {
         /* @__PURE__ */ jsx(Route, { path: "calendar", element: /* @__PURE__ */ jsx(CalendarPage, {}) }),
         /* @__PURE__ */ jsx(Route, { path: "clients", element: /* @__PURE__ */ jsx(ClientsPage, {}) }),
         /* @__PURE__ */ jsx(Route, { path: "clients/:id", element: /* @__PURE__ */ jsx(ClientDetailPage, {}) }),
+        /* @__PURE__ */ jsx(Route, { path: "tunnel", element: /* @__PURE__ */ jsx(TunnelPage, {}) }),
         /* @__PURE__ */ jsx(Route, { path: "sms-templates", element: /* @__PURE__ */ jsx(SmsTemplatesPage, {}) }),
         /* @__PURE__ */ jsx(Route, { path: "quotes", element: /* @__PURE__ */ jsx(QuotesPage, {}) }),
         /* @__PURE__ */ jsx(Route, { path: "quotes/new", element: /* @__PURE__ */ jsx(QuoteDetailPage, {}) }),

@@ -64,7 +64,7 @@ export default function FinalStudio() {
               whileTap={{ scale: 0.94 }}
               className="flex h-28 w-28 items-center justify-center rounded-full bg-[#25D366] p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#1ebe5a] md:h-40 md:w-40 md:p-6 md:text-lg"
             >
-              Prendre un RDV
+              Appelez-moi
             </motion.button>
             {/* Pour qui préfère écrire plutôt que caler un appel. */}
             <a

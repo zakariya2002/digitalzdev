@@ -4,7 +4,7 @@ import { EASE_OUT, VIEWPORT } from './motion/config'
 
 /** Conversation WhatsApp avec Zakariya, message d'ouverture prérempli. */
 export const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
-  "Bonjour Digitalz Dev, j'aimerais vous parler de mon projet de site : "
+  "Bonjour Digitalz Dev, je suis architecte et j'aimerais vous parler du site de mon agence : "
 )}`
 
 interface Service {
@@ -16,30 +16,30 @@ interface Service {
 
 export const SERVICES: Service[] = [
   {
-    title: 'Site vitrine sur mesure',
-    lead: "Pour présenter une activité et déclencher la prise de contact.",
-    body: "Nous concevons un site internet taillé pour votre métier plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une intention de recherche précise et mène à une action claire, appel, formulaire ou prise de rendez-vous.",
+    title: "Site d'agence d'architecture",
+    lead: "Pour présenter votre agence et déclencher la prise de contact.",
+    body: "Nous concevons un site taillé pour votre agence plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise, « architecte maison contemporaine », « extension », « rénovation », et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
     points: [
       'Maquettes validées avant la première ligne de code',
-      'Rédaction et structure orientées référencement naturel',
-      'Formulaire de contact et suivi des demandes',
+      'Pages par type de projet et par ville, rédigées pour Google',
+      'Formulaire de contact qui qualifie les demandes',
       'Formation à la prise en main, vous restez autonome',
     ],
   },
   {
-    title: 'Boutique e-commerce Shopify',
-    lead: "Pour vendre en ligne sans se battre contre son propre site.",
-    body: "Thème Shopify développé sur mesure, fiches produits pensées pour la conversion, tunnel d'achat réduit au strict nécessaire et paiements Shop Pay, PayPal, Klarna et carte bancaire. Nous branchons ensuite vos outils marketing pour que chaque visite compte.",
+    title: 'Portfolio de réalisations',
+    lead: "Pour que vos projets parlent avant vous.",
+    body: "Vos réalisations montrées en grand, sans perte de qualité et sans ralentir le site : galeries plein écran, fiches projet avec programme, surface, lieu et photos avant-après. Vous ajoutez vous-même chaque nouveau chantier livré.",
     points: [
-      'Thème sur mesure, pas de gabarit du commerce',
-      'Fiches produits, packs et ventes additionnelles',
-      'Capture e-mail et scénarios automatisés',
-      'Suivi des ventes et des conversions',
+      'Galeries haute définition, chargement rapide',
+      'Fiche par projet : programme, surface, lieu, année',
+      'Filtres par type : neuf, extension, rénovation, intérieur',
+      'Mise en avant des prix et publications',
     ],
   },
   {
     title: 'Refonte de site internet',
-    lead: "Pour un site qui ne convertit plus, ou qui ne suit plus.",
+    lead: "Pour un site d'agence qui ne montre plus ce que vous faites.",
     body: "Nous partons de l'existant : ce qui fonctionne, ce qui coince, ce que disent vos statistiques. La refonte préserve votre référencement acquis grâce à un plan de redirections complet, et corrige ce qui vous coûtait des visiteurs, notamment la lenteur et le confort de lecture sur mobile.",
     points: [
       'Audit du site actuel, contenus et performances',
@@ -49,19 +49,19 @@ export const SERVICES: Service[] = [
     ],
   },
   {
-    title: 'Application web et dashboard',
-    lead: "Pour outiller une activité que les tableurs ne suivent plus.",
-    body: "Quand le besoin dépasse le site web, nous développons l'outil métier : espace client, back-office, tableau de bord, facturation, automatisations. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre agence et prestataire technique.",
+    title: "Espace client maîtres d'ouvrage",
+    lead: "Pour suivre vos chantiers sans multiplier les e-mails.",
+    body: "Un espace privé où vos maîtres d'ouvrage retrouvent plans, comptes rendus de chantier, photos d'avancement et documents à signer. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre agence et prestataire technique.",
     points: [
-      'Espaces client et back-office sur mesure',
-      'Tableaux de bord et indicateurs métier',
-      'Automatisations et intégrations tierces',
-      'Applications iOS lorsque le mobile est central',
+      'Plans et documents partagés par projet',
+      "Comptes rendus et photos d'avancement",
+      'Validation des étapes par le client',
+      'Accès sécurisé, sur ordinateur et mobile',
     ],
   },
   {
     title: 'Meta Ads et Google Ads',
-    lead: "Pour aller chercher le trafic que le site ne capte pas seul.",
+    lead: "Pour toucher les particuliers qui cherchent un architecte maintenant.",
     body: "Un site sans visiteurs ne sert à rien. Nous mettons en place et pilotons vos campagnes : structure des comptes, audiences, rédaction et création des annonces, arbitrages de budget. Les conversions sont mesurées, pour savoir ce qui rapporte et ce qui coûte.",
     points: [
       'Création et structuration des comptes publicitaires',
@@ -72,7 +72,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'Référencement naturel',
-    lead: "Pour exister sur Google au-delà de votre propre nom.",
+    lead: "Pour être trouvé sur « architecte » + votre ville, pas seulement sur votre nom.",
     body: "Le référencement se construit dès la conception : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus qui répondent aux questions réelles de vos clients. Nous livrons un site déjà prêt, puis nous suivons les positions.",
     points: [
       'Architecture et balisage optimisés dès le départ',

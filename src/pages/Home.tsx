@@ -9,7 +9,6 @@ import RendezVousStudio from '../components/studio/RendezVousStudio'
 import Prechargeur from '../components/studio/Prechargeur'
 import AvisGoogleSection from '../components/AvisGoogleSection'
 import FaqSection from '../components/FaqSection'
-import MissionSection from '../components/MissionSection'
 import Footer from '../components/Footer'
 
 /**
@@ -34,7 +33,6 @@ export default function Home() {
       <AvisGoogleSection />
       <EquipeStudio />
       <FaqSection />
-      <MissionSection />
       <Footer />
     </main>
   )
