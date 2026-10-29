@@ -25,24 +25,30 @@ export interface PageSeo {
 /** Titre affiché dans l'onglet et en résultat de recherche. Viser 50 à 60 signes. */
 const HOME: PageSeo = {
   path: '/',
-  title: "Agence web pour architectes et agences d'architecture | Digitalz Dev",
+  title: "Agence web pour avocats et cabinets d'avocats | Digitalz Dev",
   description:
-    "Sites internet sur mesure pour architectes et agences d'architecture : vos réalisations mises en valeur, référencement local et demandes de particuliers. Devis sous 48 h.",
+    "Sites internet sur mesure pour avocats et cabinets d'avocats : domaines d'intervention, prise de rendez-vous en ligne et référencement local. Devis sous 48 h.",
 }
 
 const STATIC_PAGES: PageSeo[] = [
   HOME,
   {
-    path: '/contact',
-    title: "Devis gratuit pour le site de votre agence d'architecture | Digitalz Dev",
+    path: '/avocatleads',
+    title: 'AvocatLeads | Sites internet et clients pour avocats',
     description:
-      "Architectes : décrivez le site de votre agence en deux minutes (réalisations, budget, délais). Réponse sous 24 à 48 h avec un devis adapté.",
+      "Sites internet pour avocats et cabinets d'avocats : conformes à la déontologie, prise de rendez-vous en ligne et référencement local. Devis sous 48 h.",
+  },
+  {
+    path: '/contact',
+    title: "Devis gratuit pour le site de votre cabinet d'avocats | Digitalz Dev",
+    description:
+      "Avocats : décrivez le site de votre cabinet en deux minutes (domaines d'intervention, budget, délais). Réponse sous 24 à 48 h avec un devis adapté.",
   },
   {
     path: '/projet',
     title: 'Parlons de votre site | Digitalz Dev',
     description:
-      "Architectes : quatre questions sur votre agence et votre site, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
+      "Avocats : quatre questions sur votre cabinet et votre site, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
     noindex: true,
   },
   {
@@ -66,7 +72,7 @@ const PROJECT_PAGES: PageSeo[] = projects.map((project) => ({
   // La description du projet est déjà rédigée pour être lue : on la reprend,
   // en la bornant à la longueur qu'un extrait Google affiche réellement.
   description: truncate(
-    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web pour architectes.`,
+    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web pour avocats.`,
     158
   ),
 }))

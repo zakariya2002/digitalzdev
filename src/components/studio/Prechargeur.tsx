@@ -69,7 +69,7 @@ export default function Prechargeur() {
           </div>
           <div className="flex items-end justify-between gap-6">
             <p className="max-w-[14rem] text-sm font-medium leading-snug">
-              Sites internet pour architectes et agences d'architecture.
+              Sites internet pour avocats et cabinets d'avocats.
             </p>
             <span className="text-[28vw] font-normal leading-[0.8] tracking-[-0.06em] md:text-[18vw]">
               {compte}

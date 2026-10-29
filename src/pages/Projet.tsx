@@ -31,23 +31,23 @@ interface Question {
   options: string[]
 }
 
-// Réservé aux architectes : les libellés partent tels quels dans le CRM et
+// Réservé aux avocats : les libellés partent tels quels dans le CRM et
 // le message WhatsApp (60 caractères au plus pour les deux premiers, 40 pour
 // les suivants, comme le veut l'API).
 const QUESTIONS: Question[] = [
   {
     cle: 'metier',
     titre: 'Comment exercez-vous ?',
-    options: ['Architecte indépendant', 'Agence de 2 à 10 personnes', 'Agence de plus de 10 personnes', "Architecte d'intérieur"],
+    options: ['Avocat exerçant seul', 'Cabinet de 2 à 10 avocats', 'Cabinet de plus de 10 avocats', 'Je m\'installe à mon compte'],
   },
   {
     cle: 'besoin',
     titre: 'Où en est votre site aujourd\'hui ?',
     options: [
       "Je n'ai pas encore de site",
-      'Mon site ne met pas mes réalisations en valeur',
-      'Mon site ne m\'apporte aucun nouveau projet',
-      'Je veux être trouvé sur Google par des particuliers',
+      'Mon site ne reflète pas mon cabinet',
+      'Mon site ne m\'apporte aucun nouveau client',
+      'Je veux être trouvé sur Google par mes futurs clients',
     ],
   },
   {
@@ -201,15 +201,15 @@ export default function Projet() {
     }
 
     const texte = [
-      'Bonjour Digitalz Dev, je suis architecte et je viens de remplir le formulaire de votre site.',
+      'Bonjour Digitalz Dev, je suis avocat et je viens de remplir le formulaire de votre site.',
       '',
       `• Structure : ${ligne.metier}`,
       `• Site actuel : ${ligne.besoin}`,
       `• Budget : ${ligne.budget}`,
       `• Délai : ${ligne.delai}`,
       `• Nom : ${ligne.nom}`,
-      ligne.activite ? `• Agence / site : ${ligne.activite}` : null,
-      ligne.message ? `• Projets visés : ${ligne.message}` : null,
+      ligne.activite ? `• Cabinet / site : ${ligne.activite}` : null,
+      ligne.message ? `• Domaines et clients visés : ${ligne.message}` : null,
     ]
       .filter((l) => l !== null)
       .join('\n')
@@ -328,7 +328,7 @@ export default function Projet() {
             >
               {etape === 0 && (
                 <p className="mb-4 text-text-secondary">
-                  Architectes : quatre questions sur votre agence, puis on en parle directement sur WhatsApp.
+                  Avocats : quatre questions sur votre cabinet, puis on en parle directement sur WhatsApp.
                 </p>
               )}
               <h1 className="text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl">
@@ -400,7 +400,7 @@ export default function Projet() {
                   )}
                 </label>
                 <label className="grid gap-1.5">
-                  <span className="text-sm text-text-secondary">Le nom de votre agence ou votre site actuel (facultatif)</span>
+                  <span className="text-sm text-text-secondary">Le nom de votre cabinet ou votre site actuel (facultatif)</span>
                   <input
                     value={activite}
                     onChange={(e) => setActivite(e.target.value)}
@@ -408,7 +408,7 @@ export default function Projet() {
                   />
                 </label>
                 <label className="grid gap-1.5">
-                  <span className="text-sm text-text-secondary">Les projets que vous voulez attirer : maisons neuves, extensions, rénovations… (facultatif)</span>
+                  <span className="text-sm text-text-secondary">Vos domaines d'intervention et les clients que vous voulez attirer (facultatif)</span>
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

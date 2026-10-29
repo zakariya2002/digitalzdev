@@ -35,9 +35,67 @@ export interface Project {
   mockups: ProjectMockup[]
 }
 
-// Portfolio centré sur les architectes : trois agences d'architecture en
-// tête, puis deux réalisations hors architecture.
+// Portfolio centré sur les avocats : le cabinet Fidal en tête, puis des
+// sites institutionnels sobres et une boutique.
 export const projects: Project[] = [
+  {
+    id: 'fidal',
+    title: 'Fidal Montpellier',
+    subtitle: 'Cabinet d’avocats d’affaires',
+    year: '2026',
+    tags: ['Avocats', 'Site institutionnel', 'Référencement local'],
+    stack: ['CMS', 'SEO local', 'Cartographie'],
+    description:
+      "Page du bureau montpelliérain de Fidal, cabinet d'avocats d'affaires : présentation du bureau, expertises, équipe et coordonnées, pensée pour le référencement local.",
+    url: 'https://www.fidal.com/nos-implantations/mediterranee/montpellier',
+    route: '/fidal',
+    color: '#1B2A41',
+    gradient: 'from-[#E6E9EE] via-[#C9D0DA] to-[#1B2A41]',
+    heroImage: '/screenshots/fidal-hero.webp',
+    brief:
+      "Fidal souhaitait que chacun de ses bureaux régionaux existe en ligne à part entière : une page qui présente le bureau de Montpellier, ses expertises et ses avocats, et qui ressorte sur les recherches locales d'avocat d'affaires.",
+    solution:
+      "Une page de bureau structurée pour la recherche locale : présentation et domaines d'intervention, coordonnées et carte, équipe avec fonctions et secteurs, liens vers les autres implantations.",
+    features: [
+      'Page de bureau dédiée à Montpellier',
+      'Présentation des expertises du bureau',
+      'Équipe avec fonctions et secteurs',
+      'Coordonnées, carte et accès',
+      'Maillage vers les autres implantations',
+      'Référencement local avocat d’affaires',
+    ],
+    metrics: [
+      { value: '1', label: 'bureau régional dédié' },
+      { value: '100%', label: 'référencement local' },
+      { value: 'FR / EN', label: 'cabinet international' },
+    ],
+    mockups: [
+      {
+        title: 'Bureau',
+        gradient: 'from-[#EEE] to-[#DDD]',
+        content: 'Présentation du bureau de Montpellier',
+        image: '/screenshots/fidal-hero.webp',
+      },
+      {
+        title: 'Contact',
+        gradient: 'from-[#EEE] to-[#DDD]',
+        content: 'Coordonnées et carte',
+        image: '/screenshots/fidal-2.webp',
+      },
+      {
+        title: 'Équipe',
+        gradient: 'from-[#EEE] to-[#DDD]',
+        content: 'Avocats et directeur de bureau',
+        image: '/screenshots/fidal-3.webp',
+      },
+      {
+        title: 'Réseau',
+        gradient: 'from-[#EEE] to-[#DDD]',
+        content: 'Les autres implantations',
+        image: '/screenshots/fidal-4.webp',
+      },
+    ],
+  },
   {
     id: 'gensler',
     title: 'gensler.com',
@@ -197,64 +255,6 @@ export const projects: Project[] = [
         gradient: 'from-[#EEE] to-[#DDD]',
         content: 'Ingénierie, intérieurs, urbanisme',
         image: '/screenshots/foster-4.webp',
-      },
-    ],
-  },
-  {
-    id: 'fidal',
-    title: 'Fidal Montpellier',
-    subtitle: 'Cabinet d’avocats d’affaires',
-    year: '2026',
-    tags: ['Avocats', 'Site institutionnel', 'Référencement local'],
-    stack: ['CMS', 'SEO local', 'Cartographie'],
-    description:
-      "Page du bureau montpelliérain de Fidal, cabinet d'avocats d'affaires : présentation du bureau, expertises, équipe et coordonnées, pensée pour le référencement local.",
-    url: 'https://www.fidal.com/nos-implantations/mediterranee/montpellier',
-    route: '/fidal',
-    color: '#1B2A41',
-    gradient: 'from-[#E6E9EE] via-[#C9D0DA] to-[#1B2A41]',
-    heroImage: '/screenshots/fidal-hero.webp',
-    brief:
-      "Fidal souhaitait que chacun de ses bureaux régionaux existe en ligne à part entière : une page qui présente le bureau de Montpellier, ses expertises et ses avocats, et qui ressorte sur les recherches locales d'avocat d'affaires.",
-    solution:
-      "Une page de bureau structurée pour la recherche locale : présentation et domaines d'intervention, coordonnées et carte, équipe avec fonctions et secteurs, liens vers les autres implantations.",
-    features: [
-      'Page de bureau dédiée à Montpellier',
-      'Présentation des expertises du bureau',
-      'Équipe avec fonctions et secteurs',
-      'Coordonnées, carte et accès',
-      'Maillage vers les autres implantations',
-      'Référencement local avocat d’affaires',
-    ],
-    metrics: [
-      { value: '1', label: 'bureau régional dédié' },
-      { value: '100%', label: 'référencement local' },
-      { value: 'FR / EN', label: 'cabinet international' },
-    ],
-    mockups: [
-      {
-        title: 'Bureau',
-        gradient: 'from-[#EEE] to-[#DDD]',
-        content: 'Présentation du bureau de Montpellier',
-        image: '/screenshots/fidal-hero.webp',
-      },
-      {
-        title: 'Contact',
-        gradient: 'from-[#EEE] to-[#DDD]',
-        content: 'Coordonnées et carte',
-        image: '/screenshots/fidal-2.webp',
-      },
-      {
-        title: 'Équipe',
-        gradient: 'from-[#EEE] to-[#DDD]',
-        content: 'Avocats et directeur de bureau',
-        image: '/screenshots/fidal-3.webp',
-      },
-      {
-        title: 'Réseau',
-        gradient: 'from-[#EEE] to-[#DDD]',
-        content: 'Les autres implantations',
-        image: '/screenshots/fidal-4.webp',
       },
     ],
   },

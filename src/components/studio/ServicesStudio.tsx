@@ -100,12 +100,12 @@ export default function ServicesStudio() {
     <section id="services" className="overflow-x-clip bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10">
       <div className="mx-auto max-w-7xl">
         <h2 className="max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl">
-          Une agence web qui conçoit, développe <span className="font-bold text-pop">et fait connaître votre agence d'architecture.</span>
+          Une agence web qui conçoit, développe <span className="font-bold text-pop">et fait connaître votre cabinet d'avocats.</span>
         </h2>
         <p className="mt-6 max-w-2xl text-lg font-medium text-text-secondary">
-          Site d'agence, portfolio de réalisations, refonte, référencement local
-          et campagnes publicitaires, pour les architectes. Un site se juge sur
-          les projets qu'il vous apporte une fois en ligne, pas sur sa maquette.
+          Site de cabinet, prise de rendez-vous en ligne, refonte, référencement
+          local et campagnes publicitaires, pour les avocats. Un site se juge sur
+          les dossiers qu'il vous apporte une fois en ligne, pas sur sa maquette.
         </p>
 
         <div ref={grilleRef} className="mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3">
@@ -116,8 +116,8 @@ export default function ServicesStudio() {
 
         <div className="mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12">
           <p className="max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl">
-            Votre agence n'a pas encore de site, ou votre site ne montre pas vos
-            réalisations ? Décrivez-nous votre agence directement sur WhatsApp.
+            Votre cabinet n'a pas encore de site, ou votre site ne vous apporte
+            aucun client ? Décrivez-nous votre cabinet directement sur WhatsApp.
           </p>
           <a
             href={WHATSAPP_PROJET}

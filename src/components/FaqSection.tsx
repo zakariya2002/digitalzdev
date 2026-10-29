@@ -10,34 +10,34 @@ interface QuestionReponse {
 
 export const FAQ: QuestionReponse[] = [
   {
-    question: 'Combien coûte le site d’une agence d’architecture ?',
+    question: 'Combien coûte le site d’un cabinet d’avocats ?',
     reponse:
-      "Un site d'architecte démarre autour de 1 500 € ; un site avec portfolio complet, pages par ville et espace client se situe plus haut, selon le nombre de projets à mettre en ligne et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route.",
+      "Un site d'avocat démarre autour de 1 500 € ; un site avec une page par domaine d'intervention, prise de rendez-vous en ligne et espace client se situe plus haut, selon le nombre de pages et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route.",
   },
   {
-    question: 'Comment mettre en valeur nos réalisations ?',
+    question: 'Le site respecte-t-il les règles déontologiques ?',
     reponse:
-      "Chaque projet a sa fiche : photos en haute définition, programme, surface, lieu, année et, si vous le souhaitez, plans et photos avant-après. Les images sont optimisées pour rester nettes sans ralentir le site, et vos prix ou publications sont mis en avant. Pas de photos professionnelles ? Nous vous orientons vers des photographes d'architecture.",
+      "Oui. Les textes sont rédigés dans le cadre des règles de communication de la profession (article 10 du Règlement intérieur national) : informations obligatoires, mentions de spécialisation réservées aux certificats obtenus, pas de promesse de résultat ni de comparaison avec d'autres confrères, informations claires sur les honoraires. Vous validez chaque page avant la mise en ligne.",
   },
   {
     question: 'Combien de temps prend un projet de site web ?',
     reponse:
-      "Comptez trois à six semaines pour un site d'agence, six à dix semaines avec un portfolio complet et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus, photos de réalisations et descriptifs de projets, qui sont le premier facteur de retard.",
+      "Comptez trois à six semaines pour un site de cabinet, six à dix semaines avec la prise de rendez-vous en ligne et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus, présentation des associés, domaines d'intervention et relecture, qui sont le premier facteur de retard.",
   },
   {
     question: 'Le site sera-t-il visible sur Google ?',
     reponse:
-      "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients : « architecte maison », « extension », « rénovation » suivis de votre ville. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads.",
+      "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients : « avocat divorce », « avocat droit du travail », « avocat pénaliste » suivis de votre ville. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads.",
   },
   {
     question: 'Puis-je modifier mon site moi-même ensuite ?',
     reponse:
-      "Oui. Vous ajoutez vous-même vos nouvelles réalisations, photos et actualités depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite.",
+      "Oui. Vous ajoutez vous-même vos articles, actualités juridiques et nouveaux collaborateurs depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite.",
   },
   {
     question: 'Travaillez-vous partout en France ?',
     reponse:
-      "Oui, dans toute la France et à l'international. Nous avons travaillé pour des agences d'architecture de toutes tailles, de l'architecte indépendant aux agences internationales. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
+      "Oui, dans toute la France et à l'international. Nous avons notamment travaillé pour Fidal, cabinet d'avocats d'affaires, et nous accompagnons aussi bien l'avocat qui s'installe que les cabinets de plusieurs associés. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
   },
   {
     question: 'Que se passe-t-il après la mise en ligne ?',

@@ -6,7 +6,7 @@ import { createContext, useContext, useState, useEffect, Component, useLayoutEff
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server.mjs";
 import { createClient } from "@supabase/supabase-js";
-import { useLocation, Link, Navigate, Routes, Route } from "react-router-dom";
+import { useLocation, Link, Navigate, useNavigate, Routes, Route } from "react-router-dom";
 import { useReducedMotion, motion, useScroll, useMotionValueEvent, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate, useInView } from "framer-motion";
 import Lenis from "lenis";
 import emailjs from "@emailjs/browser";
@@ -85,6 +85,61 @@ class ErrorBoundary extends Component {
   }
 }
 const projects = [
+  {
+    id: "fidal",
+    title: "Fidal Montpellier",
+    subtitle: "Cabinet d’avocats d’affaires",
+    year: "2026",
+    tags: ["Avocats", "Site institutionnel", "Référencement local"],
+    stack: ["CMS", "SEO local", "Cartographie"],
+    description: "Page du bureau montpelliérain de Fidal, cabinet d'avocats d'affaires : présentation du bureau, expertises, équipe et coordonnées, pensée pour le référencement local.",
+    url: "https://www.fidal.com/nos-implantations/mediterranee/montpellier",
+    route: "/fidal",
+    color: "#1B2A41",
+    gradient: "from-[#E6E9EE] via-[#C9D0DA] to-[#1B2A41]",
+    heroImage: "/screenshots/fidal-hero.webp",
+    brief: "Fidal souhaitait que chacun de ses bureaux régionaux existe en ligne à part entière : une page qui présente le bureau de Montpellier, ses expertises et ses avocats, et qui ressorte sur les recherches locales d'avocat d'affaires.",
+    solution: "Une page de bureau structurée pour la recherche locale : présentation et domaines d'intervention, coordonnées et carte, équipe avec fonctions et secteurs, liens vers les autres implantations.",
+    features: [
+      "Page de bureau dédiée à Montpellier",
+      "Présentation des expertises du bureau",
+      "Équipe avec fonctions et secteurs",
+      "Coordonnées, carte et accès",
+      "Maillage vers les autres implantations",
+      "Référencement local avocat d’affaires"
+    ],
+    metrics: [
+      { value: "1", label: "bureau régional dédié" },
+      { value: "100%", label: "référencement local" },
+      { value: "FR / EN", label: "cabinet international" }
+    ],
+    mockups: [
+      {
+        title: "Bureau",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Présentation du bureau de Montpellier",
+        image: "/screenshots/fidal-hero.webp"
+      },
+      {
+        title: "Contact",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Coordonnées et carte",
+        image: "/screenshots/fidal-2.webp"
+      },
+      {
+        title: "Équipe",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Avocats et directeur de bureau",
+        image: "/screenshots/fidal-3.webp"
+      },
+      {
+        title: "Réseau",
+        gradient: "from-[#EEE] to-[#DDD]",
+        content: "Les autres implantations",
+        image: "/screenshots/fidal-4.webp"
+      }
+    ]
+  },
   {
     id: "gensler",
     title: "gensler.com",
@@ -239,61 +294,6 @@ const projects = [
     ]
   },
   {
-    id: "fidal",
-    title: "Fidal Montpellier",
-    subtitle: "Cabinet d’avocats d’affaires",
-    year: "2026",
-    tags: ["Avocats", "Site institutionnel", "Référencement local"],
-    stack: ["CMS", "SEO local", "Cartographie"],
-    description: "Page du bureau montpelliérain de Fidal, cabinet d'avocats d'affaires : présentation du bureau, expertises, équipe et coordonnées, pensée pour le référencement local.",
-    url: "https://www.fidal.com/nos-implantations/mediterranee/montpellier",
-    route: "/fidal",
-    color: "#1B2A41",
-    gradient: "from-[#E6E9EE] via-[#C9D0DA] to-[#1B2A41]",
-    heroImage: "/screenshots/fidal-hero.webp",
-    brief: "Fidal souhaitait que chacun de ses bureaux régionaux existe en ligne à part entière : une page qui présente le bureau de Montpellier, ses expertises et ses avocats, et qui ressorte sur les recherches locales d'avocat d'affaires.",
-    solution: "Une page de bureau structurée pour la recherche locale : présentation et domaines d'intervention, coordonnées et carte, équipe avec fonctions et secteurs, liens vers les autres implantations.",
-    features: [
-      "Page de bureau dédiée à Montpellier",
-      "Présentation des expertises du bureau",
-      "Équipe avec fonctions et secteurs",
-      "Coordonnées, carte et accès",
-      "Maillage vers les autres implantations",
-      "Référencement local avocat d’affaires"
-    ],
-    metrics: [
-      { value: "1", label: "bureau régional dédié" },
-      { value: "100%", label: "référencement local" },
-      { value: "FR / EN", label: "cabinet international" }
-    ],
-    mockups: [
-      {
-        title: "Bureau",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Présentation du bureau de Montpellier",
-        image: "/screenshots/fidal-hero.webp"
-      },
-      {
-        title: "Contact",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Coordonnées et carte",
-        image: "/screenshots/fidal-2.webp"
-      },
-      {
-        title: "Équipe",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Avocats et directeur de bureau",
-        image: "/screenshots/fidal-3.webp"
-      },
-      {
-        title: "Réseau",
-        gradient: "from-[#EEE] to-[#DDD]",
-        content: "Les autres implantations",
-        image: "/screenshots/fidal-4.webp"
-      }
-    ]
-  },
-  {
     id: "st-agni",
     title: "st-agni.com",
     subtitle: "Minimalisme premium",
@@ -354,20 +354,25 @@ const SITE_NAME = "Digitalz Dev";
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`;
 const HOME = {
   path: "/",
-  title: "Agence web pour architectes et agences d'architecture | Digitalz Dev",
-  description: "Sites internet sur mesure pour architectes et agences d'architecture : vos réalisations mises en valeur, référencement local et demandes de particuliers. Devis sous 48 h."
+  title: "Agence web pour avocats et cabinets d'avocats | Digitalz Dev",
+  description: "Sites internet sur mesure pour avocats et cabinets d'avocats : domaines d'intervention, prise de rendez-vous en ligne et référencement local. Devis sous 48 h."
 };
 const STATIC_PAGES = [
   HOME,
   {
+    path: "/avocatleads",
+    title: "AvocatLeads | Sites internet et clients pour avocats",
+    description: "Sites internet pour avocats et cabinets d'avocats : conformes à la déontologie, prise de rendez-vous en ligne et référencement local. Devis sous 48 h."
+  },
+  {
     path: "/contact",
-    title: "Devis gratuit pour le site de votre agence d'architecture | Digitalz Dev",
-    description: "Architectes : décrivez le site de votre agence en deux minutes (réalisations, budget, délais). Réponse sous 24 à 48 h avec un devis adapté."
+    title: "Devis gratuit pour le site de votre cabinet d'avocats | Digitalz Dev",
+    description: "Avocats : décrivez le site de votre cabinet en deux minutes (domaines d'intervention, budget, délais). Réponse sous 24 à 48 h avec un devis adapté."
   },
   {
     path: "/projet",
     title: "Parlons de votre site | Digitalz Dev",
-    description: "Architectes : quatre questions sur votre agence et votre site, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
+    description: "Avocats : quatre questions sur votre cabinet et votre site, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
     noindex: true
   },
   {
@@ -387,7 +392,7 @@ const PROJECT_PAGES = projects.map((project) => ({
   // La description du projet est déjà rédigée pour être lue : on la reprend,
   // en la bornant à la longueur qu'un extrait Google affiche réellement.
   description: truncate(
-    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web pour architectes.`,
+    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web pour avocats.`,
     158
   )
 }));
@@ -551,21 +556,21 @@ function PageTransition({ children }) {
     }
   );
 }
-const LIENS = [
+const LIENS$1 = [
   { libelle: "Accueil", vers: "/", interne: true },
   { libelle: "Projets", vers: "/#projets", interne: false },
   { libelle: "Services", vers: "/#services", interne: false },
   { libelle: "L'agence", vers: "/#agence", interne: false },
   { libelle: "Contact", vers: "/projet", interne: true }
 ];
-const PROJET = "/projet";
-const EASE$7 = [0.76, 0, 0.24, 1];
-function estCourant(lien2, chemin) {
+const PROJET$1 = "/projet";
+const EASE$g = [0.76, 0, 0.24, 1];
+function estCourant$1(lien2, chemin) {
   if (lien2.vers === "/") return chemin === "/";
   if (lien2.vers.startsWith("/#")) return false;
   return chemin === lien2.vers;
 }
-function Heure() {
+function Heure$1() {
   const formater = () => new Intl.DateTimeFormat("fr-FR", {
     hour: "2-digit",
     minute: "2-digit",
@@ -631,7 +636,7 @@ function Navbar() {
                 initial: false,
                 animate: { width: liensVisibles ? "auto" : 0, opacity: liensVisibles ? 1 : 0 },
                 transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                children: /* @__PURE__ */ jsx("ul", { className: "flex items-center gap-1 whitespace-nowrap pl-4", children: LIENS.filter((l) => l.vers !== "/").map((lien2) => {
+                children: /* @__PURE__ */ jsx("ul", { className: "flex items-center gap-1 whitespace-nowrap pl-4", children: LIENS$1.filter((l) => l.vers !== "/").map((lien2) => {
                   const classe = "inline-flex min-h-[40px] items-center rounded-xl px-3 text-[15px] text-text-primary transition-colors hover:text-text-muted";
                   return /* @__PURE__ */ jsx("li", { children: lien2.interne ? /* @__PURE__ */ jsx(Link, { to: lien2.vers, className: classe, children: lien2.libelle }) : /* @__PURE__ */ jsx("a", { href: lien2.vers, className: classe, children: lien2.libelle }) }, lien2.libelle);
                 }) })
@@ -643,7 +648,7 @@ function Navbar() {
                 type: "button",
                 onPointerEnter: (e) => e.pointerType === "mouse" && setSurvol(true),
                 onClick: () => {
-                  if (window.matchMedia("(min-width: 1024px)").matches) setEpingle((v2) => !v2);
+                  if (window.matchMedia("(min-width: 1024px)").matches) setEpingle((v) => !v);
                   else setOuvert((o) => !o);
                 },
                 "aria-expanded": ouvert,
@@ -663,7 +668,7 @@ function Navbar() {
       /* @__PURE__ */ jsx("div", { className: "pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl", children: /* @__PURE__ */ jsxs(
         Link,
         {
-          to: PROJET,
+          to: PROJET$1,
           className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
           children: [
             /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Mon projet" }),
@@ -680,10 +685,10 @@ function Navbar() {
         initial: { clipPath: "inset(0% 0% 100% 0%)" },
         animate: { clipPath: "inset(0% 0% 0% 0%)" },
         exit: { clipPath: "inset(0% 0% 100% 0%)" },
-        transition: { duration: 0.7, ease: EASE$7 },
+        transition: { duration: 0.7, ease: EASE$g },
         children: [
-          /* @__PURE__ */ jsx("nav", { "aria-label": "Menu", children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien2, i) => {
-            const courant = estCourant(lien2, location.pathname);
+          /* @__PURE__ */ jsx("nav", { "aria-label": "Menu", children: /* @__PURE__ */ jsx("ul", { children: LIENS$1.map((lien2, i) => {
+            const courant = estCourant$1(lien2, location.pathname);
             const classe = `group inline-flex items-center gap-4 text-[13vw] font-normal leading-[0.95] tracking-[-0.05em] transition-colors md:text-[7.5vw] ${courant ? "text-accent" : "text-text-primary hover:text-accent"}`;
             const contenu = /* @__PURE__ */ jsxs(Fragment, { children: [
               lien2.libelle,
@@ -717,7 +722,7 @@ function Navbar() {
               transition: { duration: 0.5, delay: 0.4 },
               children: [
                 /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-1 text-[15px] font-medium text-text-secondary", children: [
-                  /* @__PURE__ */ jsx(Heure, {}),
+                  /* @__PURE__ */ jsx(Heure$1, {}),
                   /* @__PURE__ */ jsx("a", { href: "mailto:zdigitalzdev@gmail.com", className: "transition-colors hover:text-accent", children: "zdigitalzdev@gmail.com" }),
                   /* @__PURE__ */ jsx(
                     "a",
@@ -743,7 +748,7 @@ function Navbar() {
                 /* @__PURE__ */ jsx(
                   Link,
                   {
-                    to: PROJET,
+                    to: PROJET$1,
                     onClick: fermer,
                     className: "inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto",
                     children: "Démarrer mon projet →"
@@ -858,524 +863,15 @@ function ProtectedRoute({ children }) {
   }
   return /* @__PURE__ */ jsx(Fragment, { children });
 }
-const v = (x = 0, y = 0, z = 0) => ({ x, y, z });
-function Trousseau({ className = "" }) {
-  const hoteRef = useRef(null);
-  useEffect(() => {
-    const hote = hoteRef.current;
-    if (!hote) return;
-    let arret = false;
-    let nettoyer = () => {
-    };
-    (async () => {
-      const THREE = await import("three");
-      const { RoomEnvironment } = await import("three/examples/jsm/environments/RoomEnvironment.js");
-      const { RoundedBoxGeometry } = await import("three/examples/jsm/geometries/RoundedBoxGeometry.js");
-      const { TextGeometry } = await import("three/examples/jsm/geometries/TextGeometry.js");
-      const { FontLoader } = await import("three/examples/jsm/loaders/FontLoader.js");
-      const police = await new FontLoader().loadAsync("/fonts/nunito-black.typeface.json");
-      if (arret) return;
-      const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const rendu = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      rendu.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      rendu.outputColorSpace = THREE.SRGBColorSpace;
-      rendu.toneMapping = THREE.ACESFilmicToneMapping;
-      rendu.toneMappingExposure = 1.05;
-      rendu.domElement.style.cssText = "width:100%;height:100%;display:block;pointer-events:none";
-      hote.appendChild(rendu.domElement);
-      const scene = new THREE.Scene();
-      const pmrem = new THREE.PMREMGenerator(rendu);
-      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-      const soleil = new THREE.DirectionalLight(16777215, 1.6);
-      soleil.position.set(3, 6, 8);
-      scene.add(soleil);
-      const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
-      camera.position.set(0, 0, 14);
-      const chrome = new THREE.MeshPhysicalMaterial({ color: 15329774, metalness: 1, roughness: 0.12 });
-      const bleu = new THREE.MeshPhysicalMaterial({ color: 3560692, metalness: 0.55, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.15 });
-      const citron = new THREE.MeshPhysicalMaterial({ color: 14283866, metalness: 0, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.2 });
-      const noir = new THREE.MeshPhysicalMaterial({ color: 1907999, metalness: 0.2, roughness: 0.35, clearcoat: 1, clearcoatRoughness: 0.25 });
-      const sombre = new THREE.MeshStandardMaterial({ color: 1118484, roughness: 0.6 });
-      const led = new THREE.MeshStandardMaterial({ color: 3560692, emissive: 3560692, emissiveIntensity: 1.4 });
-      const anneauPetit = () => new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.028, 12, 32), chrome);
-      const fabriquer = {
-        mousqueton() {
-          const g = new THREE.Group();
-          const courbe = new THREE.CatmullRomCurve3(
-            [v(0, 0), v(0.3, -0.1), v(0.36, -0.7), v(0.22, -1.32), v(0, -1.42), v(-0.22, -1.3), v(-0.3, -0.7), v(-0.26, -0.12)].map(
-              (p) => new THREE.Vector3(p.x, p.y, p.z)
-            ),
-            true
-          );
-          g.add(new THREE.Mesh(new THREE.TubeGeometry(courbe, 120, 0.075, 16, true), bleu));
-          const doigt = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.9, 12), chrome);
-          doigt.position.set(-0.18, -0.68, 0.02);
-          doigt.rotation.z = -0.08;
-          g.add(doigt);
-          return g;
-        },
-        logo() {
-          const g = new THREE.Group();
-          const a = anneauPetit();
-          a.position.y = -0.1;
-          g.add(a);
-          const plaque = new THREE.Mesh(new RoundedBoxGeometry(1.05, 1.05, 0.28, 5, 0.22), noir);
-          plaque.position.y = -0.74;
-          g.add(plaque);
-          const trois = new TextGeometry("3", { font: police, size: 0.72, depth: 0.16, curveSegments: 10, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 4 });
-          trois.computeBoundingBox();
-          const bb = trois.boundingBox;
-          trois.translate(-(bb.max.x + bb.min.x) / 2, -(bb.max.y + bb.min.y) / 2, 0);
-          const m = new THREE.Mesh(trois, chrome);
-          m.position.set(0, -0.74, 0.12);
-          g.add(m);
-          return g;
-        },
-        usb() {
-          const g = new THREE.Group();
-          const a = anneauPetit();
-          a.position.y = -0.1;
-          g.add(a);
-          const corps = new THREE.Mesh(new RoundedBoxGeometry(0.62, 1.12, 0.26, 5, 0.1), noir);
-          corps.position.y = -0.8;
-          g.add(corps);
-          const voyant = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.02), led);
-          voyant.position.set(0.16, -0.42, 0.135);
-          g.add(voyant);
-          const bande = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.1, 0.262), bleu);
-          bande.position.y = -1.2;
-          g.add(bande);
-          const prise = new THREE.Mesh(new RoundedBoxGeometry(0.46, 0.5, 0.15, 3, 0.02), chrome);
-          prise.position.y = -1.6;
-          g.add(prise);
-          for (const x of [-0.1, 0.1]) {
-            const trou = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.02), sombre);
-            trou.position.set(x, -1.68, 0.075);
-            g.add(trou);
-          }
-          return g;
-        },
-        cle() {
-          const g = new THREE.Group();
-          const tete = new THREE.Shape();
-          tete.absarc(0, -0.3, 0.42, 0, Math.PI * 2, false);
-          const oeil = new THREE.Path();
-          oeil.absarc(0, -0.12, 0.11, 0, Math.PI * 2, true);
-          tete.holes.push(oeil);
-          const lame = new THREE.Shape();
-          lame.moveTo(-0.11, -0.6);
-          lame.lineTo(-0.11, -2.05);
-          lame.lineTo(0.02, -2.18);
-          lame.lineTo(0.13, -2.05);
-          for (let i = 0; i < 5; i++) {
-            const y = -1.95 + i * 0.22;
-            lame.lineTo(0.13, y);
-            lame.lineTo(0.24, y + 0.07);
-            lame.lineTo(0.24, y + 0.13);
-            lame.lineTo(0.13, y + 0.18);
-          }
-          lame.lineTo(0.13, -0.6);
-          lame.lineTo(-0.11, -0.6);
-          const reglages = { depth: 0.09, bevelEnabled: true, bevelThickness: 0.025, bevelSize: 0.02, bevelSegments: 3, curveSegments: 40 };
-          for (const s of [tete, lame]) {
-            const geo = new THREE.ExtrudeGeometry(s, reglages);
-            geo.translate(0, 0.12, -0.045);
-            g.add(new THREE.Mesh(geo, chrome));
-          }
-          const a = anneauPetit();
-          a.rotation.y = Math.PI / 2;
-          g.add(a);
-          return g;
-        },
-        texte() {
-          const g = new THREE.Group();
-          const a = anneauPetit();
-          a.position.y = -0.1;
-          g.add(a);
-          const geo = new TextGeometry("digitalzdev", { font: police, size: 0.27, depth: 0.2, curveSegments: 10, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.02, bevelSegments: 4 });
-          geo.computeBoundingBox();
-          const bb = geo.boundingBox;
-          geo.translate(-bb.min.x, -(bb.max.y + bb.min.y) / 2, -0.1);
-          geo.rotateZ(-Math.PI / 2);
-          const m = new THREE.Mesh(geo, citron);
-          m.position.y = -0.2;
-          g.add(m);
-          return g;
-        }
-      };
-      const trousseau = new THREE.Group();
-      scene.add(trousseau);
-      const anneau = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.05, 16, 64), chrome);
-      trousseau.add(anneau);
-      const PAS = 0.28;
-      const NB = 30;
-      const LONGUEUR = PAS * (NB - 1);
-      const chaine = Array.from({ length: NB }, () => ({ pos: v(), prec: v() }));
-      const maillons = Array.from({ length: NB - 1 }, (_, i) => {
-        const m = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.028, 10, 28), chrome);
-        m.scale.set(1, 1.6, 1);
-        m.userData.alterne = i % 2;
-        trousseau.add(m);
-        return m;
-      });
-      const objets = [
-        { mesh: fabriquer.mousqueton(), pivot: v(-0.4, -0.18, 0.06), longueur: 0.75, rayon: 0.42, repos: 0.6 },
-        { mesh: fabriquer.logo(), pivot: v(-0.22, -0.36, 0.16), longueur: 0.78, rayon: 0.62, repos: 0.05 },
-        { mesh: fabriquer.usb(), pivot: v(0, -0.43, -0.1), longueur: 0.95, rayon: 0.45, repos: -0.2 },
-        { mesh: fabriquer.cle(), pivot: v(0.22, -0.36, 0.12), longueur: 1.05, rayon: 0.42, repos: -0.4 },
-        { mesh: fabriquer.texte(), pivot: v(0.4, -0.18, -0.06), longueur: 1.25, rayon: 0.34, repos: -0.15 }
-      ];
-      const pendules = objets.map((o) => {
-        trousseau.add(o.mesh);
-        return { pivot: o.pivot, pos: v(), prec: v(), longueur: o.longueur, rayon: o.rayon, lacet: o.repos, lacetV: 0, lacetRepos: o.repos };
-      });
-      let demiH = 1;
-      let demiL = 1;
-      let ancreX = 0;
-      let anneauY = 0;
-      let echelle = 1;
-      const redimensionner = () => {
-        const l = hote.clientWidth;
-        const h = hote.clientHeight;
-        rendu.setSize(l, h, false);
-        camera.aspect = l / h;
-        camera.updateProjectionMatrix();
-        demiH = Math.tan(camera.fov * Math.PI / 360) * camera.position.z;
-        demiL = demiH * camera.aspect;
-        const mobile = l < 768;
-        echelle = mobile ? 0.5 : 0.95;
-        ancreX = mobile ? demiL * 0.62 : demiL * 0.68;
-        anneauY = demiH * (1 - 2 * (mobile ? 0.2 : 0.14));
-        trousseau.scale.setScalar(echelle);
-      };
-      redimensionner();
-      window.addEventListener("resize", redimensionner);
-      const ancreFinale = () => v(ancreX / echelle, anneauY / echelle + LONGUEUR, 0);
-      const debut = performance.now();
-      const DELAI = reduit ? 0 : 350;
-      const CHUTE = 0.75;
-      const REMONTEE = 0.9;
-      const DEPASSE = -2.2;
-      const decalage = () => {
-        if (reduit) return 0;
-        const t = (performance.now() - debut - DELAI) / 1e3;
-        if (t <= 0) return 12;
-        if (t < CHUTE) {
-          const e2 = t / CHUTE;
-          return 12 + (DEPASSE - 12) * (e2 * e2 * (3 - 2 * e2));
-        }
-        const u = Math.min(1, (t - CHUTE) / REMONTEE);
-        const e = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
-        return DEPASSE * (1 - e);
-      };
-      const ancre = () => {
-        const f = ancreFinale();
-        return v(f.x, f.y + decalage(), f.z);
-      };
-      {
-        const a = ancre();
-        chaine.forEach((n, i) => {
-          n.pos = v(a.x, a.y - i * PAS, 0);
-          n.prec = { ...n.pos };
-        });
-        const c = chaine[NB - 1].pos;
-        pendules.forEach((p) => {
-          p.pos = v(c.x + p.pivot.x, c.y + p.pivot.y - p.longueur, c.z + p.pivot.z);
-          p.prec = { ...p.pos };
-        });
-      }
-      const souris = { x: 99, y: 99, vx: 0, vy: 0, actif: false };
-      let dernier = { x: 99, y: 99, t: performance.now() };
-      const bouger = (e) => {
-        const r = hote.getBoundingClientRect();
-        if (e.clientY < r.top || e.clientY > r.bottom) return;
-        const x = ((e.clientX - r.left) / r.width * 2 - 1) * demiL / echelle;
-        const y = -((e.clientY - r.top) / r.height * 2 - 1) * demiH / echelle;
-        const t = performance.now();
-        const dt = Math.max(8, t - dernier.t) / 1e3;
-        souris.vx = (x - dernier.x) / dt;
-        souris.vy = (y - dernier.y) / dt;
-        souris.x = x;
-        souris.y = y;
-        souris.actif = true;
-        dernier = { x, y, t };
-      };
-      window.addEventListener("pointermove", bouger, { passive: true });
-      const rayon = new THREE.Raycaster();
-      const ndc = new THREE.Vector2();
-      let saisi = -1;
-      const toucher = (e) => {
-        const r = hote.getBoundingClientRect();
-        ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-        rayon.setFromCamera(ndc, camera);
-        for (let i = 0; i < objets.length; i++)
-          if (rayon.intersectObject(objets[i].mesh, true).length) return i;
-        if (rayon.intersectObject(anneau).length) return objets.length;
-        return -1;
-      };
-      const appuyer = (e) => {
-        const i = toucher(e);
-        if (i < 0) return;
-        saisi = i;
-        bouger(e);
-        souris.vx = souris.vy = 0;
-        e.preventDefault();
-        document.documentElement.style.cursor = "grabbing";
-        document.body.style.userSelect = "none";
-      };
-      const relacher = () => {
-        if (saisi < 0) return;
-        saisi = -1;
-        document.documentElement.style.cursor = "";
-        document.body.style.userSelect = "";
-      };
-      const survoler = (e) => {
-        if (saisi >= 0 || e.pointerType !== "mouse") return;
-        document.documentElement.style.cursor = toucher(e) >= 0 ? "grab" : "";
-      };
-      const bloquerDefilement = (e) => {
-        if (saisi >= 0) e.preventDefault();
-      };
-      let doigtX = 0;
-      let doigtY = 0;
-      let elan = 0;
-      const debutDoigt = (e) => {
-        doigtX = e.touches[0].clientX;
-        doigtY = e.touches[0].clientY;
-      };
-      const glisser = (e) => {
-        if (saisi >= 0) return;
-        const t = e.touches[0];
-        const r = hote.getBoundingClientRect();
-        if (t.clientY < r.top || t.clientY > r.bottom) return;
-        const dx = t.clientX - doigtX;
-        const dy = t.clientY - doigtY;
-        doigtX = t.clientX;
-        doigtY = t.clientY;
-        if (Math.abs(dx) > Math.abs(dy)) elan += dx / r.width * 6;
-      };
-      const balayer = (e) => {
-        if (saisi >= 0 || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-        const r = hote.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > window.innerHeight) return;
-        elan -= e.deltaX / r.width * 7;
-      };
-      window.addEventListener("wheel", balayer, { passive: true });
-      window.addEventListener("touchstart", debutDoigt, { passive: true });
-      window.addEventListener("touchmove", glisser, { passive: true });
-      window.addEventListener("pointerdown", appuyer);
-      window.addEventListener("pointerup", relacher);
-      window.addEventListener("pointercancel", relacher);
-      window.addEventListener("pointermove", survoler, { passive: true });
-      window.addEventListener("touchmove", bloquerDefilement, { passive: false });
-      const GRAVITE = -14;
-      const AMORTI = 0.984;
-      const contraindre = (a, b, longueur, poidsA) => {
-        const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
-        const d = Math.hypot(dx, dy, dz) || 1e-6;
-        const k = (d - longueur) / d;
-        a.x += dx * k * poidsA;
-        a.y += dy * k * poidsA;
-        a.z += dz * k * poidsA;
-        b.x -= dx * k * (1 - poidsA);
-        b.y -= dy * k * (1 - poidsA);
-        b.z -= dz * k * (1 - poidsA);
-      };
-      const integrer = (n, dt, vent) => {
-        const vx = (n.pos.x - n.prec.x) * AMORTI;
-        const vy = (n.pos.y - n.prec.y) * AMORTI;
-        const vz = (n.pos.z - n.prec.z) * AMORTI;
-        n.prec = { ...n.pos };
-        n.pos.x += vx + vent * dt * dt;
-        n.pos.y += vy + GRAVITE * dt * dt;
-        n.pos.z += vz;
-      };
-      const pas = (dt, temps) => {
-        const vent = 0;
-        const a = ancre();
-        chaine[0].pos = a;
-        chaine[0].prec = { ...a };
-        for (let i = 1; i < NB; i++) integrer(chaine[i], dt, vent * 0.4);
-        pendules.forEach((p) => integrer(p, dt, vent));
-        if (souris.actif && saisi < 0) {
-          pendules.forEach((p) => {
-            const d = Math.hypot(p.pos.x - souris.x, p.pos.y - souris.y);
-            const portee = p.rayon + 0.55;
-            if (d < portee) {
-              const f = (1 - d / portee) * dt * 0.9;
-              p.prec.x -= souris.vx * f * 0.06;
-              p.prec.y -= souris.vy * f * 0.04;
-              p.prec.z -= (Math.abs(souris.vx) + Math.abs(souris.vy)) * f * 0.02 * (p.pivot.z >= 0 ? 1 : -1);
-              p.lacetV += souris.vx * f * 1.3;
-            }
-          });
-          souris.vx *= 0.85;
-          souris.vy *= 0.85;
-        }
-        if (elan !== 0) {
-          const e = elan * 0.25;
-          pendules.forEach((p, i) => {
-            p.prec.x -= e * dt * (1 + i * 0.12);
-            p.lacetV += e * 4 * dt;
-          });
-          const c = chaine[NB - 1];
-          c.prec.x -= e * dt * 0.6;
-          elan -= e;
-          if (Math.abs(elan) < 1e-3) elan = 0;
-        }
-        if (saisi >= 0) {
-          const cible = saisi < pendules.length ? pendules[saisi].pos : chaine[NB - 1].pos;
-          cible.x += (souris.x - cible.x) * 0.35;
-          cible.y += (souris.y - cible.y) * 0.35;
-          if (saisi < pendules.length) pendules[saisi].lacetV += souris.vx * dt * 0.8;
-        }
-        for (let it = 0; it < 14; it++) {
-          for (let i = 0; i < NB - 1; i++) contraindre(chaine[i].pos, chaine[i + 1].pos, PAS, i === 0 ? 0 : 0.5);
-          const c = chaine[NB - 1].pos;
-          pendules.forEach((p, i) => {
-            const piv = v(c.x + p.pivot.x, c.y + p.pivot.y, c.z + p.pivot.z);
-            const avant2 = { ...piv };
-            const tenu = i === saisi;
-            contraindre(piv, p.pos, p.longueur, tenu ? 0.95 : 0.12);
-            const k = tenu ? 1 : 0.6;
-            c.x += (piv.x - avant2.x) * k;
-            c.y += (piv.y - avant2.y) * k;
-            c.z += (piv.z - avant2.z) * k;
-          });
-          for (let i = 0; i < pendules.length; i++)
-            for (let j = i + 1; j < pendules.length; j++) {
-              const A = pendules[i].pos, B = pendules[j].pos;
-              const min = (pendules[i].rayon + pendules[j].rayon) * 0.95;
-              const dx = B.x - A.x, dy = B.y - A.y, dz = B.z - A.z;
-              const d = Math.hypot(dx, dy, dz) || 1e-6;
-              if (d < min) {
-                const k = (min - d) / d * 0.5;
-                A.x -= dx * k;
-                A.y -= dy * k;
-                A.z -= dz * k;
-                B.x += dx * k;
-                B.y += dy * k;
-                B.z += dz * k;
-              }
-            }
-        }
-        for (let i = 1; i < NB; i++) {
-          const a2 = chaine[i - 1].pos, b = chaine[i].pos;
-          const dx = b.x - a2.x, dy = b.y - a2.y, dz = b.z - a2.z;
-          const d = Math.hypot(dx, dy, dz);
-          if (d > PAS) {
-            const k = PAS / d;
-            const nx = a2.x + dx * k, ny = a2.y + dy * k, nz = a2.z + dz * k;
-            const n = chaine[i];
-            n.prec.x += nx - b.x;
-            n.prec.y += ny - b.y;
-            n.prec.z += nz - b.z;
-            b.x = nx;
-            b.y = ny;
-            b.z = nz;
-          }
-        }
-        pendules.forEach((p) => {
-          p.lacetV += -(p.lacet - p.lacetRepos) * 6 * dt;
-          p.lacetV *= 0.97;
-          p.lacet += p.lacetV * dt;
-        });
-      };
-      const haut = new THREE.Vector3(0, 1, 0);
-      const bas = new THREE.Vector3(0, -1, 0);
-      const dir = new THREE.Vector3();
-      const qA = new THREE.Quaternion();
-      const qB = new THREE.Quaternion();
-      const afficher = () => {
-        for (let i = 0; i < NB - 1; i++) {
-          const a = chaine[i].pos, b = chaine[i + 1].pos;
-          const m = maillons[i];
-          m.position.set((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2);
-          dir.set(b.x - a.x, b.y - a.y, b.z - a.z).normalize();
-          qA.setFromUnitVectors(haut, dir.multiplyScalar(-1));
-          qB.setFromAxisAngle(haut, m.userData.alterne ? Math.PI / 2 : 0);
-          m.quaternion.copy(qA).multiply(qB);
-        }
-        const c = chaine[NB - 1].pos;
-        anneau.position.set(c.x, c.y - 0.1, c.z);
-        anneau.rotation.set(0, 0.5, 0);
-        pendules.forEach((p, i) => {
-          const m = objets[i].mesh;
-          const piv = v(c.x + p.pivot.x, c.y + p.pivot.y, c.z + p.pivot.z);
-          m.position.set(piv.x, piv.y, piv.z);
-          dir.set(p.pos.x - piv.x, p.pos.y - piv.y, p.pos.z - piv.z).normalize();
-          qA.setFromUnitVectors(bas, dir);
-          qB.setFromAxisAngle(haut, p.lacet);
-          m.quaternion.copy(qA).multiply(qB);
-        });
-      };
-      let visible = true;
-      const obs = new IntersectionObserver(([e]) => visible = e.isIntersecting);
-      obs.observe(hote);
-      let raf = 0;
-      let avant = performance.now();
-      let reste = 0;
-      const PAS_FIXE = 1 / 120;
-      const boucle = (t) => {
-        raf = requestAnimationFrame(boucle);
-        const ecoule = Math.min(0.05, (t - avant) / 1e3);
-        avant = t;
-        if (!visible || document.hidden) return;
-        reste += ecoule;
-        while (reste >= PAS_FIXE) {
-          pas(PAS_FIXE);
-          reste -= PAS_FIXE;
-        }
-        afficher();
-        rendu.render(scene, camera);
-      };
-      if (reduit) {
-        for (let i = 0; i < 600; i++) pas(PAS_FIXE);
-        afficher();
-        rendu.render(scene, camera);
-      } else {
-        raf = requestAnimationFrame(boucle);
-      }
-      nettoyer = () => {
-        cancelAnimationFrame(raf);
-        obs.disconnect();
-        window.removeEventListener("resize", redimensionner);
-        window.removeEventListener("pointermove", bouger);
-        window.removeEventListener("pointerdown", appuyer);
-        window.removeEventListener("pointerup", relacher);
-        window.removeEventListener("pointercancel", relacher);
-        window.removeEventListener("pointermove", survoler);
-        window.removeEventListener("touchmove", bloquerDefilement);
-        window.removeEventListener("touchstart", debutDoigt);
-        window.removeEventListener("wheel", balayer);
-        window.removeEventListener("touchmove", glisser);
-        document.documentElement.style.cursor = "";
-        scene.traverse((o) => {
-          const m = o;
-          if (m.isMesh) m.geometry.dispose();
-        });
-        [chrome, bleu, citron, noir, sombre, led].forEach((m) => m.dispose());
-        pmrem.dispose();
-        rendu.dispose();
-        rendu.domElement.remove();
-      };
-    })();
-    return () => {
-      arret = true;
-      nettoyer();
-    };
-  }, []);
-  return /* @__PURE__ */ jsx("div", { ref: hoteRef, "aria-hidden": true, className });
-}
-const EASE$6 = [0.22, 1, 0.36, 1];
-function Ligne$1({ children, delai }) {
+const EASE$f = [0.22, 1, 0.36, 1];
+function Ligne$2({ children, delai }) {
   return /* @__PURE__ */ jsx("span", { className: "-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]", children: /* @__PURE__ */ jsx(
     motion.span,
     {
       className: "block",
       initial: { y: "110%" },
       animate: { y: 0 },
-      transition: { duration: 1, delay: delai, ease: EASE$6 },
+      transition: { duration: 1, delay: delai, ease: EASE$f },
       children
     }
   ) });
@@ -1457,12 +953,11 @@ function HeroStudio() {
             className: "relative z-10 flex h-full flex-col items-center justify-center px-5 text-center",
             style: { opacity: titreOpacite, y: titreY, fontFamily: "'Inter Tight', system-ui, sans-serif" },
             children: [
-              /* @__PURE__ */ jsx(Trousseau, { className: "pointer-events-none absolute inset-0 -z-10" }),
               /* @__PURE__ */ jsxs("h1", { className: "text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]", children: [
-                /* @__PURE__ */ jsx(Ligne$1, { delai: 0.25, children: "Créons un site" }),
-                /* @__PURE__ */ jsxs(Ligne$1, { delai: 0.35, children: [
-                  "à la hauteur de vos ",
-                  /* @__PURE__ */ jsx("span", { className: "text-pop", children: "projets." })
+                /* @__PURE__ */ jsx(Ligne$2, { delai: 0.25, children: "Créons un site" }),
+                /* @__PURE__ */ jsxs(Ligne$2, { delai: 0.35, children: [
+                  "à la hauteur de votre ",
+                  /* @__PURE__ */ jsx("span", { className: "text-pop", children: "cabinet." })
                 ] })
               ] }),
               /* @__PURE__ */ jsx(
@@ -1471,7 +966,7 @@ function HeroStudio() {
                   className: "mt-8 md:mt-10",
                   initial: { opacity: 0, y: 16 },
                   animate: { opacity: 1, y: 0 },
-                  transition: { duration: 0.8, delay: 0.7, ease: EASE$6 },
+                  transition: { duration: 0.8, delay: 0.7, ease: EASE$f },
                   children: /* @__PURE__ */ jsx(
                     Link,
                     {
@@ -1500,14 +995,14 @@ function HeroStudio() {
     }
   ) });
 }
-const PHRASE = [
+const PHRASE$1 = [
   { texte: "Pas seulement esthétique.", accent: false },
   { texte: "Pensé pour le référencement.", accent: true }
 ];
-const MOTS = PHRASE.flatMap(
+const MOTS$1 = PHRASE$1.flatMap(
   (p) => p.texte.split(" ").map((mot) => ({ mot, accent: p.accent }))
 );
-function Mot({
+function Mot$1({
   mot,
   accent,
   p,
@@ -1523,7 +1018,7 @@ function Mot({
 function ManifesteStudio() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.6"] });
-  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS.map((m, i) => /* @__PURE__ */ jsx(Mot, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS.length }, `${m.mot}-${i}`)) }) }) });
+  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS$1.map((m, i) => /* @__PURE__ */ jsx(Mot$1, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS$1.length }, `${m.mot}-${i}`)) }) }) });
 }
 function CarteProjet({ projet, className = "" }) {
   return /* @__PURE__ */ jsxs(
@@ -1817,34 +1312,34 @@ function Magnetic({ children, className, strength = 0.35 }) {
   );
 }
 const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
-  "Bonjour Digitalz Dev, je suis architecte et j'aimerais vous parler du site de mon agence : "
+  "Bonjour Digitalz Dev, je suis avocat et j'aimerais vous parler du site de mon cabinet : "
 )}`;
-const SERVICES$1 = [
+const SERVICES$2 = [
   {
-    title: "Site d'agence d'architecture",
-    lead: "Pour présenter votre agence et déclencher la prise de contact.",
-    body: "Nous concevons un site taillé pour votre agence plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise, « architecte maison contemporaine », « extension », « rénovation », et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
+    title: "Site de cabinet d'avocats",
+    lead: "Pour présenter votre cabinet et déclencher la prise de contact.",
+    body: "Nous concevons un site taillé pour votre cabinet plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise, « avocat divorce », « avocat licenciement », « avocat droit des affaires », et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
     points: [
       "Maquettes validées avant la première ligne de code",
-      "Pages par type de projet et par ville, rédigées pour Google",
+      "Une page par domaine d'intervention et par ville",
       "Formulaire de contact qui qualifie les demandes",
       "Formation à la prise en main, vous restez autonome"
     ]
   },
   {
-    title: "Portfolio de réalisations",
-    lead: "Pour que vos projets parlent avant vous.",
-    body: "Vos réalisations montrées en grand, sans perte de qualité et sans ralentir le site : galeries plein écran, fiches projet avec programme, surface, lieu et photos avant-après. Vous ajoutez vous-même chaque nouveau chantier livré.",
+    title: "Prise de rendez-vous en ligne",
+    lead: "Pour que le premier rendez-vous se prenne sans un appel.",
+    body: "Le visiteur choisit son domaine, décrit sa situation en quelques questions et réserve un créneau, au cabinet ou en visioconférence. Vous recevez des demandes déjà qualifiées, et vous gardez la main sur vos disponibilités.",
     points: [
-      "Galeries haute définition, chargement rapide",
-      "Fiche par projet : programme, surface, lieu, année",
-      "Filtres par type : neuf, extension, rénovation, intérieur",
-      "Mise en avant des prix et publications"
+      "Agenda synchronisé avec votre calendrier",
+      "Consultation au cabinet ou en visioconférence",
+      "Questions de pré-qualification par domaine",
+      "Paiement en ligne de la consultation, si vous le souhaitez"
     ]
   },
   {
     title: "Refonte de site internet",
-    lead: "Pour un site d'agence qui ne montre plus ce que vous faites.",
+    lead: "Pour un site de cabinet qui ne dit plus ce que vous faites.",
     body: "Nous partons de l'existant : ce qui fonctionne, ce qui coince, ce que disent vos statistiques. La refonte préserve votre référencement acquis grâce à un plan de redirections complet, et corrige ce qui vous coûtait des visiteurs, notamment la lenteur et le confort de lecture sur mobile.",
     points: [
       "Audit du site actuel, contenus et performances",
@@ -1854,19 +1349,19 @@ const SERVICES$1 = [
     ]
   },
   {
-    title: "Espace client maîtres d'ouvrage",
-    lead: "Pour suivre vos chantiers sans multiplier les e-mails.",
-    body: "Un espace privé où vos maîtres d'ouvrage retrouvent plans, comptes rendus de chantier, photos d'avancement et documents à signer. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre agence et prestataire technique.",
+    title: "Espace client sécurisé",
+    lead: "Pour échanger les pièces d'un dossier sans multiplier les e-mails.",
+    body: "Un espace privé où vos clients déposent leurs pièces, suivent l'avancement de leur dossier et retrouvent conventions d'honoraires et documents à signer. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre cabinet et prestataire technique.",
     points: [
-      "Plans et documents partagés par projet",
-      "Comptes rendus et photos d'avancement",
-      "Validation des étapes par le client",
-      "Accès sécurisé, sur ordinateur et mobile"
+      "Dépôt et partage des pièces par dossier",
+      "Suivi des étapes et des échéances",
+      "Convention d'honoraires et documents à signer",
+      "Accès sécurisé, données hébergées en France"
     ]
   },
   {
     title: "Meta Ads et Google Ads",
-    lead: "Pour toucher les particuliers qui cherchent un architecte maintenant.",
+    lead: "Pour toucher les particuliers et les entreprises qui cherchent un avocat maintenant.",
     body: "Un site sans visiteurs ne sert à rien. Nous mettons en place et pilotons vos campagnes : structure des comptes, audiences, rédaction et création des annonces, arbitrages de budget. Les conversions sont mesurées, pour savoir ce qui rapporte et ce qui coûte.",
     points: [
       "Création et structuration des comptes publicitaires",
@@ -1877,7 +1372,7 @@ const SERVICES$1 = [
   },
   {
     title: "Référencement naturel",
-    lead: "Pour être trouvé sur « architecte » + votre ville, pas seulement sur votre nom.",
+    lead: "Pour être trouvé sur « avocat » + votre domaine + votre ville, pas seulement sur votre nom.",
     body: "Le référencement se construit dès la conception : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus qui répondent aux questions réelles de vos clients. Nous livrons un site déjà prêt, puis nous suivons les positions.",
     points: [
       "Architecture et balisage optimisés dès le départ",
@@ -1887,7 +1382,7 @@ const SERVICES$1 = [
     ]
   }
 ];
-const DEPART = [
+const DEPART$1 = [
   { x: 55, y: 30, r: -9 },
   { x: 0, y: 10, r: 3 },
   { x: -55, y: 35, r: 8 },
@@ -1895,8 +1390,8 @@ const DEPART = [
   { x: 0, y: -60, r: -5 },
   { x: -45, y: -35, r: -8 }
 ];
-const FONDS = ["bg-[#efeff2]", "bg-[#e4ebfd]", "bg-[#f6fbd6]", "bg-[#e4ebfd]", "bg-[#f6fbd6]", "bg-[#efeff2]"];
-function Carte({
+const FONDS$1 = ["bg-[#efeff2]", "bg-[#e4ebfd]", "bg-[#f6fbd6]", "bg-[#e4ebfd]", "bg-[#f6fbd6]", "bg-[#efeff2]"];
+function Carte$1({
   service,
   i,
   progression,
@@ -1905,7 +1400,7 @@ function Carte({
   const carteRef = useRef(null);
   const { scrollYProgress: propre } = useScroll({ target: carteRef, offset: ["start 1", "start 0.5"] });
   const p = mobile ? propre : progression;
-  const d = mobile ? { x: i % 2 === 0 ? 28 : -28, y: 12, r: i % 2 === 0 ? 7 : -7 } : DEPART[i % DEPART.length];
+  const d = mobile ? { x: i % 2 === 0 ? 28 : -28, y: 12, r: i % 2 === 0 ? 7 : -7 } : DEPART$1[i % DEPART$1.length];
   const x = useTransform(p, [0, 1], [`${d.x}%`, "0%"]);
   const y = useTransform(p, [0, 1], [`${d.y}%`, "0%"]);
   const rotate = useTransform(p, [0, 1], [d.r, 0]);
@@ -1914,7 +1409,7 @@ function Carte({
     {
       ref: carteRef,
       style: { x, y, rotate, zIndex: 10 - i },
-      className: `relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % FONDS.length]}`,
+      className: `relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS$1[i % FONDS$1.length]}`,
       children: [
         /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "text-5xl leading-none text-text-muted/50", children: "❞" }),
         /* @__PURE__ */ jsx("h3", { className: "mt-4 text-2xl font-normal leading-tight tracking-tight text-text-primary md:text-3xl", children: service.title }),
@@ -1942,12 +1437,12 @@ function ServicesStudio() {
   return /* @__PURE__ */ jsx("section", { id: "services", className: "overflow-x-clip bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
     /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
       "Une agence web qui conçoit, développe ",
-      /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "et fait connaître votre agence d'architecture." })
+      /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "et fait connaître votre cabinet d'avocats." })
     ] }),
-    /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Site d'agence, portfolio de réalisations, refonte, référencement local et campagnes publicitaires, pour les architectes. Un site se juge sur les projets qu'il vous apporte une fois en ligne, pas sur sa maquette." }),
-    /* @__PURE__ */ jsx("div", { ref: grilleRef, className: "mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3", children: SERVICES$1.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, progression: scrollYProgress, mobile }, s.title)) }),
+    /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Site de cabinet, prise de rendez-vous en ligne, refonte, référencement local et campagnes publicitaires, pour les avocats. Un site se juge sur les dossiers qu'il vous apporte une fois en ligne, pas sur sa maquette." }),
+    /* @__PURE__ */ jsx("div", { ref: grilleRef, className: "mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3", children: SERVICES$2.map((s, i) => /* @__PURE__ */ jsx(Carte$1, { service: s, i, progression: scrollYProgress, mobile }, s.title)) }),
     /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12", children: [
-      /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Votre agence n'a pas encore de site, ou votre site ne montre pas vos réalisations ? Décrivez-nous votre agence directement sur WhatsApp." }),
+      /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Votre cabinet n'a pas encore de site, ou votre site ne vous apporte aucun client ? Décrivez-nous votre cabinet directement sur WhatsApp." }),
       /* @__PURE__ */ jsx(
         "a",
         {
@@ -2095,7 +1590,7 @@ function CalendlyModal({ open, onClose }) {
     )
   ] }) });
 }
-const LEVIERS = [
+const LEVIERS$1 = [
   {
     titre: "Référencement naturel",
     accroche: "Être trouvé sur ce que cherchent vos clients.",
@@ -2137,19 +1632,19 @@ const LEVIERS = [
     ]
   }
 ];
-const REQUETE = "architecte maison contemporaine lyon";
+const REQUETE = "avocat droit des affaires lyon";
 const NOTE_DEBUT = 3;
 const NOTE_FIN = 5;
 const CONCURRENTS = [
-  { titre: "Atelier Durand Architectes · Lyon", url: "atelier-durand.fr", texte: "Maisons individuelles, extensions et rénovations. Permis de construire." },
-  { titre: "Architecte Lyon : annuaire des agences", url: "annuaire-architectes.com", texte: "Comparez 310 architectes à Lyon et dans le Rhône. Devis gratuits." },
-  { titre: "Lefèvre Architecture · Rénovation", url: "lefevre-architecture.com", texte: "Réhabilitation, surélévation et aménagement de combles." },
-  { titre: "Faire construire : trouver un architecte", url: "forum-construire.fr", texte: "Discussion · 52 réponses · Quel architecte pour une maison contemporaine ?" }
+  { titre: "Cabinet Durand & Associés · Avocats Lyon", url: "durand-avocats.fr", texte: "Conseil et contentieux des entreprises. Prise de rendez-vous par téléphone." },
+  { titre: "Avocat affaires Lyon : annuaire des cabinets", url: "annuaire-juridique.com", texte: "Comparez 240 avocats en droit des affaires à Lyon et dans le Rhône." },
+  { titre: "Lefèvre Avocats · Droit commercial", url: "lefevre-avocats.com", texte: "Création de société, baux commerciaux, recouvrement de créances." },
+  { titre: "Droit des affaires : trouver un avocat", url: "forum-entrepreneurs.fr", texte: "Discussion · 38 réponses · Quel avocat choisir pour une levée de fonds ?" }
 ];
 const CLIENT = {
-  titre: "Martin Architectes · Maisons contemporaines à Lyon",
-  url: "martin-architectes.fr",
-  texte: "De l'esquisse au chantier : maisons neuves, extensions, rénovations. Premier rendez-vous sous 48 h."
+  titre: "Martin Avocats · Droit des affaires à Lyon",
+  url: "martin-avocats.fr",
+  texte: "Cabinet dédié aux entreprises : création, contrats, levées de fonds. Premier rendez-vous sous 48 h."
 };
 function useHauteurLigne() {
   const [h, setH] = useState(84);
@@ -2178,7 +1673,7 @@ function LogoGoogle$1({ className = "" }) {
     /* @__PURE__ */ jsx("span", { className: "text-[#ea4335]", children: "e" })
   ] });
 }
-function Ligne({
+function Ligne$1({
   i,
   position,
   r,
@@ -2248,8 +1743,8 @@ function Eclat({ cle }) {
 function useEclat(progression, seuil) {
   const [cle, setCle] = useState(0);
   const [visible, setVisible] = useState(false);
-  useMotionValueEvent(progression, "change", (v2) => {
-    const dedans = v2 >= seuil;
+  useMotionValueEvent(progression, "change", (v) => {
+    const dedans = v >= seuil;
     if (dedans && !visible) setCle((c) => c + 1);
     if (dedans !== visible) setVisible(dedans);
   });
@@ -2311,17 +1806,17 @@ function RechercheGoogle() {
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
   const texteRequete = useTransform(
     p,
-    (v2) => REQUETE.slice(0, Math.round(Math.min(1, Math.max(0, v2 / 0.18)) * REQUETE.length))
+    (v) => REQUETE.slice(0, Math.round(Math.min(1, Math.max(0, v / 0.18)) * REQUETE.length))
   );
   const t = useTransform(p, [0.3, 0.8], [0, 1], { clamp: true });
   const fiche = {
-    note: useTransform(t, (v2) => (NOTE_DEBUT + v2 * (NOTE_FIN - NOTE_DEBUT)).toFixed(1).replace(".", ",")),
-    avis: useTransform(t, (v2) => `(${Math.round(12 + v2 * 136)})`),
-    remplissage: useTransform(t, (v2) => `inset(0 ${100 - (NOTE_DEBUT + v2 * (NOTE_FIN - NOTE_DEBUT)) * 20}% 0 0)`)
+    note: useTransform(t, (v) => (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)).toFixed(1).replace(".", ",")),
+    avis: useTransform(t, (v) => `(${Math.round(12 + v * 136)})`),
+    remplissage: useTransform(t, (v) => `inset(0 ${100 - (NOTE_DEBUT + v * (NOTE_FIN - NOTE_DEBUT)) * 20}% 0 0)`)
   };
   const position = useTransform(p, [0.2, 0.75], [CONCURRENTS.length, 0], { clamp: true });
   const H = useHauteurLigne();
-  const yClient = useTransform(position, (v2) => v2 * H);
+  const yClient = useTransform(position, (v) => v * H);
   const resultatsOpacite = useTransform(p, [0.14, 0.22], [0, 1]);
   const sponsorise = useTransform(p, [0.78, 0.86], [0, 1]);
   return /* @__PURE__ */ jsx("section", { ref, className: "relative h-[240vh] bg-surface md:h-[280vh]", children: /* @__PURE__ */ jsxs("div", { className: "sticky top-0 flex h-[100svh] flex-col items-center justify-start gap-4 overflow-hidden px-4 pt-16 md:gap-6 md:px-10 md:pt-28", children: [
@@ -2357,7 +1852,7 @@ function RechercheGoogle() {
         ] }),
         /* @__PURE__ */ jsxs(motion.div, { className: "mt-5 grid gap-6 md:grid-cols-[1fr_15rem]", style: { opacity: resultatsOpacite }, children: [
           /* @__PURE__ */ jsxs("div", { className: "relative", style: { height: (CONCURRENTS.length + 1) * H }, children: [
-            CONCURRENTS.map((r, i) => /* @__PURE__ */ jsx(Ligne, { i, position, r, h: H }, r.url)),
+            CONCURRENTS.map((r, i) => /* @__PURE__ */ jsx(Ligne$1, { i, position, r, h: H }, r.url)),
             /* @__PURE__ */ jsx(motion.div, { className: "absolute inset-x-0 top-0 z-10 px-1", style: { y: yClient }, children: /* @__PURE__ */ jsxs("div", { className: "relative", children: [
               /* @__PURE__ */ jsx(
                 motion.span,
@@ -2372,13 +1867,13 @@ function RechercheGoogle() {
           ] }),
           /* @__PURE__ */ jsxs("div", { className: "hidden self-start rounded-xl p-4 ring-1 ring-black/10 md:block", children: [
             /* @__PURE__ */ jsx("div", { className: "h-24 rounded-lg bg-gradient-to-br from-[#e8eaed] to-[#c9ccd1]" }),
-            /* @__PURE__ */ jsx("p", { className: "mt-3 text-[17px] text-[#202124]", children: "Martin Architectes" }),
+            /* @__PURE__ */ jsx("p", { className: "mt-3 text-[17px] text-[#202124]", children: "Martin Avocats" }),
             /* @__PURE__ */ jsxs("p", { className: "mt-0.5 flex items-center gap-1.5 text-sm text-[#4d5156]", children: [
               /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums text-[#202124]", children: fiche.note }),
               /* @__PURE__ */ jsx(Etoiles$1, { remplissage: fiche.remplissage }),
               /* @__PURE__ */ jsx(motion.span, { className: "tabular-nums", children: fiche.avis })
             ] }),
-            /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-[#4d5156]", children: "Architecte · Lyon 6e · Ouvert" }),
+            /* @__PURE__ */ jsx("p", { className: "mt-1 text-xs text-[#4d5156]", children: "Avocat · Lyon 2e · Ouvert" }),
             /* @__PURE__ */ jsxs("div", { className: "mt-3 grid grid-cols-3 gap-1.5 text-center text-[11px] text-[#1a73e8]", children: [
               /* @__PURE__ */ jsx("span", { className: "rounded-full py-1.5 ring-1 ring-black/10", children: "Itinéraire" }),
               /* @__PURE__ */ jsx("span", { className: "rounded-full py-1.5 ring-1 ring-black/10", children: "Site" }),
@@ -2390,9 +1885,9 @@ function RechercheGoogle() {
     ] })
   ] }) });
 }
-const EASE$5 = [0.22, 1, 0.36, 1];
-const LARGEURS = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
-const SURVOL = [
+const EASE$e = [0.22, 1, 0.36, 1];
+const LARGEURS$1 = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
+const SURVOL$1 = [
   { carte: "[@media(hover:hover)]:hover:bg-[#1d1d1f]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
   { carte: "[@media(hover:hover)]:hover:bg-[#6e7177]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
   { carte: "[@media(hover:hover)]:hover:bg-pop", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
@@ -2401,25 +1896,25 @@ const SURVOL = [
 function AcquisitionStudio() {
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx("div", { id: "acquisition", children: /* @__PURE__ */ jsx(RechercheGoogle, {}) }),
-    /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-8 pt-16 md:px-10 md:pb-10 md:pt-8", children: /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("div", { className: "grid gap-4 md:grid-cols-6", children: LEVIERS.map((levier, i) => /* @__PURE__ */ jsxs(
+    /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-8 pt-16 md:px-10 md:pb-10 md:pt-8", children: /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("div", { className: "grid gap-4 md:grid-cols-6", children: LEVIERS$1.map((levier, i) => /* @__PURE__ */ jsxs(
       motion.article,
       {
-        className: `group flex flex-col justify-between rounded-[1.75rem] bg-surface-card p-7 transition-colors duration-500 md:min-h-[24rem] md:p-10 ${SURVOL[i].carte} ${LARGEURS[i]}`,
+        className: `group flex flex-col justify-between rounded-[1.75rem] bg-surface-card p-7 transition-colors duration-500 md:min-h-[24rem] md:p-10 ${SURVOL$1[i].carte} ${LARGEURS$1[i]}`,
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$5 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$e },
         children: [
           /* @__PURE__ */ jsxs("div", { children: [
-            /* @__PURE__ */ jsx("p", { className: `text-sm font-medium text-accent transition-colors duration-500 ${SURVOL[i].texte}`, children: levier.titre }),
-            /* @__PURE__ */ jsx("h3", { className: `mt-4 text-2xl font-normal leading-[1.05] tracking-tight text-text-primary transition-colors duration-500 md:text-3xl ${SURVOL[i].texte}`, children: levier.accroche })
+            /* @__PURE__ */ jsx("p", { className: `text-sm font-medium text-accent transition-colors duration-500 ${SURVOL$1[i].texte}`, children: levier.titre }),
+            /* @__PURE__ */ jsx("h3", { className: `mt-4 text-2xl font-normal leading-[1.05] tracking-tight text-text-primary transition-colors duration-500 md:text-3xl ${SURVOL$1[i].texte}`, children: levier.accroche })
           ] }),
           /* @__PURE__ */ jsx("ul", { className: "mt-8 space-y-2", children: levier.points.map((point) => /* @__PURE__ */ jsxs(
             "li",
             {
-              className: `flex gap-3 text-[15px] font-medium text-text-secondary transition-colors duration-500 ${SURVOL[i].texte}`,
+              className: `flex gap-3 text-[15px] font-medium text-text-secondary transition-colors duration-500 ${SURVOL$1[i].texte}`,
               children: [
-                /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: `mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pop transition-colors duration-500 ${SURVOL[i].puce}` }),
+                /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: `mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pop transition-colors duration-500 ${SURVOL$1[i].puce}` }),
                 point
               ]
             },
@@ -2450,29 +1945,29 @@ const MEMBERS = [
 ];
 const FACTS = [
   { value: "5", label: "projets en ligne" },
-  { value: "3", label: "agences d'architecture" },
+  { value: "1", label: "cabinet d'avocats d'affaires" },
   { value: "2", label: "métiers réunis" }
 ];
-const SERVICES = [
-  { title: "Conception et développement", body: "Sites d'agences d'architecture, portfolios de réalisations et espaces client. Du cadrage à la mise en ligne." },
+const SERVICES$1 = [
+  { title: "Conception et développement", body: "Sites de cabinets d'avocats, prise de rendez-vous en ligne et espaces client. Du cadrage à la mise en ligne." },
   { title: "Meta Ads et Google Ads", body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
   { title: "Mesure et conversions", body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." }
 ];
-const FONDATEUR = MEMBERS[0];
-const DISCIPLINES_EQUIPE = [
+const FONDATEUR$1 = MEMBERS[0];
+const DISCIPLINES_EQUIPE$1 = [
   "Direction artistique",
   "UX / UI",
-  "Valorisation de portfolio",
+  "Communication des avocats",
   "Meta Ads",
   "Google Ads",
   "Tracking & conversions",
   "Gestion de projet"
 ];
-const PHOTOS = [
+const PHOTOS$1 = [
   { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[28rem]" },
   { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "hidden md:block md:col-span-5 md:h-[28rem]" }
 ];
-const EASE$4 = [0.22, 1, 0.36, 1];
+const EASE$d = [0.22, 1, 0.36, 1];
 function Chiffre({ valeur }) {
   const ref = useRef(null);
   const vu = useInView(ref, { once: true, margin: "-60px" });
@@ -2501,14 +1996,14 @@ function EquipeStudio() {
       ] }) }),
       /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5", children: "Pas de chaîne d'intermédiaires : vous parlez directement à l'équipe qui conçoit et qui développe votre site. Et le travail ne s'arrête pas à la mise en ligne : nous mettons aussi en place et pilotons vos campagnes Meta Ads et Google Ads." })
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "mt-12 grid gap-4 md:mt-16 md:grid-cols-12", children: PHOTOS.map((photo, i) => /* @__PURE__ */ jsx(
+    /* @__PURE__ */ jsx("div", { className: "mt-12 grid gap-4 md:mt-16 md:grid-cols-12", children: PHOTOS$1.map((photo, i) => /* @__PURE__ */ jsx(
       motion.figure,
       {
         className: `overflow-hidden rounded-[1.75rem] bg-surface-card ${photo.classe}`,
         initial: { opacity: 0, y: 40 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$4 },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$d },
         children: /* @__PURE__ */ jsx(
           "img",
           {
@@ -2530,24 +2025,24 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, ease: EASE$4 },
+          transition: { duration: 0.8, ease: EASE$d },
           children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
-              /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: FONDATEUR.initials }),
+              /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-citron text-xl font-normal text-[#1d1d1f]", children: FONDATEUR$1.initials }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight text-text-primary md:text-3xl", children: FONDATEUR.name }),
+                /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight text-text-primary md:text-3xl", children: FONDATEUR$1.name }),
                 /* @__PURE__ */ jsxs("p", { className: "text-sm font-medium text-accent", children: [
                   "Fondateur · ",
-                  FONDATEUR.role
+                  FONDATEUR$1.role
                 ] })
               ] })
             ] }),
-            /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-text-secondary", children: FONDATEUR.pitch }),
-            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: FONDATEUR.disciplines.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-surface-light px-3 py-1.5 text-xs font-medium text-text-secondary", children: d }, d)) }),
+            /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-text-secondary", children: FONDATEUR$1.pitch }),
+            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: FONDATEUR$1.disciplines.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-surface-light px-3 py-1.5 text-xs font-medium text-text-secondary", children: d }, d)) }),
             /* @__PURE__ */ jsx(
               "a",
               {
-                href: FONDATEUR.linkedin,
+                href: FONDATEUR$1.linkedin,
                 target: "_blank",
                 rel: "noopener noreferrer",
                 className: "mt-6 inline-flex min-h-[44px] w-fit items-center text-sm font-medium text-text-primary transition-colors hover:text-accent",
@@ -2564,24 +2059,24 @@ function EquipeStudio() {
           initial: { opacity: 0, y: 40 },
           whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: "-60px" },
-          transition: { duration: 0.8, delay: 0.1, ease: EASE$4 },
+          transition: { duration: 0.8, delay: 0.1, ease: EASE$d },
           children: [
             /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight md:text-3xl", children: "L'équipe" }),
             /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-white/75", children: "Direction de projet, design et marketing" }),
             /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-white/85", children: "Autour du développement, une équipe cadre votre besoin, dessine le parcours, pilote le projet jusqu'à la livraison, puis fait vivre le site une fois en ligne : campagnes Meta Ads et Google Ads, suivi des conversions, améliorations continues." }),
-            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: DISCIPLINES_EQUIPE.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white", children: d }, d)) })
+            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: DISCIPLINES_EQUIPE$1.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white", children: d }, d)) })
           ]
         }
       )
     ] }),
-    /* @__PURE__ */ jsx("div", { className: "mt-4 grid gap-4 md:grid-cols-3", children: SERVICES.map((r, i) => /* @__PURE__ */ jsxs(
+    /* @__PURE__ */ jsx("div", { className: "mt-4 grid gap-4 md:grid-cols-3", children: SERVICES$1.map((r, i) => /* @__PURE__ */ jsxs(
       motion.div,
       {
         className: "rounded-[1.75rem] bg-surface-card p-7",
         initial: { opacity: 0, y: 30 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-60px" },
-        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$4 },
+        transition: { duration: 0.7, delay: i * 0.08, ease: EASE$d },
         children: [
           /* @__PURE__ */ jsx("h3", { className: "text-lg font-normal text-text-primary", children: r.title }),
           /* @__PURE__ */ jsx("p", { className: "mt-2 text-sm font-medium leading-relaxed text-text-secondary", children: r.body })
@@ -2595,12 +2090,12 @@ function EquipeStudio() {
     ] }, f.label)) })
   ] }) });
 }
-const EASE$3 = [0.22, 1, 0.36, 1];
-const DUREES = { sonne: 2600, decroche: 900 };
-function Combine({ className = "" }) {
+const EASE$c = [0.22, 1, 0.36, 1];
+const DUREES$1 = { sonne: 2600, decroche: 900 };
+function Combine$1({ className = "" }) {
   return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", className, fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z" }) });
 }
-function AppelEntrant() {
+function AppelEntrant$1() {
   const ref = useRef(null);
   const visible = useInView(ref, { amount: 0.6 });
   const [etape, setEtape] = useState("sonne");
@@ -2626,8 +2121,8 @@ function AppelEntrant() {
       setEtape("enligne");
       return;
     }
-    const t1 = window.setTimeout(() => setEtape("decroche"), DUREES.sonne);
-    const t2 = window.setTimeout(() => setEtape("enligne"), DUREES.sonne + DUREES.decroche);
+    const t1 = window.setTimeout(() => setEtape("decroche"), DUREES$1.sonne);
+    const t2 = window.setTimeout(() => setEtape("enligne"), DUREES$1.sonne + DUREES$1.decroche);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
@@ -2663,7 +2158,7 @@ function AppelEntrant() {
       {
         className: "relative h-[27rem] w-[13.5rem] rounded-[2.6rem] bg-[#1d1d1f] p-[7px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] md:h-[31rem] md:w-[15.5rem]",
         animate: sonne ? { rotate: [0, -3, 3, -3, 3, -2, 2, 0, 0, 0], x: [0, -2, 2, -2, 2, -1, 1, 0, 0, 0] } : { rotate: 0, x: 0, y: etape === "decroche" ? -8 : 0 },
-        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$3 },
+        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$c },
         children: /* @__PURE__ */ jsxs("div", { className: "relative flex h-full w-full flex-col overflow-hidden rounded-[2.2rem] bg-gradient-to-b from-[#3a3d42] via-[#26282c] to-[#161718] px-5 pb-8 pt-12 text-white", children: [
           /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "absolute left-1/2 top-2.5 h-5 w-20 -translate-x-1/2 rounded-full bg-black" }),
           /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: etape !== "enligne" ? /* @__PURE__ */ jsxs(
@@ -2692,8 +2187,8 @@ function AppelEntrant() {
                     {
                       className: "absolute left-1 top-1 flex h-12 w-12 items-center justify-center rounded-full bg-[#34c759]",
                       animate: { x: etape === "decroche" ? course : 0 },
-                      transition: { duration: 0.7, ease: EASE$3 },
-                      children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5" })
+                      transition: { duration: 0.7, ease: EASE$c },
+                      children: /* @__PURE__ */ jsx(Combine$1, { className: "h-5 w-5" })
                     }
                   )
                 ] }) })
@@ -2706,7 +2201,7 @@ function AppelEntrant() {
               className: "flex h-full flex-col items-center",
               initial: { opacity: 0, y: 10 },
               animate: { opacity: 1, y: 0 },
-              transition: { duration: 0.45, ease: EASE$3 },
+              transition: { duration: 0.45, ease: EASE$c },
               children: [
                 /* @__PURE__ */ jsx("p", { className: "text-sm tabular-nums text-[#34c759]", children: duree }),
                 /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
@@ -2716,7 +2211,7 @@ function AppelEntrant() {
                   /* @__PURE__ */ jsx("span", { className: "h-11 w-11 rounded-full bg-white/15" }),
                   l
                 ] }, l)) }),
-                /* @__PURE__ */ jsx("span", { className: "mt-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff3b30]", children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5 rotate-[135deg]" }) })
+                /* @__PURE__ */ jsx("span", { className: "mt-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff3b30]", children: /* @__PURE__ */ jsx(Combine$1, { className: "h-5 w-5 rotate-[135deg]" }) })
               ]
             },
             "enligne"
@@ -2753,7 +2248,7 @@ function FinalStudio() {
         /* @__PURE__ */ jsx(motion.span, { className: "block", style: { x: ligne1 }, children: "Nous vendons plus qu'un site." }),
         /* @__PURE__ */ jsx(motion.span, { className: "block text-[#25D366]", style: { x: ligne2 }, children: "Nous vendons des appels." })
       ] }),
-      /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant, {}) }),
+      /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant$1, {}) }),
       /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center gap-10 text-center md:mt-8", children: [
         /* @__PURE__ */ jsx("p", { className: "max-w-md text-xl leading-snug text-text-secondary md:text-2xl", children: "Commandez le site qui vous apportera vos prochains prospects." }),
         /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-6", onPointerMove: attirer, onPointerLeave: relacher, children: [
@@ -2785,7 +2280,7 @@ function FinalStudio() {
     /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
   ] });
 }
-const EASE$2 = [0.22, 1, 0.36, 1];
+const EASE$b = [0.22, 1, 0.36, 1];
 function RendezVousStudio() {
   const [rdvOuvert, setRdvOuvert] = useState(false);
   return /* @__PURE__ */ jsxs("section", { className: "bg-surface py-24 md:py-32", children: [
@@ -2796,7 +2291,7 @@ function RendezVousStudio() {
         initial: { opacity: 0, y: 32 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true, margin: "-15% 0px" },
-        transition: { duration: 0.8, ease: EASE$2 },
+        transition: { duration: 0.8, ease: EASE$b },
         children: [
           /* @__PURE__ */ jsxs(
             "h2",
@@ -2837,16 +2332,16 @@ function RendezVousStudio() {
     /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
   ] });
 }
-const CLE = "digitalz-prechargeur-vu";
-const DUREE_MS = 1100;
-const EASE$1 = [0.76, 0, 0.24, 1];
-function Prechargeur() {
+const CLE$1 = "digitalz-prechargeur-vu";
+const DUREE_MS$1 = 1100;
+const EASE$a = [0.76, 0, 0.24, 1];
+function Prechargeur$1() {
   const [visible, setVisible] = useState(false);
   const [compte, setCompte] = useState(0);
   useEffect(() => {
     let dejaVu = false;
     try {
-      dejaVu = sessionStorage.getItem(CLE) === "1";
+      dejaVu = sessionStorage.getItem(CLE$1) === "1";
     } catch {
     }
     const sobre = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2856,12 +2351,12 @@ function Prechargeur() {
     let frame = 0;
     let sortie = 0;
     const tick = (t) => {
-      const p = Math.min(1, (t - debut) / DUREE_MS);
+      const p = Math.min(1, (t - debut) / DUREE_MS$1);
       setCompte(Math.round((1 - Math.pow(1 - p, 3)) * 100));
       if (p < 1) frame = requestAnimationFrame(tick);
       else {
         try {
-          sessionStorage.setItem(CLE, "1");
+          sessionStorage.setItem(CLE$1, "1");
         } catch {
         }
         sortie = window.setTimeout(() => setVisible(false), 180);
@@ -2879,14 +2374,14 @@ function Prechargeur() {
       className: "fixed inset-0 z-[90] flex flex-col justify-between bg-pop p-6 text-white md:p-10",
       initial: { y: 0 },
       exit: { y: "-100%" },
-      transition: { duration: 0.8, ease: EASE$1 },
+      transition: { duration: 0.8, ease: EASE$a },
       children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
           /* @__PURE__ */ jsx("img", { src: "/logo-studio.png", alt: "", className: "h-10 w-10 rounded-full ring-2 ring-surface" }),
           /* @__PURE__ */ jsx("span", { className: "text-lg font-normal tracking-tight", children: "Digitalz Dev" })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex items-end justify-between gap-6", children: [
-          /* @__PURE__ */ jsx("p", { className: "max-w-[14rem] text-sm font-medium leading-snug", children: "Sites internet pour architectes et agences d'architecture." }),
+          /* @__PURE__ */ jsx("p", { className: "max-w-[14rem] text-sm font-medium leading-snug", children: "Sites internet pour avocats et cabinets d'avocats." }),
           /* @__PURE__ */ jsx("span", { className: "text-[28vw] font-normal leading-[0.8] tracking-[-0.06em] md:text-[18vw]", children: compte })
         ] })
       ]
@@ -2921,9 +2416,9 @@ function LogoGoogle({ className = "" }) {
   ] });
 }
 const EXEMPLES = [
-  { auteur: "Claire D., agence d'architecture", note: 5, texte: "Un site sobre, clair sur nos types de projets, et des demandes de premier rendez-vous qui arrivent désormais par le formulaire plutôt que par hasard.", date: "il y a 2 semaines" },
-  { auteur: "Karim B., architecte", note: 5, texte: "Nos projets sont enfin montrés en grand, sans perte de qualité. Les maîtres d'ouvrage nous parlent du site dès le premier échange.", date: "il y a 1 mois" },
-  { auteur: "Thomas L., architecte d'intérieur", note: 5, texte: "Galeries rapides, photos en pleine qualité et une fiche Google optimisée : je reçois des demandes de projets chaque semaine.", date: "il y a 2 mois" }
+  { auteur: "Maître Sarah M.", note: 5, texte: "Un site sobre, clair sur nos domaines d'intervention, et des demandes de premier rendez-vous qui arrivent désormais par le formulaire plutôt que par hasard.", date: "il y a 2 semaines" },
+  { auteur: "Karim B., avocat en droit du travail", note: 5, texte: "Une page par domaine, rédigée sans jargon : les clients arrivent au premier rendez-vous en sachant déjà ce que je fais et comment je travaille.", date: "il y a 1 mois" },
+  { auteur: "Thomas L., cabinet d'avocats d'affaires", note: 5, texte: "Prise de rendez-vous en ligne et fiche Google optimisée : nous recevons des demandes de consultation chaque semaine.", date: "il y a 2 mois" }
 ];
 function horsProduction() {
   if (typeof window === "undefined") return false;
@@ -2991,30 +2486,30 @@ function AvisGoogleSection() {
     fiche.lien
   ] }) });
 }
-const FAQ = [
+const FAQ$1 = [
   {
-    question: "Combien coûte le site d’une agence d’architecture ?",
-    reponse: "Un site d'architecte démarre autour de 1 500 € ; un site avec portfolio complet, pages par ville et espace client se situe plus haut, selon le nombre de projets à mettre en ligne et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route."
+    question: "Combien coûte le site d’un cabinet d’avocats ?",
+    reponse: "Un site d'avocat démarre autour de 1 500 € ; un site avec une page par domaine d'intervention, prise de rendez-vous en ligne et espace client se situe plus haut, selon le nombre de pages et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route."
   },
   {
-    question: "Comment mettre en valeur nos réalisations ?",
-    reponse: "Chaque projet a sa fiche : photos en haute définition, programme, surface, lieu, année et, si vous le souhaitez, plans et photos avant-après. Les images sont optimisées pour rester nettes sans ralentir le site, et vos prix ou publications sont mis en avant. Pas de photos professionnelles ? Nous vous orientons vers des photographes d'architecture."
+    question: "Le site respecte-t-il les règles déontologiques ?",
+    reponse: "Oui. Les textes sont rédigés dans le cadre des règles de communication de la profession (article 10 du Règlement intérieur national) : informations obligatoires, mentions de spécialisation réservées aux certificats obtenus, pas de promesse de résultat ni de comparaison avec d'autres confrères, informations claires sur les honoraires. Vous validez chaque page avant la mise en ligne."
   },
   {
     question: "Combien de temps prend un projet de site web ?",
-    reponse: "Comptez trois à six semaines pour un site d'agence, six à dix semaines avec un portfolio complet et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus, photos de réalisations et descriptifs de projets, qui sont le premier facteur de retard."
+    reponse: "Comptez trois à six semaines pour un site de cabinet, six à dix semaines avec la prise de rendez-vous en ligne et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus, présentation des associés, domaines d'intervention et relecture, qui sont le premier facteur de retard."
   },
   {
     question: "Le site sera-t-il visible sur Google ?",
-    reponse: "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients : « architecte maison », « extension », « rénovation » suivis de votre ville. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads."
+    reponse: "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients : « avocat divorce », « avocat droit du travail », « avocat pénaliste » suivis de votre ville. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads."
   },
   {
     question: "Puis-je modifier mon site moi-même ensuite ?",
-    reponse: "Oui. Vous ajoutez vous-même vos nouvelles réalisations, photos et actualités depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite."
+    reponse: "Oui. Vous ajoutez vous-même vos articles, actualités juridiques et nouveaux collaborateurs depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite."
   },
   {
     question: "Travaillez-vous partout en France ?",
-    reponse: "Oui, dans toute la France et à l'international. Nous avons travaillé pour des agences d'architecture de toutes tailles, de l'architecte indépendant aux agences internationales. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique."
+    reponse: "Oui, dans toute la France et à l'international. Nous avons notamment travaillé pour Fidal, cabinet d'avocats d'affaires, et nous accompagnons aussi bien l'avocat qui s'installe que les cabinets de plusieurs associés. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique."
   },
   {
     question: "Que se passe-t-il après la mise en ligne ?",
@@ -3033,7 +2528,7 @@ function FaqSection() {
     script.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: FAQ.map((item2) => ({
+      mainEntity: FAQ$1.map((item2) => ({
         "@type": "Question",
         name: item2.question,
         acceptedAnswer: { "@type": "Answer", text: item2.reponse }
@@ -3055,7 +2550,7 @@ function FaqSection() {
         className: "mx-auto block font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-5xl"
       }
     ) }),
-    /* @__PURE__ */ jsx("dl", { children: FAQ.map((item2, index) => {
+    /* @__PURE__ */ jsx("dl", { children: FAQ$1.map((item2, index) => {
       const estOuverte = ouverte === index;
       return /* @__PURE__ */ jsxs(
         motion.div,
@@ -3108,7 +2603,7 @@ function FaqSection() {
     }) })
   ] }) });
 }
-const RACCOURCIS = [
+const RACCOURCIS$1 = [
   { to: "/#services", label: "Nos services" },
   { to: "/#projets", label: "Nos réalisations" },
   { to: "/#agence", label: "L'agence" },
@@ -3122,18 +2617,18 @@ const RESEAUX = [
   { href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/", label: "LinkedIn" },
   { href: "mailto:zdigitalzdev@gmail.com", label: "zdigitalzdev@gmail.com" }
 ];
-const lien = "inline-block py-2 text-[15px] font-medium text-text-secondary transition-colors hover:text-accent";
+const lien$1 = "inline-block py-2 text-[15px] font-medium text-text-secondary transition-colors hover:text-accent";
 function Footer() {
   return /* @__PURE__ */ jsxs("footer", { className: "overflow-hidden bg-surface px-5 pt-10 md:px-10 md:pt-14", children: [
     /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
       /* @__PURE__ */ jsxs("nav", { "aria-label": "Plan du site", className: "grid gap-10 sm:grid-cols-2 lg:grid-cols-12", children: [
         /* @__PURE__ */ jsxs("div", { className: "lg:col-span-3", children: [
           /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-text-muted", children: "Le site" }),
-          /* @__PURE__ */ jsx("ul", { className: "mt-4", children: RACCOURCIS.map((l) => /* @__PURE__ */ jsx("li", { children: l.externe ? /* @__PURE__ */ jsx("a", { href: l.to, className: lien, children: l.label }) : /* @__PURE__ */ jsx(Link, { to: l.to, className: lien, children: l.label }) }, l.to)) })
+          /* @__PURE__ */ jsx("ul", { className: "mt-4", children: RACCOURCIS$1.map((l) => /* @__PURE__ */ jsx("li", { children: l.externe ? /* @__PURE__ */ jsx("a", { href: l.to, className: lien$1, children: l.label }) : /* @__PURE__ */ jsx(Link, { to: l.to, className: lien$1, children: l.label }) }, l.to)) })
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "lg:col-span-6", children: [
           /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-text-muted", children: "Réalisations" }),
-          /* @__PURE__ */ jsx("ul", { className: "mt-4 grid gap-x-6 sm:grid-cols-2", children: projects.map((p) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(Link, { to: p.route, className: lien, children: [
+          /* @__PURE__ */ jsx("ul", { className: "mt-4 grid gap-x-6 sm:grid-cols-2", children: projects.map((p) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsxs(Link, { to: p.route, className: lien$1, children: [
             p.title,
             /* @__PURE__ */ jsxs("span", { className: "font-medium text-text-muted", children: [
               " · ",
@@ -3149,7 +2644,7 @@ function Footer() {
               href: r.href,
               target: r.href.startsWith("http") ? "_blank" : void 0,
               rel: r.href.startsWith("http") ? "noopener noreferrer" : void 0,
-              className: lien,
+              className: lien$1,
               children: r.label
             }
           ) }, r.href)) })
@@ -3186,7 +2681,7 @@ function Footer() {
 }
 function Home() {
   return /* @__PURE__ */ jsxs("main", { children: [
-    /* @__PURE__ */ jsx(Prechargeur, {}),
+    /* @__PURE__ */ jsx(Prechargeur$1, {}),
     /* @__PURE__ */ jsx(HeroStudio, {}),
     /* @__PURE__ */ jsx(ManifesteStudio, {}),
     /* @__PURE__ */ jsx(TravauxStudio, {}),
@@ -3523,10 +3018,11 @@ function ProjectPage({ project }) {
   ] });
 }
 const PROJECT_TYPES = [
-  "Site d'agence / portfolio",
+  "Site de cabinet",
   "Refonte de site",
   "Référencement local",
-  "Espace client maîtres d'ouvrage",
+  "Prise de rendez-vous en ligne",
+  "Espace client sécurisé",
   "Campagnes Google / Meta",
   "Autre"
 ];
@@ -3639,7 +3135,7 @@ function Contact() {
           initial: { opacity: 0, y: 30 },
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
-          children: "Parlons de votre agence"
+          children: "Parlons de votre cabinet"
         }
       ),
       /* @__PURE__ */ jsx(
@@ -3684,7 +3180,7 @@ function Contact() {
                 )
               ] }),
               /* @__PURE__ */ jsxs("div", { children: [
-                /* @__PURE__ */ jsx("label", { className: "block text-sm text-text-secondary mb-1.5 font-display", children: "Agence / cabinet" }),
+                /* @__PURE__ */ jsx("label", { className: "block text-sm text-text-secondary mb-1.5 font-display", children: "Cabinet" }),
                 /* @__PURE__ */ jsx(
                   "input",
                   {
@@ -3692,7 +3188,7 @@ function Contact() {
                     value: form.company,
                     onChange: (e) => update("company", e.target.value),
                     className: "w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors",
-                    placeholder: "Nom de votre agence"
+                    placeholder: "Nom de votre cabinet"
                   }
                 )
               ] })
@@ -3708,7 +3204,7 @@ function Contact() {
                     value: form.email,
                     onChange: (e) => update("email", e.target.value),
                     className: "w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors",
-                    placeholder: "jean@agence-archi.fr"
+                    placeholder: "jean@cabinet-avocat.fr"
                   }
                 )
               ] }),
@@ -3828,7 +3324,7 @@ function Contact() {
                 value: form.description,
                 onChange: (e) => update("description", e.target.value),
                 className: "w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors resize-none",
-                placeholder: "Votre agence, les projets que vous voulez attirer (maisons neuves, extensions, rénovations…), des sites d'architectes que vous aimez..."
+                placeholder: "Votre cabinet, vos domaines d'intervention, les clients que vous voulez attirer (particuliers, entreprises…), des sites de cabinets que vous aimez..."
               }
             )
           ] }),
@@ -4220,24 +3716,24 @@ function NotFound() {
     )
   ] }) });
 }
-const WHATSAPP = "33783259869";
+const WHATSAPP$1 = "33783259869";
 const PIXEL_ID = "1770228247552236";
 const API_LEAD = "https://quiz.digitalzdev.com/api/lead-site";
-const EASE = [0.22, 1, 0.36, 1];
+const EASE$9 = [0.22, 1, 0.36, 1];
 const QUESTIONS = [
   {
     cle: "metier",
     titre: "Comment exercez-vous ?",
-    options: ["Architecte indépendant", "Agence de 2 à 10 personnes", "Agence de plus de 10 personnes", "Architecte d'intérieur"]
+    options: ["Avocat exerçant seul", "Cabinet de 2 à 10 avocats", "Cabinet de plus de 10 avocats", "Je m'installe à mon compte"]
   },
   {
     cle: "besoin",
     titre: "Où en est votre site aujourd'hui ?",
     options: [
       "Je n'ai pas encore de site",
-      "Mon site ne met pas mes réalisations en valeur",
-      "Mon site ne m'apporte aucun nouveau projet",
-      "Je veux être trouvé sur Google par des particuliers"
+      "Mon site ne reflète pas mon cabinet",
+      "Mon site ne m'apporte aucun nouveau client",
+      "Je veux être trouvé sur Google par mes futurs clients"
     ]
   },
   {
@@ -4282,7 +3778,7 @@ function normaliserTelephone(brut) {
 function chargerPixel() {
   const w = window;
   if (w.fbq) return;
-  (function(f, b, e, v2) {
+  (function(f, b, e, v) {
     if (f.fbq) return;
     const n = f.fbq = function() {
       n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
@@ -4294,7 +3790,7 @@ function chargerPixel() {
     n.queue = [];
     const t = b.createElement(e);
     t.async = true;
-    t.src = v2;
+    t.src = v;
     const s = b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t, s);
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
@@ -4313,15 +3809,15 @@ function lireCookie(nom) {
 function lireAttribution() {
   var _a, _b;
   const q = new URLSearchParams(window.location.search);
-  const v2 = (k) => {
+  const v = (k) => {
     var _a2;
     return ((_a2 = q.get(k)) == null ? void 0 : _a2.slice(0, 200)) || null;
   };
   return {
-    utm_source: v2("utm_source"),
-    utm_medium: v2("utm_medium"),
-    utm_campaign: v2("utm_campaign"),
-    utm_content: v2("utm_content"),
+    utm_source: v("utm_source"),
+    utm_medium: v("utm_medium"),
+    utm_campaign: v("utm_campaign"),
+    utm_content: v("utm_content"),
     fbclid: ((_a = q.get("fbclid")) == null ? void 0 : _a.slice(0, 300)) || null,
     // Google Ads : gclid, ou gbraid / wbraid sur iOS.
     gclid: ((_b = q.get("gclid") || q.get("gbraid") || q.get("wbraid")) == null ? void 0 : _b.slice(0, 300)) || null
@@ -4371,17 +3867,17 @@ function Projet() {
       message: message.trim().slice(0, 1e3) || null
     };
     const texte = [
-      "Bonjour Digitalz Dev, je suis architecte et je viens de remplir le formulaire de votre site.",
+      "Bonjour Digitalz Dev, je suis avocat et je viens de remplir le formulaire de votre site.",
       "",
       `• Structure : ${ligne.metier}`,
       `• Site actuel : ${ligne.besoin}`,
       `• Budget : ${ligne.budget}`,
       `• Délai : ${ligne.delai}`,
       `• Nom : ${ligne.nom}`,
-      ligne.activite ? `• Agence / site : ${ligne.activite}` : null,
-      ligne.message ? `• Projets visés : ${ligne.message}` : null
+      ligne.activite ? `• Cabinet / site : ${ligne.activite}` : null,
+      ligne.message ? `• Domaines et clients visés : ${ligne.message}` : null
     ].filter((l) => l !== null).join("\n");
-    const lien2 = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texte)}`;
+    const lien2 = `https://wa.me/${WHATSAPP$1}?text=${encodeURIComponent(texte)}`;
     window.open(lien2, "_blank", "noopener");
     setLienWhatsapp(lien2);
     const evenementId = ((_a = crypto.randomUUID) == null ? void 0 : _a.call(crypto)) ?? `${Date.now()}-${Math.random()}`;
@@ -4437,7 +3933,7 @@ function Projet() {
       {
         className: "h-full rounded-full bg-pop",
         animate: { width: `${(Math.min(etape, total - 1) + (lienWhatsapp ? 1 : 0)) / total * 100}%` },
-        transition: { duration: 0.4, ease: EASE }
+        transition: { duration: 0.4, ease: EASE$9 }
       }
     ) }),
     /* @__PURE__ */ jsx("div", { className: `mx-auto mt-10 w-full md:mt-16 max-w-2xl ${lienWhatsapp ? "" : "flex-1 pb-10"}`, children: /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: lienWhatsapp ? /* @__PURE__ */ jsx(motion.div, { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, children: /* @__PURE__ */ jsxs("div", { className: "text-center", children: [
@@ -4473,9 +3969,9 @@ function Projet() {
         initial: { opacity: 0, x: 24 },
         animate: { opacity: 1, x: 0 },
         exit: { opacity: 0, x: -24 },
-        transition: { duration: 0.3, ease: EASE },
+        transition: { duration: 0.3, ease: EASE$9 },
         children: [
-          etape === 0 && /* @__PURE__ */ jsx("p", { className: "mb-4 text-text-secondary", children: "Architectes : quatre questions sur votre agence, puis on en parle directement sur WhatsApp." }),
+          etape === 0 && /* @__PURE__ */ jsx("p", { className: "mb-4 text-text-secondary", children: "Avocats : quatre questions sur votre cabinet, puis on en parle directement sur WhatsApp." }),
           /* @__PURE__ */ jsx("h1", { className: "text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl", children: question.titre }),
           /* @__PURE__ */ jsx("div", { className: "mt-8 grid gap-3", children: question.options.map((o) => {
             const actif = reponses[question.cle] === o;
@@ -4512,7 +4008,7 @@ function Projet() {
         initial: { opacity: 0, x: 24 },
         animate: { opacity: 1, x: 0 },
         exit: { opacity: 0, x: -24 },
-        transition: { duration: 0.3, ease: EASE },
+        transition: { duration: 0.3, ease: EASE$9 },
         noValidate: true,
         children: [
           /* @__PURE__ */ jsx("h1", { className: "text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl", children: "Comment vous joindre ?" }),
@@ -4545,7 +4041,7 @@ function Projet() {
               touche && !telValide && /* @__PURE__ */ jsx("span", { className: "text-sm text-red-600", children: "Indiquez un numéro valide pour qu'on puisse vous répondre." })
             ] }),
             /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
-              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Le nom de votre agence ou votre site actuel (facultatif)" }),
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Le nom de votre cabinet ou votre site actuel (facultatif)" }),
               /* @__PURE__ */ jsx(
                 "input",
                 {
@@ -4556,7 +4052,7 @@ function Projet() {
               )
             ] }),
             /* @__PURE__ */ jsxs("label", { className: "grid gap-1.5", children: [
-              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Les projets que vous voulez attirer : maisons neuves, extensions, rénovations… (facultatif)" }),
+              /* @__PURE__ */ jsx("span", { className: "text-sm text-text-secondary", children: "Vos domaines d'intervention et les clients que vous voulez attirer (facultatif)" }),
               /* @__PURE__ */ jsx(
                 "textarea",
                 {
@@ -4625,6 +4121,1229 @@ function Projet() {
     /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
   ] });
 }
+function Pictogramme({ className = "h-9 w-9" }) {
+  return /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 40 40", className, "aria-hidden": true, children: [
+    /* @__PURE__ */ jsx("rect", { width: "40", height: "40", rx: "10", fill: "#9EA2AA" }),
+    /* @__PURE__ */ jsx("path", { d: "M20 8.5l11.5 6.5h-23z", fill: "#FFFFFF" }),
+    /* @__PURE__ */ jsx("rect", { x: "10", y: "17", width: "3.6", height: "11", rx: "1", fill: "#FFFFFF" }),
+    /* @__PURE__ */ jsx("rect", { x: "18.2", y: "17", width: "3.6", height: "11", rx: "1", fill: "#FFFFFF" }),
+    /* @__PURE__ */ jsx("rect", { x: "26.4", y: "17", width: "3.6", height: "11", rx: "1", fill: "#FFFFFF" }),
+    /* @__PURE__ */ jsx("rect", { x: "8.5", y: "29.5", width: "23", height: "2.6", rx: "1.3", fill: "#FFFFFF" })
+  ] });
+}
+function NomMarque({ className = "" }) {
+  return /* @__PURE__ */ jsxs("span", { className: `whitespace-nowrap tracking-[-0.03em] text-[#1D1D1F] ${className}`, style: { fontFamily: "'Inter Tight', system-ui, sans-serif" }, children: [
+    /* @__PURE__ */ jsx("span", { className: "font-light", children: "avocat" }),
+    /* @__PURE__ */ jsx("span", { className: "font-bold", children: "leads" })
+  ] });
+}
+function Logo({ taille = "normale" }) {
+  const grande = taille === "grande";
+  return /* @__PURE__ */ jsxs("span", { className: `inline-flex items-center ${grande ? "gap-4" : "gap-2.5"}`, children: [
+    /* @__PURE__ */ jsx(Pictogramme, { className: grande ? "h-14 w-14" : "h-8 w-8" }),
+    /* @__PURE__ */ jsx(NomMarque, { className: grande ? "text-[44px]" : "text-[21px]" })
+  ] });
+}
+const CLE = "avocatleads-prechargeur-vu";
+const DUREE_MS = 1100;
+const EASE$8 = [0.76, 0, 0.24, 1];
+function Prechargeur() {
+  const [visible, setVisible] = useState(false);
+  const [compte, setCompte] = useState(0);
+  useEffect(() => {
+    let dejaVu = false;
+    try {
+      dejaVu = sessionStorage.getItem(CLE) === "1";
+    } catch {
+    }
+    const sobre = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (dejaVu || sobre) return;
+    setVisible(true);
+    const debut = performance.now();
+    let frame = 0;
+    let sortie = 0;
+    const tick = (t) => {
+      const p = Math.min(1, (t - debut) / DUREE_MS);
+      setCompte(Math.round((1 - Math.pow(1 - p, 3)) * 100));
+      if (p < 1) frame = requestAnimationFrame(tick);
+      else {
+        try {
+          sessionStorage.setItem(CLE, "1");
+        } catch {
+        }
+        sortie = window.setTimeout(() => setVisible(false), 180);
+      }
+    };
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(sortie);
+    };
+  }, []);
+  return /* @__PURE__ */ jsx(AnimatePresence, { children: visible && /* @__PURE__ */ jsxs(
+    motion.div,
+    {
+      className: "fixed inset-0 z-[90] flex flex-col justify-between bg-pop p-6 text-white md:p-10",
+      initial: { y: 0 },
+      exit: { y: "-100%" },
+      transition: { duration: 0.8, ease: EASE$8 },
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-3", children: [
+          /* @__PURE__ */ jsx(Pictogramme, { className: "h-10 w-10" }),
+          /* @__PURE__ */ jsxs("span", { className: "text-xl tracking-[-0.03em]", style: { fontFamily: "'Inter Tight', system-ui, sans-serif" }, children: [
+            /* @__PURE__ */ jsx("span", { className: "font-light", children: "avocat" }),
+            /* @__PURE__ */ jsx("span", { className: "font-bold", children: "leads" })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex items-end justify-between gap-6", children: [
+          /* @__PURE__ */ jsx("p", { className: "max-w-[14rem] text-sm font-medium leading-snug", children: "Sites internet pour avocats et cabinets d'avocats." }),
+          /* @__PURE__ */ jsx("span", { className: "text-[15vw] font-normal leading-[0.8] tracking-[-0.05em] md:text-[11vw]", style: { opacity: compte / 100 }, children: "Maître." })
+        ] })
+      ]
+    }
+  ) });
+}
+const WHATSAPP = `https://wa.me/33783259869?text=${encodeURIComponent(
+  "Bonjour AvocatLeads, je suis avocat et j'aimerais vous parler du site de mon cabinet : "
+)}`;
+const SERVICES = [
+  {
+    title: "Site de cabinet",
+    lead: "Présenter le cabinet avec la rigueur de vos actes.",
+    body: "Arborescence, rédaction, direction artistique et développement, conçus pour votre pratique et non tirés d'un modèle. Chaque page répond à une recherche précise et conduit à une prise de contact.",
+    points: [
+      "Une page par domaine d'intervention et par ville",
+      "Textes relus au regard de la déontologie",
+      "Maquettes validées avant tout développement",
+      "Prise en main simple, vous restez autonome"
+    ]
+  },
+  {
+    title: "Prise de rendez-vous en ligne",
+    lead: "Des demandes qualifiées, sans échange préalable au téléphone.",
+    body: "Le visiteur choisit sa matière, expose sa situation en quelques questions et réserve un créneau, au cabinet ou en visioconférence. Vous recevez une demande déjà qualifiée et conservez la maîtrise de votre agenda.",
+    points: [
+      "Agenda synchronisé avec votre calendrier",
+      "Consultation au cabinet ou en visioconférence",
+      "Questions de qualification par matière",
+      "Règlement de la consultation en ligne, en option"
+    ]
+  },
+  {
+    title: "Refonte de site",
+    lead: "Pour un site qui ne reflète plus le cabinet.",
+    body: "Nous partons de l'existant : ce qui fonctionne, ce qui freine, ce que disent vos statistiques. La refonte conserve votre référencement grâce à un plan de redirections complet et corrige la lenteur et la lecture sur mobile.",
+    points: [
+      "Audit du site actuel et de ses performances",
+      "Plan de redirections, sans perte de référencement",
+      "Reprise et réécriture des contenus",
+      "Mise en conformité RGPD et accessibilité"
+    ]
+  },
+  {
+    title: "Espace client sécurisé",
+    lead: "Les pièces du dossier, hors de la messagerie.",
+    body: "Un espace privé où vos clients déposent leurs pièces, suivent l'avancement de leur dossier et signent la convention d'honoraires. Moins d'échanges par courriel, davantage de confidentialité.",
+    points: [
+      "Dépôt et partage des pièces par dossier",
+      "Suivi des étapes et des échéances",
+      "Convention d'honoraires à signer en ligne",
+      "Données hébergées en France"
+    ]
+  },
+  {
+    title: "Google Ads",
+    lead: "Être présent quand un justiciable cherche un avocat.",
+    body: "Campagnes construites sur les recherches qui précèdent un appel : « avocat divorce », « avocat licenciement », « avocat pénaliste », dans votre ressort. Le budget est piloté sur le coût par demande de rendez-vous.",
+    points: [
+      "Recherches ciblées par matière et par ville",
+      "Annonces sobres, conformes à l'article 10 du RIN",
+      "Mesure des appels et des formulaires reçus",
+      "Rapports clairs, sans jargon"
+    ]
+  },
+  {
+    title: "Référencement local",
+    lead: "Ressortir sur « avocat », votre matière et votre ville.",
+    body: "Le référencement se construit dès la conception : structure des pages, balisage, données structurées, vitesse et contenus qui répondent aux questions réelles de vos futurs clients. Puis nous suivons vos positions.",
+    points: [
+      "Fiche Google complète et entretenue",
+      "Pages de matières rédigées pour être comprises",
+      "Vitesse et données structurées soignées",
+      "Suivi mensuel des positions"
+    ]
+  }
+];
+const LEVIERS = [
+  {
+    titre: "Référencement naturel",
+    accroche: "Être trouvé sur les questions que se posent vos clients.",
+    points: [
+      "Articles sur les questions juridiques de vos clients",
+      "Pages par domaine d'intervention et par ville",
+      "Structure technique, vitesse et balisage soignés",
+      "Suivi mensuel des positions et du trafic"
+    ]
+  },
+  {
+    titre: "Fiche Google",
+    accroche: "Apparaître parmi les premiers cabinets sur Maps.",
+    points: [
+      "Fiche d'établissement complète et optimisée",
+      "Horaires, domaines d'intervention et publications",
+      "Réponses aux avis dans le respect du secret professionnel",
+      "Visibilité locale, ville par ville"
+    ]
+  },
+  {
+    titre: "Google Ads",
+    accroche: "En tête des recherches dès la semaine suivante.",
+    points: [
+      "Campagnes sur les recherches qui précèdent un appel",
+      "Extensions d'appel et de lieu",
+      "Mesure des appels et des formulaires reçus",
+      "Budget piloté sur le coût par demande"
+    ]
+  },
+  {
+    titre: "Meta Ads",
+    accroche: "Faire connaître le cabinet dans votre ressort.",
+    points: [
+      "Diffusion de vos analyses juridiques",
+      "Ciblage par zone et par profil de client",
+      "Reciblage des visiteurs de votre site",
+      "Formulaires de contact intégrés"
+    ]
+  }
+];
+const VERIFICATIONS = [
+  { titre: "Mentions obligatoires", texte: "Qualité d'avocat, barreau d'inscription, structure d'exercice et coordonnées complètes, conformément à l'article 10.2 du RIN." },
+  { titre: "Termes réservés", texte: "Le mot « spécialiste » n'apparaît qu'avec un certificat délivré par le CNB. Trois domaines d'activité dominante au plus par avocat." },
+  { titre: "Nom de domaine conforme", texte: "Votre nom ou la dénomination du cabinet, jamais un nom générique ni un domaine du droit (article 10.5 du RIN)." },
+  { titre: "Secret professionnel", texte: "Aucun nom de client. Vos dossiers marquants sont présentés sous forme de références anonymisées." },
+  { titre: "Sobriété du message", texte: "Ni mention comparative, ni promesse de résultat, ni reprise de commentaires élogieux de clients." },
+  { titre: "Honoraires et médiation", texte: "Information sur les modes de fixation des honoraires et coordonnées du médiateur de la consommation." },
+  { titre: "Information de l'Ordre", texte: "Le courrier d'information à votre Ordre, pour la création ou la refonte du site, est préparé avec vous." },
+  { titre: "Données personnelles", texte: "Mentions légales, politique de confidentialité et formulaires sobres en données, hébergés en Europe." }
+];
+const FAQ = [
+  {
+    question: "Combien coûte le site d'un cabinet d'avocats ?",
+    reponse: "Un site d'avocat démarre autour de 1 500 €. Un site avec une page par domaine d'intervention, la prise de rendez-vous en ligne et un espace client se situe plus haut, selon le nombre de pages et le travail de rédaction. Nous établissons un devis écrit après un premier échange : aucune surprise en cours de mission."
+  },
+  {
+    question: "Puis-je afficher des avis clients sur mon site ?",
+    reponse: "Le Conseil national des barreaux considère que renvoyer vers des commentaires élogieux de clients est contraire aux principes essentiels de la profession. Nous ne les intégrons donc pas au site. Vos références anonymisées, vos publications et vos distinctions remplissent ce rôle."
+  },
+  {
+    question: "Puis-je me présenter comme spécialiste ?",
+    reponse: "Uniquement si vous êtes titulaire d'un certificat de spécialisation délivré par le CNB, et à titre personnel : un cabinet ne peut pas se dire spécialiste. À défaut, nous présentons vos domaines d'intervention, ou vos domaines d'activité dominante, trois au plus par avocat."
+  },
+  {
+    question: "Dois-je informer mon Ordre de la création du site ?",
+    reponse: "Oui. L'Ordre doit être informé de la création du site et de ses modifications substantielles. Nous préparons ce courrier avec vous, avec l'adresse du site et le nom de domaine retenu."
+  },
+  {
+    question: "Quel nom de domaine choisir ?",
+    reponse: "Il doit comporter votre nom ou la dénomination du cabinet, éventuellement suivi du mot « avocat ». Une adresse générique ou un domaine du droit, du type avocat-divorce-lyon.fr, est interdit. Le référencement sur « avocat divorce Lyon » se travaille par le contenu des pages."
+  },
+  {
+    question: "Qui rédige les textes ?",
+    reponse: "Nous les rédigeons à partir d'un entretien avec vous, pour un lecteur qui n'est pas juriste. Vous relisez et validez chaque page avant la mise en ligne : vous restez seul juge du fond."
+  },
+  {
+    question: "Combien de temps faut-il pour être en ligne ?",
+    reponse: "Comptez trois à six semaines pour un site de cabinet, six à dix semaines avec la prise de rendez-vous en ligne et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus et de vos relectures."
+  },
+  {
+    question: "Pourrai-je modifier mon site moi-même ?",
+    reponse: "Oui. Vous publiez vos actualités, ajoutez un collaborateur ou modifiez une page depuis une interface simple. Nous vous formons à la livraison et restons joignables ensuite. Le site vous appartient, code et hébergement compris."
+  }
+];
+const LIENS = [
+  { libelle: "Accueil", vers: "/avocatleads", interne: true },
+  { libelle: "Services", vers: "#services", interne: false },
+  { libelle: "Déontologie", vers: "#deontologie", interne: false },
+  { libelle: "Réalisation", vers: "#realisation", interne: false },
+  { libelle: "Questions", vers: "#faq", interne: false },
+  { libelle: "Contact", vers: "/projet", interne: true }
+];
+const PROJET = "/projet";
+const EASE$7 = [0.76, 0, 0.24, 1];
+function estCourant(lien2, chemin) {
+  if (lien2.vers === "/avocatleads") return chemin === "/avocatleads";
+  if (lien2.vers.startsWith("#")) return false;
+  return chemin === lien2.vers;
+}
+function Heure() {
+  const formater = () => new Intl.DateTimeFormat("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Paris"
+  }).format(/* @__PURE__ */ new Date());
+  const [heure, setHeure] = useState(null);
+  useEffect(() => {
+    setHeure(formater());
+    const t = window.setInterval(() => setHeure(formater()), 3e4);
+    return () => window.clearInterval(t);
+  }, []);
+  return /* @__PURE__ */ jsxs("span", { className: "text-sm font-medium text-text-secondary", children: [
+    "Paris, France ",
+    /* @__PURE__ */ jsx("span", { className: "text-text-primary", children: heure ?? "" })
+  ] });
+}
+function Navigation() {
+  const [defile, setDefile] = useState(false);
+  const [survol, setSurvol] = useState(false);
+  const [epingle, setEpingle] = useState(false);
+  const liensVisibles = !defile || survol || epingle;
+  const [ouvert, setOuvert] = useState(false);
+  const location = useLocation();
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (y) => setDefile(y > 24));
+  useEffect(() => setOuvert(false), [location]);
+  useEffect(() => {
+    if (!ouvert) return;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    const clavier = (e) => e.key === "Escape" && setOuvert(false);
+    window.addEventListener("keydown", clavier);
+    return () => {
+      document.body.style.overflow = overflow;
+      window.removeEventListener("keydown", clavier);
+    };
+  }, [ouvert]);
+  const fermer = () => setOuvert(false);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs("header", { className: "pointer-events-none fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-3 px-3 pt-3 md:px-6 md:pt-5", children: [
+      /* @__PURE__ */ jsxs(
+        "nav",
+        {
+          "aria-label": "Navigation principale",
+          className: "pointer-events-auto flex items-center rounded-2xl bg-surface-card/75 py-1.5 pl-3 pr-1.5 backdrop-blur-xl md:pl-4",
+          onPointerLeave: () => setSurvol(false),
+          children: [
+            /* @__PURE__ */ jsx(Link, { to: "/avocatleads", onClick: fermer, className: "flex min-h-[44px] items-center pr-2", children: /* @__PURE__ */ jsx(Logo, {}) }),
+            /* @__PURE__ */ jsx(
+              motion.div,
+              {
+                className: "hidden overflow-hidden lg:block",
+                initial: false,
+                animate: { width: liensVisibles ? "auto" : 0, opacity: liensVisibles ? 1 : 0 },
+                transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+                children: /* @__PURE__ */ jsx("ul", { className: "flex items-center gap-1 whitespace-nowrap pl-4", children: LIENS.filter((l) => l.vers !== "/avocatleads").map((lien2) => {
+                  const classe = "inline-flex min-h-[40px] items-center rounded-xl px-3 text-[15px] text-text-primary transition-colors hover:text-text-muted";
+                  return /* @__PURE__ */ jsx("li", { children: lien2.interne ? /* @__PURE__ */ jsx(Link, { to: lien2.vers, className: classe, children: lien2.libelle }) : /* @__PURE__ */ jsx("a", { href: lien2.vers, className: classe, children: lien2.libelle }) }, lien2.libelle);
+                }) })
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onPointerEnter: (e) => e.pointerType === "mouse" && setSurvol(true),
+                onClick: () => {
+                  if (window.matchMedia("(min-width: 1024px)").matches) setEpingle((v) => !v);
+                  else setOuvert((o) => !o);
+                },
+                "aria-expanded": ouvert,
+                "aria-controls": "menu-plein-ecran",
+                "aria-label": ouvert ? "Fermer le menu" : "Ouvrir le menu",
+                className: "relative z-[60] ml-1 flex h-10 w-10 items-center justify-center rounded-xl text-text-primary transition-colors hover:bg-surface-border/60",
+                children: ouvert ? /* @__PURE__ */ jsx("svg", { viewBox: "0 0 16 16", className: "h-4 w-4", fill: "none", stroke: "currentColor", strokeWidth: 1.6, strokeLinecap: "round", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M3.5 3.5l9 9M12.5 3.5l-9 9" }) }) : /* @__PURE__ */ jsxs("svg", { viewBox: "0 0 4 16", className: "h-4 w-1", fill: "currentColor", "aria-hidden": true, children: [
+                  /* @__PURE__ */ jsx("circle", { cx: "2", cy: "2", r: "1.6" }),
+                  /* @__PURE__ */ jsx("circle", { cx: "2", cy: "8", r: "1.6" }),
+                  /* @__PURE__ */ jsx("circle", { cx: "2", cy: "14", r: "1.6" })
+                ] })
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsx("div", { className: "pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl", children: /* @__PURE__ */ jsxs(
+        Link,
+        {
+          to: PROJET,
+          className: "inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover",
+          children: [
+            /* @__PURE__ */ jsx("span", { className: "sm:hidden", children: "Rendez-vous" }),
+            /* @__PURE__ */ jsx("span", { className: "hidden sm:inline", children: "Prendre rendez-vous" })
+          ]
+        }
+      ) })
+    ] }),
+    /* @__PURE__ */ jsx(AnimatePresence, { children: ouvert && /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        id: "menu-plein-ecran",
+        className: "fixed inset-0 z-40 flex flex-col justify-between bg-surface-light px-5 pb-8 pt-28 md:px-10 md:pb-10",
+        initial: { clipPath: "inset(0% 0% 100% 0%)" },
+        animate: { clipPath: "inset(0% 0% 0% 0%)" },
+        exit: { clipPath: "inset(0% 0% 100% 0%)" },
+        transition: { duration: 0.7, ease: EASE$7 },
+        children: [
+          /* @__PURE__ */ jsx("nav", { "aria-label": "Menu", children: /* @__PURE__ */ jsx("ul", { children: LIENS.map((lien2, i) => {
+            const courant = estCourant(lien2, location.pathname);
+            const classe = `group inline-flex items-center gap-4 text-[13vw] font-normal leading-[0.95] tracking-[-0.05em] transition-colors md:text-[7.5vw] ${courant ? "text-accent" : "text-text-primary hover:text-accent"}`;
+            const contenu = /* @__PURE__ */ jsxs(Fragment, { children: [
+              lien2.libelle,
+              /* @__PURE__ */ jsx(
+                "span",
+                {
+                  "aria-hidden": true,
+                  className: "text-[0.4em] opacity-0 transition-all duration-300 group-hover:translate-x-2 group-hover:opacity-100",
+                  children: "→"
+                }
+              )
+            ] });
+            return /* @__PURE__ */ jsx("li", { className: "overflow-hidden", children: /* @__PURE__ */ jsx(
+              motion.div,
+              {
+                initial: { y: "110%" },
+                animate: { y: 0 },
+                exit: { y: "110%" },
+                transition: { duration: 0.6, delay: 0.15 + i * 0.05, ease: [0.22, 1, 0.36, 1] },
+                children: lien2.interne ? /* @__PURE__ */ jsx(Link, { to: lien2.vers, onClick: fermer, className: classe, "aria-current": courant ? "page" : void 0, children: contenu }) : /* @__PURE__ */ jsx("a", { href: lien2.vers, onClick: fermer, className: classe, children: contenu })
+              }
+            ) }, lien2.libelle);
+          }) }) }),
+          /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              className: "flex flex-col gap-6 md:flex-row md:items-end md:justify-between",
+              initial: { opacity: 0, y: 20 },
+              animate: { opacity: 1, y: 0 },
+              exit: { opacity: 0 },
+              transition: { duration: 0.5, delay: 0.4 },
+              children: [
+                /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-1 text-[15px] font-medium text-text-secondary", children: [
+                  /* @__PURE__ */ jsx(Heure, {}),
+                  /* @__PURE__ */ jsx("a", { href: WHATSAPP, target: "_blank", rel: "noopener noreferrer", className: "transition-colors hover:text-accent", children: "WhatsApp" }),
+                  /* @__PURE__ */ jsx(
+                    "a",
+                    {
+                      href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/",
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                      className: "transition-colors hover:text-accent",
+                      children: "LinkedIn"
+                    }
+                  )
+                ] }),
+                /* @__PURE__ */ jsx(
+                  Link,
+                  {
+                    to: PROJET,
+                    onClick: fermer,
+                    className: "inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto",
+                    children: "Prendre rendez-vous"
+                  }
+                )
+              ]
+            }
+          )
+        ]
+      }
+    ) })
+  ] });
+}
+const EASE$6 = [0.22, 1, 0.36, 1];
+function Ligne({ children, delai }) {
+  return /* @__PURE__ */ jsx("span", { className: "-mt-[0.18em] block overflow-hidden pb-[0.06em] pt-[0.18em]", children: /* @__PURE__ */ jsx(
+    motion.span,
+    {
+      className: "block",
+      initial: { y: "110%" },
+      animate: { y: 0 },
+      transition: { duration: 1, delay: delai, ease: EASE$6 },
+      children
+    }
+  ) });
+}
+function Hero() {
+  return /* @__PURE__ */ jsxs(
+    "section",
+    {
+      className: "relative flex min-h-[100svh] flex-col items-center justify-center px-5 text-center",
+      style: { background: "linear-gradient(#d9dadd 0%, #f7f7f8 100%)", fontFamily: "'Inter Tight', system-ui, sans-serif" },
+      children: [
+        /* @__PURE__ */ jsx(
+          motion.p,
+          {
+            className: "mb-8 text-[13px] font-medium uppercase tracking-[0.22em] text-text-secondary",
+            initial: { opacity: 0 },
+            animate: { opacity: 1 },
+            transition: { duration: 0.9, delay: 0.15 },
+            children: "Agence web dédiée aux avocats"
+          }
+        ),
+        /* @__PURE__ */ jsxs("h1", { className: "text-[11vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]", children: [
+          /* @__PURE__ */ jsx(Ligne, { delai: 0.25, children: "Le site qui amène" }),
+          /* @__PURE__ */ jsxs(Ligne, { delai: 0.35, children: [
+            "des clients à votre ",
+            /* @__PURE__ */ jsx("span", { className: "text-pop", children: "cabinet." })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsx(
+          motion.p,
+          {
+            className: "mt-8 max-w-xl text-lg leading-relaxed text-text-secondary md:text-xl",
+            initial: { opacity: 0, y: 16 },
+            animate: { opacity: 1, y: 0 },
+            transition: { duration: 0.8, delay: 0.6, ease: EASE$6 },
+            children: "Sites de cabinet conformes aux règles de la profession, prise de rendez-vous en ligne et référencement local, pour les avocats."
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          motion.div,
+          {
+            className: "mt-10",
+            initial: { opacity: 0, y: 16 },
+            animate: { opacity: 1, y: 0 },
+            transition: { duration: 0.8, delay: 0.75, ease: EASE$6 },
+            children: /* @__PURE__ */ jsx(
+              Link,
+              {
+                to: "/projet",
+                className: "inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black",
+                children: "Prendre rendez-vous"
+              }
+            )
+          }
+        )
+      ]
+    }
+  );
+}
+const PHRASE = [
+  { texte: "Un site conforme à la déontologie,", accent: false },
+  { texte: "pensé pour amener des clients.", accent: true }
+];
+const MOTS = PHRASE.flatMap(
+  (p) => p.texte.split(" ").map((mot) => ({ mot, accent: p.accent }))
+);
+function Mot({
+  mot,
+  accent,
+  p,
+  i,
+  n
+}) {
+  const opacite = useTransform(p, [i / n, (i + 1) / n], [0.14, 1]);
+  return /* @__PURE__ */ jsxs(motion.span, { style: { opacity: opacite }, className: accent ? "text-pop" : "text-text-primary", children: [
+    mot,
+    " "
+  ] });
+}
+function Manifeste() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.8", "end 0.6"] });
+  return /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-2 pt-20 md:px-10 md:pb-4 md:pt-32", children: /* @__PURE__ */ jsx("div", { ref, className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-5xl text-center text-[8vw] font-extrabold uppercase leading-[1.04] md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: MOTS.map((m, i) => /* @__PURE__ */ jsx(Mot, { mot: m.mot, accent: m.accent, p: scrollYProgress, i, n: MOTS.length }, `${m.mot}-${i}`)) }) }) });
+}
+const EASE$5 = [0.22, 1, 0.36, 1];
+function Reference() {
+  return /* @__PURE__ */ jsx("section", { id: "realisation", className: "bg-surface px-5 py-24 md:px-10 md:py-32", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-12", children: [
+    /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        className: "lg:col-span-5",
+        initial: { opacity: 0, y: 32 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-15% 0px" },
+        transition: { duration: 0.8, ease: EASE$5 },
+        children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-accent", children: "Réalisation" }),
+          /* @__PURE__ */ jsxs("h2", { className: "mt-4 text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
+            "Fidal, ",
+            /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "bureau de Montpellier." })
+          ] }),
+          /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-md text-lg font-medium leading-relaxed text-text-secondary", children: "La page du bureau montpelliérain du cabinet d'avocats d'affaires : présentation, expertises, équipe et coordonnées, structurées pour ressortir sur les recherches locales d'avocat d'affaires." }),
+          /* @__PURE__ */ jsx(
+            Link,
+            {
+              to: "/fidal",
+              "data-curseur": "Voir",
+              className: "mt-8 inline-flex min-h-[52px] items-center rounded-xl bg-[#0f0f0f] px-8 text-[16px] text-white transition-colors hover:bg-black",
+              children: "Voir l'étude de cas"
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        className: "overflow-hidden rounded-[1.75rem] bg-surface-card lg:col-span-7",
+        initial: { opacity: 0, y: 40 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-15% 0px" },
+        transition: { duration: 0.9, delay: 0.08, ease: EASE$5 },
+        children: /* @__PURE__ */ jsx(
+          "img",
+          {
+            src: "/screenshots/fidal-hero.webp",
+            alt: "Page du bureau de Montpellier du cabinet Fidal",
+            loading: "lazy",
+            decoding: "async",
+            className: "block w-full transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03]"
+          }
+        )
+      }
+    )
+  ] }) });
+}
+const EASE$4 = [0.22, 1, 0.36, 1];
+function RendezVous() {
+  const [rdvOuvert, setRdvOuvert] = useState(false);
+  return /* @__PURE__ */ jsxs("section", { className: "bg-surface py-24 md:py-32", children: [
+    /* @__PURE__ */ jsxs(
+      motion.div,
+      {
+        className: "mx-auto flex max-w-4xl flex-col items-center px-5 text-center md:px-10",
+        initial: { opacity: 0, y: 32 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-15% 0px" },
+        transition: { duration: 0.8, ease: EASE$4 },
+        children: [
+          /* @__PURE__ */ jsxs(
+            "h2",
+            {
+              className: "text-[10vw] leading-[1.02] tracking-[-0.03em] text-text-primary md:text-[5vw] lg:text-[min(4.6vw,76px)]",
+              style: { fontFamily: "'Inter Tight', system-ui, sans-serif" },
+              children: [
+                "Parlons de votre ",
+                /* @__PURE__ */ jsx("span", { className: "text-pop", children: "cabinet." })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsx("p", { className: "mt-5 max-w-lg text-base leading-relaxed text-text-secondary md:text-lg", children: "Réservez un entretien de vingt minutes dans notre agenda, ou écrivez-nous sur WhatsApp. Nous vous répondons dans la journée." }),
+          /* @__PURE__ */ jsxs("div", { className: "mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row", children: [
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => setRdvOuvert(true),
+                className: "inline-flex h-[52px] w-full items-center justify-center rounded-xl bg-[#0f0f0f] px-8 text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black sm:w-auto",
+                children: "Réserver un entretien"
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "a",
+              {
+                href: WHATSAPP,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-surface-card px-8 text-[16px] tracking-[0.01em] text-text-primary transition-colors hover:bg-surface-border sm:w-auto",
+                children: "Écrire sur WhatsApp"
+              }
+            )
+          ] })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
+  ] });
+}
+const EASE$3 = [0.22, 1, 0.36, 1];
+const DUREES = { sonne: 2600, decroche: 900 };
+function Combine({ className = "" }) {
+  return /* @__PURE__ */ jsx("svg", { viewBox: "0 0 24 24", className, fill: "currentColor", "aria-hidden": true, children: /* @__PURE__ */ jsx("path", { d: "M6.6 10.8a15.5 15.5 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z" }) });
+}
+function AppelEntrant() {
+  const ref = useRef(null);
+  const visible = useInView(ref, { amount: 0.6 });
+  const [etape, setEtape] = useState("sonne");
+  const [secondes, setSecondes] = useState(0);
+  const pisteRef = useRef(null);
+  const [course, setCourse] = useState(0);
+  useLayoutEffect(() => {
+    const piste = pisteRef.current;
+    if (!piste) return;
+    const mesurer = () => setCourse(piste.clientWidth - 56);
+    mesurer();
+    const obs = new ResizeObserver(mesurer);
+    obs.observe(piste);
+    return () => obs.disconnect();
+  }, [etape]);
+  useEffect(() => {
+    if (!visible) {
+      setEtape("sonne");
+      setSecondes(0);
+      return;
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setEtape("enligne");
+      return;
+    }
+    const t1 = window.setTimeout(() => setEtape("decroche"), DUREES.sonne);
+    const t2 = window.setTimeout(() => setEtape("enligne"), DUREES.sonne + DUREES.decroche);
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [visible]);
+  useEffect(() => {
+    if (etape !== "enligne") return;
+    const t = window.setInterval(() => setSecondes((s) => s + 1), 1e3);
+    return () => window.clearInterval(t);
+  }, [etape]);
+  const duree = `${String(Math.floor(secondes / 60)).padStart(2, "0")}:${String(secondes % 60).padStart(2, "0")}`;
+  const sonne = etape === "sonne";
+  return /* @__PURE__ */ jsxs("div", { ref, className: "relative mx-auto flex h-[30rem] w-full items-center justify-center md:h-[34rem]", children: [
+    /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        "aria-hidden": true,
+        className: "pointer-events-none absolute inset-0 hidden items-center justify-center md:flex",
+        animate: { opacity: sonne ? 1 : 0 },
+        transition: { duration: 0.6, ease: "easeOut" },
+        children: [0, 1, 2].map((i) => /* @__PURE__ */ jsx(
+          "span",
+          {
+            className: "onde-appel absolute h-64 w-64 rounded-full border-2 border-[#1E3454]/30",
+            style: { animationDelay: `${-i * 0.9}s` }
+          },
+          i
+        ))
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        className: "relative h-[27rem] w-[13.5rem] rounded-[2.6rem] bg-[#1d1d1f] p-[7px] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.45)] md:h-[31rem] md:w-[15.5rem]",
+        animate: sonne ? { rotate: [0, -3, 3, -3, 3, -2, 2, 0, 0, 0], x: [0, -2, 2, -2, 2, -1, 1, 0, 0, 0] } : { rotate: 0, x: 0, y: etape === "decroche" ? -8 : 0 },
+        transition: sonne ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.5, ease: EASE$3 },
+        children: /* @__PURE__ */ jsxs("div", { className: "relative flex h-full w-full flex-col overflow-hidden rounded-[2.2rem] bg-gradient-to-b from-[#3a3d42] via-[#26282c] to-[#161718] px-5 pb-8 pt-12 text-white", children: [
+          /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "absolute left-1/2 top-2.5 h-5 w-20 -translate-x-1/2 rounded-full bg-black" }),
+          /* @__PURE__ */ jsx(AnimatePresence, { mode: "wait", children: etape !== "enligne" ? /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              className: "flex h-full flex-col items-center",
+              exit: { opacity: 0, y: -10 },
+              transition: { duration: 0.35 },
+              children: [
+                /* @__PURE__ */ jsx("p", { className: "text-xs text-white/60", children: "Appel entrant" }),
+                /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
+                /* @__PURE__ */ jsx("p", { className: "mt-3 text-xl", children: "Nouveau client" }),
+                /* @__PURE__ */ jsx("p", { className: "text-sm text-white/60", children: "via le site du cabinet" }),
+                /* @__PURE__ */ jsx("div", { className: "mt-auto w-full", children: /* @__PURE__ */ jsxs("div", { ref: pisteRef, className: "relative h-14 w-full overflow-hidden rounded-full bg-white/15", children: [
+                  /* @__PURE__ */ jsx(
+                    motion.p,
+                    {
+                      className: "absolute inset-0 flex items-center justify-center pl-12 text-[11px] text-white/70 md:text-xs",
+                      animate: { opacity: etape === "decroche" ? 0 : [0.4, 1, 0.4] },
+                      transition: etape === "decroche" ? { duration: 0.2 } : { duration: 1.8, repeat: Infinity },
+                      children: "faire glisser pour répondre"
+                    }
+                  ),
+                  /* @__PURE__ */ jsx(
+                    motion.span,
+                    {
+                      className: "absolute left-1 top-1 flex h-12 w-12 items-center justify-center rounded-full bg-[#34c759]",
+                      animate: { x: etape === "decroche" ? course : 0 },
+                      transition: { duration: 0.7, ease: EASE$3 },
+                      children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5" })
+                    }
+                  )
+                ] }) })
+              ]
+            },
+            "entrant"
+          ) : /* @__PURE__ */ jsxs(
+            motion.div,
+            {
+              className: "flex h-full flex-col items-center",
+              initial: { opacity: 0, y: 10 },
+              animate: { opacity: 1, y: 0 },
+              transition: { duration: 0.45, ease: EASE$3 },
+              children: [
+                /* @__PURE__ */ jsx("p", { className: "text-sm tabular-nums text-[#34c759]", children: duree }),
+                /* @__PURE__ */ jsx("span", { className: "mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/15 text-xl", children: "NC" }),
+                /* @__PURE__ */ jsx("p", { className: "mt-3 text-xl", children: "Nouveau client" }),
+                /* @__PURE__ */ jsx("p", { className: "text-sm text-white/60", children: "« Bonjour Maître, j'ai vu votre site. »" }),
+                /* @__PURE__ */ jsx("div", { className: "mt-auto grid w-full grid-cols-3 gap-3", children: ["Silence", "Clavier", "HP"].map((l) => /* @__PURE__ */ jsxs("span", { className: "flex flex-col items-center gap-1 text-[10px] text-white/60", children: [
+                  /* @__PURE__ */ jsx("span", { className: "h-11 w-11 rounded-full bg-white/15" }),
+                  l
+                ] }, l)) }),
+                /* @__PURE__ */ jsx("span", { className: "mt-5 flex h-12 w-12 items-center justify-center rounded-full bg-[#ff3b30]", children: /* @__PURE__ */ jsx(Combine, { className: "h-5 w-5 rotate-[135deg]" }) })
+              ]
+            },
+            "enligne"
+          ) })
+        ] })
+      }
+    )
+  ] });
+}
+function Final() {
+  const ref = useRef(null);
+  const boutonRef = useRef(null);
+  const [rdvOuvert, setRdvOuvert] = useState(false);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+  const ligne1 = useTransform(scrollYProgress, [0, 0.6], ["-12%", "0%"]);
+  const ligne2 = useTransform(scrollYProgress, [0, 0.6], ["12%", "0%"]);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 150, damping: 15 });
+  const sy = useSpring(my, { stiffness: 150, damping: 15 });
+  const attirer = (e) => {
+    if (e.pointerType !== "mouse" || !boutonRef.current) return;
+    const r = boutonRef.current.getBoundingClientRect();
+    mx.set((e.clientX - (r.left + r.width / 2)) * 0.3);
+    my.set((e.clientY - (r.top + r.height / 2)) * 0.3);
+  };
+  const relacher = () => {
+    mx.set(0);
+    my.set(0);
+  };
+  return /* @__PURE__ */ jsxs("section", { ref, className: "overflow-hidden bg-surface px-5 pb-8 pt-14 md:px-10 md:pb-10 md:pt-20", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+      /* @__PURE__ */ jsxs("h2", { className: "text-center text-[8vw] font-extrabold uppercase leading-[1.04] text-text-primary md:text-[4.6vw] lg:text-[min(4.4vw,76px)]", children: [
+        /* @__PURE__ */ jsx(motion.span, { className: "block", style: { x: ligne1 }, children: "Plus qu'un site." }),
+        /* @__PURE__ */ jsx(motion.span, { className: "block text-pop", style: { x: ligne2 }, children: "Des rendez-vous." })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "mt-6 md:mt-10", children: /* @__PURE__ */ jsx(AppelEntrant, {}) }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-6 flex flex-col items-center gap-10 text-center md:mt-8", children: [
+        /* @__PURE__ */ jsx("p", { className: "max-w-md text-xl leading-snug text-text-secondary md:text-2xl", children: "Un site pensé pour que vos prochains clients vous appellent." }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-6", onPointerMove: attirer, onPointerLeave: relacher, children: [
+          /* @__PURE__ */ jsx(
+            motion.button,
+            {
+              ref: boutonRef,
+              type: "button",
+              onClick: () => setRdvOuvert(true),
+              style: { x: sx, y: sy },
+              whileTap: { scale: 0.94 },
+              className: "flex h-28 w-28 items-center justify-center rounded-full bg-pop p-3 text-center text-base font-normal leading-tight text-white transition-colors hover:bg-[#16263d] md:h-40 md:w-40 md:p-6 md:text-lg",
+              children: "Prendre rendez-vous"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "a",
+            {
+              href: WHATSAPP,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "inline-flex min-h-[44px] items-center text-base text-text-muted underline-offset-4 transition-colors hover:text-text-primary hover:underline",
+              children: "Écrire sur WhatsApp"
+            }
+          )
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
+  ] });
+}
+const EASE$2 = [0.22, 1, 0.36, 1];
+const LARGEURS = ["md:col-span-4", "md:col-span-2", "md:col-span-2", "md:col-span-4"];
+const SURVOL = [
+  { carte: "[@media(hover:hover)]:hover:bg-[#1d1d1f]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
+  { carte: "[@media(hover:hover)]:hover:bg-[#4a5363]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
+  { carte: "[@media(hover:hover)]:hover:bg-pop", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" },
+  { carte: "[@media(hover:hover)]:hover:bg-[#8a7a5c]", texte: "[@media(hover:hover)]:group-hover:text-white", puce: "[@media(hover:hover)]:group-hover:bg-white" }
+];
+function Acquisition() {
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { id: "acquisition", children: /* @__PURE__ */ jsx(RechercheGoogle, {}) }),
+    /* @__PURE__ */ jsx("section", { className: "bg-surface px-5 pb-8 pt-16 md:px-10 md:pb-10 md:pt-8", children: /* @__PURE__ */ jsx("div", { className: "mx-auto max-w-7xl", children: /* @__PURE__ */ jsx("div", { className: "grid gap-4 md:grid-cols-6", children: LEVIERS.map((levier, i) => /* @__PURE__ */ jsxs(
+      motion.article,
+      {
+        className: `group flex flex-col justify-between rounded-[1.75rem] bg-surface-card p-7 transition-colors duration-500 md:min-h-[24rem] md:p-10 ${SURVOL[i].carte} ${LARGEURS[i]}`,
+        initial: { opacity: 0, y: 40 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE$2 },
+        children: [
+          /* @__PURE__ */ jsxs("div", { children: [
+            /* @__PURE__ */ jsx("p", { className: `text-sm font-medium text-accent transition-colors duration-500 ${SURVOL[i].texte}`, children: levier.titre }),
+            /* @__PURE__ */ jsx("h3", { className: `mt-4 text-2xl font-normal leading-[1.05] tracking-tight text-text-primary transition-colors duration-500 md:text-3xl ${SURVOL[i].texte}`, children: levier.accroche })
+          ] }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-8 space-y-2", children: levier.points.map((point) => /* @__PURE__ */ jsxs(
+            "li",
+            {
+              className: `flex gap-3 text-[15px] font-medium text-text-secondary transition-colors duration-500 ${SURVOL[i].texte}`,
+              children: [
+                /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: `mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pop transition-colors duration-500 ${SURVOL[i].puce}` }),
+                point
+              ]
+            },
+            point
+          )) })
+        ]
+      },
+      levier.titre
+    )) }) }) })
+  ] });
+}
+const DEPART = [
+  { x: 55, y: 30, r: -9 },
+  { x: 0, y: 10, r: 3 },
+  { x: -55, y: 35, r: 8 },
+  { x: 45, y: -40, r: 6 },
+  { x: 0, y: -60, r: -5 },
+  { x: -45, y: -35, r: -8 }
+];
+const FONDS = ["bg-[#eff0f2]", "bg-[#e8ecf2]", "bg-[#f1eee8]", "bg-[#e8ecf2]", "bg-[#f1eee8]", "bg-[#eff0f2]"];
+function Carte({
+  service,
+  i,
+  progression,
+  mobile
+}) {
+  const carteRef = useRef(null);
+  const { scrollYProgress: propre } = useScroll({ target: carteRef, offset: ["start 1", "start 0.5"] });
+  const p = mobile ? propre : progression;
+  const d = mobile ? { x: i % 2 === 0 ? 28 : -28, y: 12, r: i % 2 === 0 ? 7 : -7 } : DEPART[i % DEPART.length];
+  const x = useTransform(p, [0, 1], [`${d.x}%`, "0%"]);
+  const y = useTransform(p, [0, 1], [`${d.y}%`, "0%"]);
+  const rotate = useTransform(p, [0, 1], [d.r, 0]);
+  return /* @__PURE__ */ jsxs(
+    motion.article,
+    {
+      ref: carteRef,
+      style: { x, y, rotate, zIndex: 10 - i },
+      className: `relative flex flex-col rounded-[1.75rem] p-7 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] ring-4 ring-surface will-change-transform md:p-9 ${FONDS[i % FONDS.length]}`,
+      children: [
+        /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal leading-tight tracking-tight text-text-primary md:text-3xl", children: service.title }),
+        /* @__PURE__ */ jsx("p", { className: "mt-2 text-[15px] font-medium text-pop", children: service.lead }),
+        /* @__PURE__ */ jsx("p", { className: "mt-4 text-[15px] leading-relaxed text-text-secondary", children: service.body }),
+        /* @__PURE__ */ jsx("ul", { className: "mt-6 space-y-1.5", children: service.points.map((point) => /* @__PURE__ */ jsxs("li", { className: "flex gap-2.5 text-sm text-text-primary", children: [
+          /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-pop" }),
+          point
+        ] }, point)) })
+      ]
+    }
+  );
+}
+function Services() {
+  const grilleRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: grilleRef, offset: ["start 0.95", "start 0.2"] });
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const requete = window.matchMedia("(max-width: 767px)");
+    const suivre2 = () => setMobile(requete.matches);
+    suivre2();
+    requete.addEventListener("change", suivre2);
+    return () => requete.removeEventListener("change", suivre2);
+  }, []);
+  return /* @__PURE__ */ jsx("section", { id: "services", className: "overflow-x-clip bg-surface px-5 pb-8 pt-8 md:px-10 md:pb-10 md:pt-10", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+    /* @__PURE__ */ jsxs("h2", { className: "max-w-5xl text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
+      "Une agence dédiée aux avocats, ",
+      /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "qui conçoit votre site et vous amène des clients." })
+    ] }),
+    /* @__PURE__ */ jsx("p", { className: "mt-6 max-w-2xl text-lg font-medium text-text-secondary", children: "Site de cabinet, prise de rendez-vous en ligne, référencement local et campagnes. Un site d'avocat se juge sur les dossiers qu'il apporte au cabinet, et sur sa conformité aux règles de la profession." }),
+    /* @__PURE__ */ jsx("div", { ref: grilleRef, className: "mt-14 grid gap-5 md:mt-20 md:grid-cols-2 lg:grid-cols-3", children: SERVICES.map((s, i) => /* @__PURE__ */ jsx(Carte, { service: s, i, progression: scrollYProgress, mobile }, s.title)) }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-12 flex flex-col items-start gap-6 rounded-[1.75rem] bg-surface-light p-8 md:mt-16 md:flex-row md:items-center md:justify-between md:p-12", children: [
+      /* @__PURE__ */ jsx("p", { className: "max-w-2xl text-xl font-medium leading-snug text-text-primary md:text-2xl", children: "Votre cabinet n'a pas encore de site, ou votre site ne vous apporte aucun client ? Présentez-nous votre cabinet sur WhatsApp." }),
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: WHATSAPP,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          "data-curseur": "WhatsApp",
+          className: "inline-flex min-h-[56px] shrink-0 items-center rounded-full bg-accent px-8 text-base font-medium text-surface transition-colors hover:bg-accent-hover",
+          children: "Présenter mon cabinet"
+        }
+      )
+    ] })
+  ] }) });
+}
+const EASE$1 = [0.22, 1, 0.36, 1];
+function Deontologie() {
+  return /* @__PURE__ */ jsx("section", { id: "deontologie", className: "bg-pop px-5 py-20 md:px-10 md:py-28", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+    /* @__PURE__ */ jsxs("div", { className: "grid gap-8 lg:grid-cols-12", children: [
+      /* @__PURE__ */ jsxs("h2", { className: "text-[9vw] text-white md:text-5xl lg:col-span-7 lg:text-6xl", children: [
+        "Conforme aux règles ",
+        /* @__PURE__ */ jsx("span", { className: "font-bold", children: "de la profession." })
+      ] }),
+      /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-white/75 lg:col-span-5", children: "Chaque page est relue au regard de l'article 10 du Règlement intérieur national et du vade-mecum de la communication du Conseil national des barreaux. Vous validez tout avant la mise en ligne." })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 md:mt-16", children: VERIFICATIONS.map((v, i) => /* @__PURE__ */ jsxs(
+      motion.article,
+      {
+        className: "rounded-[1.75rem] bg-white/[0.07] p-7",
+        initial: { opacity: 0, y: 30 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.7, delay: i % 4 * 0.06, ease: EASE$1 },
+        children: [
+          /* @__PURE__ */ jsx("h3", { className: "text-xl font-normal tracking-tight text-white", children: v.titre }),
+          /* @__PURE__ */ jsx("p", { className: "mt-3 text-[15px] font-medium leading-relaxed text-white/70", children: v.texte })
+        ]
+      },
+      v.titre
+    )) })
+  ] }) });
+}
+const FONDATEUR = MEMBERS[0];
+const DISCIPLINES_EQUIPE = [
+  "Direction artistique",
+  "Rédaction juridique grand public",
+  "Communication des avocats",
+  "Google Ads",
+  "Meta Ads",
+  "Mesure des demandes",
+  "Gestion de projet"
+];
+const PHOTOS = [
+  { src: "/images/equipe/atelier.webp", alt: "L'équipe au travail autour d'un bureau", classe: "aspect-[4/3] md:col-span-7 md:aspect-auto md:h-[28rem]" },
+  { src: "/images/equipe/creation.webp", alt: "Séance de création sur un projet de site", classe: "hidden md:block md:col-span-5 md:h-[28rem]" }
+];
+const EASE = [0.22, 1, 0.36, 1];
+function Equipe() {
+  return /* @__PURE__ */ jsx("section", { id: "agence", className: "bg-surface-light px-5 py-10 md:px-10 md:py-14", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+    /* @__PURE__ */ jsxs("div", { className: "grid gap-10 lg:grid-cols-12", children: [
+      /* @__PURE__ */ jsx("div", { className: "lg:col-span-7", children: /* @__PURE__ */ jsxs("h2", { className: "text-[9vw] text-text-primary md:text-5xl lg:text-6xl", children: [
+        "Une équipe, ",
+        /* @__PURE__ */ jsx("span", { className: "font-bold text-pop", children: "un seul client : l'avocat." })
+      ] }) }),
+      /* @__PURE__ */ jsx("p", { className: "self-end text-lg font-medium leading-relaxed text-text-secondary lg:col-span-5", children: "Aucun intermédiaire : vous échangez directement avec l'équipe qui conçoit, rédige et développe votre site. Après la mise en ligne, nous pilotons votre visibilité, du référencement local aux campagnes Google Ads." })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "mt-12 grid gap-4 md:mt-16 md:grid-cols-12", children: PHOTOS.map((photo, i) => /* @__PURE__ */ jsx(
+      motion.figure,
+      {
+        className: `overflow-hidden rounded-[1.75rem] bg-surface-card ${photo.classe}`,
+        initial: { opacity: 0, y: 40 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, margin: "-60px" },
+        transition: { duration: 0.8, delay: i * 0.08, ease: EASE },
+        children: /* @__PURE__ */ jsx(
+          "img",
+          {
+            src: photo.src,
+            alt: photo.alt,
+            loading: "lazy",
+            decoding: "async",
+            className: "h-full w-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03]"
+          }
+        )
+      },
+      photo.src
+    )) }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-4 grid gap-4 md:grid-cols-2", children: [
+      /* @__PURE__ */ jsxs(
+        motion.article,
+        {
+          className: "flex flex-col rounded-[1.75rem] bg-surface-card p-8 md:p-10",
+          initial: { opacity: 0, y: 40 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "-60px" },
+          transition: { duration: 0.8, ease: EASE },
+          children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-4", children: [
+              /* @__PURE__ */ jsx("span", { className: "flex h-16 w-16 items-center justify-center rounded-full bg-pop text-xl font-normal text-white", children: FONDATEUR.initials }),
+              /* @__PURE__ */ jsxs("div", { children: [
+                /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight text-text-primary md:text-3xl", children: FONDATEUR.name }),
+                /* @__PURE__ */ jsxs("p", { className: "text-sm font-medium text-accent", children: [
+                  "Fondateur · ",
+                  FONDATEUR.role
+                ] })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-text-secondary", children: FONDATEUR.pitch }),
+            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: FONDATEUR.disciplines.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-surface-light px-3 py-1.5 text-xs font-medium text-text-secondary", children: d }, d)) }),
+            /* @__PURE__ */ jsx(
+              "a",
+              {
+                href: FONDATEUR.linkedin,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                className: "mt-6 inline-flex min-h-[44px] w-fit items-center text-sm font-medium text-text-primary transition-colors hover:text-accent",
+                children: "Profil LinkedIn"
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs(
+        motion.article,
+        {
+          className: "flex flex-col rounded-[1.75rem] bg-pop p-8 text-white md:p-10",
+          initial: { opacity: 0, y: 40 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "-60px" },
+          transition: { duration: 0.8, delay: 0.1, ease: EASE },
+          children: [
+            /* @__PURE__ */ jsx("h3", { className: "text-2xl font-normal tracking-tight md:text-3xl", children: "L'équipe" }),
+            /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-white/75", children: "Direction de projet, design et marketing" }),
+            /* @__PURE__ */ jsx("p", { className: "mt-6 flex-1 text-[15px] font-medium leading-relaxed text-white/85", children: "Autour du développement, une équipe cadre votre besoin, rédige vos pages dans le respect des règles de la profession, pilote le projet jusqu'à la livraison, puis fait vivre le site : référencement, campagnes et mesure des demandes de rendez-vous." }),
+            /* @__PURE__ */ jsx("ul", { className: "mt-6 flex flex-wrap gap-2", children: DISCIPLINES_EQUIPE.map((d) => /* @__PURE__ */ jsx("li", { className: "rounded-full bg-white/15 px-3 py-1.5 text-xs font-medium text-white", children: d }, d)) })
+          ]
+        }
+      )
+    ] })
+  ] }) });
+}
+function Faq() {
+  const [ouverte, setOuverte] = useState(0);
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQ.map((item2) => ({
+        "@type": "Question",
+        name: item2.question,
+        acceptedAnswer: { "@type": "Answer", text: item2.reponse }
+      }))
+    });
+    document.head.appendChild(script);
+    return () => {
+      script.remove();
+    };
+  }, []);
+  return /* @__PURE__ */ jsx("section", { id: "faq", className: "relative bg-surface-light py-10 md:py-14", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-3xl px-6", children: [
+    /* @__PURE__ */ jsx("div", { className: "mb-14 text-center md:mb-20", children: /* @__PURE__ */ jsx(
+      SplitText,
+      {
+        as: "h2",
+        by: "word",
+        text: "Les questions que posent les avocats",
+        delay: 0.1,
+        className: "mx-auto block font-display text-3xl font-medium leading-[1.05] tracking-tight text-text-primary md:text-5xl"
+      }
+    ) }),
+    /* @__PURE__ */ jsx("dl", { children: FAQ.map((item2, index) => {
+      const estOuverte = ouverte === index;
+      return /* @__PURE__ */ jsxs(
+        motion.div,
+        {
+          className: "mb-3 rounded-2xl bg-surface-card px-5 last:mb-0 md:px-7",
+          initial: { opacity: 0, y: 20 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: VIEWPORT,
+          transition: { duration: 0.5, delay: index * 0.04, ease: EASE_OUT },
+          children: [
+            /* @__PURE__ */ jsx("dt", { children: /* @__PURE__ */ jsxs(
+              "button",
+              {
+                type: "button",
+                onClick: () => setOuverte(estOuverte ? null : index),
+                "aria-expanded": estOuverte,
+                "aria-controls": `faq-reponse-${index}`,
+                className: "flex w-full items-center justify-between gap-6 py-6 text-left",
+                children: [
+                  /* @__PURE__ */ jsx("span", { className: "font-display text-base font-medium text-text-primary md:text-lg", children: item2.question }),
+                  /* @__PURE__ */ jsx(
+                    motion.span,
+                    {
+                      "aria-hidden": true,
+                      className: "shrink-0 text-2xl leading-none text-accent",
+                      animate: { rotate: estOuverte ? 45 : 0 },
+                      transition: { duration: 0.3, ease: EASE_OUT },
+                      children: "+"
+                    }
+                  )
+                ]
+              }
+            ) }),
+            /* @__PURE__ */ jsx(AnimatePresence, { initial: false, children: estOuverte && /* @__PURE__ */ jsx(
+              motion.dd,
+              {
+                id: `faq-reponse-${index}`,
+                className: "overflow-hidden",
+                initial: { height: 0, opacity: 0 },
+                animate: { height: "auto", opacity: 1 },
+                exit: { height: 0, opacity: 0 },
+                transition: { duration: 0.35, ease: EASE_OUT },
+                children: /* @__PURE__ */ jsx("p", { className: "pb-6 leading-relaxed text-text-secondary sm:pr-10", children: item2.reponse })
+              }
+            ) })
+          ]
+        },
+        item2.question
+      );
+    }) })
+  ] }) });
+}
+const RACCOURCIS = [
+  { to: "#services", label: "Services" },
+  { to: "#deontologie", label: "Déontologie" },
+  { to: "#realisation", label: "Réalisation" },
+  { to: "#faq", label: "Questions fréquentes" }
+];
+const CONTACT = [
+  { href: WHATSAPP, label: "WhatsApp" },
+  { href: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/", label: "LinkedIn" }
+];
+const lien = "inline-block py-2 text-[15px] font-medium text-text-secondary transition-colors hover:text-accent";
+function PiedDePage() {
+  return /* @__PURE__ */ jsxs("footer", { className: "overflow-hidden bg-surface px-5 pt-10 md:px-10 md:pt-14", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl", children: [
+      /* @__PURE__ */ jsxs("nav", { "aria-label": "Plan du site", className: "grid gap-10 sm:grid-cols-2 lg:grid-cols-12", children: [
+        /* @__PURE__ */ jsxs("div", { className: "lg:col-span-4", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-text-muted", children: "Le site" }),
+          /* @__PURE__ */ jsx("ul", { className: "mt-4", children: RACCOURCIS.map((l) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("a", { href: l.to, className: lien, children: l.label }) }, l.to)) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "lg:col-span-4", children: [
+          /* @__PURE__ */ jsx("p", { className: "text-sm font-medium text-text-muted", children: "Prendre rendez-vous" }),
+          /* @__PURE__ */ jsxs("ul", { className: "mt-4", children: [
+            /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(Link, { to: "/projet", className: lien, children: "Formulaire en quatre questions" }) }),
+            CONTACT.map((r) => /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("a", { href: r.href, target: "_blank", rel: "noopener noreferrer", className: lien, children: r.label }) }, r.href))
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "lg:col-span-4", children: [
+          /* @__PURE__ */ jsx(Logo, {}),
+          /* @__PURE__ */ jsx("p", { className: "mt-4 max-w-xs py-2 text-[15px] font-medium leading-relaxed text-text-secondary", children: "Sites internet, prise de rendez-vous et visibilité en ligne, exclusivement pour les avocats et les cabinets d'avocats." })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "mt-14 flex flex-col gap-3 text-sm font-medium text-text-muted md:flex-row md:items-center md:justify-between", children: [
+        /* @__PURE__ */ jsxs("p", { children: [
+          "AvocatLeads © ",
+          (/* @__PURE__ */ new Date()).getFullYear(),
+          ", tous droits réservés"
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-6", children: [
+          /* @__PURE__ */ jsx(Link, { to: "/mentions-legales", className: "py-2 transition-colors hover:text-accent", children: "Mentions légales" }),
+          /* @__PURE__ */ jsx(Link, { to: "/politique-confidentialite", className: "py-2 transition-colors hover:text-accent", children: "Politique de confidentialité" })
+        ] })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "mt-10 overflow-hidden", children: /* @__PURE__ */ jsxs(
+      motion.p,
+      {
+        "aria-hidden": true,
+        className: "whitespace-nowrap pb-[0.06em] text-center text-[14vw] font-bold leading-[1.05] tracking-[-0.05em] text-text-primary",
+        style: { fontFamily: "'Inter Tight', system-ui, sans-serif" },
+        initial: { y: "60%" },
+        whileInView: { y: "0%" },
+        viewport: { once: true },
+        transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+        children: [
+          /* @__PURE__ */ jsx("span", { className: "font-light", children: "avocat" }),
+          /* @__PURE__ */ jsx("span", { children: "leads" })
+        ]
+      }
+    ) })
+  ] });
+}
+const SOBRE = {
+  "--pop": "30 52 84",
+  "--citron": "138 122 92"
+};
+function AvocatLeads() {
+  return /* @__PURE__ */ jsx("div", { style: SOBRE, children: /* @__PURE__ */ jsxs(SmoothScroll, { children: [
+    /* @__PURE__ */ jsx(Navigation, {}),
+    /* @__PURE__ */ jsxs("main", { children: [
+      /* @__PURE__ */ jsx(Prechargeur, {}),
+      /* @__PURE__ */ jsx(Hero, {}),
+      /* @__PURE__ */ jsx(Manifeste, {}),
+      /* @__PURE__ */ jsx(Reference, {}),
+      /* @__PURE__ */ jsx(RendezVous, {}),
+      /* @__PURE__ */ jsx(Final, {}),
+      /* @__PURE__ */ jsx(Acquisition, {}),
+      /* @__PURE__ */ jsx(Services, {}),
+      /* @__PURE__ */ jsx(Deontologie, {}),
+      /* @__PURE__ */ jsx(AvisGoogleSection, {}),
+      /* @__PURE__ */ jsx(Equipe, {}),
+      /* @__PURE__ */ jsx(Faq, {}),
+      /* @__PURE__ */ jsx(PiedDePage, {})
+    ] }),
+    /* @__PURE__ */ jsx(Curseur, {})
+  ] }) });
+}
 const Login = lazy(() => import("./assets/Login-DIbTS8yc.js"));
 const ClientPortal = lazy(() => import("./assets/ClientPortal-Cyb14TnS.js"));
 const DashboardLayout = lazy(() => import("./assets/DashboardLayout-B12nLCyN.js"));
@@ -4634,6 +5353,10 @@ function RouteFallback() {
 function App() {
   const location = useLocation();
   const isDashboard = location.pathname.startsWith("/dashboard") || location.pathname === "/login" || location.pathname.startsWith("/espace/");
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (location.pathname === "/") navigate("/avocatleads", { replace: true });
+  }, [location.pathname, navigate]);
   useEffect(() => {
     document.documentElement.classList.toggle("studio", !isDashboard);
   }, [isDashboard]);
@@ -4651,6 +5374,13 @@ function App() {
           }
         )
       ] }) })
+    ] });
+  }
+  if (location.pathname.replace(/\/$/, "") === "/avocatleads") {
+    return /* @__PURE__ */ jsxs(Fragment, { children: [
+      /* @__PURE__ */ jsx(Seo, {}),
+      /* @__PURE__ */ jsx(ScrollToTop, {}),
+      /* @__PURE__ */ jsx(AvocatLeads, {})
     ] });
   }
   if (location.pathname === "/projet") {

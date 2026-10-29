@@ -8,7 +8,7 @@ const FONDATEUR = MEMBERS[0]
 const DISCIPLINES_EQUIPE = [
   'Direction artistique',
   'UX / UI',
-  'Valorisation de portfolio',
+  'Communication des avocats',
   'Meta Ads',
   'Google Ads',
   'Tracking & conversions',

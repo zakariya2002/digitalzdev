@@ -7,6 +7,16 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "destination": "/avocatleads",
+      "permanent": false
+    },
+    {
+      "source": "/v2",
+      "destination": "/avocatleads",
+      "permanent": false
+    },
+    {
       "source": "/reuni",
       "destination": "/#projets",
       "permanent": true

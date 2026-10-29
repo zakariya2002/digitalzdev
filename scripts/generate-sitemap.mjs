@@ -75,7 +75,8 @@ function derniereModification(fichier) {
 }
 
 const pages = [
-  { loc: '/', changefreq: 'weekly', priority: '1.0', source: 'src/pages/Home.tsx' },
+  // L'accueil redirige vers AvocatLeads : c'est elle qui porte la priorité.
+  { loc: '/avocatleads', changefreq: 'weekly', priority: '1.0', source: 'src/pages/AvocatLeads.tsx' },
   { loc: '/contact', changefreq: 'monthly', priority: '0.8', source: 'src/pages/Contact.tsx' },
   // Les pages projet sont toutes rendues par le même composant à partir du
   // même fichier de données : leur date de mise à jour est celle de ce couple.

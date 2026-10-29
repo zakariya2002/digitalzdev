@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Seo from './components/Seo'
 import SmoothScroll from './components/SmoothScroll'
@@ -16,6 +16,7 @@ import MentionsLegales from './pages/MentionsLegales'
 import PolitiqueConfidentialite from './pages/PolitiqueConfidentialite'
 import NotFound from './pages/NotFound'
 import Projet from './pages/Projet'
+import AvocatLeads from './pages/AvocatLeads'
 import { projects } from './data/projects'
 
 // Le back-office embarque Supabase, Twilio, Recharts et pdf.js. Rien de tout
@@ -38,6 +39,13 @@ export default function App() {
   const isDashboard = location.pathname.startsWith('/dashboard')
     || location.pathname === '/login'
     || location.pathname.startsWith('/espace/')
+
+  // L'accueil renvoie vers AvocatLeads. Vercel redirige déjà les visites
+  // directes ; ceci couvre la navigation interne vers « / ».
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (location.pathname === '/') navigate('/avocatleads', { replace: true })
+  }, [location.pathname, navigate])
 
   // Le thème « studio » ne vaut que pour la vitrine.
   useEffect(() => {
@@ -62,6 +70,18 @@ export default function App() {
             />
           </Routes>
         </Suspense>
+      </>
+    )
+  }
+
+  // AvocatLeads, la vitrine réservée aux avocats : une page autonome, avec
+  // sa propre navigation. C'est désormais la page d'accueil du site.
+  if (location.pathname.replace(/\/$/, '') === '/avocatleads') {
+    return (
+      <>
+        <Seo />
+        <ScrollToTop />
+        <AvocatLeads />
       </>
     )
   }

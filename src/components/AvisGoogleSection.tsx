@@ -47,9 +47,9 @@ function LogoGoogle({ className = '' }: { className?: string }) {
  * ligne n'affiche que data/avisGoogle.ts.
  */
 const EXEMPLES: AvisGoogle[] = [
-  { auteur: "Claire D., agence d'architecture", note: 5, texte: "Un site sobre, clair sur nos types de projets, et des demandes de premier rendez-vous qui arrivent désormais par le formulaire plutôt que par hasard.", date: 'il y a 2 semaines' },
-  { auteur: 'Karim B., architecte', note: 5, texte: "Nos projets sont enfin montrés en grand, sans perte de qualité. Les maîtres d'ouvrage nous parlent du site dès le premier échange.", date: 'il y a 1 mois' },
-  { auteur: "Thomas L., architecte d'intérieur", note: 5, texte: "Galeries rapides, photos en pleine qualité et une fiche Google optimisée : je reçois des demandes de projets chaque semaine.", date: 'il y a 2 mois' },
+  { auteur: 'Maître Sarah M.', note: 5, texte: "Un site sobre, clair sur nos domaines d'intervention, et des demandes de premier rendez-vous qui arrivent désormais par le formulaire plutôt que par hasard.", date: 'il y a 2 semaines' },
+  { auteur: 'Karim B., avocat en droit du travail', note: 5, texte: "Une page par domaine, rédigée sans jargon : les clients arrivent au premier rendez-vous en sachant déjà ce que je fais et comment je travaille.", date: 'il y a 1 mois' },
+  { auteur: "Thomas L., cabinet d'avocats d'affaires", note: 5, texte: "Prise de rendez-vous en ligne et fiche Google optimisée : nous recevons des demandes de consultation chaque semaine.", date: 'il y a 2 mois' },
 ]
 
 /** Vrai hors du site en ligne : en local et sur les prévisualisations. */

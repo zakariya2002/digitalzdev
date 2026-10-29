@@ -6,7 +6,6 @@ import {
   useTransform,
 } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import Trousseau from './Trousseau'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -122,11 +121,10 @@ export default function HeroStudio() {
           className="relative z-10 flex h-full flex-col items-center justify-center px-5 text-center"
           style={{ opacity: titreOpacite, y: titreY, fontFamily: "'Inter Tight', system-ui, sans-serif" }}
         >
-          <Trousseau className="pointer-events-none absolute inset-0 -z-10" />
           <h1 className="text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]">
             <Ligne delai={0.25}>Créons un site</Ligne>
             <Ligne delai={0.35}>
-              à la hauteur de vos <span className="text-pop">projets.</span>
+              à la hauteur de votre <span className="text-pop">cabinet.</span>
             </Ligne>
           </h1>
 

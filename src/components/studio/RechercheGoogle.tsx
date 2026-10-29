@@ -7,22 +7,22 @@ import {
   type MotionValue,
 } from 'framer-motion'
 
-const REQUETE = 'architecte maison contemporaine lyon'
+const REQUETE = 'avocat droit des affaires lyon'
 const NOTE_DEBUT = 3
 const NOTE_FIN = 5
 
 /** Les concurrents, dans l'ordre où Google les classe au départ. */
 const CONCURRENTS = [
-  { titre: 'Atelier Durand Architectes · Lyon', url: 'atelier-durand.fr', texte: 'Maisons individuelles, extensions et rénovations. Permis de construire.' },
-  { titre: 'Architecte Lyon : annuaire des agences', url: 'annuaire-architectes.com', texte: 'Comparez 310 architectes à Lyon et dans le Rhône. Devis gratuits.' },
-  { titre: 'Lefèvre Architecture · Rénovation', url: 'lefevre-architecture.com', texte: 'Réhabilitation, surélévation et aménagement de combles.' },
-  { titre: 'Faire construire : trouver un architecte', url: 'forum-construire.fr', texte: 'Discussion · 52 réponses · Quel architecte pour une maison contemporaine ?' },
+  { titre: 'Cabinet Durand & Associés · Avocats Lyon', url: 'durand-avocats.fr', texte: 'Conseil et contentieux des entreprises. Prise de rendez-vous par téléphone.' },
+  { titre: 'Avocat affaires Lyon : annuaire des cabinets', url: 'annuaire-juridique.com', texte: 'Comparez 240 avocats en droit des affaires à Lyon et dans le Rhône.' },
+  { titre: 'Lefèvre Avocats · Droit commercial', url: 'lefevre-avocats.com', texte: 'Création de société, baux commerciaux, recouvrement de créances.' },
+  { titre: 'Droit des affaires : trouver un avocat', url: 'forum-entrepreneurs.fr', texte: 'Discussion · 38 réponses · Quel avocat choisir pour une levée de fonds ?' },
 ]
 
 const CLIENT = {
-  titre: 'Martin Architectes · Maisons contemporaines à Lyon',
-  url: 'martin-architectes.fr',
-  texte: 'De l\'esquisse au chantier : maisons neuves, extensions, rénovations. Premier rendez-vous sous 48 h.',
+  titre: 'Martin Avocats · Droit des affaires à Lyon',
+  url: 'martin-avocats.fr',
+  texte: 'Cabinet dédié aux entreprises : création, contrats, levées de fonds. Premier rendez-vous sous 48 h.',
 }
 
 /** Hauteur d'une ligne de résultat, en pixels : plus haute sur mobile, où
@@ -327,13 +327,13 @@ export default function RechercheGoogle() {
               {/* Fiche Google de l'établissement */}
               <div className="hidden self-start rounded-xl p-4 ring-1 ring-black/10 md:block">
                 <div className="h-24 rounded-lg bg-gradient-to-br from-[#e8eaed] to-[#c9ccd1]" />
-                <p className="mt-3 text-[17px] text-[#202124]">Martin Architectes</p>
+                <p className="mt-3 text-[17px] text-[#202124]">Martin Avocats</p>
                 <p className="mt-0.5 flex items-center gap-1.5 text-sm text-[#4d5156]">
                   <motion.span className="tabular-nums text-[#202124]">{fiche.note}</motion.span>
                   <Etoiles remplissage={fiche.remplissage} />
                   <motion.span className="tabular-nums">{fiche.avis}</motion.span>
                 </p>
-                <p className="mt-1 text-xs text-[#4d5156]">Architecte · Lyon 6e · Ouvert</p>
+                <p className="mt-1 text-xs text-[#4d5156]">Avocat · Lyon 2e · Ouvert</p>
                 <div className="mt-3 grid grid-cols-3 gap-1.5 text-center text-[11px] text-[#1a73e8]">
                   <span className="rounded-full py-1.5 ring-1 ring-black/10">Itinéraire</span>
                   <span className="rounded-full py-1.5 ring-1 ring-black/10">Site</span>

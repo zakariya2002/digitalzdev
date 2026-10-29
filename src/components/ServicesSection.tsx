@@ -4,7 +4,7 @@ import { EASE_OUT, VIEWPORT } from './motion/config'
 
 /** Conversation WhatsApp avec Zakariya, message d'ouverture prérempli. */
 export const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
-  "Bonjour Digitalz Dev, je suis architecte et j'aimerais vous parler du site de mon agence : "
+  "Bonjour Digitalz Dev, je suis avocat et j'aimerais vous parler du site de mon cabinet : "
 )}`
 
 interface Service {
@@ -16,30 +16,30 @@ interface Service {
 
 export const SERVICES: Service[] = [
   {
-    title: "Site d'agence d'architecture",
-    lead: "Pour présenter votre agence et déclencher la prise de contact.",
-    body: "Nous concevons un site taillé pour votre agence plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise, « architecte maison contemporaine », « extension », « rénovation », et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
+    title: "Site de cabinet d'avocats",
+    lead: "Pour présenter votre cabinet et déclencher la prise de contact.",
+    body: "Nous concevons un site taillé pour votre cabinet plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise, « avocat divorce », « avocat licenciement », « avocat droit des affaires », et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
     points: [
       'Maquettes validées avant la première ligne de code',
-      'Pages par type de projet et par ville, rédigées pour Google',
+      'Une page par domaine d\'intervention et par ville',
       'Formulaire de contact qui qualifie les demandes',
       'Formation à la prise en main, vous restez autonome',
     ],
   },
   {
-    title: 'Portfolio de réalisations',
-    lead: "Pour que vos projets parlent avant vous.",
-    body: "Vos réalisations montrées en grand, sans perte de qualité et sans ralentir le site : galeries plein écran, fiches projet avec programme, surface, lieu et photos avant-après. Vous ajoutez vous-même chaque nouveau chantier livré.",
+    title: 'Prise de rendez-vous en ligne',
+    lead: "Pour que le premier rendez-vous se prenne sans un appel.",
+    body: "Le visiteur choisit son domaine, décrit sa situation en quelques questions et réserve un créneau, au cabinet ou en visioconférence. Vous recevez des demandes déjà qualifiées, et vous gardez la main sur vos disponibilités.",
     points: [
-      'Galeries haute définition, chargement rapide',
-      'Fiche par projet : programme, surface, lieu, année',
-      'Filtres par type : neuf, extension, rénovation, intérieur',
-      'Mise en avant des prix et publications',
+      'Agenda synchronisé avec votre calendrier',
+      'Consultation au cabinet ou en visioconférence',
+      'Questions de pré-qualification par domaine',
+      'Paiement en ligne de la consultation, si vous le souhaitez',
     ],
   },
   {
     title: 'Refonte de site internet',
-    lead: "Pour un site d'agence qui ne montre plus ce que vous faites.",
+    lead: "Pour un site de cabinet qui ne dit plus ce que vous faites.",
     body: "Nous partons de l'existant : ce qui fonctionne, ce qui coince, ce que disent vos statistiques. La refonte préserve votre référencement acquis grâce à un plan de redirections complet, et corrige ce qui vous coûtait des visiteurs, notamment la lenteur et le confort de lecture sur mobile.",
     points: [
       'Audit du site actuel, contenus et performances',
@@ -49,19 +49,19 @@ export const SERVICES: Service[] = [
     ],
   },
   {
-    title: "Espace client maîtres d'ouvrage",
-    lead: "Pour suivre vos chantiers sans multiplier les e-mails.",
-    body: "Un espace privé où vos maîtres d'ouvrage retrouvent plans, comptes rendus de chantier, photos d'avancement et documents à signer. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre agence et prestataire technique.",
+    title: 'Espace client sécurisé',
+    lead: "Pour échanger les pièces d'un dossier sans multiplier les e-mails.",
+    body: "Un espace privé où vos clients déposent leurs pièces, suivent l'avancement de leur dossier et retrouvent conventions d'honoraires et documents à signer. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre cabinet et prestataire technique.",
     points: [
-      'Plans et documents partagés par projet',
-      "Comptes rendus et photos d'avancement",
-      'Validation des étapes par le client',
-      'Accès sécurisé, sur ordinateur et mobile',
+      'Dépôt et partage des pièces par dossier',
+      "Suivi des étapes et des échéances",
+      "Convention d'honoraires et documents à signer",
+      'Accès sécurisé, données hébergées en France',
     ],
   },
   {
     title: 'Meta Ads et Google Ads',
-    lead: "Pour toucher les particuliers qui cherchent un architecte maintenant.",
+    lead: "Pour toucher les particuliers et les entreprises qui cherchent un avocat maintenant.",
     body: "Un site sans visiteurs ne sert à rien. Nous mettons en place et pilotons vos campagnes : structure des comptes, audiences, rédaction et création des annonces, arbitrages de budget. Les conversions sont mesurées, pour savoir ce qui rapporte et ce qui coûte.",
     points: [
       'Création et structuration des comptes publicitaires',
@@ -72,7 +72,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'Référencement naturel',
-    lead: "Pour être trouvé sur « architecte » + votre ville, pas seulement sur votre nom.",
+    lead: "Pour être trouvé sur « avocat » + votre domaine + votre ville, pas seulement sur votre nom.",
     body: "Le référencement se construit dès la conception : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus qui répondent aux questions réelles de vos clients. Nous livrons un site déjà prêt, puis nous suivons les positions.",
     points: [
       'Architecture et balisage optimisés dès le départ',

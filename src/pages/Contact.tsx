@@ -5,10 +5,11 @@ import emailjs from '@emailjs/browser'
 import Footer from '../components/Footer'
 
 const PROJECT_TYPES = [
-  "Site d'agence / portfolio",
+  'Site de cabinet',
   'Refonte de site',
   'Référencement local',
-  "Espace client maîtres d'ouvrage",
+  'Prise de rendez-vous en ligne',
+  'Espace client sécurisé',
   'Campagnes Google / Meta',
   'Autre',
 ]
@@ -123,7 +124,7 @@ export default function Contact() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            Parlons de votre agence
+            Parlons de votre cabinet
           </motion.h1>
           <motion.p
             className="text-text-secondary text-lg md:text-xl max-w-xl mx-auto"
@@ -175,14 +176,14 @@ export default function Contact() {
                     </div>
                     <div>
                       <label className="block text-sm text-text-secondary mb-1.5 font-display">
-                        Agence / cabinet
+                        Cabinet
                       </label>
                       <input
                         type="text"
                         value={form.company}
                         onChange={(e) => update('company', e.target.value)}
                         className="w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors"
-                        placeholder="Nom de votre agence"
+                        placeholder="Nom de votre cabinet"
                       />
                     </div>
                   </div>
@@ -197,7 +198,7 @@ export default function Contact() {
                         value={form.email}
                         onChange={(e) => update('email', e.target.value)}
                         className="w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors"
-                        placeholder="jean@agence-archi.fr"
+                        placeholder="jean@cabinet-avocat.fr"
                       />
                     </div>
                     <div>
@@ -355,7 +356,7 @@ export default function Contact() {
                     value={form.description}
                     onChange={(e) => update('description', e.target.value)}
                     className="w-full px-4 py-3 bg-surface-card border border-surface-border rounded-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors resize-none"
-                    placeholder="Votre agence, les projets que vous voulez attirer (maisons neuves, extensions, rénovations…), des sites d'architectes que vous aimez..."
+                    placeholder="Votre cabinet, vos domaines d'intervention, les clients que vous voulez attirer (particuliers, entreprises…), des sites de cabinets que vous aimez..."
                   />
                 </fieldset>
 

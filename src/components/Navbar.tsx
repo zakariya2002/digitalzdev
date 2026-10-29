@@ -15,7 +15,7 @@ const LIENS = [
 
 type Lien = (typeof LIENS)[number]
 
-/** Le formulaire en quelques questions, réservé aux architectes. */
+/** Le formulaire en quelques questions, réservé aux avocats. */
 const PROJET = '/projet'
 const EASE = [0.76, 0, 0.24, 1] as const
 
