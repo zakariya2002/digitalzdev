@@ -20,6 +20,15 @@ export interface PageSeo {
   description: string
   /** Page d'atterrissage publicitaire, tenue hors de l'index. */
   noindex?: boolean
+  /** Image de partage propre à la page, chemin depuis la racine du site. */
+  image?: string
+  /** Largeur et hauteur de cette image, en pixels. */
+  imageSize?: [number, number]
+  imageAlt?: string
+  /** Nom du site affiché au partage, si la page porte une autre marque. */
+  siteName?: string
+  /** Icône d'onglet propre à la page. */
+  icon?: string
 }
 
 /** Titre affiché dans l'onglet et en résultat de recherche. Viser 50 à 60 signes. */
@@ -34,9 +43,14 @@ const STATIC_PAGES: PageSeo[] = [
   HOME,
   {
     path: '/avocatleads',
-    title: 'AvocatLeads | Sites internet et clients pour avocats',
+    title: 'AvocatLeads | Création de site internet pour avocats',
     description:
-      "Sites internet pour avocats et cabinets d'avocats : conformes à la déontologie, prise de rendez-vous en ligne et référencement local. Devis sous 48 h.",
+      "Sites internet pour avocats, conformes au RIN : une page par domaine d'intervention, prise de rendez-vous en ligne et référencement local. Devis sous 48 h.",
+    image: '/og-avocatleads.png',
+    imageSize: [2400, 1260],
+    imageAlt: "AvocatLeads : le site qui amène des clients à votre cabinet. Sites internet pour avocats, conformes aux règles de la profession.",
+    siteName: 'AvocatLeads',
+    icon: '/avocatleads-icon.svg',
   },
   {
     path: '/contact',

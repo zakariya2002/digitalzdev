@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Reveal, SplitText } from '../motion'
 import { EASE_OUT, VIEWPORT } from '../motion/config'
@@ -17,23 +17,6 @@ import { FAQ } from './contenu'
 export default function Faq() {
   const [ouverte, setOuverte] = useState<number | null>(0)
 
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.type = 'application/ld+json'
-    script.textContent = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: FAQ.map((item) => ({
-        '@type': 'Question',
-        name: item.question,
-        acceptedAnswer: { '@type': 'Answer', text: item.reponse },
-      })),
-    })
-    document.head.appendChild(script)
-    return () => {
-      script.remove()
-    }
-  }, [])
 
   return (
     <section id="faq" className="relative bg-surface-light py-10 md:py-14">

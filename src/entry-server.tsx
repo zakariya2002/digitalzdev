@@ -5,6 +5,10 @@ import { AuthProvider } from './contexts/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
 import App from './App'
 
+// Lus par le script de pré-rendu, qui ne sait pas importer le TypeScript.
+export { seoForPath } from './lib/seo'
+export { donneesStructurees } from './lib/donneesStructurees'
+
 /**
  * Rend une page en HTML complet, au moment de la construction du site.
  *

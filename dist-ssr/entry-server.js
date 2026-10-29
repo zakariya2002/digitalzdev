@@ -361,8 +361,13 @@ const STATIC_PAGES = [
   HOME,
   {
     path: "/avocatleads",
-    title: "AvocatLeads | Sites internet et clients pour avocats",
-    description: "Sites internet pour avocats et cabinets d'avocats : conformes à la déontologie, prise de rendez-vous en ligne et référencement local. Devis sous 48 h."
+    title: "AvocatLeads | Création de site internet pour avocats",
+    description: "Sites internet pour avocats, conformes au RIN : une page par domaine d'intervention, prise de rendez-vous en ligne et référencement local. Devis sous 48 h.",
+    image: "/og-avocatleads.png",
+    imageSize: [2400, 1260],
+    imageAlt: "AvocatLeads : le site qui amène des clients à votre cabinet. Sites internet pour avocats, conformes aux règles de la profession.",
+    siteName: "AvocatLeads",
+    icon: "/avocatleads-icon.svg"
   },
   {
     path: "/contact",
@@ -432,6 +437,7 @@ function setLink(rel, href) {
 function Seo() {
   const { pathname } = useLocation();
   useEffect(() => {
+    var _a, _b;
     const page = seoForPath(pathname);
     const url = canonicalFor(page.path);
     document.title = page.title;
@@ -446,14 +452,19 @@ function Seo() {
       content: page.description
     });
     setMeta('meta[property="og:url"]', { property: "og:url", content: url });
-    setMeta('meta[property="og:image"]', { property: "og:image", content: DEFAULT_OG_IMAGE });
-    setMeta('meta[property="og:site_name"]', { property: "og:site_name", content: SITE_NAME });
+    const image = page.image ? `${SITE_URL}${page.image}` : DEFAULT_OG_IMAGE;
+    setMeta('meta[property="og:image"]', { property: "og:image", content: image });
+    setMeta('meta[property="og:image:width"]', { property: "og:image:width", content: String(((_a = page.imageSize) == null ? void 0 : _a[0]) ?? 2400) });
+    setMeta('meta[property="og:image:height"]', { property: "og:image:height", content: String(((_b = page.imageSize) == null ? void 0 : _b[1]) ?? 1350) });
+    if (page.imageAlt) setMeta('meta[property="og:image:alt"]', { property: "og:image:alt", content: page.imageAlt });
+    setMeta('meta[property="og:site_name"]', { property: "og:site_name", content: page.siteName ?? SITE_NAME });
+    setLink("icon", page.icon ?? "/logo-studio.png");
     setMeta('meta[name="twitter:title"]', { name: "twitter:title", content: page.title });
     setMeta('meta[name="twitter:description"]', {
       name: "twitter:description",
       content: page.description
     });
-    setMeta('meta[name="twitter:image"]', { name: "twitter:image", content: DEFAULT_OG_IMAGE });
+    setMeta('meta[name="twitter:image"]', { name: "twitter:image", content: image });
     const isNotFound = page.path === "/404";
     setMeta('meta[name="robots"]', {
       name: "robots",
@@ -5165,23 +5176,6 @@ function Equipe() {
 }
 function Faq() {
   const [ouverte, setOuverte] = useState(0);
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.textContent = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: FAQ.map((item2) => ({
-        "@type": "Question",
-        name: item2.question,
-        acceptedAnswer: { "@type": "Answer", text: item2.reponse }
-      }))
-    });
-    document.head.appendChild(script);
-    return () => {
-      script.remove();
-    };
-  }, []);
   return /* @__PURE__ */ jsx("section", { id: "faq", className: "relative bg-surface-light py-10 md:py-14", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-3xl px-6", children: [
     /* @__PURE__ */ jsx("div", { className: "mb-14 text-center md:mb-20", children: /* @__PURE__ */ jsx(
       SplitText,
@@ -5405,13 +5399,92 @@ function App() {
     /* @__PURE__ */ jsx(Curseur, {})
   ] });
 }
+function donneesStructurees(path) {
+  if (path !== "/avocatleads") return null;
+  const url = `${SITE_URL}/avocatleads`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#neurocare`,
+        name: "NEUROCARE SAS",
+        legalName: "NEUROCARE SAS",
+        url: SITE_URL,
+        identifier: { "@type": "PropertyValue", propertyID: "SIREN", value: "131907420" },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "8 avenue Édouard Branly",
+          postalCode: "93420",
+          addressLocality: "Villepinte",
+          addressCountry: "FR"
+        },
+        email: "zdigitalzdev@gmail.com",
+        telephone: "+33783259869",
+        founder: { "@type": "Person", name: "Zakariya Nebbache", sameAs: "https://www.linkedin.com/in/zakariya-nebbache-7b0644214/" }
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": `${url}#service`,
+        name: "AvocatLeads",
+        url,
+        image: `${SITE_URL}/og-avocatleads.png`,
+        logo: `${SITE_URL}/avocatleads-icon-180.png`,
+        description: "Création de sites internet pour avocats et cabinets d'avocats, conformes aux règles de communication de la profession : pages par domaine d'intervention, prise de rendez-vous en ligne, référencement local et campagnes Google Ads.",
+        parentOrganization: { "@id": `${SITE_URL}/#neurocare` },
+        telephone: "+33783259869",
+        email: "zdigitalzdev@gmail.com",
+        priceRange: "À partir de 1 500 €",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "8 avenue Édouard Branly",
+          postalCode: "93420",
+          addressLocality: "Villepinte",
+          addressCountry: "FR"
+        },
+        areaServed: { "@type": "Country", name: "France" },
+        audience: { "@type": "BusinessAudience", audienceType: "Avocats et cabinets d'avocats" },
+        knowsLanguage: ["fr", "en"],
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Prestations pour les avocats",
+          itemListElement: SERVICES.map((s) => ({
+            "@type": "Offer",
+            itemOffered: { "@type": "Service", name: s.title, description: s.lead }
+          }))
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": url,
+        url,
+        name: "AvocatLeads | Création de site internet pour avocats",
+        inLanguage: "fr-FR",
+        about: { "@id": `${url}#service` },
+        publisher: { "@id": `${SITE_URL}/#neurocare` },
+        primaryImageOfPage: `${SITE_URL}/og-avocatleads.png`
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        mainEntity: FAQ.map((item2) => ({
+          "@type": "Question",
+          name: item2.question,
+          acceptedAnswer: { "@type": "Answer", text: item2.reponse }
+        }))
+      }
+    ]
+  };
+}
 function render(url) {
   return renderToString(
     /* @__PURE__ */ jsx(StrictMode, { children: /* @__PURE__ */ jsx(StaticRouter, { location: url, children: /* @__PURE__ */ jsx(AuthProvider, { children: /* @__PURE__ */ jsx(ErrorBoundary, { children: /* @__PURE__ */ jsx(App, {}) }) }) }) })
   );
 }
 export {
+  donneesStructurees,
   render,
   supabase as s,
+  seoForPath,
   useAuth as u
 };

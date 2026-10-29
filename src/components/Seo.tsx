@@ -4,6 +4,7 @@ import {
   canonicalFor,
   DEFAULT_OG_IMAGE,
   SITE_NAME,
+  SITE_URL,
   seoForPath,
 } from '../lib/seo'
 
@@ -54,15 +55,21 @@ export default function Seo() {
       content: page.description,
     })
     setMeta('meta[property="og:url"]', { property: 'og:url', content: url })
-    setMeta('meta[property="og:image"]', { property: 'og:image', content: DEFAULT_OG_IMAGE })
-    setMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: SITE_NAME })
+    // Image, nom et icône propres à la page quand elle porte une autre marque.
+    const image = page.image ? `${SITE_URL}${page.image}` : DEFAULT_OG_IMAGE
+    setMeta('meta[property="og:image"]', { property: 'og:image', content: image })
+    setMeta('meta[property="og:image:width"]', { property: 'og:image:width', content: String(page.imageSize?.[0] ?? 2400) })
+    setMeta('meta[property="og:image:height"]', { property: 'og:image:height', content: String(page.imageSize?.[1] ?? 1350) })
+    if (page.imageAlt) setMeta('meta[property="og:image:alt"]', { property: 'og:image:alt', content: page.imageAlt })
+    setMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: page.siteName ?? SITE_NAME })
+    setLink('icon', page.icon ?? '/logo-studio.png')
 
     setMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: page.title })
     setMeta('meta[name="twitter:description"]', {
       name: 'twitter:description',
       content: page.description,
     })
-    setMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: DEFAULT_OG_IMAGE })
+    setMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: image })
 
     // Une page inconnue ne doit pas entrer dans l'index : elle n'a pas de
     // contenu propre et ferait doublon avec l'accueil.

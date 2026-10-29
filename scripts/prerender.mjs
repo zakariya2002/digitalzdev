@@ -108,8 +108,10 @@ function texteBrut(html) {
 const mesures = []
 
 let rendre = null
+let seoForPath = null
+let donneesStructurees = null
 try {
-  ;({ render: rendre } = await import(
+  ;({ render: rendre, seoForPath, donneesStructurees } = await import(
     new URL('../dist-ssr/entry-server.js', import.meta.url).href
   ))
 } catch (err) {
@@ -158,6 +160,38 @@ for (const page of pages) {
     /<meta name="twitter:description" content=".*?" \/>/s,
     `<meta name="twitter:description" content="${escape(page.description)}" />`
   )
+
+  // Page qui porte sa propre marque : image de partage, nom, icône et
+  // données structurées remplacent ceux de Digitalz Dev.
+  const propre = seoForPath ? seoForPath(page.path) : null
+  if (propre?.image) {
+    const image = `${SITE_URL}${propre.image}`
+    html = html.replace(/<meta property="og:image" content=".*?" \/>/s, `<meta property="og:image" content="${image}" />`)
+    html = html.replace(/<meta name="twitter:image" content=".*?" \/>/s, `<meta name="twitter:image" content="${image}" />`)
+    if (propre.imageSize) {
+      html = html.replace(/<meta property="og:image:width" content=".*?" \/>/s, `<meta property="og:image:width" content="${propre.imageSize[0]}" />`)
+      html = html.replace(/<meta property="og:image:height" content=".*?" \/>/s, `<meta property="og:image:height" content="${propre.imageSize[1]}" />`)
+    }
+  }
+  if (propre?.imageAlt) {
+    html = html.replace(/<meta property="og:image:alt" content=".*?" \/>/s, `<meta property="og:image:alt" content="${escape(propre.imageAlt)}" />`)
+  }
+  if (propre?.siteName) {
+    html = html.replace(/<meta property="og:site_name" content=".*?" \/>/s, `<meta property="og:site_name" content="${escape(propre.siteName)}" />`)
+    html = html.replace(/<meta name="author" content=".*?" \/>/s, `<meta name="author" content="${escape(propre.siteName)}" />`)
+  }
+  if (propre?.icon) {
+    html = html.replace(/<link rel="icon" [^>]*\/>/, `<link rel="icon" type="image/svg+xml" href="${propre.icon}" />`)
+    html = html.replace(/<link rel="apple-touch-icon" [^>]*\/>/, '<link rel="apple-touch-icon" href="/avocatleads-icon-180.png" />')
+  }
+  const ld = donneesStructurees ? donneesStructurees(page.path) : null
+  if (ld) {
+    const json = JSON.stringify(ld, null, 2).replace(/</g, '\\u003c')
+    html = html.replace(
+      /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+      () => `<script type="application/ld+json">\n${json}\n    </script>`
+    )
+  }
 
   if (rendre) {
     const corps = rendre(page.path)
