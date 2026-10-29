@@ -2,7 +2,6 @@ import { type CSSProperties } from 'react'
 import SmoothScroll from '../components/SmoothScroll'
 import Curseur from '../components/studio/Curseur'
 import AvisGoogleSection from '../components/AvisGoogleSection'
-import Prechargeur from '../components/avocatleads/Prechargeur'
 import Navigation from '../components/avocatleads/Navigation'
 import Hero from '../components/avocatleads/Hero'
 import Manifeste from '../components/avocatleads/Manifeste'
@@ -35,7 +34,6 @@ export default function AvocatLeads() {
       <SmoothScroll>
         <Navigation />
         <main>
-          <Prechargeur />
           <Hero />
           <Manifeste />
           <Reference />
