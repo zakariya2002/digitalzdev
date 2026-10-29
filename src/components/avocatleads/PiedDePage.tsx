@@ -59,7 +59,7 @@ export default function PiedDePage() {
         </nav>
 
         <div className="mt-14 flex flex-col gap-3 text-sm font-medium text-text-muted md:flex-row md:items-center md:justify-between">
-          <p>AvocatLeads &copy; {new Date().getFullYear()}, tous droits réservés</p>
+          <p>AvocatLeads &copy; {new Date().getFullYear()}, nom commercial de NEUROCARE SAS, RCS Bobigny 131 907 420. Société de services web, et non cabinet d'avocats.</p>
           <div className="flex gap-6">
             <Link to="/mentions-legales" className="py-2 transition-colors hover:text-accent">
               Mentions légales

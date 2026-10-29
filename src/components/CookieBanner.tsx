@@ -32,10 +32,10 @@ export default function CookieBanner() {
                 annonçait l'absence de tiers alors que le calendrier de prise
                 de rendez-vous est fourni par Calendly. */}
             <p className="text-text-secondary text-sm leading-relaxed flex-1">
-              Ce site ne dépose aucun cookie publicitaire et ne vous suit pas.
+              Ce site ne dépose aucun cookie publicitaire sans votre accord.
               Le stockage local retient seulement que vous avez lu ce message.
-              Les prises de contact passent par WhatsApp, qui ne s&apos;ouvre
-              que si vous cliquez.{' '}
+              WhatsApp et l&apos;agenda Calendly ne s&apos;ouvrent que si vous
+              cliquez.{' '}
               <Link
                 to="/politique-confidentialite"
                 className="text-accent underline"

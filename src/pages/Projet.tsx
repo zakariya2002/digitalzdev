@@ -137,6 +137,19 @@ function lireCookie(nom: string): string | undefined {
   return m ? decodeURIComponent(m[1]) : undefined
 }
 
+/** Choix du visiteur sur les cookies publicitaires, gardé sur son appareil. */
+const CLE_CONSENTEMENT = 'consentement-pub'
+type Consentement = 'oui' | 'non' | null
+
+function lireConsentement(): Consentement {
+  try {
+    const v = localStorage.getItem(CLE_CONSENTEMENT)
+    return v === 'oui' || v === 'non' ? v : null
+  } catch {
+    return null
+  }
+}
+
 /** Origine du visiteur, lue une fois à l'arrivée. */
 function lireAttribution() {
   const q = new URLSearchParams(window.location.search)
@@ -169,9 +182,26 @@ export default function Projet() {
   }, [])
   const attribution = useMemo(() => (typeof window === 'undefined' ? null : lireAttribution()), [])
 
+  // Le pixel Meta dépose des cookies publicitaires : il ne se charge qu'après
+  // l'accord du visiteur. Sans réponse, rien n'est chargé.
+  const [consentement, setConsentement] = useState<Consentement>(null)
+  const [choixFait, setChoixFait] = useState(true)
   useEffect(() => {
-    chargerPixel()
+    const c = lireConsentement()
+    setConsentement(c)
+    setChoixFait(c !== null)
+    if (c === 'oui') chargerPixel()
   }, [])
+  const repondre = (c: 'oui' | 'non') => {
+    try {
+      localStorage.setItem(CLE_CONSENTEMENT, c)
+    } catch {
+      /* stockage refusé : le choix vaut pour cette visite */
+    }
+    setConsentement(c)
+    setChoixFait(true)
+    if (c === 'oui') chargerPixel()
+  }
 
   const total = QUESTIONS.length + 1
   const question = QUESTIONS[etape]
@@ -237,8 +267,10 @@ export default function Projet() {
           activite: ligne.activite ?? undefined,
           message: ligne.message ?? undefined,
           url: window.location.href.slice(0, 500),
-          fbp: lireCookie('_fbp'),
-          fbc: lireCookie('_fbc') ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined),
+          // Sans accord, aucun identifiant publicitaire et aucun envoi à Meta.
+          consentementPub: consentement === 'oui',
+          fbp: consentement === 'oui' ? lireCookie('_fbp') : undefined,
+          fbc: consentement === 'oui' ? lireCookie('_fbc') ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined) : undefined,
           attribution: {
             utmSource: attribution?.utm_source ?? undefined,
             utmMedium: attribution?.utm_medium ?? undefined,
@@ -468,6 +500,47 @@ export default function Projet() {
         </div>
       )}
       <CalendlyModal open={rdvOuvert} onClose={() => setRdvOuvert(false)} />
+      <AnimatePresence>
+        {!choixFait && (
+          <motion.div
+            className="fixed inset-x-0 bottom-0 z-[60] p-4 md:p-6"
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            role="dialog"
+            aria-label="Cookies publicitaires"
+          >
+            <div className="mx-auto flex max-w-3xl flex-col gap-4 rounded-xl bg-surface-card p-5 shadow-lg md:flex-row md:items-center md:p-6">
+              <p className="flex-1 text-sm leading-relaxed text-text-secondary">
+                Avec votre accord, nous utilisons le pixel Meta, un cookie
+                publicitaire, pour mesurer l'efficacité de nos annonces. Sans
+                accord, rien n'est déposé et le formulaire fonctionne de la même
+                façon.{' '}
+                <Link to="/politique-confidentialite" className="text-accent underline">
+                  Politique de confidentialité
+                </Link>
+              </p>
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={() => repondre('non')}
+                  className="min-h-[44px] flex-1 rounded-lg bg-accent px-5 text-sm font-medium text-surface md:flex-none"
+                >
+                  Refuser
+                </button>
+                <button
+                  type="button"
+                  onClick={() => repondre('oui')}
+                  className="min-h-[44px] flex-1 rounded-lg bg-accent px-5 text-sm font-medium text-surface md:flex-none"
+                >
+                  Accepter
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }

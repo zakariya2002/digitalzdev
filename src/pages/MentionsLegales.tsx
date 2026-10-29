@@ -1,138 +1,124 @@
-import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import Footer from '../components/Footer'
+import PageLegale, { Bloc, Lien } from '../components/PageLegale'
 
+/**
+ * Mentions légales (article 6 III de la loi n° 2004-575 du 21 juin 2004 pour
+ * la confiance dans l'économie numérique, et article R. 123-237 du code de
+ * commerce). Les informations sur la société viennent de l'extrait Kbis du
+ * 23 octobre 2026. Le registre des bénéficiaires effectifs n'est pas public :
+ * rien n'en est repris ici.
+ */
 export default function MentionsLegales() {
   return (
-    <main className="bg-surface min-h-screen">
-      <section className="pt-32 pb-16 md:pt-40 md:pb-20 px-6">
-        <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Link
-              to="/"
-              className="-mt-3 mb-5 inline-flex min-h-[44px] items-center gap-2 py-3 text-sm text-text-secondary transition-colors hover:text-accent"
-            >
-              <span>←</span> Retour
-            </Link>
-          </motion.div>
+    <PageLegale titre="Mentions légales" miseAJour="29 octobre 2026">
+      <Bloc titre="Éditeur du site">
+        <p>
+          Les sites digitalzdev.com et digitalzdev.com/avocatleads sont édités par :
+        </p>
+        <p>
+          <strong className="text-text-primary">NEUROCARE SAS</strong>
+          <br />
+          Société par actions simplifiée à associé unique au capital de 100 €
+          <br />
+          Siège social : 8 avenue Édouard Branly, 93420 Villepinte, France
+          <br />
+          Immatriculée au registre du commerce et des sociétés de Bobigny sous le numéro 131 907 420
+          <br />
+          Identifiant unique européen (EUID) : FR9301.131907420
+          <br />
+          Noms commerciaux : Digitalz Dev et AvocatLeads
+        </p>
+        <p>
+          Téléphone : <Lien href="tel:+33783259869">+33 7 83 25 98 69</Lien>
+          <br />
+          Courrier électronique : <Lien href="mailto:zdigitalzdev@gmail.com">zdigitalzdev@gmail.com</Lien>
+        </p>
+      </Bloc>
 
-          <motion.h1
-            className="mb-12 font-display text-3xl font-black text-text-primary [hyphens:auto] sm:text-4xl md:text-5xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Mentions légales
-          </motion.h1>
+      <Bloc titre="Directeur de la publication">
+        <p>Zakariya Nebbache, en sa qualité de président de NEUROCARE SAS.</p>
+      </Bloc>
 
-          <motion.div
-            className="space-y-8 text-text-secondary leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div>
-              <h2 className="font-display font-bold text-xl text-text-primary mb-3">
-                Éditeur du site
-              </h2>
-              <p>
-                Digitalz Dev est le nom commercial de :
-              </p>
-              <p className="mt-3">
-                <strong className="text-text-primary">NeuroCare</strong>
-                <br />
-                Société par actions simplifiée à associé unique (SASU)
-                <br />
-                Capital social : 150 €
-                <br />
-                Siège social : 8 avenue Édouard Branly, 93420 Villepinte,
-                France
-                <br />
-                RCS Bobigny : immatriculation en cours
-                <br />
-                Email :{' '}
-                <a
-                  href="mailto:zdigitalzdev@gmail.com"
-                  className="text-accent underline underline-offset-2"
-                >
-                  zdigitalzdev@gmail.com
-                </a>
-                <br />
-                Site : digitalzdev.com
-              </p>
-            </div>
+      <Bloc titre="Hébergement">
+        <p>
+          <strong className="text-text-primary">Vercel Inc.</strong>
+          <br />
+          440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis
+          <br />
+          Site : <Lien href="https://vercel.com">vercel.com</Lien>, contact :{' '}
+          <Lien href="https://vercel.com/contact">vercel.com/contact</Lien>
+        </p>
+        <p>
+          Les demandes envoyées depuis les formulaires sont enregistrées dans une
+          base de données fournie par Supabase, hébergée dans l'Union européenne
+          (Irlande). Le détail des prestataires figure dans la{' '}
+          <Link to="/politique-confidentialite" className="text-accent underline underline-offset-2">
+            politique de confidentialité
+          </Link>
+          .
+        </p>
+      </Bloc>
 
-            <div>
-              <h2 className="font-display font-bold text-xl text-text-primary mb-3">
-                Directeur de la publication
-              </h2>
-              <p>
-                Zakariya Nebbache, président de la société NeuroCare.
-              </p>
-            </div>
+      <Bloc titre="Activité">
+        <p>
+          NEUROCARE SAS conçoit et développe des sites internet et accompagne
+          leur visibilité en ligne (référencement, campagnes publicitaires).
+          Sous le nom AvocatLeads, ces prestations s'adressent aux avocats et
+          aux cabinets d'avocats. Elles sont réservées aux professionnels.
+        </p>
+        <p>
+          NEUROCARE SAS n'est pas un cabinet d'avocats. Elle n'exerce aucune
+          activité juridique réglementée et ne délivre ni consultation ni
+          conseil juridique. Les indications données sur ce site au sujet des
+          règles de communication de la profession d'avocat (Règlement intérieur
+          national, avis du Conseil national des barreaux) sont fournies à titre
+          d'information générale. Elles ne constituent pas un avis juridique et
+          ne remplacent ni l'appréciation de l'avocat ni celle de son Ordre.
+        </p>
+      </Bloc>
 
-            <div>
-              <h2 className="font-display font-bold text-xl text-text-primary mb-3">
-                Hébergement
-              </h2>
-              <p>
-                Ce site est hébergé par :<br />
-                Vercel Inc.<br />
-                340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis<br />
-                Site : vercel.com
-              </p>
-            </div>
+      <Bloc titre="Propriété intellectuelle">
+        <p>
+          Les textes, éléments graphiques, logos, maquettes et le code source
+          de ce site sont la propriété de NEUROCARE SAS, sauf mention contraire.
+          Toute reproduction ou représentation, totale ou partielle, sans
+          autorisation écrite préalable est interdite (articles L. 122-4 et
+          L. 335-2 du code de la propriété intellectuelle).
+        </p>
+        <p>
+          Les noms, marques et captures d'écran des réalisations présentées
+          appartiennent à leurs titulaires respectifs et sont reproduits à titre
+          de références.
+        </p>
+      </Bloc>
 
-            <div>
-              <h2 className="font-display font-bold text-xl text-text-primary mb-3">
-                Propriété intellectuelle
-              </h2>
-              <p>
-                L'ensemble du contenu de ce site (textes, images, logos,
-                maquettes, code source) est la propriété exclusive de la société
-                NeuroCare, sauf mention contraire. Les captures d'écran des
-                réalisations restent la propriété de leurs marques respectives.
-                Toute reproduction, même partielle, est interdite sans
-                autorisation préalable.
-              </p>
-            </div>
+      <Bloc titre="Responsabilité et liens">
+        <p>
+          NEUROCARE SAS s'efforce d'assurer l'exactitude des informations
+          publiées, sans pouvoir garantir qu'elles soient exemptes d'erreur ou
+          d'omission. Les liens vers des sites tiers sont fournis pour faciliter
+          la navigation ; NEUROCARE SAS n'exerce aucun contrôle sur leur
+          contenu.
+        </p>
+      </Bloc>
 
-            <div>
-              <h2 className="font-display font-bold text-xl text-text-primary mb-3">
-                Données personnelles
-              </h2>
-              <p>
-                Pour en savoir plus sur la collecte et le traitement de vos
-                données, consultez notre{' '}
-                <Link
-                  to="/politique-confidentialite"
-                  className="text-accent underline"
-                >
-                  Politique de confidentialité
-                </Link>
-                .
-              </p>
-            </div>
+      <Bloc titre="Données personnelles et cookies">
+        <p>
+          Les traitements de données personnelles, les prestataires concernés,
+          les durées de conservation, vos droits et l'usage des cookies sont
+          décrits dans la{' '}
+          <Link to="/politique-confidentialite" className="text-accent underline underline-offset-2">
+            politique de confidentialité
+          </Link>
+          . Aucun cookie publicitaire n'est déposé sans votre accord.
+        </p>
+      </Bloc>
 
-            <div>
-              <h2 className="font-display font-bold text-xl text-text-primary mb-3">
-                Cookies
-              </h2>
-              <p>
-                Ce site n'utilise aucun cookie tiers ni outil de tracking. Seul
-                le stockage local du navigateur (localStorage) est utilisé pour
-                mémoriser votre préférence de thème (clair/sombre). Cette donnée
-                reste sur votre appareil et n'est jamais transmise.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-      <Footer />
-    </main>
+      <Bloc titre="Droit applicable">
+        <p>
+          Les présentes mentions sont régies par le droit français.
+        </p>
+      </Bloc>
+    </PageLegale>
   )
 }

@@ -783,7 +783,7 @@ function CookieBanner() {
       transition: { duration: 0.4 },
       children: /* @__PURE__ */ jsxs("div", { className: "max-w-3xl mx-auto bg-surface-card border border-surface-border rounded-xl p-5 md:p-6 shadow-lg flex flex-col md:flex-row items-start md:items-center gap-4", children: [
         /* @__PURE__ */ jsxs("p", { className: "text-text-secondary text-sm leading-relaxed flex-1", children: [
-          "Ce site ne dépose aucun cookie publicitaire et ne vous suit pas. Le stockage local retient seulement que vous avez lu ce message. Les prises de contact passent par WhatsApp, qui ne s'ouvre que si vous cliquez.",
+          "Ce site ne dépose aucun cookie publicitaire sans votre accord. Le stockage local retient seulement que vous avez lu ce message. WhatsApp et l'agenda Calendly ne s'ouvrent que si vous cliquez.",
           " ",
           /* @__PURE__ */ jsx(
             Link,
@@ -3418,262 +3418,245 @@ function Contact() {
     /* @__PURE__ */ jsx(Footer, {})
   ] });
 }
-function MentionsLegales() {
-  return /* @__PURE__ */ jsxs("main", { className: "bg-surface min-h-screen", children: [
-    /* @__PURE__ */ jsx("section", { className: "pt-32 pb-16 md:pt-40 md:pb-20 px-6", children: /* @__PURE__ */ jsxs("div", { className: "max-w-3xl mx-auto", children: [
-      /* @__PURE__ */ jsx(
-        motion.div,
+function PageLegale({ titre, miseAJour, children }) {
+  return /* @__PURE__ */ jsxs("main", { className: "min-h-screen bg-surface", children: [
+    /* @__PURE__ */ jsx("section", { className: "px-6 pb-16 pt-32 md:pb-20 md:pt-40", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-3xl", children: [
+      /* @__PURE__ */ jsx(motion.div, { initial: { opacity: 0, y: -10 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.5 }, children: /* @__PURE__ */ jsxs(
+        Link,
         {
-          initial: { opacity: 0, y: -10 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.5 },
-          children: /* @__PURE__ */ jsxs(
-            Link,
-            {
-              to: "/",
-              className: "-mt-3 mb-5 inline-flex min-h-[44px] items-center gap-2 py-3 text-sm text-text-secondary transition-colors hover:text-accent",
-              children: [
-                /* @__PURE__ */ jsx("span", { children: "←" }),
-                " Retour"
-              ]
-            }
-          )
+          to: "/",
+          className: "-mt-3 mb-5 inline-flex min-h-[44px] items-center gap-2 py-3 text-sm text-text-secondary transition-colors hover:text-accent",
+          children: [
+            /* @__PURE__ */ jsx("span", { children: "←" }),
+            " Retour"
+          ]
         }
-      ),
+      ) }),
       /* @__PURE__ */ jsx(
         motion.h1,
         {
-          className: "mb-12 font-display text-3xl font-black text-text-primary [hyphens:auto] sm:text-4xl md:text-5xl",
+          className: "mb-3 font-display text-3xl font-black text-text-primary [hyphens:auto] sm:text-4xl md:text-5xl",
           initial: { opacity: 0, y: 20 },
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.6, delay: 0.1 },
-          children: "Mentions légales"
+          children: titre
         }
       ),
-      /* @__PURE__ */ jsxs(
+      /* @__PURE__ */ jsxs("p", { className: "mb-12 text-sm text-text-muted", children: [
+        "Dernière mise à jour : ",
+        miseAJour
+      ] }),
+      /* @__PURE__ */ jsx(
         motion.div,
         {
-          className: "space-y-8 text-text-secondary leading-relaxed",
+          className: "space-y-10 leading-relaxed text-text-secondary",
           initial: { opacity: 0, y: 20 },
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.6, delay: 0.2 },
-          children: [
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Éditeur du site" }),
-              /* @__PURE__ */ jsx("p", { children: "Digitalz Dev est le nom commercial de :" }),
-              /* @__PURE__ */ jsxs("p", { className: "mt-3", children: [
-                /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "NeuroCare" }),
-                /* @__PURE__ */ jsx("br", {}),
-                "Société par actions simplifiée à associé unique (SASU)",
-                /* @__PURE__ */ jsx("br", {}),
-                "Capital social : 150 €",
-                /* @__PURE__ */ jsx("br", {}),
-                "Siège social : 8 avenue Édouard Branly, 93420 Villepinte, France",
-                /* @__PURE__ */ jsx("br", {}),
-                "RCS Bobigny : immatriculation en cours",
-                /* @__PURE__ */ jsx("br", {}),
-                "Email :",
-                " ",
-                /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: "mailto:zdigitalzdev@gmail.com",
-                    className: "text-accent underline underline-offset-2",
-                    children: "zdigitalzdev@gmail.com"
-                  }
-                ),
-                /* @__PURE__ */ jsx("br", {}),
-                "Site : digitalzdev.com"
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Directeur de la publication" }),
-              /* @__PURE__ */ jsx("p", { children: "Zakariya Nebbache, président de la société NeuroCare." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Hébergement" }),
-              /* @__PURE__ */ jsxs("p", { children: [
-                "Ce site est hébergé par :",
-                /* @__PURE__ */ jsx("br", {}),
-                "Vercel Inc.",
-                /* @__PURE__ */ jsx("br", {}),
-                "340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis",
-                /* @__PURE__ */ jsx("br", {}),
-                "Site : vercel.com"
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Propriété intellectuelle" }),
-              /* @__PURE__ */ jsx("p", { children: "L'ensemble du contenu de ce site (textes, images, logos, maquettes, code source) est la propriété exclusive de la société NeuroCare, sauf mention contraire. Les captures d'écran des réalisations restent la propriété de leurs marques respectives. Toute reproduction, même partielle, est interdite sans autorisation préalable." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Données personnelles" }),
-              /* @__PURE__ */ jsxs("p", { children: [
-                "Pour en savoir plus sur la collecte et le traitement de vos données, consultez notre",
-                " ",
-                /* @__PURE__ */ jsx(
-                  Link,
-                  {
-                    to: "/politique-confidentialite",
-                    className: "text-accent underline",
-                    children: "Politique de confidentialité"
-                  }
-                ),
-                "."
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Cookies" }),
-              /* @__PURE__ */ jsx("p", { children: "Ce site n'utilise aucun cookie tiers ni outil de tracking. Seul le stockage local du navigateur (localStorage) est utilisé pour mémoriser votre préférence de thème (clair/sombre). Cette donnée reste sur votre appareil et n'est jamais transmise." })
-            ] })
-          ]
+          children
         }
       )
     ] }) }),
     /* @__PURE__ */ jsx(Footer, {})
   ] });
 }
-function PolitiqueConfidentialite() {
-  return /* @__PURE__ */ jsxs("main", { className: "bg-surface min-h-screen", children: [
-    /* @__PURE__ */ jsx("section", { className: "pt-32 pb-16 md:pt-40 md:pb-20 px-6", children: /* @__PURE__ */ jsxs("div", { className: "max-w-3xl mx-auto", children: [
-      /* @__PURE__ */ jsx(
-        motion.div,
-        {
-          initial: { opacity: 0, y: -10 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.5 },
-          children: /* @__PURE__ */ jsxs(
-            Link,
-            {
-              to: "/",
-              className: "-mt-3 mb-5 inline-flex min-h-[44px] items-center gap-2 py-3 text-sm text-text-secondary transition-colors hover:text-accent",
-              children: [
-                /* @__PURE__ */ jsx("span", { children: "←" }),
-                " Retour"
-              ]
-            }
-          )
-        }
-      ),
-      /* @__PURE__ */ jsx(
-        motion.h1,
-        {
-          className: "mb-12 font-display text-3xl font-black text-text-primary [hyphens:auto] sm:text-4xl md:text-5xl",
-          initial: { opacity: 0, y: 20 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6, delay: 0.1 },
-          children: "Politique de confidentialité"
-        }
-      ),
-      /* @__PURE__ */ jsxs(
-        motion.div,
-        {
-          className: "space-y-8 text-text-secondary leading-relaxed",
-          initial: { opacity: 0, y: 20 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.6, delay: 0.2 },
-          children: [
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Responsable du traitement" }),
-              /* @__PURE__ */ jsxs("p", { children: [
-                "NeuroCare, société par actions simplifiée à associé unique, éditrice du site sous le nom commercial Digitalz Dev.",
-                /* @__PURE__ */ jsx("br", {}),
-                "Siège social : 8 avenue Édouard Branly, 93420 Villepinte, France",
-                /* @__PURE__ */ jsx("br", {}),
-                "Email :",
-                " ",
-                /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: "mailto:zdigitalzdev@gmail.com",
-                    className: "text-accent underline underline-offset-2",
-                    children: "zdigitalzdev@gmail.com"
-                  }
-                )
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Données collectées" }),
-              /* @__PURE__ */ jsx("p", { children: "Lorsque vous utilisez le formulaire de contact, les données suivantes peuvent être collectées :" }),
-              /* @__PURE__ */ jsxs("ul", { className: "list-disc pl-6 mt-2 space-y-1", children: [
-                /* @__PURE__ */ jsx("li", { children: "Nom complet" }),
-                /* @__PURE__ */ jsx("li", { children: "Adresse email" }),
-                /* @__PURE__ */ jsx("li", { children: "Numéro de téléphone (facultatif)" }),
-                /* @__PURE__ */ jsx("li", { children: "Nom d'entreprise (facultatif)" }),
-                /* @__PURE__ */ jsx("li", { children: "Description du projet" })
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Finalité du traitement" }),
-              /* @__PURE__ */ jsx("p", { children: "Vos données sont collectées uniquement pour répondre à votre demande de devis et vous recontacter dans le cadre de votre projet. Elles ne sont jamais utilisées à des fins commerciales ou publicitaires." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Base légale" }),
-              /* @__PURE__ */ jsx("p", { children: "Le traitement repose sur votre consentement explicite (case cochée avant l'envoi du formulaire), conformément à l'article 6.1.a du RGPD." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Destinataires" }),
-              /* @__PURE__ */ jsx("p", { children: "Vos données sont transmises uniquement au responsable du traitement, par email. Aucun sous-traitant ni tiers n'y a accès." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Durée de conservation" }),
-              /* @__PURE__ */ jsx("p", { children: "Vos données sont conservées pendant la durée nécessaire au traitement de votre demande, puis supprimées dans un délai maximum de 12 mois après le dernier échange." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Vos droits" }),
-              /* @__PURE__ */ jsx("p", { children: "Conformément au RGPD, vous disposez des droits suivants :" }),
-              /* @__PURE__ */ jsxs("ul", { className: "list-disc pl-6 mt-2 space-y-1", children: [
-                /* @__PURE__ */ jsx("li", { children: "Droit d'accès à vos données" }),
-                /* @__PURE__ */ jsx("li", { children: "Droit de rectification" }),
-                /* @__PURE__ */ jsx("li", { children: "Droit à l'effacement (« droit à l'oubli »)" }),
-                /* @__PURE__ */ jsx("li", { children: "Droit à la limitation du traitement" }),
-                /* @__PURE__ */ jsx("li", { children: "Droit à la portabilité" }),
-                /* @__PURE__ */ jsx("li", { children: "Droit d'opposition" }),
-                /* @__PURE__ */ jsx("li", { children: "Droit de retirer votre consentement à tout moment" })
-              ] }),
-              /* @__PURE__ */ jsxs("p", { className: "mt-3", children: [
-                "Pour exercer vos droits, contactez-nous à :",
-                " ",
-                /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: "mailto:zdigitalzdev@gmail.com",
-                    className: "text-accent underline",
-                    children: "zdigitalzdev@gmail.com"
-                  }
-                )
-              ] })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Cookies et stockage local" }),
-              /* @__PURE__ */ jsx("p", { children: "Ce site n'utilise aucun cookie. Le stockage local du navigateur (localStorage) est utilisé uniquement pour mémoriser votre préférence de thème (clair/sombre). Cette donnée est strictement fonctionnelle et reste sur votre appareil." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Services tiers" }),
-              /* @__PURE__ */ jsx("p", { children: "Ce site n'intègre aucun service tiers de tracking ou d'analyse. Les polices de caractères sont hébergées localement sur notre serveur. Aucune donnée n'est transmise à Google ou tout autre fournisseur externe." })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { children: [
-              /* @__PURE__ */ jsx("h2", { className: "font-display font-bold text-xl text-text-primary mb-3", children: "Réclamation" }),
-              /* @__PURE__ */ jsxs("p", { children: [
-                "Si vous estimez que le traitement de vos données ne respecte pas la réglementation, vous pouvez adresser une réclamation à la CNIL :",
-                " ",
-                /* @__PURE__ */ jsx(
-                  "a",
-                  {
-                    href: "https://www.cnil.fr",
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                    className: "text-accent underline",
-                    children: "www.cnil.fr"
-                  }
-                )
-              ] })
-            ] })
-          ]
-        }
-      )
+function Bloc({ titre, children }) {
+  return /* @__PURE__ */ jsxs("div", { children: [
+    /* @__PURE__ */ jsx("h2", { className: "mb-3 font-display text-xl font-bold text-text-primary", children: titre }),
+    /* @__PURE__ */ jsx("div", { className: "space-y-3", children })
+  ] });
+}
+function Lien({ href, children }) {
+  const externe = href.startsWith("http");
+  return /* @__PURE__ */ jsx(
+    "a",
+    {
+      href,
+      target: externe ? "_blank" : void 0,
+      rel: externe ? "noopener noreferrer" : void 0,
+      className: "text-accent underline underline-offset-2",
+      children
+    }
+  );
+}
+function MentionsLegales() {
+  return /* @__PURE__ */ jsxs(PageLegale, { titre: "Mentions légales", miseAJour: "29 octobre 2026", children: [
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Éditeur du site", children: [
+      /* @__PURE__ */ jsx("p", { children: "Les sites digitalzdev.com et digitalzdev.com/avocatleads sont édités par :" }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "NEUROCARE SAS" }),
+        /* @__PURE__ */ jsx("br", {}),
+        "Société par actions simplifiée à associé unique au capital de 100 €",
+        /* @__PURE__ */ jsx("br", {}),
+        "Siège social : 8 avenue Édouard Branly, 93420 Villepinte, France",
+        /* @__PURE__ */ jsx("br", {}),
+        "Immatriculée au registre du commerce et des sociétés de Bobigny sous le numéro 131 907 420",
+        /* @__PURE__ */ jsx("br", {}),
+        "Identifiant unique européen (EUID) : FR9301.131907420",
+        /* @__PURE__ */ jsx("br", {}),
+        "Noms commerciaux : Digitalz Dev et AvocatLeads"
+      ] }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        "Téléphone : ",
+        /* @__PURE__ */ jsx(Lien, { href: "tel:+33783259869", children: "+33 7 83 25 98 69" }),
+        /* @__PURE__ */ jsx("br", {}),
+        "Courrier électronique : ",
+        /* @__PURE__ */ jsx(Lien, { href: "mailto:zdigitalzdev@gmail.com", children: "zdigitalzdev@gmail.com" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(Bloc, { titre: "Directeur de la publication", children: /* @__PURE__ */ jsx("p", { children: "Zakariya Nebbache, en sa qualité de président de NEUROCARE SAS." }) }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Hébergement", children: [
+      /* @__PURE__ */ jsxs("p", { children: [
+        /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "Vercel Inc." }),
+        /* @__PURE__ */ jsx("br", {}),
+        "440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis",
+        /* @__PURE__ */ jsx("br", {}),
+        "Site : ",
+        /* @__PURE__ */ jsx(Lien, { href: "https://vercel.com", children: "vercel.com" }),
+        ", contact :",
+        " ",
+        /* @__PURE__ */ jsx(Lien, { href: "https://vercel.com/contact", children: "vercel.com/contact" })
+      ] }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        "Les demandes envoyées depuis les formulaires sont enregistrées dans une base de données fournie par Supabase, hébergée dans l'Union européenne (Irlande). Le détail des prestataires figure dans la",
+        " ",
+        /* @__PURE__ */ jsx(Link, { to: "/politique-confidentialite", className: "text-accent underline underline-offset-2", children: "politique de confidentialité" }),
+        "."
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Activité", children: [
+      /* @__PURE__ */ jsx("p", { children: "NEUROCARE SAS conçoit et développe des sites internet et accompagne leur visibilité en ligne (référencement, campagnes publicitaires). Sous le nom AvocatLeads, ces prestations s'adressent aux avocats et aux cabinets d'avocats. Elles sont réservées aux professionnels." }),
+      /* @__PURE__ */ jsx("p", { children: "NEUROCARE SAS n'est pas un cabinet d'avocats. Elle n'exerce aucune activité juridique réglementée et ne délivre ni consultation ni conseil juridique. Les indications données sur ce site au sujet des règles de communication de la profession d'avocat (Règlement intérieur national, avis du Conseil national des barreaux) sont fournies à titre d'information générale. Elles ne constituent pas un avis juridique et ne remplacent ni l'appréciation de l'avocat ni celle de son Ordre." })
+    ] }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Propriété intellectuelle", children: [
+      /* @__PURE__ */ jsx("p", { children: "Les textes, éléments graphiques, logos, maquettes et le code source de ce site sont la propriété de NEUROCARE SAS, sauf mention contraire. Toute reproduction ou représentation, totale ou partielle, sans autorisation écrite préalable est interdite (articles L. 122-4 et L. 335-2 du code de la propriété intellectuelle)." }),
+      /* @__PURE__ */ jsx("p", { children: "Les noms, marques et captures d'écran des réalisations présentées appartiennent à leurs titulaires respectifs et sont reproduits à titre de références." })
+    ] }),
+    /* @__PURE__ */ jsx(Bloc, { titre: "Responsabilité et liens", children: /* @__PURE__ */ jsx("p", { children: "NEUROCARE SAS s'efforce d'assurer l'exactitude des informations publiées, sans pouvoir garantir qu'elles soient exemptes d'erreur ou d'omission. Les liens vers des sites tiers sont fournis pour faciliter la navigation ; NEUROCARE SAS n'exerce aucun contrôle sur leur contenu." }) }),
+    /* @__PURE__ */ jsx(Bloc, { titre: "Données personnelles et cookies", children: /* @__PURE__ */ jsxs("p", { children: [
+      "Les traitements de données personnelles, les prestataires concernés, les durées de conservation, vos droits et l'usage des cookies sont décrits dans la",
+      " ",
+      /* @__PURE__ */ jsx(Link, { to: "/politique-confidentialite", className: "text-accent underline underline-offset-2", children: "politique de confidentialité" }),
+      ". Aucun cookie publicitaire n'est déposé sans votre accord."
     ] }) }),
-    /* @__PURE__ */ jsx(Footer, {})
+    /* @__PURE__ */ jsx(Bloc, { titre: "Droit applicable", children: /* @__PURE__ */ jsx("p", { children: "Les présentes mentions sont régies par le droit français." }) })
+  ] });
+}
+const CLE_CONSENTEMENT$1 = "consentement-pub";
+function ChoixCookies() {
+  const [choix, setChoix] = useState(void 0);
+  useEffect(() => {
+    try {
+      setChoix(localStorage.getItem(CLE_CONSENTEMENT$1));
+    } catch {
+      setChoix(null);
+    }
+  }, []);
+  const retirer = () => {
+    try {
+      localStorage.setItem(CLE_CONSENTEMENT$1, "non");
+    } catch {
+    }
+    const domaine = window.location.hostname.replace(/^www\./, "");
+    for (const nom of ["_fbp", "_fbc"]) {
+      document.cookie = `${nom}=; Max-Age=0; path=/`;
+      document.cookie = `${nom}=; Max-Age=0; path=/; domain=.${domaine}`;
+    }
+    setChoix("non");
+  };
+  if (choix === void 0) return null;
+  return /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-start gap-3 rounded-xl bg-surface-card p-5 sm:flex-row sm:items-center sm:justify-between", children: [
+    /* @__PURE__ */ jsxs("p", { className: "text-sm", children: [
+      "Votre choix actuel sur ce navigateur :",
+      " ",
+      /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: choix === "oui" ? "cookies publicitaires acceptés" : choix === "non" ? "cookies publicitaires refusés" : "aucun choix enregistré" })
+    ] }),
+    choix === "oui" && /* @__PURE__ */ jsx(
+      "button",
+      {
+        type: "button",
+        onClick: retirer,
+        className: "min-h-[44px] rounded-lg bg-accent px-5 text-sm font-medium text-surface",
+        children: "Retirer mon accord"
+      }
+    )
+  ] });
+}
+function PolitiqueConfidentialite() {
+  return /* @__PURE__ */ jsxs(PageLegale, { titre: "Politique de confidentialité", miseAJour: "29 octobre 2026", children: [
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Responsable du traitement", children: [
+      /* @__PURE__ */ jsx("p", { children: "NEUROCARE SAS, société par actions simplifiée à associé unique au capital de 100 €, immatriculée au RCS de Bobigny sous le numéro 131 907 420, dont le siège est situé 8 avenue Édouard Branly, 93420 Villepinte, France. Elle exploite les noms commerciaux Digitalz Dev et AvocatLeads." }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        "Contact pour toute question sur vos données :",
+        " ",
+        /* @__PURE__ */ jsx(Lien, { href: "mailto:zdigitalzdev@gmail.com", children: "zdigitalzdev@gmail.com" })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Formulaire de demande (page « Démarrer mon projet »)", children: [
+      /* @__PURE__ */ jsxs("p", { children: [
+        /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "Données :" }),
+        " vos réponses aux quatre questions (mode d'exercice, situation de votre site, budget, délai), votre nom, votre numéro de téléphone et, si vous les indiquez, le nom de votre cabinet ou de votre site et un message. Nous enregistrons aussi l'origine de votre visite : paramètres de campagne présents dans l'adresse (utm), identifiant de clic publicitaire (fbclid, gclid) et page de provenance."
+      ] }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "Finalités :" }),
+        " vous recontacter, établir une proposition, suivre votre demande dans notre outil de gestion commerciale et savoir quelle campagne vous a amené."
+      ] }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "Bases légales :" }),
+        " mesures précontractuelles prises à votre demande (article 6.1.b du RGPD) ; intérêt légitime à mesurer l'origine de nos demandes (article 6.1.f)."
+      ] }),
+      /* @__PURE__ */ jsx("p", { children: "À l'envoi, WhatsApp s'ouvre avec un message déjà rédigé qui reprend vos réponses. Il n'est transmis que si vous appuyez vous-même sur « Envoyer ». WhatsApp est fourni par WhatsApp Ireland Limited, selon sa propre politique de confidentialité." })
+    ] }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Formulaire de contact (page « Contact »)", children: [
+      /* @__PURE__ */ jsxs("p", { children: [
+        /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "Données :" }),
+        " nom, adresse électronique, et selon ce que vous renseignez : téléphone, entreprise, type de projet, budget, délai, adresse de votre site et description de votre projet."
+      ] }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        /* @__PURE__ */ jsx("strong", { className: "text-text-primary", children: "Finalité et base légale :" }),
+        " ",
+        "répondre à votre demande de devis, sur la base de votre consentement exprimé par la case à cocher avant l'envoi (article 6.1.a du RGPD). Le message nous est acheminé par le service EmailJS, puis reçu dans notre messagerie Gmail."
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(Bloc, { titre: "Prise de rendez-vous", children: /* @__PURE__ */ jsx("p", { children: "Le bouton de réservation ouvre l'agenda Calendly. Le service n'est chargé que lorsque vous cliquez. Les informations saisies pour réserver (nom, adresse électronique, créneau) sont traitées par Calendly LLC, selon sa propre politique de confidentialité, et nous sont transmises pour organiser l'entretien." }) }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Cookies et traceurs", children: [
+      /* @__PURE__ */ jsx("p", { children: "Le site ne dépose aucun cookie publicitaire sans votre accord. Le stockage local de votre navigateur retient seulement que vous avez lu le bandeau d'information et, le cas échéant, votre choix sur les cookies publicitaires." }),
+      /* @__PURE__ */ jsx("p", { children: "Sur la page « Démarrer mon projet », un bandeau vous demande votre accord pour le pixel Meta, un traceur publicitaire de Meta Platforms Ireland Limited qui mesure l'efficacité de nos annonces. Il n'est chargé qu'après « Accepter ». Avec votre accord, l'envoi de votre demande est aussi signalé à Meta par notre serveur (API Conversions), avec votre numéro de téléphone et votre nom sous forme chiffrée irréversible (hachage). Sans accord, aucune donnée n'est transmise à Meta. Refuser n'empêche pas d'utiliser le formulaire." }),
+      /* @__PURE__ */ jsx("p", { children: "Vous pouvez retirer votre accord à tout moment, aussi simplement que vous l'avez donné :" }),
+      /* @__PURE__ */ jsx(ChoixCookies, {})
+    ] }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Destinataires et prestataires", children: [
+      /* @__PURE__ */ jsx("p", { children: "Vos données sont destinées à NEUROCARE SAS. Elles ne sont ni vendues ni louées. Elles sont traitées, pour notre compte, par les prestataires suivants :" }),
+      /* @__PURE__ */ jsxs("ul", { className: "list-disc space-y-1 pl-6", children: [
+        /* @__PURE__ */ jsx("li", { children: "Vercel Inc. (États-Unis) : hébergement du site et journaux techniques de connexion ;" }),
+        /* @__PURE__ */ jsx("li", { children: "Supabase (base de données hébergée dans l'Union européenne, en Irlande) : enregistrement des demandes et suivi commercial ;" }),
+        /* @__PURE__ */ jsx("li", { children: "EmailJS : acheminement des messages du formulaire de contact ;" }),
+        /* @__PURE__ */ jsx("li", { children: "Google (Gmail) : réception de nos courriers électroniques et des alertes de nouvelle demande ;" }),
+        /* @__PURE__ */ jsx("li", { children: "Calendly LLC (États-Unis) : prise de rendez-vous, si vous l'utilisez ;" }),
+        /* @__PURE__ */ jsx("li", { children: "Meta Platforms Ireland Limited : mesure publicitaire, uniquement avec votre accord." })
+      ] })
+    ] }),
+    /* @__PURE__ */ jsx(Bloc, { titre: "Transferts hors de l'Union européenne", children: /* @__PURE__ */ jsx("p", { children: "Certains prestataires sont établis aux États-Unis ou peuvent y traiter des données. Ces transferts sont encadrés par la décision d'adéquation relative au cadre de protection des données entre l'Union européenne et les États-Unis, pour les sociétés qui y ont adhéré, ou à défaut par les clauses contractuelles types de la Commission européenne." }) }),
+    /* @__PURE__ */ jsx(Bloc, { titre: "Durées de conservation", children: /* @__PURE__ */ jsxs("ul", { className: "list-disc space-y-1 pl-6", children: [
+      /* @__PURE__ */ jsx("li", { children: "Demandes sans suite : trois ans à compter du dernier échange ;" }),
+      /* @__PURE__ */ jsx("li", { children: "Clients : pendant la relation contractuelle, puis cinq ans pour les besoins de preuve ;" }),
+      /* @__PURE__ */ jsx("li", { children: "Pièces comptables et factures : dix ans, comme l'exige le code de commerce ;" }),
+      /* @__PURE__ */ jsx("li", { children: "Journaux techniques de l'hébergeur : selon la durée fixée par celui-ci, pour la sécurité du site." })
+    ] }) }),
+    /* @__PURE__ */ jsxs(Bloc, { titre: "Vos droits", children: [
+      /* @__PURE__ */ jsxs("p", { children: [
+        "Vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, de portabilité et d'opposition, ainsi que du droit de retirer votre consentement à tout moment et de définir des directives sur le sort de vos données après votre décès. Pour les exercer, écrivez à",
+        " ",
+        /* @__PURE__ */ jsx(Lien, { href: "mailto:zdigitalzdev@gmail.com", children: "zdigitalzdev@gmail.com" }),
+        ". Nous répondons dans un délai d'un mois."
+      ] }),
+      /* @__PURE__ */ jsx("p", { children: "Aucune décision automatisée produisant des effets juridiques à votre égard n'est prise à partir de vos données." }),
+      /* @__PURE__ */ jsxs("p", { children: [
+        "Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la Commission nationale de l'informatique et des libertés (CNIL) : ",
+        /* @__PURE__ */ jsx(Lien, { href: "https://www.cnil.fr", children: "www.cnil.fr" }),
+        "."
+      ] })
+    ] })
   ] });
 }
 function NotFound() {
@@ -3806,6 +3789,15 @@ function lireCookie(nom) {
   const m = document.cookie.match(new RegExp(`(?:^|; )${nom}=([^;]*)`));
   return m ? decodeURIComponent(m[1]) : void 0;
 }
+const CLE_CONSENTEMENT = "consentement-pub";
+function lireConsentement() {
+  try {
+    const v = localStorage.getItem(CLE_CONSENTEMENT);
+    return v === "oui" || v === "non" ? v : null;
+  } catch {
+    return null;
+  }
+}
 function lireAttribution() {
   var _a, _b;
   const q = new URLSearchParams(window.location.search);
@@ -3839,9 +3831,23 @@ function Projet() {
     setMobile(window.matchMedia("(max-width: 767px)").matches);
   }, []);
   const attribution = useMemo(() => typeof window === "undefined" ? null : lireAttribution(), []);
+  const [consentement, setConsentement] = useState(null);
+  const [choixFait, setChoixFait] = useState(true);
   useEffect(() => {
-    chargerPixel();
+    const c = lireConsentement();
+    setConsentement(c);
+    setChoixFait(c !== null);
+    if (c === "oui") chargerPixel();
   }, []);
+  const repondre = (c) => {
+    try {
+      localStorage.setItem(CLE_CONSENTEMENT, c);
+    } catch {
+    }
+    setConsentement(c);
+    setChoixFait(true);
+    if (c === "oui") chargerPixel();
+  };
   const total = QUESTIONS.length + 1;
   const question = QUESTIONS[etape];
   const telValide = normaliserTelephone(telephone);
@@ -3893,8 +3899,10 @@ function Projet() {
           activite: ligne.activite ?? void 0,
           message: ligne.message ?? void 0,
           url: window.location.href.slice(0, 500),
-          fbp: lireCookie("_fbp"),
-          fbc: lireCookie("_fbc") ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : void 0),
+          // Sans accord, aucun identifiant publicitaire et aucun envoi à Meta.
+          consentementPub: consentement === "oui",
+          fbp: consentement === "oui" ? lireCookie("_fbp") : void 0,
+          fbc: consentement === "oui" ? lireCookie("_fbc") ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : void 0) : void 0,
           attribution: {
             utmSource: (attribution == null ? void 0 : attribution.utm_source) ?? void 0,
             utmMedium: (attribution == null ? void 0 : attribution.utm_medium) ?? void 0,
@@ -4118,7 +4126,46 @@ function Projet() {
       /* @__PURE__ */ jsx(EquipeStudio, {}),
       /* @__PURE__ */ jsx(Footer, {})
     ] }),
-    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) })
+    /* @__PURE__ */ jsx(CalendlyModal, { open: rdvOuvert, onClose: () => setRdvOuvert(false) }),
+    /* @__PURE__ */ jsx(AnimatePresence, { children: !choixFait && /* @__PURE__ */ jsx(
+      motion.div,
+      {
+        className: "fixed inset-x-0 bottom-0 z-[60] p-4 md:p-6",
+        initial: { y: 100, opacity: 0 },
+        animate: { y: 0, opacity: 1 },
+        exit: { y: 100, opacity: 0 },
+        transition: { duration: 0.4 },
+        role: "dialog",
+        "aria-label": "Cookies publicitaires",
+        children: /* @__PURE__ */ jsxs("div", { className: "mx-auto flex max-w-3xl flex-col gap-4 rounded-xl bg-surface-card p-5 shadow-lg md:flex-row md:items-center md:p-6", children: [
+          /* @__PURE__ */ jsxs("p", { className: "flex-1 text-sm leading-relaxed text-text-secondary", children: [
+            "Avec votre accord, nous utilisons le pixel Meta, un cookie publicitaire, pour mesurer l'efficacité de nos annonces. Sans accord, rien n'est déposé et le formulaire fonctionne de la même façon.",
+            " ",
+            /* @__PURE__ */ jsx(Link, { to: "/politique-confidentialite", className: "text-accent underline", children: "Politique de confidentialité" })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex shrink-0 gap-2", children: [
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => repondre("non"),
+                className: "min-h-[44px] flex-1 rounded-lg bg-accent px-5 text-sm font-medium text-surface md:flex-none",
+                children: "Refuser"
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              "button",
+              {
+                type: "button",
+                onClick: () => repondre("oui"),
+                className: "min-h-[44px] flex-1 rounded-lg bg-accent px-5 text-sm font-medium text-surface md:flex-none",
+                children: "Accepter"
+              }
+            )
+          ] })
+        ] })
+      }
+    ) })
   ] });
 }
 const WHATSAPP = `https://wa.me/33783259869?text=${encodeURIComponent(
@@ -5234,7 +5281,7 @@ function PiedDePage() {
         /* @__PURE__ */ jsxs("p", { children: [
           "AvocatLeads © ",
           (/* @__PURE__ */ new Date()).getFullYear(),
-          ", tous droits réservés"
+          ", nom commercial de NEUROCARE SAS, RCS Bobigny 131 907 420. Société de services web, et non cabinet d'avocats."
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex gap-6", children: [
           /* @__PURE__ */ jsx(Link, { to: "/mentions-legales", className: "py-2 transition-colors hover:text-accent", children: "Mentions légales" }),
