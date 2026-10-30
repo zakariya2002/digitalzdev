@@ -21,6 +21,8 @@ export interface ProspectScript {
 
 // Les manques relevés sur le site, dits comme on les dit au téléphone.
 const A_DIRE: Record<string, (ville: string) => string> = {
+  "page d'accueil interdite à Google (noindex)": () =>
+    "votre site est réglé pour ne pas apparaître sur Google : il porte une consigne qui demande à Google de ne pas l'afficher, sans doute oubliée à la mise en ligne",
   'pas adapté au mobile': () =>
     "votre site ne s'affiche pas correctement sur un téléphone, alors que la plupart des gens cherchent un avocat depuis leur mobile",
   "la ville n'apparaît ni dans le titre ni dans la description": v =>

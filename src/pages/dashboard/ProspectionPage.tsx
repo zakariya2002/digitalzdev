@@ -103,6 +103,7 @@ export default function ProspectionPage() {
   const [noteMax, setNoteMax] = useState('')
   const [recherche, setRecherche] = useState('')
   const [position, setPosition] = useState('')
+  const [noindex, setNoindex] = useState(false)
   const [defautsOuverts, setDefautsOuverts] = useState<string | null>(null)
 
   const [session, setSession] = useState(false)
@@ -145,6 +146,7 @@ export default function ProspectionPage() {
     if (mobiles) q = q.eq('mobile', true)
     if (pasAJour) q = q.eq('site_pas_a_jour', true)
     if (noteMax) q = q.lte('note_seo', Number(noteMax))
+    if (noindex) q = q.ilike('a_corriger_seo', '%noindex%')
     if (position === 'absent') q = q.not('position_verifiee_le', 'is', null).is('position_google', null)
     if (position === 'hors_p1') q = q.not('position_verifiee_le', 'is', null).or('position_google.is.null,position_google.gt.10')
     if (position === 'p2') q = q.gt('position_google', 10)
@@ -166,14 +168,14 @@ export default function ProspectionPage() {
     }
     setListe((data ?? []) as Prospect[])
     setNbListe(count ?? 0)
-  }, [statutListe, mobiles, pasAJour, noteMax, position, recherche, page])
+  }, [statutListe, mobiles, pasAJour, noteMax, position, noindex, recherche, page])
 
   useEffect(() => {
     const t = setTimeout(chargerListe, 300)
     return () => clearTimeout(t)
   }, [chargerListe])
 
-  useEffect(() => { setPage(0) }, [statutListe, mobiles, pasAJour, noteMax, position, recherche])
+  useEffect(() => { setPage(0) }, [statutListe, mobiles, pasAJour, noteMax, position, noindex, recherche])
 
   const appeler = useCallback(async (p: Prospect) => {
     vus.current.push(p.id)
@@ -198,6 +200,7 @@ export default function ProspectionPage() {
       p_recherche: recherche.trim() || undefined,
       p_exclure: vus.current,
       p_position: position || undefined,
+      p_noindex: noindex,
     })
     if (error) {
       setErreur('Impossible de charger le prochain numéro.')
@@ -213,7 +216,7 @@ export default function ProspectionPage() {
       return
     }
     await appeler(p)
-  }, [mobiles, pasAJour, noteMax, position, recherche, appeler])
+  }, [mobiles, pasAJour, noteMax, position, noindex, recherche, appeler])
 
   // Fin d'appel : le softphone repasse au repos, on demande le résultat.
   useEffect(() => {
@@ -342,6 +345,10 @@ export default function ProspectionPage() {
         <label className="flex items-center gap-2 text-sm text-gray-300">
           <input type="checkbox" checked={pasAJour} onChange={e => setPasAJour(e.target.checked)} disabled={session} />
           Site pas à jour depuis 2024
+        </label>
+        <label className="flex items-center gap-2 text-sm text-gray-300">
+          <input type="checkbox" checked={noindex} onChange={e => setNoindex(e.target.checked)} disabled={session} />
+          Site invisible sur Google (noindex)
         </label>
         <select
           value={noteMax}

@@ -59,13 +59,15 @@ CREATE TRIGGER set_updated_at_prospects
 -- Prochain numéro à composer, réservé 10 minutes pour qu'un collègue sur la
 -- même file ne l'appelle pas en même temps. Les filtres sont facultatifs.
 DROP FUNCTION IF EXISTS prochain_prospect(BOOLEAN, BOOLEAN, INTEGER, TEXT, UUID[]);
+DROP FUNCTION IF EXISTS prochain_prospect(BOOLEAN, BOOLEAN, INTEGER, TEXT, UUID[], TEXT);
 CREATE OR REPLACE FUNCTION prochain_prospect(
   p_mobiles BOOLEAN DEFAULT false,
   p_pas_a_jour BOOLEAN DEFAULT false,
   p_note_max INTEGER DEFAULT NULL,
   p_recherche TEXT DEFAULT NULL,
   p_exclure UUID[] DEFAULT '{}',
-  p_position TEXT DEFAULT NULL                -- absent, hors_p1, p2, p1, top3
+  p_position TEXT DEFAULT NULL,               -- absent, hors_p1, p2, p1, top3
+  p_noindex BOOLEAN DEFAULT false             -- site interdit à Google
 ) RETURNS SETOF prospects_avocats
 LANGUAGE plpgsql SECURITY INVOKER SET search_path = public AS $$
 DECLARE
@@ -81,6 +83,7 @@ BEGIN
      AND (NOT p_mobiles OR p.mobile)
      AND (NOT p_pas_a_jour OR p.site_pas_a_jour)
      AND (p_note_max IS NULL OR p.note_seo <= p_note_max)
+     AND (NOT p_noindex OR p.a_corriger_seo ILIKE '%noindex%')
      AND (p_position IS NULL
           OR (p_position = 'absent' AND p.position_verifiee_le IS NOT NULL AND p.position_google IS NULL)
           OR (p_position = 'hors_p1' AND p.position_verifiee_le IS NOT NULL AND (p.position_google IS NULL OR p.position_google > 10))

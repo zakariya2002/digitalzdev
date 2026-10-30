@@ -2692,6 +2692,7 @@ export type Database = {
         Args: {
           p_exclure?: string[]
           p_mobiles?: boolean
+          p_noindex?: boolean
           p_note_max?: number
           p_pas_a_jour?: boolean
           p_position?: string
