@@ -482,8 +482,8 @@ export default function Projet() {
             </h2>
             <video
               className="mt-6 aspect-[9/16] w-full rounded-2xl bg-surface-card object-cover md:aspect-video"
-              src={mobile ? '/videos/presentation-mobile.mp4' : '/videos/presentation.mp4'}
-              poster={mobile ? '/videos/presentation-mobile-poster.jpg' : '/videos/presentation-poster.jpg'}
+              src={mobile ? '/videos/avocatleads-mobile.mp4' : '/videos/avocatleads.mp4'}
+              poster={mobile ? '/videos/avocatleads-mobile-poster.jpg' : '/videos/avocatleads-poster.jpg'}
               autoPlay
               muted
               loop

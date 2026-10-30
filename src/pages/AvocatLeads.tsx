@@ -5,6 +5,7 @@ import AvisGoogleSection from '../components/AvisGoogleSection'
 import Navigation from '../components/avocatleads/Navigation'
 import Hero from '../components/avocatleads/Hero'
 import Manifeste from '../components/avocatleads/Manifeste'
+import Presentation from '../components/avocatleads/Presentation'
 import RendezVous from '../components/avocatleads/RendezVous'
 import Final from '../components/avocatleads/Final'
 import Acquisition from '../components/avocatleads/Acquisition'
@@ -19,8 +20,7 @@ import PiedDePage from '../components/avocatleads/PiedDePage'
  *
  * Même récit que l'accueil d'origine, avec des couleurs plus sobres : le bleu
  * électrique devient un marine profond et le citron disparaît. La section
- * déontologie s'ajoute, et la réalisation pour un cabinet d'avocats remplace
- * la piste de projets.
+ * déontologie s'ajoute, et la vidéo de présentation suit l'accroche.
  */
 const SOBRE = {
   '--pop': '30 52 84',
@@ -34,6 +34,7 @@ export default function AvocatLeads() {
         <Navigation />
         <main>
           <Hero />
+          <Presentation />
           <Manifeste />
           <RendezVous />
           <Final />
