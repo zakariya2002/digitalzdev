@@ -55,6 +55,11 @@ export default function Softphone() {
   }
 
   const handleHangup = () => {
+    // Les appels de prospection ont leur propre suivi, sur la page Prospection.
+    if (activeCall?.customParameters?.get('Prospection') === '1') {
+      hangup()
+      return
+    }
     const params = activeCall?.parameters || {}
     setPostCallData({
       clientId: (params as Record<string, string>).clientId || '',

@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.17"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -306,10 +306,12 @@ export type Database = {
           phone: string | null
           phone_secondary: string | null
           project_id: string | null
+          quiz_lead_id: string | null
           rcs: string | null
           representative: string | null
           share_capital: string | null
           siren: string | null
+          site_lead_id: string | null
           sms_count: number
           source: string
           status: string
@@ -333,10 +335,12 @@ export type Database = {
           phone?: string | null
           phone_secondary?: string | null
           project_id?: string | null
+          quiz_lead_id?: string | null
           rcs?: string | null
           representative?: string | null
           share_capital?: string | null
           siren?: string | null
+          site_lead_id?: string | null
           sms_count?: number
           source?: string
           status?: string
@@ -360,10 +364,12 @@ export type Database = {
           phone?: string | null
           phone_secondary?: string | null
           project_id?: string | null
+          quiz_lead_id?: string | null
           rcs?: string | null
           representative?: string | null
           share_capital?: string | null
           siren?: string | null
+          site_lead_id?: string | null
           sms_count?: number
           source?: string
           status?: string
@@ -384,6 +390,20 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clients_quiz_lead_id_fkey"
+            columns: ["quiz_lead_id"]
+            isOneToOne: true
+            referencedRelation: "quiz_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clients_site_lead_id_fkey"
+            columns: ["site_lead_id"]
+            isOneToOne: true
+            referencedRelation: "site_leads"
             referencedColumns: ["id"]
           },
         ]
@@ -1482,6 +1502,107 @@ export type Database = {
           },
         ]
       }
+      prospects_avocats: {
+        Row: {
+          a_corriger_seo: string | null
+          annee_serment: number | null
+          annee_site: number | null
+          avocats: string | null
+          barreau: string | null
+          cabinet: string | null
+          client_id: string | null
+          code_postal: string | null
+          created_at: string | null
+          dernier_appel: string | null
+          derniere_maj: string | null
+          email: string | null
+          id: string
+          mobile: boolean | null
+          nb_appels: number
+          nb_avocats: number | null
+          note_seo: number | null
+          notes: string | null
+          rappeler_le: string | null
+          site: string | null
+          site_pas_a_jour: boolean | null
+          specialites: string | null
+          statut: string
+          techno: string | null
+          telephone: string
+          updated_at: string | null
+          verrou_jusqua: string | null
+          ville: string | null
+        }
+        Insert: {
+          a_corriger_seo?: string | null
+          annee_serment?: number | null
+          annee_site?: number | null
+          avocats?: string | null
+          barreau?: string | null
+          cabinet?: string | null
+          client_id?: string | null
+          code_postal?: string | null
+          created_at?: string | null
+          dernier_appel?: string | null
+          derniere_maj?: string | null
+          email?: string | null
+          id?: string
+          mobile?: boolean | null
+          nb_appels?: number
+          nb_avocats?: number | null
+          note_seo?: number | null
+          notes?: string | null
+          rappeler_le?: string | null
+          site?: string | null
+          site_pas_a_jour?: boolean | null
+          specialites?: string | null
+          statut?: string
+          techno?: string | null
+          telephone: string
+          updated_at?: string | null
+          verrou_jusqua?: string | null
+          ville?: string | null
+        }
+        Update: {
+          a_corriger_seo?: string | null
+          annee_serment?: number | null
+          annee_site?: number | null
+          avocats?: string | null
+          barreau?: string | null
+          cabinet?: string | null
+          client_id?: string | null
+          code_postal?: string | null
+          created_at?: string | null
+          dernier_appel?: string | null
+          derniere_maj?: string | null
+          email?: string | null
+          id?: string
+          mobile?: boolean | null
+          nb_appels?: number
+          nb_avocats?: number | null
+          note_seo?: number | null
+          notes?: string | null
+          rappeler_le?: string | null
+          site?: string | null
+          site_pas_a_jour?: boolean | null
+          specialites?: string | null
+          statut?: string
+          techno?: string | null
+          telephone?: string
+          updated_at?: string | null
+          verrou_jusqua?: string | null
+          ville?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospects_avocats_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quiz_api_calls: {
         Row: {
           cost_estimate: number | null
@@ -1563,36 +1684,161 @@ export type Database = {
           },
         ]
       }
-      quiz_leads: {
+      quiz_evenements: {
+        Row: {
+          chemin: string | null
+          created_at: string
+          depuis_meta: boolean
+          donnees: Json | null
+          id: number
+          identifiant: string | null
+          nom: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_source: string | null
+          utm_term: string | null
+          visiteur: string | null
+        }
+        Insert: {
+          chemin?: string | null
+          created_at?: string
+          depuis_meta?: boolean
+          donnees?: Json | null
+          id?: never
+          identifiant?: string | null
+          nom: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          visiteur?: string | null
+        }
+        Update: {
+          chemin?: string | null
+          created_at?: string
+          depuis_meta?: boolean
+          donnees?: Json | null
+          id?: never
+          identifiant?: string | null
+          nom?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          visiteur?: string | null
+        }
+        Relationships: []
+      }
+      quiz_generations: {
         Row: {
           created_at: string | null
-          email: string
-          first_quiz_at: string | null
-          has_booked: boolean | null
+          demo_id: string | null
+          email: string | null
+          erreur: string | null
           id: string
-          last_quiz_at: string | null
-          total_generations: number | null
-          utm_source: string | null
+          ip_address: unknown
+          statut: string
+          updated_at: string | null
         }
         Insert: {
           created_at?: string | null
-          email: string
-          first_quiz_at?: string | null
-          has_booked?: boolean | null
-          id?: string
-          last_quiz_at?: string | null
-          total_generations?: number | null
-          utm_source?: string | null
+          demo_id?: string | null
+          email?: string | null
+          erreur?: string | null
+          id: string
+          ip_address?: unknown
+          statut?: string
+          updated_at?: string | null
         }
         Update: {
           created_at?: string | null
-          email?: string
+          demo_id?: string | null
+          email?: string | null
+          erreur?: string | null
+          id?: string
+          ip_address?: unknown
+          statut?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_generations_demo_id_fkey"
+            columns: ["demo_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_demos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_leads: {
+        Row: {
+          address: string | null
+          city: string | null
+          contact_name: string | null
+          created_at: string | null
+          email: string
+          fbclid: string | null
+          first_quiz_at: string | null
+          has_booked: boolean | null
+          id: string
+          landing_page: string | null
+          last_quiz_at: string | null
+          phone: string | null
+          postal_code: string | null
+          referrer: string | null
+          total_generations: number | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          visiteur: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          email: string
+          fbclid?: string | null
           first_quiz_at?: string | null
           has_booked?: boolean | null
           id?: string
+          landing_page?: string | null
           last_quiz_at?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          referrer?: string | null
           total_generations?: number | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
+          visiteur?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          email?: string
+          fbclid?: string | null
+          first_quiz_at?: string | null
+          has_booked?: boolean | null
+          id?: string
+          landing_page?: string | null
+          last_quiz_at?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          referrer?: string | null
+          total_generations?: number | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          visiteur?: string | null
         }
         Relationships: []
       }
@@ -1915,6 +2161,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_leads: {
+        Row: {
+          activite: string | null
+          besoin: string
+          budget: string
+          created_at: string | null
+          delai: string
+          fbclid: string | null
+          gclid: string | null
+          id: string
+          message: string | null
+          metier: string
+          nom: string
+          source: string | null
+          telephone: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          activite?: string | null
+          besoin: string
+          budget: string
+          created_at?: string | null
+          delai: string
+          fbclid?: string | null
+          gclid?: string | null
+          id?: string
+          message?: string | null
+          metier: string
+          nom: string
+          source?: string | null
+          telephone: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          activite?: string | null
+          besoin?: string
+          budget?: string
+          created_at?: string | null
+          delai?: string
+          fbclid?: string | null
+          gclid?: string | null
+          id?: string
+          message?: string | null
+          metier?: string
+          nom?: string
+          source?: string | null
+          telephone?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
       }
       sms: {
         Row: {
@@ -2328,6 +2634,13 @@ export type Database = {
       can_see_project: { Args: { p_project: string }; Returns: boolean }
       client_in_team_project: { Args: { p_client: string }; Returns: boolean }
       close_stale_sessions: { Args: never; Returns: number }
+      crm_lead_interne: {
+        Args: { p_email: string; p_tel: string }
+        Returns: boolean
+      }
+      crm_lead_owner: { Args: never; Returns: string }
+      crm_sync_quiz_lead: { Args: { p_lead_id: string }; Returns: undefined }
+      crm_sync_site_lead: { Args: { p_lead_id: string }; Returns: undefined }
       current_user_role: { Args: never; Returns: string }
       entity_label: { Args: { eid: string; etype: string }; Returns: string }
       entity_link: { Args: { eid: string; etype: string }; Returns: string }
@@ -2341,29 +2654,83 @@ export type Database = {
       }
       next_sequence_number: { Args: { seq_id: string }; Returns: string }
       open_direct_conversation: { Args: { p_other: string }; Returns: string }
+      prochain_prospect: {
+        Args: {
+          p_exclure?: string[]
+          p_mobiles?: boolean
+          p_note_max?: number
+          p_pas_a_jour?: boolean
+          p_recherche?: string
+        }
+        Returns: {
+          a_corriger_seo: string | null
+          annee_serment: number | null
+          annee_site: number | null
+          avocats: string | null
+          barreau: string | null
+          cabinet: string | null
+          client_id: string | null
+          code_postal: string | null
+          created_at: string | null
+          dernier_appel: string | null
+          derniere_maj: string | null
+          email: string | null
+          id: string
+          mobile: boolean | null
+          nb_appels: number
+          nb_avocats: number | null
+          note_seo: number | null
+          notes: string | null
+          rappeler_le: string | null
+          site: string | null
+          site_pas_a_jour: boolean | null
+          specialites: string | null
+          statut: string
+          techno: string | null
+          telephone: string
+          updated_at: string | null
+          verrou_jusqua: string | null
+          ville: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "prospects_avocats"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       punch: { Args: { p_note?: string }; Returns: Json }
+      quiz_equipe: { Args: never; Returns: boolean }
       quiz_parcours: {
         Args: { p_depuis?: string }
         Returns: {
-          visiteur: string
+          campagne: string
+          client_id: string
+          creation: string
           debut: string
+          depuis_meta: boolean
           dernier: string
-          rang_max: number | null
-          dernier_ecran: string | null
-          ecrans: string[] | null
+          dernier_ecran: string
+          ecrans: string[]
+          email: string
           erreur: boolean
-          campagne: string | null
-          creation: string | null
-          depuis_meta: boolean | null
-          email: string | null
-          telephone: string | null
-          marque: string | null
-          client_id: string | null
+          marque: string
+          rang_max: number
+          telephone: string
+          visiteur: string
         }[]
+      }
+      quiz_rang_etape: {
+        Args: { p_donnees: Json; p_nom: string }
+        Returns: number
       }
       quiz_tunnel: {
         Args: { p_depuis?: string; p_meta_seulement?: boolean }
-        Returns: { rang: number; etape: string; visiteurs: number }[]
+        Returns: {
+          etape: string
+          rang: number
+          visiteurs: number
+        }[]
       }
       record_share_response: {
         Args: { p_name: string; p_response: string; p_token: string }
@@ -2401,12 +2768,12 @@ export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
         DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -2430,11 +2797,11 @@ export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -2455,11 +2822,11 @@ export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
-  TableName extends DefaultSchemaTableNameOrOptions extends {
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -2480,11 +2847,11 @@ export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
-  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
-    : never = never,
+    : never) = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }
@@ -2497,11 +2864,11 @@ export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals
   }
     ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
-    : never = never,
+    : never) = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals
 }

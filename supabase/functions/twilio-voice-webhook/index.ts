@@ -15,13 +15,17 @@ Deno.serve(async (req) => {
   // Parse les params POST de Twilio (application/x-www-form-urlencoded)
   const formData = await req.formData();
   const to = formData.get("To") as string;
+  // Appels de prospection : pas d'enregistrement. Enregistrer un inconnu
+  // sans l'en avertir n'est pas permis.
+  const prospection = formData.get("Prospection") === "1";
+  const record = prospection ? "" : ' record="record-from-answer-dual"';
 
   const statusCallbackUrl = `${SUPABASE_URL}/functions/v1/twilio-status-webhook`;
 
   // Retourner TwiML
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Dial callerId="${TWILIO_PHONE_NUMBER}" record="record-from-answer-dual"
+  <Dial callerId="${TWILIO_PHONE_NUMBER}"${record} timeout="25"
         statusCallback="${statusCallbackUrl}"
         statusCallbackMethod="POST"
         statusCallbackEvent="initiated ringing answered completed">

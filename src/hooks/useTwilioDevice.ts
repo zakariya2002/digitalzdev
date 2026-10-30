@@ -10,7 +10,7 @@ export interface TwilioDeviceState {
   isMuted: boolean
   callDuration: number
   error: string | null
-  makeCall: (phoneNumber: string) => Promise<void>
+  makeCall: (phoneNumber: string, params?: Record<string, string>) => Promise<void>
   hangup: () => void
   toggleMute: () => void
   acceptIncoming: () => void
@@ -139,7 +139,7 @@ export function useTwilioDevice(): TwilioDeviceState {
   }, [setupCallEvents])
 
   const makeCall = useCallback(
-    async (phoneNumber: string) => {
+    async (phoneNumber: string, params?: Record<string, string>) => {
       setStatus('calling')
       try {
         // Initialize device on first call (user gesture context)
@@ -150,7 +150,7 @@ export function useTwilioDevice(): TwilioDeviceState {
         }
 
         const call = await device.connect({
-          params: { To: phoneNumber },
+          params: { ...params, To: phoneNumber },
         })
         setActiveCall(call)
         setupCallEvents(call)
