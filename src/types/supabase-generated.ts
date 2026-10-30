@@ -2697,6 +2697,7 @@ export type Database = {
           p_pas_a_jour?: boolean
           p_position?: string
           p_recherche?: string
+          p_specialite?: string
         }
         Returns: {
           a_corriger_seo: string | null

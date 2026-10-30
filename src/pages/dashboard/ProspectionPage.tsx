@@ -62,6 +62,38 @@ const LIBELLES: Record<Statut, string> = {
   interesse: 'Intéressés', pas_interesse: 'Pas intéressés', ne_plus_appeler: 'Ne plus appeler', faux_numero: 'Faux numéros',
 }
 
+// Certificats de spécialisation du CNB, du plus fréquent au plus rare.
+const SPECIALITES = [
+  "Droit du travail",
+  "Droit de la famille",
+  "Droit immobilier",
+  "Droit public",
+  "Droit du dommage corporel",
+  "Droit de la sécurité sociale",
+  "Droit commercial",
+  "Droit fiscal",
+  "Droit des sociétés",
+  "Droit pénal",
+  "Droit de la propriété intellectuelle",
+  "Procédure d'appel",
+  "Droit du numérique",
+  "Droit de l'environnement",
+  "Droit bancaire et boursier",
+  "Droit des enfants",
+  "Droit international",
+  "Droit des garanties",
+  "Droit des associations",
+  "Droit du crédit et de la consommation",
+  "Droit des assurances",
+  "Droit des étrangers",
+  "Droit de la santé",
+  "Droit rural",
+  "Droit du sport",
+  "Droit de la protection des données",
+  "Droit de l'arbitrage",
+  "Droit des transports",
+]
+
 const PAR_PAGE = 50
 
 const COULEURS: Record<Statut, string> = {
@@ -104,6 +136,7 @@ export default function ProspectionPage() {
   const [recherche, setRecherche] = useState('')
   const [position, setPosition] = useState('')
   const [noindex, setNoindex] = useState(false)
+  const [specialite, setSpecialite] = useState('')
   const [defautsOuverts, setDefautsOuverts] = useState<string | null>(null)
 
   const [session, setSession] = useState(false)
@@ -146,6 +179,7 @@ export default function ProspectionPage() {
     if (mobiles) q = q.eq('mobile', true)
     if (pasAJour) q = q.eq('site_pas_a_jour', true)
     if (noteMax) q = q.lte('note_seo', Number(noteMax))
+    if (specialite) q = q.ilike('specialites', `%${specialite}%`)
     if (noindex) q = q.ilike('a_corriger_seo', '%noindex%')
     if (position === 'absent') q = q.not('position_verifiee_le', 'is', null).is('position_google', null)
     if (position === 'hors_p1') q = q.not('position_verifiee_le', 'is', null).or('position_google.is.null,position_google.gt.10')
@@ -168,14 +202,14 @@ export default function ProspectionPage() {
     }
     setListe((data ?? []) as Prospect[])
     setNbListe(count ?? 0)
-  }, [statutListe, mobiles, pasAJour, noteMax, position, noindex, recherche, page])
+  }, [statutListe, mobiles, pasAJour, noteMax, position, noindex, specialite, recherche, page])
 
   useEffect(() => {
     const t = setTimeout(chargerListe, 300)
     return () => clearTimeout(t)
   }, [chargerListe])
 
-  useEffect(() => { setPage(0) }, [statutListe, mobiles, pasAJour, noteMax, position, noindex, recherche])
+  useEffect(() => { setPage(0) }, [statutListe, mobiles, pasAJour, noteMax, position, noindex, specialite, recherche])
 
   const appeler = useCallback(async (p: Prospect) => {
     vus.current.push(p.id)
@@ -201,6 +235,7 @@ export default function ProspectionPage() {
       p_exclure: vus.current,
       p_position: position || undefined,
       p_noindex: noindex,
+      p_specialite: specialite || undefined,
     })
     if (error) {
       setErreur('Impossible de charger le prochain numéro.')
@@ -216,7 +251,7 @@ export default function ProspectionPage() {
       return
     }
     await appeler(p)
-  }, [mobiles, pasAJour, noteMax, position, noindex, recherche, appeler])
+  }, [mobiles, pasAJour, noteMax, position, noindex, specialite, recherche, appeler])
 
   // Fin d'appel : le softphone repasse au repos, on demande le résultat.
   useEffect(() => {
@@ -372,6 +407,15 @@ export default function ProspectionPage() {
           <option value="p2">Deuxième page</option>
           <option value="p1">Première page</option>
           <option value="top3">Dans les 3 premiers</option>
+        </select>
+        <select
+          value={specialite}
+          onChange={e => setSpecialite(e.target.value)}
+          disabled={session}
+          className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300"
+        >
+          <option value="">Toutes les spécialités</option>
+          {SPECIALITES.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
         <input
           value={recherche}
