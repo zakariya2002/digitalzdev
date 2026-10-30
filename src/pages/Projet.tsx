@@ -176,6 +176,13 @@ export default function Projet() {
   const [touche, setTouche] = useState(false)
   const [envoi, setEnvoi] = useState(false)
   const [lienWhatsapp, setLienWhatsapp] = useState<string | null>(null)
+  // En local seulement : /projet?apercu=fin montre la page de fin sans
+  // envoyer de demande ni ouvrir WhatsApp.
+  useEffect(() => {
+    if (import.meta.env.DEV && new URLSearchParams(window.location.search).get('apercu') === 'fin') {
+      setLienWhatsapp(`https://wa.me/${WHATSAPP}`)
+    }
+  }, [])
   const [rdvOuvert, setRdvOuvert] = useState(false)
   const [mobile, setMobile] = useState(false)
   useEffect(() => {
