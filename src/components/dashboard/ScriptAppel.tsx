@@ -14,6 +14,9 @@ export interface ProspectScript {
   site_pas_a_jour: boolean
   annee_site: number | null
   a_corriger_seo: string | null
+  position_google?: number | null
+  recherche_google?: string | null
+  position_verifiee_le?: string | null
 }
 
 // Les manques relevés sur le site, dits comme on les dit au téléphone.
@@ -75,7 +78,18 @@ export default function ScriptAppel({ prospect }: { prospect: ProspectScript | n
   const nom = prospect ? nomMaitre(prospect.avocats) : '[Nom]'
   const domaine = prospect?.specialites?.split(' ; ')[0]?.toLowerCase() || (prospect ? '' : '[domaine]')
   const ville = prospect?.ville ? enClair(prospect.ville.replace(/\s+cedex.*$/i, '').trim()) : prospect ? '' : '[ville]'
-  const recherche = ['avocat', domaine, ville].filter(Boolean).join(' ')
+  const recherche = prospect?.recherche_google || ['avocat', domaine, ville].filter(Boolean).join(' ')
+  const pos = prospect?.position_google
+  const verifiee = Boolean(prospect?.position_verifiee_le)
+  const google = !verifiee
+    ? `Et quand je tape « ${recherche} » sur Google, vous n'apparaissez pas dans les premiers résultats.`
+    : !pos
+      ? `Et quand je tape « ${recherche} » sur Google, vous n'apparaissez même pas dans les 20 premiers résultats.`
+      : pos > 10
+        ? `Et quand je tape « ${recherche} » sur Google, vous sortez en ${pos}e position, en deuxième page. Presque personne ne va jusque-là.`
+        : pos > 3
+          ? `Et quand je tape « ${recherche} » sur Google, vous sortez en ${pos}e position, derrière ${pos - 1} autres résultats.`
+          : `Quand je tape « ${recherche} » sur Google, vous sortez en ${pos}e position, c'est une vraie base. Mais une fois sur votre site, il faut que le visiteur ait envie d'appeler.`
 
   const defauts = (prospect?.a_corriger_seo?.split(' ; ') ?? []).map(m => A_DIRE[m]?.(ville)).filter(Boolean) as string[]
   if (prospect?.site_pas_a_jour && prospect.annee_site) {
@@ -103,13 +117,16 @@ export default function ScriptAppel({ prospect }: { prospect: ProspectScript | n
           {defaut
             ? `Par exemple, ${defaut}. `
             : ''}
-          Et quand je tape « {recherche} » sur Google, vous n'apparaissez pas dans les premiers résultats. Or quelqu'un
-          qui a un problème juridique cherche souvent dans l'urgence, et il appelle l'un des premiers cabinets qu'il
-          trouve.
+          {google}{' '}
+          {verifiee && pos && pos <= 3
+            ? ''
+            : "Or quelqu'un qui a un problème juridique cherche souvent dans l'urgence, et il appelle l'un des premiers cabinets qu'il trouve."}
         </Moi>
         <Conseil>
           {prospect
-            ? 'Vérifie la recherche sur Google avant de le dire. Les autres points relevés sur son site sont dans la fiche.'
+            ? verifiee
+              ? 'Position relevée sur Google France. Les autres points relevés sur son site sont dans la fiche.'
+              : 'Position pas encore vérifiée : fais la recherche sur Google avant de le dire.'
             : 'Remplace par le point précis que tu as noté sur sa fiche.'}
         </Conseil>
       </Bloc>

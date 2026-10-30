@@ -38,6 +38,9 @@ interface Prospect {
   note_seo: number | null
   a_corriger_seo: string | null
   techno: string | null
+  position_google: number | null
+  recherche_google: string | null
+  position_verifiee_le: string | null
   statut: Statut
   nb_appels: number
   dernier_appel: string | null
@@ -64,6 +67,17 @@ const PAR_PAGE = 50
 const COULEURS: Record<Statut, string> = {
   a_appeler: 'text-gray-300', pas_de_reponse: 'text-gray-400', repondeur: 'text-gray-400', rappeler: 'text-yellow-400',
   interesse: 'text-green-400', pas_interesse: 'text-gray-500', ne_plus_appeler: 'text-red-400', faux_numero: 'text-gray-500',
+}
+
+function libellePosition(p: Prospect) {
+  if (!p.position_verifiee_le) return null
+  if (!p.position_google) return 'Absent des 20 premiers'
+  return p.position_google <= 10 ? `${p.position_google}e, première page` : `${p.position_google}e, deuxième page`
+}
+
+function couleurPosition(p: Prospect) {
+  if (!p.position_google) return 'text-red-400'
+  return p.position_google <= 3 ? 'text-green-400' : p.position_google <= 10 ? 'text-gray-200' : 'text-yellow-400'
 }
 
 function demainDixHeures() {
@@ -431,6 +445,13 @@ export default function ProspectionPage() {
                 <dd className="text-gray-200">{courant.note_seo !== null ? `${courant.note_seo}/100` : 'Non notée'}</dd>
               </div>
               <div>
+                <dt className="text-gray-500">Position Google</dt>
+                <dd className={courant.position_verifiee_le ? couleurPosition(courant) : 'text-gray-200'}>
+                  {libellePosition(courant) ?? 'Pas encore vérifiée'}
+                  {courant.recherche_google && <span className="text-gray-500"> sur « {courant.recherche_google} »</span>}
+                </dd>
+              </div>
+              <div>
                 <dt className="text-gray-500">Courriel</dt>
                 <dd className="text-gray-200 break-all">{courant.email || 'Aucun'}</dd>
               </div>
@@ -520,6 +541,7 @@ export default function ProspectionPage() {
                 <th className="px-4 py-2 font-medium">Ville</th>
                 <th className="px-4 py-2 font-medium">Téléphone</th>
                 <th className="px-4 py-2 font-medium">Site</th>
+                <th className="px-4 py-2 font-medium">Google</th>
                 <th className="px-4 py-2 font-medium">SEO et défauts</th>
                 <th className="px-4 py-2 font-medium">Statut</th>
                 <th className="px-4 py-2" />
@@ -544,6 +566,10 @@ export default function ProspectionPage() {
                     <div className={`text-xs ${p.site_pas_a_jour ? 'text-yellow-400' : 'text-gray-500'}`}>
                       {p.annee_site ? `à jour en ${p.annee_site}` : ''}
                     </div>
+                  </td>
+                  <td className="px-4 py-2 max-w-[180px]">
+                    <div className={`whitespace-nowrap ${couleurPosition(p)}`}>{libellePosition(p)}</div>
+                    {p.recherche_google && <div className="text-xs text-gray-500">{p.recherche_google}</div>}
                   </td>
                   <td className="px-4 py-2 max-w-xs">
                     <div className="text-gray-300 whitespace-nowrap">{p.note_seo !== null ? `${p.note_seo}/100` : ''}</div>
