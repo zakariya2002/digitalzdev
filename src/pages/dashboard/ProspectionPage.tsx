@@ -520,7 +520,7 @@ export default function ProspectionPage() {
                 <th className="px-4 py-2 font-medium">Ville</th>
                 <th className="px-4 py-2 font-medium">Téléphone</th>
                 <th className="px-4 py-2 font-medium">Site</th>
-                <th className="px-4 py-2 font-medium">SEO</th>
+                <th className="px-4 py-2 font-medium">SEO et défauts</th>
                 <th className="px-4 py-2 font-medium">Statut</th>
                 <th className="px-4 py-2" />
               </tr>
@@ -545,7 +545,14 @@ export default function ProspectionPage() {
                       {p.annee_site ? `à jour en ${p.annee_site}` : ''}
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-gray-300 whitespace-nowrap">{p.note_seo !== null ? `${p.note_seo}/100` : ''}</td>
+                  <td className="px-4 py-2 max-w-xs">
+                    <div className="text-gray-300 whitespace-nowrap">{p.note_seo !== null ? `${p.note_seo}/100` : ''}</div>
+                    {p.a_corriger_seo && (
+                      <ul className="text-xs text-gray-500 space-y-0.5">
+                        {p.a_corriger_seo.split(' ; ').map(m => <li key={m}>{m}</li>)}
+                      </ul>
+                    )}
+                  </td>
                   <td className={`px-4 py-2 whitespace-nowrap ${COULEURS[p.statut]}`}>
                     {LIBELLES[p.statut]}
                     {p.nb_appels > 0 && <span className="text-xs text-gray-500"> · {p.nb_appels} appel{p.nb_appels > 1 ? 's' : ''}</span>}
