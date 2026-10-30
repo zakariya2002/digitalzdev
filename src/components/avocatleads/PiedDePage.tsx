@@ -6,7 +6,6 @@ import Logo from './Logo'
 const RACCOURCIS = [
   { to: '#services', label: 'Services' },
   { to: '#deontologie', label: 'Déontologie' },
-  { to: '#realisation', label: 'Réalisation' },
   { to: '#faq', label: 'Questions fréquentes' },
 ]
 

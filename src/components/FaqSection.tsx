@@ -37,7 +37,7 @@ export const FAQ: QuestionReponse[] = [
   {
     question: 'Travaillez-vous partout en France ?',
     reponse:
-      "Oui, dans toute la France et à l'international. Nous avons notamment travaillé pour Fidal, cabinet d'avocats d'affaires, et nous accompagnons aussi bien l'avocat qui s'installe que les cabinets de plusieurs associés. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
+      "Oui, dans toute la France et à l'international. Nous accompagnons aussi bien l'avocat qui s'installe que les cabinets de plusieurs associés. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
   },
   {
     question: 'Que se passe-t-il après la mise en ligne ?',

@@ -60,10 +60,15 @@ const STATIC_PAGES: PageSeo[] = [
   },
   {
     path: '/projet',
-    title: 'Parlons de votre site | Digitalz Dev',
+    title: 'Parlons de votre site | AvocatLeads',
     description:
       "Avocats : quatre questions sur votre cabinet et votre site, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
     noindex: true,
+    image: '/og-avocatleads.png',
+    imageSize: [2400, 1260],
+    imageAlt: "AvocatLeads : le site qui amène des clients à votre cabinet. Sites internet pour avocats, conformes aux règles de la profession.",
+    siteName: 'AvocatLeads',
+    icon: '/avocatleads-icon.svg',
   },
   {
     path: '/mentions-legales',

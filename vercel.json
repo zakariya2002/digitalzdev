@@ -17,6 +17,11 @@
       "permanent": false
     },
     {
+      "source": "/fidal",
+      "destination": "/avocatleads",
+      "permanent": true
+    },
+    {
       "source": "/reuni",
       "destination": "/#projets",
       "permanent": true

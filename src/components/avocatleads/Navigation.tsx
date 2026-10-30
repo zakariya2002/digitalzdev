@@ -11,7 +11,6 @@ const LIENS = [
   { libelle: 'Accueil', vers: '/avocatleads', interne: true },
   { libelle: 'Services', vers: '#services', interne: false },
   { libelle: 'Déontologie', vers: '#deontologie', interne: false },
-  { libelle: 'Réalisation', vers: '#realisation', interne: false },
   { libelle: 'Questions', vers: '#faq', interne: false },
   { libelle: 'Contact', vers: '/projet', interne: true },
 ] as const

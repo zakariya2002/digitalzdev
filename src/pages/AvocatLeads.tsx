@@ -5,7 +5,6 @@ import AvisGoogleSection from '../components/AvisGoogleSection'
 import Navigation from '../components/avocatleads/Navigation'
 import Hero from '../components/avocatleads/Hero'
 import Manifeste from '../components/avocatleads/Manifeste'
-import Reference from '../components/avocatleads/Reference'
 import RendezVous from '../components/avocatleads/RendezVous'
 import Final from '../components/avocatleads/Final'
 import Acquisition from '../components/avocatleads/Acquisition'
@@ -36,7 +35,6 @@ export default function AvocatLeads() {
         <main>
           <Hero />
           <Manifeste />
-          <Reference />
           <RendezVous />
           <Final />
           <Acquisition />

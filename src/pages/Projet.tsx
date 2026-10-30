@@ -7,6 +7,7 @@ import RechercheGoogle from '../components/studio/RechercheGoogle'
 import FinalStudio from '../components/studio/FinalStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
 import Footer from '../components/Footer'
+import Logo from '../components/avocatleads/Logo'
 import CalendlyModal from '../components/CalendlyModal'
 
 /**
@@ -231,7 +232,7 @@ export default function Projet() {
     }
 
     const texte = [
-      'Bonjour Digitalz Dev, je suis avocat et je viens de remplir le formulaire de votre site.',
+      'Bonjour AvocatLeads, je suis avocat et je viens de remplir le formulaire de votre site.',
       '',
       `• Structure : ${ligne.metier}`,
       `• Site actuel : ${ligne.besoin}`,
@@ -298,9 +299,8 @@ export default function Projet() {
   return (
     <main className="flex min-h-[100svh] flex-col overflow-x-clip bg-surface px-5 pt-6 md:px-10">
       <header className="mx-auto flex w-full max-w-2xl items-center justify-between">
-        <Link to="/" className="flex min-h-[44px] items-center gap-2.5">
-          <img src="/logo-studio.png" alt="" className="h-9 w-9 rounded-full" />
-          <span className="text-[17px] font-medium tracking-tight text-text-primary">Digitalz Dev</span>
+        <Link to="/avocatleads" className="flex min-h-[44px] items-center" aria-label="AvocatLeads">
+          <Logo />
         </Link>
         <span className="text-sm text-text-muted">
           {Math.min(etape + 1, total)} / {total}
@@ -478,7 +478,7 @@ export default function Projet() {
         <div className="-mx-5 mt-16 md:-mx-10">
           <div className="mx-auto max-w-5xl px-5 md:px-10">
             <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl">
-              En attendant, découvrez Digitalz <span className="text-accent">Dev</span>
+              En attendant, découvrez Avocat<span className="text-accent">Leads</span>
             </h2>
             <video
               className="mt-6 aspect-[9/16] w-full rounded-2xl bg-surface-card object-cover md:aspect-video"
