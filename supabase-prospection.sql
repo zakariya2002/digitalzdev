@@ -25,6 +25,9 @@ CREATE TABLE IF NOT EXISTS prospects_avocats (
   note_seo INTEGER,
   a_corriger_seo TEXT,
   techno TEXT,
+  position_google INTEGER,                   -- place du site sur Google, NULL si absent des 20 premiers
+  recherche_google TEXT,
+  position_verifiee_le TIMESTAMPTZ,
   statut TEXT NOT NULL DEFAULT 'a_appeler' CHECK (statut IN (
     'a_appeler', 'pas_de_reponse', 'repondeur', 'rappeler', 'interesse',
     'pas_interesse', 'ne_plus_appeler', 'faux_numero')),
@@ -55,12 +58,14 @@ CREATE TRIGGER set_updated_at_prospects
 
 -- Prochain numéro à composer, réservé 10 minutes pour qu'un collègue sur la
 -- même file ne l'appelle pas en même temps. Les filtres sont facultatifs.
+DROP FUNCTION IF EXISTS prochain_prospect(BOOLEAN, BOOLEAN, INTEGER, TEXT, UUID[]);
 CREATE OR REPLACE FUNCTION prochain_prospect(
   p_mobiles BOOLEAN DEFAULT false,
   p_pas_a_jour BOOLEAN DEFAULT false,
   p_note_max INTEGER DEFAULT NULL,
   p_recherche TEXT DEFAULT NULL,
-  p_exclure UUID[] DEFAULT '{}'
+  p_exclure UUID[] DEFAULT '{}',
+  p_position TEXT DEFAULT NULL                -- absent, hors_p1, p2, p1, top3
 ) RETURNS SETOF prospects_avocats
 LANGUAGE plpgsql SECURITY INVOKER SET search_path = public AS $$
 DECLARE
@@ -76,6 +81,12 @@ BEGIN
      AND (NOT p_mobiles OR p.mobile)
      AND (NOT p_pas_a_jour OR p.site_pas_a_jour)
      AND (p_note_max IS NULL OR p.note_seo <= p_note_max)
+     AND (p_position IS NULL
+          OR (p_position = 'absent' AND p.position_verifiee_le IS NOT NULL AND p.position_google IS NULL)
+          OR (p_position = 'hors_p1' AND p.position_verifiee_le IS NOT NULL AND (p.position_google IS NULL OR p.position_google > 10))
+          OR (p_position = 'p2' AND p.position_google > 10)
+          OR (p_position = 'p1' AND p.position_google <= 10)
+          OR (p_position = 'top3' AND p.position_google <= 3))
      AND (p_recherche IS NULL OR p_recherche = ''
           OR p.ville ILIKE '%' || p_recherche || '%'
           OR p.code_postal LIKE p_recherche || '%'

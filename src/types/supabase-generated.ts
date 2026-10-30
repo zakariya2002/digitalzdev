@@ -2694,6 +2694,7 @@ export type Database = {
           p_mobiles?: boolean
           p_note_max?: number
           p_pas_a_jour?: boolean
+          p_position?: string
           p_recherche?: string
         }
         Returns: {

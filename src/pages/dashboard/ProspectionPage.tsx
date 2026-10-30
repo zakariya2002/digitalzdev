@@ -102,6 +102,8 @@ export default function ProspectionPage() {
   const [pasAJour, setPasAJour] = useState(false)
   const [noteMax, setNoteMax] = useState('')
   const [recherche, setRecherche] = useState('')
+  const [position, setPosition] = useState('')
+  const [defautsOuverts, setDefautsOuverts] = useState<string | null>(null)
 
   const [session, setSession] = useState(false)
   const [pause, setPause] = useState(false)
@@ -143,6 +145,11 @@ export default function ProspectionPage() {
     if (mobiles) q = q.eq('mobile', true)
     if (pasAJour) q = q.eq('site_pas_a_jour', true)
     if (noteMax) q = q.lte('note_seo', Number(noteMax))
+    if (position === 'absent') q = q.not('position_verifiee_le', 'is', null).is('position_google', null)
+    if (position === 'hors_p1') q = q.not('position_verifiee_le', 'is', null).or('position_google.is.null,position_google.gt.10')
+    if (position === 'p2') q = q.gt('position_google', 10)
+    if (position === 'p1') q = q.lte('position_google', 10)
+    if (position === 'top3') q = q.lte('position_google', 3)
     const r = recherche.trim().replace(/[,()%*]/g, ' ').trim()
     if (r) {
       q = q.or(['ville', 'specialites', 'barreau', 'cabinet', 'avocats'].map(c => `${c}.ilike.%${r}%`)
@@ -159,14 +166,14 @@ export default function ProspectionPage() {
     }
     setListe((data ?? []) as Prospect[])
     setNbListe(count ?? 0)
-  }, [statutListe, mobiles, pasAJour, noteMax, recherche, page])
+  }, [statutListe, mobiles, pasAJour, noteMax, position, recherche, page])
 
   useEffect(() => {
     const t = setTimeout(chargerListe, 300)
     return () => clearTimeout(t)
   }, [chargerListe])
 
-  useEffect(() => { setPage(0) }, [statutListe, mobiles, pasAJour, noteMax, recherche])
+  useEffect(() => { setPage(0) }, [statutListe, mobiles, pasAJour, noteMax, position, recherche])
 
   const appeler = useCallback(async (p: Prospect) => {
     vus.current.push(p.id)
@@ -190,6 +197,7 @@ export default function ProspectionPage() {
       p_note_max: noteMax ? Number(noteMax) : undefined,
       p_recherche: recherche.trim() || undefined,
       p_exclure: vus.current,
+      p_position: position || undefined,
     })
     if (error) {
       setErreur('Impossible de charger le prochain numéro.')
@@ -205,7 +213,7 @@ export default function ProspectionPage() {
       return
     }
     await appeler(p)
-  }, [mobiles, pasAJour, noteMax, recherche, appeler])
+  }, [mobiles, pasAJour, noteMax, position, recherche, appeler])
 
   // Fin d'appel : le softphone repasse au repos, on demande le résultat.
   useEffect(() => {
@@ -344,6 +352,19 @@ export default function ProspectionPage() {
           <option value="">Toutes les notes SEO</option>
           <option value="50">Note SEO jusqu'à 50</option>
           <option value="70">Note SEO jusqu'à 70</option>
+        </select>
+        <select
+          value={position}
+          onChange={e => setPosition(e.target.value)}
+          disabled={session}
+          className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300"
+        >
+          <option value="">Toutes les positions Google</option>
+          <option value="absent">Absents des 20 premiers</option>
+          <option value="hors_p1">Pas en première page</option>
+          <option value="p2">Deuxième page</option>
+          <option value="p1">Première page</option>
+          <option value="top3">Dans les 3 premiers</option>
         </select>
         <input
           value={recherche}
@@ -542,7 +563,7 @@ export default function ProspectionPage() {
                 <th className="px-4 py-2 font-medium">Téléphone</th>
                 <th className="px-4 py-2 font-medium">Site</th>
                 <th className="px-4 py-2 font-medium">Google</th>
-                <th className="px-4 py-2 font-medium">SEO et défauts</th>
+                <th className="px-4 py-2 font-medium">SEO</th>
                 <th className="px-4 py-2 font-medium">Statut</th>
                 <th className="px-4 py-2" />
               </tr>
@@ -572,9 +593,21 @@ export default function ProspectionPage() {
                     {p.recherche_google && <div className="text-xs text-gray-500">{p.recherche_google}</div>}
                   </td>
                   <td className="px-4 py-2 max-w-xs">
-                    <div className="text-gray-300 whitespace-nowrap">{p.note_seo !== null ? `${p.note_seo}/100` : ''}</div>
-                    {p.a_corriger_seo && (
-                      <ul className="text-xs text-gray-500 space-y-0.5">
+                    {p.note_seo !== null && (
+                      p.a_corriger_seo ? (
+                        <button
+                          onClick={() => setDefautsOuverts(o => (o === p.id ? null : p.id))}
+                          className="text-blue-400 hover:underline whitespace-nowrap"
+                          title="Voir les défauts SEO"
+                        >
+                          {p.note_seo}/100 {defautsOuverts === p.id ? '▴' : '▾'}
+                        </button>
+                      ) : (
+                        <span className="text-gray-300 whitespace-nowrap">{p.note_seo}/100</span>
+                      )
+                    )}
+                    {defautsOuverts === p.id && p.a_corriger_seo && (
+                      <ul className="mt-1 text-xs text-gray-400 space-y-0.5 min-w-[200px]">
                         {p.a_corriger_seo.split(' ; ').map(m => <li key={m}>{m}</li>)}
                       </ul>
                     )}
