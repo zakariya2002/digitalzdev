@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabase'
 import { useTwilio } from '../../contexts/TwilioContext'
 import { formatPhone } from '../../lib/phone'
 import ErrorBanner from '../../components/dashboard/ErrorBanner'
+import ScriptAppel from '../../components/dashboard/ScriptAppel'
 
 /**
  * Appels à la chaîne vers les avocats de la table prospects_avocats.
@@ -58,6 +59,13 @@ const LIBELLES: Record<Statut, string> = {
   interesse: 'Intéressés', pas_interesse: 'Pas intéressés', ne_plus_appeler: 'Ne plus appeler', faux_numero: 'Faux numéros',
 }
 
+const PAR_PAGE = 50
+
+const COULEURS: Record<Statut, string> = {
+  a_appeler: 'text-gray-300', pas_de_reponse: 'text-gray-400', repondeur: 'text-gray-400', rappeler: 'text-yellow-400',
+  interesse: 'text-green-400', pas_interesse: 'text-gray-500', ne_plus_appeler: 'text-red-400', faux_numero: 'text-gray-500',
+}
+
 function demainDixHeures() {
   const d = new Date()
   d.setDate(d.getDate() + 1)
@@ -92,6 +100,12 @@ export default function ProspectionPage() {
   const [stats, setStats] = useState<Partial<Record<Statut, number>>>({})
   const [fileVide, setFileVide] = useState(false)
   const [erreur, setErreur] = useState<string | null>(null)
+  const [voirScript, setVoirScript] = useState(false)
+
+  const [liste, setListe] = useState<Prospect[]>([])
+  const [nbListe, setNbListe] = useState(0)
+  const [page, setPage] = useState(0)
+  const [statutListe, setStatutListe] = useState<Statut | ''>('a_appeler')
 
   const vus = useRef<string[]>([])
   const statutPrecedent = useRef(status)
@@ -107,6 +121,51 @@ export default function ProspectionPage() {
   }, [])
 
   useEffect(() => { chargerStats() }, [chargerStats])
+
+  // La liste suit les mêmes filtres que la file d'appels.
+  const chargerListe = useCallback(async () => {
+    let q = supabase.from('prospects_avocats').select('*', { count: 'exact' })
+    if (statutListe) q = q.eq('statut', statutListe)
+    if (mobiles) q = q.eq('mobile', true)
+    if (pasAJour) q = q.eq('site_pas_a_jour', true)
+    if (noteMax) q = q.lte('note_seo', Number(noteMax))
+    const r = recherche.trim().replace(/[,()%*]/g, ' ').trim()
+    if (r) {
+      q = q.or(['ville', 'specialites', 'barreau', 'cabinet', 'avocats'].map(c => `${c}.ilike.%${r}%`)
+        .concat(`code_postal.like.${r}%`).join(','))
+    }
+    const { data, count, error } = await q
+      .order('site_pas_a_jour', { ascending: false })
+      .order('note_seo', { ascending: true, nullsFirst: false })
+      .order('id')
+      .range(page * PAR_PAGE, page * PAR_PAGE + PAR_PAGE - 1)
+    if (error) {
+      setErreur('Impossible de charger la liste des numéros.')
+      return
+    }
+    setListe((data ?? []) as Prospect[])
+    setNbListe(count ?? 0)
+  }, [statutListe, mobiles, pasAJour, noteMax, recherche, page])
+
+  useEffect(() => {
+    const t = setTimeout(chargerListe, 300)
+    return () => clearTimeout(t)
+  }, [chargerListe])
+
+  useEffect(() => { setPage(0) }, [statutListe, mobiles, pasAJour, noteMax, recherche])
+
+  const appeler = useCallback(async (p: Prospect) => {
+    vus.current.push(p.id)
+    setCourant(p)
+    setNotes(p.notes ?? '')
+    setRappelerLe(demainDixHeures())
+    setPhase('appel')
+    setAppelsSession(n => n + 1)
+    await supabase.from('prospects_avocats')
+      .update({ nb_appels: p.nb_appels + 1, dernier_appel: new Date().toISOString() })
+      .eq('id', p.id)
+    await makeCall(p.telephone, { Prospection: '1', prospectId: p.id })
+  }, [makeCall])
 
   const appelerSuivant = useCallback(async () => {
     setCompteur(null)
@@ -131,17 +190,8 @@ export default function ProspectionPage() {
       setPhase('attente')
       return
     }
-    vus.current.push(p.id)
-    setCourant(p)
-    setNotes(p.notes ?? '')
-    setRappelerLe(demainDixHeures())
-    setPhase('appel')
-    setAppelsSession(n => n + 1)
-    await supabase.from('prospects_avocats')
-      .update({ nb_appels: p.nb_appels + 1, dernier_appel: new Date().toISOString() })
-      .eq('id', p.id)
-    await makeCall(p.telephone, { Prospection: '1', prospectId: p.id })
-  }, [mobiles, pasAJour, noteMax, recherche, makeCall])
+    await appeler(p)
+  }, [mobiles, pasAJour, noteMax, recherche, appeler])
 
   // Fin d'appel : le softphone repasse au repos, on demande le résultat.
   useEffect(() => {
@@ -197,6 +247,7 @@ export default function ProspectionPage() {
       return
     }
     chargerStats()
+    chargerListe()
     setPhase('attente')
     setCourant(null)
     if (session && !pause) setCompteur(3)
@@ -209,6 +260,26 @@ export default function ProspectionPage() {
     vus.current = []
     setAppelsSession(0)
     appelerSuivant()
+  }
+
+  // Appel d'un numéro choisi dans la liste ; la suite de la file s'enchaîne ensuite.
+  const appelerDepuisListe = async (p: Prospect) => {
+    setErreur(null)
+    const { data, error } = await supabase.from('prospects_avocats')
+      .update({ verrou_jusqua: new Date(Date.now() + 10 * 60000).toISOString() })
+      .eq('id', p.id)
+      .or(`verrou_jusqua.is.null,verrou_jusqua.lt.${new Date().toISOString()}`)
+      .select('*')
+    if (error || !data?.length) {
+      setErreur('Ce numéro est déjà en cours d\'appel.')
+      return
+    }
+    setSession(true)
+    setPause(false)
+    vus.current = []
+    setAppelsSession(0)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    await appeler(data[0] as Prospect)
   }
 
   const arreter = () => {
@@ -264,9 +335,15 @@ export default function ProspectionPage() {
           value={recherche}
           onChange={e => setRecherche(e.target.value)}
           disabled={session}
-          placeholder="Ville, code postal, barreau ou spécialité"
+          placeholder="Nom, cabinet, ville, code postal, barreau ou spécialité"
           className="flex-1 min-w-[220px] px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500"
         />
+        <button
+          onClick={() => setVoirScript(v => !v)}
+          className="px-4 py-2 text-sm font-medium bg-gray-700 hover:bg-gray-600 text-white rounded-lg"
+        >
+          {voirScript ? 'Masquer le script' : 'Voir le script'}
+        </button>
         {!session ? (
           <button onClick={lancer} className="px-5 py-2 text-sm font-semibold bg-green-600 hover:bg-green-500 text-white rounded-lg">
             Lancer les appels
@@ -298,6 +375,12 @@ export default function ProspectionPage() {
           {compteur !== null && !pause && ` Appel suivant dans ${compteur} s.`}
           {pause && ' En pause.'}
         </p>
+      )}
+
+      {voirScript && !courant && (
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+          <ScriptAppel prospect={null} />
+        </div>
       )}
 
       {courant && (
@@ -367,6 +450,11 @@ export default function ProspectionPage() {
                 </ul>
               </div>
             )}
+
+            <div className="pt-2">
+              <div className="text-lg font-semibold text-white mb-3">Script</div>
+              <ScriptAppel prospect={courant} />
+            </div>
           </div>
 
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 space-y-3">
@@ -409,6 +497,89 @@ export default function ProspectionPage() {
           </div>
         </div>
       )}
+
+      <div className="bg-gray-900 border border-gray-800 rounded-xl">
+        <div className="flex flex-wrap items-center justify-between gap-3 p-4">
+          <div className="text-sm text-gray-400">
+            {nbListe.toLocaleString('fr-FR')} numéro{nbListe > 1 ? 's' : ''} avec ces filtres
+          </div>
+          <select
+            value={statutListe}
+            onChange={e => setStatutListe(e.target.value as Statut | '')}
+            className="px-3 py-1.5 text-sm bg-gray-800 border border-gray-700 rounded-lg text-gray-300"
+          >
+            <option value="">Tous les statuts</option>
+            {(Object.keys(LIBELLES) as Statut[]).map(s => <option key={s} value={s}>{LIBELLES[s]}</option>)}
+          </select>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-xs text-gray-500">
+                <th className="px-4 py-2 font-medium">Cabinet et avocats</th>
+                <th className="px-4 py-2 font-medium">Ville</th>
+                <th className="px-4 py-2 font-medium">Téléphone</th>
+                <th className="px-4 py-2 font-medium">Site</th>
+                <th className="px-4 py-2 font-medium">SEO</th>
+                <th className="px-4 py-2 font-medium">Statut</th>
+                <th className="px-4 py-2" />
+              </tr>
+            </thead>
+            <tbody>
+              {liste.map((p, i) => (
+                <tr key={p.id} className={i % 2 ? '' : 'bg-gray-800/30'}>
+                  <td className="px-4 py-2 max-w-xs">
+                    <div className="text-white truncate">{p.cabinet || p.avocats}</div>
+                    {p.cabinet && <div className="text-xs text-gray-500 truncate">{p.avocats}</div>}
+                    {p.specialites && <div className="text-xs text-gray-500 truncate">{p.specialites}</div>}
+                  </td>
+                  <td className="px-4 py-2 text-gray-300 whitespace-nowrap">{p.ville}</td>
+                  <td className="px-4 py-2 font-mono text-gray-200 whitespace-nowrap">{formatPhone(p.telephone)}</td>
+                  <td className="px-4 py-2 max-w-[220px]">
+                    {p.site && (
+                      <a href={p.site} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline truncate block">
+                        {p.site.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                      </a>
+                    )}
+                    <div className={`text-xs ${p.site_pas_a_jour ? 'text-yellow-400' : 'text-gray-500'}`}>
+                      {p.annee_site ? `à jour en ${p.annee_site}` : ''}
+                    </div>
+                  </td>
+                  <td className="px-4 py-2 text-gray-300 whitespace-nowrap">{p.note_seo !== null ? `${p.note_seo}/100` : ''}</td>
+                  <td className={`px-4 py-2 whitespace-nowrap ${COULEURS[p.statut]}`}>
+                    {LIBELLES[p.statut]}
+                    {p.nb_appels > 0 && <span className="text-xs text-gray-500"> · {p.nb_appels} appel{p.nb_appels > 1 ? 's' : ''}</span>}
+                  </td>
+                  <td className="px-4 py-2 text-right">
+                    <button
+                      onClick={() => appelerDepuisListe(p)}
+                      disabled={phase !== 'attente' || p.statut === 'ne_plus_appeler'}
+                      className="px-3 py-1 text-xs font-medium bg-green-600 hover:bg-green-500 text-white rounded-lg disabled:opacity-30"
+                    >
+                      Appeler
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {nbListe > PAR_PAGE && (
+          <div className="flex items-center justify-end gap-3 p-4 text-sm text-gray-400">
+            <button onClick={() => setPage(p => p - 1)} disabled={page === 0} className="px-3 py-1 bg-gray-800 rounded-lg disabled:opacity-30">
+              Précédents
+            </button>
+            Page {page + 1} sur {Math.ceil(nbListe / PAR_PAGE)}
+            <button
+              onClick={() => setPage(p => p + 1)}
+              disabled={(page + 1) * PAR_PAGE >= nbListe}
+              className="px-3 py-1 bg-gray-800 rounded-lg disabled:opacity-30"
+            >
+              Suivants
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

@@ -80,7 +80,9 @@ BEGIN
           OR p.ville ILIKE '%' || p_recherche || '%'
           OR p.code_postal LIKE p_recherche || '%'
           OR p.specialites ILIKE '%' || p_recherche || '%'
-          OR p.barreau ILIKE '%' || p_recherche || '%')
+          OR p.barreau ILIKE '%' || p_recherche || '%'
+          OR p.cabinet ILIKE '%' || p_recherche || '%'
+          OR p.avocats ILIKE '%' || p_recherche || '%')
    ORDER BY (p.statut = 'rappeler') DESC, p.nb_appels, p.site_pas_a_jour DESC, p.note_seo NULLS LAST, p.id
    LIMIT 1
    FOR UPDATE SKIP LOCKED;
