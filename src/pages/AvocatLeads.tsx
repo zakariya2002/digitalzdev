@@ -12,6 +12,7 @@ import Acquisition from '../components/avocatleads/Acquisition'
 import Services from '../components/avocatleads/Services'
 import Deontologie from '../components/avocatleads/Deontologie'
 import Equipe from '../components/avocatleads/Equipe'
+import TravauxStudio from '../components/studio/TravauxStudio'
 import Faq from '../components/avocatleads/Faq'
 import PiedDePage from '../components/avocatleads/PiedDePage'
 
@@ -42,6 +43,7 @@ export default function AvocatLeads() {
           <Services />
           <Deontologie />
           <AvisGoogleSection />
+          <TravauxStudio titre="Nos créations" />
           <Equipe />
           <Faq />
           <PiedDePage />

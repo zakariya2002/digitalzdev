@@ -38,6 +38,58 @@ export interface Project {
 // Portfolio : des sites institutionnels sobres et une boutique.
 export const projects: Project[] = [
   {
+    id: 'maison-dans-les-temps',
+    title: 'maisondanslestemps.com',
+    subtitle: 'Marque de vêtements, édition limitée',
+    year: '2026',
+    tags: ['E-commerce', 'Mode', 'Lancement'],
+    stack: ['Shopify', 'Compte à rebours', 'Précommande'],
+    description:
+      "Boutique de lancement de Maison Dans Les Temps, marque de vêtements en édition limitée : compte à rebours jusqu'au drop, accès réservé aux inscrits, puis précommande et paiement en ligne.",
+    url: 'https://maisondanslestemps.com',
+    route: '/maison-dans-les-temps',
+    color: '#111111',
+    gradient: 'from-[#2A2A2A] via-[#1A1A1A] to-[#0B0B0B]',
+    heroImage: '/screenshots/dlt-hero.webp',
+    brief:
+      "Maison Dans Les Temps lançait sa collection « Dans Les Temps » en édition limitée et voulait faire de la date de sortie un événement : créer l'attente avant le drop, réunir les clients intéressés, puis vendre les pièces dès l'ouverture.",
+    solution:
+      "Une page unique en noir et blanc, centrée sur un grand compte à rebours et la pièce dévoilée en pixels. L'inscription par e-mail donne accès au drop ; à l'heure dite, la page devient la boutique, avec choix de la taille, précommande et retrait sur place ou livraison.",
+    features: [
+      'Compte à rebours jusqu’au drop',
+      'Accès au drop réservé aux inscrits',
+      'Pièce dévoilée en pixels',
+      'Précommande et choix de la taille',
+      'Retrait sur place ou livraison',
+      'Paiement Shopify',
+    ],
+    metrics: [
+      { value: 'Drop', label: 'accès réservé aux inscrits' },
+      { value: 'Limited', label: 'édition limitée' },
+      { value: 'Shopify', label: 'boutique et paiement' },
+    ],
+    mockups: [
+      {
+        title: 'Compte à rebours',
+        gradient: 'from-[#2A2A2A] to-[#111111]',
+        content: 'Avant le drop',
+        image: '/screenshots/dlt-hero.webp',
+      },
+      {
+        title: 'Mobile',
+        gradient: 'from-[#2A2A2A] to-[#111111]',
+        content: 'Inscription au drop sur téléphone',
+        image: '/screenshots/dlt-2.webp',
+      },
+      {
+        title: 'Détail',
+        gradient: 'from-[#2A2A2A] to-[#111111]',
+        content: 'La pièce dévoilée en pixels',
+        image: '/screenshots/dlt-3.webp',
+      },
+    ],
+  },
+  {
     id: 'gensler',
     title: 'gensler.com',
     subtitle: 'Agence d’architecture et de design',
