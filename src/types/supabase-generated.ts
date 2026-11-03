@@ -2110,6 +2110,24 @@ export type Database = {
           },
         ]
       }
+      script_appel: {
+        Row: {
+          blocs: Json
+          id: string
+          modifie_le: string
+        }
+        Insert: {
+          blocs: Json
+          id?: string
+          modifie_le?: string
+        }
+        Update: {
+          blocs?: Json
+          id?: string
+          modifie_le?: string
+        }
+        Relationships: []
+      }
       sequences: {
         Row: {
           current_number: number | null

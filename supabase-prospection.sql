@@ -110,3 +110,15 @@ BEGIN
     UPDATE prospects_avocats SET verrou_jusqua = now() + interval '10 minutes'
      WHERE id = v_id RETURNING *;
 END $$;
+-- Script d'appel partagé : un seul modèle, appliqué à toutes les fiches.
+CREATE TABLE IF NOT EXISTS script_appel (
+  id TEXT PRIMARY KEY DEFAULT 'principal',
+  blocs JSONB NOT NULL,
+  modifie_le TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+ALTER TABLE script_appel ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Equipe prospection" ON script_appel;
+CREATE POLICY "Equipe prospection" ON script_appel
+  FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid()))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid()));
