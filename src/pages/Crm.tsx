@@ -3,6 +3,23 @@ import { motion, MotionConfig, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { WHATSAPP } from '../components/avocatleads/contenu'
+import Navbar from '../components/Navbar'
+import type { CSSProperties } from 'react'
+
+/** Variables du thème studio : la barre de l'accueil garde son apparence ici. */
+const THEME_STUDIO = {
+  '--surface': '255 255 255',
+  '--surface-light': '245 245 247',
+  '--surface-card': '240 240 242',
+  '--surface-border': '222 222 226',
+  '--accent': '29 29 31',
+  '--accent-hover': '58 58 60',
+  '--accent-muted': '152 155 161',
+  '--text-primary': '29 29 31',
+  '--text-secondary': '99 99 104',
+  '--text-muted': '142 142 147',
+  fontFamily: "'Nunito', system-ui, sans-serif",
+} as CSSProperties
 
 /*
  * Portfolio CRM et back-offices de Digitalz Dev.
@@ -151,11 +168,10 @@ function Iphone({ src, alt, className = '', web = false }: { src: string; alt: s
   )
 }
 
-function Titre({ sur, children, intro }: { sur: string; children: ReactNode; intro?: ReactNode }) {
+function Titre({ children, intro, centre = false }: { sur?: string; children: ReactNode; intro?: ReactNode; centre?: boolean }) {
   return (
     <Apparait>
-      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">{sur}</p>
-      <h2 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight tracking-tight md:text-5xl">{children}</h2>
+      <h2 className={`max-w-3xl ${centre ? 'mx-auto text-center' : ''} text-3xl font-semibold leading-tight tracking-tight md:text-5xl`}>{children}</h2>
       {intro && <p className="mt-5 max-w-2xl text-base leading-relaxed text-black/60">{intro}</p>}
     </Apparait>
   )
@@ -200,8 +216,7 @@ function Etape({ sur, titre, texte, src, url, points, inverse = false, image = f
         )}
       </Apparait>
       <Apparait delai={0.1} className={inverse ? 'md:order-1' : ''}>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">{sur}</p>
-        <h4 className="mt-3 text-2xl font-semibold leading-snug tracking-tight md:text-3xl">{titre}</h4>
+        <h4 className="text-2xl font-semibold leading-snug tracking-tight md:text-3xl">{titre}</h4>
         <p className="mt-4 text-[15px] leading-relaxed text-black/60">{texte}</p>
         {points && (
           <ul className="mt-5 space-y-2">
@@ -263,6 +278,39 @@ const ETAPES_DZ: EtapeProps[] = [
     texte: 'Chiffre d’affaires du mois et de l’année, charges estimées, revenu net, plafond du régime : la compta se tient à jour à partir des factures, sans ressaisie.',
     src: '/crm/dz-finances.webp',
     url: 'digitalzdev.com/dashboard/finances',
+  },
+]
+
+const ETAPES_ADS: EtapeProps[] = [
+  {
+    sur: 'Vue d’ensemble',
+    titre: 'Tous les comptes publicitaires des clients sur un seul écran.',
+    texte: 'Le super admin voit chaque client en lecture seule : dépense, leads, coût par lead, ROAS et meilleur ensemble de publicités, sur la période choisie, du jour même jusqu’à l’historique complet.',
+    points: ['Plusieurs comptes Meta réunis', 'Période au choix, jusqu’à « All Time »', 'Appels obtenus suivis avec Hyros et Calendly'],
+    src: '/crm/ads-overview-all.webp',
+    url: 'adspilot / admin / vue d’ensemble',
+  },
+  {
+    sur: 'Par client',
+    titre: 'Chaque campagne résumée en une carte.',
+    texte: 'Pour un client, toutes les campagnes s’affichent avec leur dépense, leurs leads, leur coût par lead et leur meilleur ensemble de publicités. On repère en quelques secondes ce qui fonctionne et ce qui coûte trop cher.',
+    src: '/crm/ads-ipe.webp',
+    url: 'adspilot / admin / immopourexpat',
+  },
+  {
+    sur: 'Comparer',
+    titre: 'Les meilleures audiences remontent d’elles-mêmes.',
+    texte: 'Sur le compte Excellers, le coût par lead moyen descend à 1,50 € sur 49 397 leads. Les campagnes gagnantes, leurs audiences et leurs appels obtenus sont visibles sans ouvrir le gestionnaire de publicités de Meta.',
+    src: '/crm/ads-excellers.webp',
+    url: 'adspilot / admin / excellers',
+  },
+  {
+    sur: 'Moteur de budget',
+    titre: 'Les budgets s’ajustent seuls, selon vos règles.',
+    texte: 'Chaque jour, un serveur dédié évalue chaque publicité sur la fenêtre choisie : il augmente le budget des gagnantes par paliers, met en sommeil celles qui dépassent le coût par lead visé, puis les relance après le délai prévu. Chaque décision peut aussi être validée à la main.',
+    points: ['Objectif de coût par lead et fenêtre d’évaluation', 'Scaling par paliers de dépense', 'Mise en sommeil et relance automatiques'],
+    src: '/crm/ads-rules.webp',
+    url: 'adspilot / rules',
   },
 ]
 
@@ -349,8 +397,7 @@ const PROJETS: Projet[] = [
         </div>
         <div className="mt-24">
           <Apparait>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">NeuroCare Pro</p>
-            <h4 className="mt-3 max-w-3xl text-2xl font-semibold tracking-tight md:text-4xl">L’espace des professionnels : séances, dossiers, factures.</h4>
+            <h4 className="max-w-3xl text-2xl font-semibold tracking-tight md:text-4xl">L’espace des professionnels : séances, dossiers, factures.</h4>
             <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-black/60">
               Chaque professionnel gère son activité depuis son espace : agenda, dossiers de suivi, messagerie, facturation. Écrans réels de l’outil, avec des données fictives.
             </p>
@@ -482,12 +529,12 @@ const ARCHI: [string, string[]][] = [
 
 /** Pictogrammes au trait, dessinés sur une grille de 24. */
 const ICONES: Record<string, ReactNode> = {
-  role: <><circle cx="12" cy="8" r="3.5" /><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" /><path d="M17.5 4.5l1.5 1.5 2.5-2.5" /></>,
-  document: <><path d="M7 3h7l4 4v14H7z" /><path d="M14 3v4h4" /><rect x="9.5" y="12" width="6" height="5" rx="1" /><path d="M11 12v-1.2a1.5 1.5 0 013 0V12" /></>,
-  trace: <><path d="M4 6h10M4 12h10M4 18h6" /><circle cx="18" cy="16" r="3" /><path d="M18 14.6V16l1 .8" /></>,
-  rgpd: <><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z" /><path d="M9 12l2 2 4-4" /></>,
-  protection: <><rect x="5" y="10" width="14" height="10" rx="2" /><path d="M8 10V7a4 4 0 018 0v3" /><circle cx="12" cy="15" r="1.3" /></>,
-  qualite: <><circle cx="12" cy="12" r="8" /><path d="M8.5 12.5l2.3 2.3 4.7-5" /></>,
+  role: <><circle cx="10" cy="7.5" r="3.5" /><path d="M3.5 20c0-3.9 2.9-6.5 6.5-6.5 1.2 0 2.3.3 3.2.8" /><path d="M17.5 13l3.5 1.4v2.7c0 2.2-1.5 3.9-3.5 4.9-2-1-3.5-2.7-3.5-4.9v-2.7z" /><path d="M16.2 17.4l.9.9 1.8-1.9" /></>,
+  document: <><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h4" /><path d="M14 3l5 5h-4a1 1 0 01-1-1z" /><rect x="13" y="14" width="8" height="7" rx="1.5" /><path d="M15 14v-1.5a2 2 0 014 0V14" /><path d="M8 9h3M8 13h3" /></>,
+  trace: <><rect x="4" y="4" width="13" height="17" rx="2" /><path d="M8 4V3h5v1" /><path d="M7.5 10h6M7.5 13.5h4" /><circle cx="17.5" cy="17.5" r="3.5" /><path d="M20 20l1.5 1.5" /></>,
+  rgpd: <><path d="M12 2.8l7.5 3v5.4c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.8z" /><path d="M8.6 12.2l2.4 2.4 4.6-4.8" /></>,
+  protection: <><rect x="3" y="4" width="18" height="13" rx="2" /><path d="M3 8h18" /><rect x="6.5" y="11" width="3.5" height="3.5" rx=".8" /><path d="M7.4 12.8l.7.7 1.2-1.3" /><path d="M12.5 12.8h5" /><path d="M9 21h6M12 17v4" /></>,
+  qualite: <><circle cx="12" cy="9" r="6" /><path d="M9.6 9.2l1.7 1.7 3.2-3.3" /><path d="M8.5 14l-1.5 7 5-2.5 5 2.5-1.5-7" /></>,
   cadrage: <><circle cx="9" cy="9" r="3" /><circle cx="16.5" cy="10" r="2.5" /><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" /><path d="M14.5 15.2c.6-.2 1.3-.2 2-.2 2.4 0 4 1.5 4 4" /></>,
   maquette: <><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 8h18" /><rect x="6" y="11" width="5" height="4" rx=".8" /><path d="M14 11h4M14 14h3" /><path d="M9 21h6" /></>,
   modules: <><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" /><path d="M17 14v6M14 17h6" /></>,
@@ -527,10 +574,9 @@ function Hero() {
   const descend = useTransform(scrollYProgress, [0, 1], [0, 60])
 
   return (
-    <section ref={ref} className="mx-auto max-w-6xl px-5 pb-10 pt-14 md:pt-24">
+    <section ref={ref} className="mx-auto max-w-6xl px-5 pb-10 pt-32 md:pt-40">
       <Apparait>
-        <p className="text-base font-semibold uppercase tracking-[0.18em] text-black/50 md:text-xl">Portfolio CRM et back-offices</p>
-        <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.06] tracking-tight md:text-[68px]">
+        <h1 className="max-w-4xl text-4xl font-semibold leading-[1.06] tracking-tight md:text-[68px]">
           Des CRM sur mesure, déjà en production.
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-black/60">
@@ -579,18 +625,10 @@ export default function Crm() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-white font-['Poppins',sans-serif] text-[#0A0A0A] antialiased selection:bg-black selection:text-white">
-        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-            <a href="/crm" aria-label="Digitalz Dev"><Logo /></a>
-            <nav className="hidden items-center gap-7 text-sm text-black/55 md:flex">
-              <a href="#savoir-faire" className="hover:text-black">Savoir-faire</a>
-              <a href="#realisations" className="hover:text-black">Réalisations</a>
-              <a href="#integrations" className="hover:text-black">Intégrations</a>
-              <a href="#architecture" className="hover:text-black">Architecture</a>
-            </nav>
-            <a href={CONTACT} className="rounded-full bg-black px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-80">Nous contacter</a>
-          </div>
-        </header>
+        {/* La barre de navigation de l'accueil, avec les couleurs du thème studio. */}
+        <div style={THEME_STUDIO}>
+          <Navbar />
+        </div>
 
         <main>
           <Hero />
@@ -676,32 +714,45 @@ export default function Crm() {
 
               <article id="adspilot">
                 <Apparait>
-                  <div className="rounded-3xl bg-black p-8 text-white md:p-12">
-                    <div className="grid gap-6 md:grid-cols-[1fr_1.1fr] md:items-end">
-                      <div>
-                        <h3 className="text-3xl font-semibold tracking-tight md:text-5xl">AdsPilot</h3>
-                        <p className="mt-3 text-sm font-medium text-white/55">Back-office de pilotage publicitaire Meta</p>
-                      </div>
-                      <p className="text-[15px] leading-relaxed text-white/65">
-                        Un centre de commande qui lance, coupe et ajuste les campagnes Meta, propose des décisions de budget à valider en un clic et suit chaque lead jusqu’au rendez-vous. Les traitements lourds tournent sur un serveur dédié, l’interface reste instantanée.
-                      </p>
+                  <div className="grid gap-6 md:grid-cols-[1fr_1.1fr] md:items-end">
+                    <div>
+                      <h3 className="text-3xl font-semibold tracking-tight md:text-5xl">AdsPilot</h3>
+                      <p className="mt-3 text-sm font-medium text-black/50">Back-office de pilotage publicitaire Meta, multi-clients</p>
                     </div>
-                    <div className="mt-10 grid gap-6 md:grid-cols-3">
-                      <div>
-                        <p className="mb-4 text-sm font-semibold">Modules</p>
-                        <Puces sombre items={ADSPILOT.modules} />
-                      </div>
-                      <div>
-                        <p className="mb-4 text-sm font-semibold">Intégrations API</p>
-                        <Puces sombre items={ADSPILOT.integrations} />
-                      </div>
-                      <div>
-                        <p className="mb-4 text-sm font-semibold">Technologies et stockage</p>
-                        <Puces sombre items={ADSPILOT.stack} />
-                      </div>
-                    </div>
+                    <p className="text-[15px] leading-relaxed text-black/60">
+                      Une plateforme pour piloter les campagnes Meta de plusieurs clients depuis un seul outil : suivi des dépenses et des leads jusqu’au rendez-vous, moteur qui ajuste les budgets chaque jour, génération de créas par IA et landing pages qui testent plusieurs accroches. Les traitements lourds tournent sur un serveur dédié, l’interface reste instantanée.
+                    </p>
                   </div>
                 </Apparait>
+                <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4">
+                  {[
+                    ['592 839 €', 'de dépenses pilotées'],
+                    ['75 560', 'leads suivis'],
+                    ['165', 'campagnes'],
+                    ['3 751', 'publicités'],
+                  ].map(([v, l], i) => (
+                    <Apparait key={l} delai={i * 0.05}>
+                      <div className="rounded-2xl bg-black p-5 text-white">
+                        <p className="text-xl font-semibold md:text-2xl">{v}</p>
+                        <p className="text-xs text-white/55">{l}</p>
+                      </div>
+                    </Apparait>
+                  ))}
+                </div>
+                <p className="mt-3 text-xs text-black/45">Données réelles « All Time » des deux comptes clients, au 17 novembre 2026.</p>
+                <div className="mt-16 space-y-20">
+                  {ETAPES_ADS.map((e, i) => <Etape key={e.titre} {...e} inverse={i % 2 === 1} />)}
+                </div>
+                <div className="mt-16 grid gap-3 md:grid-cols-3">
+                  {[['Modules', ADSPILOT.modules], ['Intégrations API', ADSPILOT.integrations], ['Technologies et stockage', ADSPILOT.stack]].map(([t, items], i) => (
+                    <Apparait key={t as string} delai={i * 0.08} className="h-full">
+                      <div className="h-full rounded-2xl bg-[#F5F5F7] p-6">
+                        <p className="mb-4 text-sm font-semibold">{t as string}</p>
+                        <Puces items={items as string[]} />
+                      </div>
+                    </Apparait>
+                  ))}
+                </div>
               </article>
             </div>
           </section>
@@ -752,7 +803,7 @@ export default function Crm() {
               {SECURITE.map(([t, ic, d], i) => (
                 <Apparait key={t} delai={(i % 3) * 0.06}>
                   <div className="h-full rounded-2xl bg-[#F5F5F7] p-6">
-                    <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-black text-white"><Picto nom={ic} className="h-5 w-5" /></span>
+                    <span className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2a2a2c] to-black text-white shadow-[0_14px_30px_-14px_rgba(0,0,0,0.7)] ring-1 ring-white/10"><Picto nom={ic} className="h-7 w-7" /></span>
                     <p className="text-base font-semibold">{t}</p>
                     <p className="mt-2 text-sm leading-relaxed text-black/60">{d}</p>
                   </div>
@@ -762,7 +813,7 @@ export default function Crm() {
           </section>
 
           <section className="mx-auto max-w-6xl px-5 py-20 md:py-28">
-            <Titre sur="Méthode">Un CRM livré par modules, utilisable dès la première étape.</Titre>
+            <Titre sur="Méthode" centre>Un CRM livré par modules, utilisable dès la première étape.</Titre>
             <ol className="mt-14 flex flex-col items-stretch gap-2 md:flex-row md:items-start md:gap-0">
               {METHODE.map(([t, ic, d], i) => (
                 <li key={t} className="flex flex-col items-center md:flex-1 md:flex-row md:items-start">
