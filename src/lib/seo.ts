@@ -72,9 +72,9 @@ const STATIC_PAGES: PageSeo[] = [
   },
   {
     path: '/crm',
-    title: 'CRM sur mesure pour Wage Portage | Digitalz Dev',
+    title: 'CRM et back-offices sur mesure | Portfolio Digitalz Dev',
     description:
-      "Les back-offices et CRM conçus par Digitalz Dev : modules, intégrations API, technologies, stockage et architecture proposée pour Wage Portage.",
+      "Les CRM, back-offices et applications mobiles conçus par Digitalz Dev : vraies captures, modules, intégrations API, technologies et architecture.",
     noindex: true,
   },
   {

@@ -490,7 +490,7 @@
   .etincelle-google { opacity: 0; }
 }
 
-/* Poppins, police de Wage Portage, pour la page /crm uniquement. */
+/* Poppins, pour la page /crm uniquement. */
 @font-face { font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/poppins-400-latin.woff2') format('woff2'); }
 @font-face { font-family: 'Poppins'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/poppins-500-latin.woff2') format('woff2'); }
 @font-face { font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/poppins-600-latin.woff2') format('woff2'); }

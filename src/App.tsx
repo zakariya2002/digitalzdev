@@ -49,7 +49,7 @@ export default function App() {
   }, [location.pathname, navigate])
 
   // Le thème « studio » ne vaut que pour la vitrine. La page /crm porte
-  // la charte de Wage Portage et garde ses propres titres.
+  // sa propre charte et garde ses propres titres.
   const sansStudio = isDashboard || location.pathname.replace(/\/$/, '') === '/crm'
   useEffect(() => {
     document.documentElement.classList.toggle('studio', !sansStudio)
@@ -89,7 +89,7 @@ export default function App() {
     )
   }
 
-  // Portfolio CRM préparé pour Wage Portage : page autonome, fond noir.
+  // Portfolio CRM et back-offices : page autonome.
   if (location.pathname.replace(/\/$/, '') === '/crm') {
     return (
       <>
