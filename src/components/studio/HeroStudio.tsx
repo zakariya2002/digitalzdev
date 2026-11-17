@@ -124,7 +124,7 @@ export default function HeroStudio() {
           <h1 className="text-[11.5vw] leading-[1] tracking-[-0.02em] text-[#0f0f0f] md:text-[6.6vw] lg:text-[min(6.6vw,104px)]">
             <Ligne delai={0.25}>Créons un site</Ligne>
             <Ligne delai={0.35}>
-              à la hauteur de votre <span className="text-pop">cabinet.</span>
+              à la hauteur de votre <span className="text-pop">projet.</span>
             </Ligne>
           </h1>
 
@@ -134,12 +134,12 @@ export default function HeroStudio() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
           >
-            <Link
-              to="/projet"
+            <a
+              href="https://quiz.digitalzdev.com"
               className="inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black"
             >
-              Prendre rendez-vous
-            </Link>
+              Démarrer mon projet
+            </a>
           </motion.div>
         </motion.div>
 

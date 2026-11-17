@@ -10,13 +10,13 @@ const LIENS = [
   { libelle: 'Projets', vers: '/#projets', interne: false },
   { libelle: 'Services', vers: '/#services', interne: false },
   { libelle: "L'agence", vers: '/#agence', interne: false },
-  { libelle: 'Contact', vers: '/projet', interne: true },
+  { libelle: 'Contact', vers: '/contact', interne: true },
 ] as const
 
 type Lien = (typeof LIENS)[number]
 
-/** Le formulaire en quelques questions, réservé aux avocats. */
-const PROJET = '/projet'
+/** Le quiz en quelques questions, ouvert à tous les projets. */
+const PROJET = 'https://quiz.digitalzdev.com'
 const EASE = [0.76, 0, 0.24, 1] as const
 
 function estCourant(lien: Lien, chemin: string): boolean {
@@ -156,13 +156,13 @@ export default function Navbar() {
         </nav>
 
         <div className="pointer-events-auto flex items-center gap-1 rounded-2xl bg-surface-card/75 p-1.5 backdrop-blur-xl">
-          <Link
-            to={PROJET}
+          <a
+            href={PROJET}
             className="inline-flex min-h-[40px] items-center whitespace-nowrap rounded-xl bg-accent px-4 text-[15px] font-semibold text-surface transition-colors hover:bg-accent-hover"
           >
             <span className="sm:hidden">Mon projet</span>
             <span className="hidden sm:inline">Démarrer mon projet</span>
-          </Link>
+          </a>
         </div>
       </header>
 
@@ -247,13 +247,13 @@ export default function Navbar() {
                   LinkedIn
                 </a>
               </div>
-              <Link
-                to={PROJET}
+              <a
+                href={PROJET}
                 onClick={fermer}
                 className="inline-flex min-h-[60px] w-full items-center justify-center rounded-full bg-accent px-8 text-lg font-medium text-surface transition-colors hover:bg-accent-hover md:w-auto"
               >
                 Démarrer mon projet →
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         )}

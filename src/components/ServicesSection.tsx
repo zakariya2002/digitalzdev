@@ -4,7 +4,7 @@ import { EASE_OUT, VIEWPORT } from './motion/config'
 
 /** Conversation WhatsApp avec Zakariya, message d'ouverture prérempli. */
 export const WHATSAPP_PROJET = `https://wa.me/33783259869?text=${encodeURIComponent(
-  "Bonjour Digitalz Dev, je suis avocat et j'aimerais vous parler du site de mon cabinet : "
+  "Bonjour Digitalz Dev, j'aimerais vous parler de mon projet : "
 )}`
 
 interface Service {
@@ -16,30 +16,41 @@ interface Service {
 
 export const SERVICES: Service[] = [
   {
-    title: "Site de cabinet d'avocats",
-    lead: "Pour présenter votre cabinet et déclencher la prise de contact.",
-    body: "Nous concevons un site taillé pour votre cabinet plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise, « avocat divorce », « avocat licenciement », « avocat droit des affaires », et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
+    title: 'Site internet sur mesure',
+    lead: "Pour présenter votre activité et déclencher la prise de contact.",
+    body: "Nous concevons un site taillé pour votre entreprise plutôt qu'un gabarit repeint : arborescence, rédaction, direction artistique et développement. Chaque page vise une recherche précise et mène à une action claire : appel, formulaire ou prise de rendez-vous.",
     points: [
       'Maquettes validées avant la première ligne de code',
-      'Une page par domaine d\'intervention et par ville',
+      'Une page par service et par ville',
       'Formulaire de contact qui qualifie les demandes',
       'Formation à la prise en main, vous restez autonome',
     ],
   },
   {
-    title: 'Prise de rendez-vous en ligne',
-    lead: "Pour que le premier rendez-vous se prenne sans un appel.",
-    body: "Le visiteur choisit son domaine, décrit sa situation en quelques questions et réserve un créneau, au cabinet ou en visioconférence. Vous recevez des demandes déjà qualifiées, et vous gardez la main sur vos disponibilités.",
+    title: 'E-commerce',
+    lead: "Pour vendre en ligne avec une boutique à votre image.",
+    body: "Boutique Shopify ou sur mesure : fiches produit soignées, tunnel de commande court, paiement, livraison et suivi des ventes. Le design sert la marque, la structure sert la conversion.",
     points: [
-      'Agenda synchronisé avec votre calendrier',
-      'Consultation au cabinet ou en visioconférence',
-      'Questions de pré-qualification par domaine',
-      'Paiement en ligne de la consultation, si vous le souhaitez',
+      'Fiches produit et collections',
+      'Paiement en ligne et tunnel de commande optimisé',
+      'Gestion des stocks et des commandes',
+      'Mesure des ventes et des abandons de panier',
+    ],
+  },
+  {
+    title: 'Applications et CRM sur mesure',
+    lead: "Pour gérer clients, devis, factures et équipes dans un seul outil.",
+    body: "Back-offices, CRM et applications mobiles iOS et Android, branchés sur vos outils : paiement, téléphonie, emails, comptabilité. Les mêmes personnes conçoivent et développent, du cadrage à la mise en production.",
+    points: [
+      'Fiches clients, pipeline et historique',
+      'Devis, factures et paiements reliés',
+      'Rôles et droits d’accès par profil',
+      'Application mobile sur la même base',
     ],
   },
   {
     title: 'Refonte de site internet',
-    lead: "Pour un site de cabinet qui ne dit plus ce que vous faites.",
+    lead: "Pour un site qui ne dit plus ce que vous faites.",
     body: "Nous partons de l'existant : ce qui fonctionne, ce qui coince, ce que disent vos statistiques. La refonte préserve votre référencement acquis grâce à un plan de redirections complet, et corrige ce qui vous coûtait des visiteurs, notamment la lenteur et le confort de lecture sur mobile.",
     points: [
       'Audit du site actuel, contenus et performances',
@@ -49,19 +60,8 @@ export const SERVICES: Service[] = [
     ],
   },
   {
-    title: 'Espace client sécurisé',
-    lead: "Pour échanger les pièces d'un dossier sans multiplier les e-mails.",
-    body: "Un espace privé où vos clients déposent leurs pièces, suivent l'avancement de leur dossier et retrouvent conventions d'honoraires et documents à signer. Les mêmes personnes conçoivent et développent, ce qui évite le jeu de téléphone entre cabinet et prestataire technique.",
-    points: [
-      'Dépôt et partage des pièces par dossier',
-      "Suivi des étapes et des échéances",
-      "Convention d'honoraires et documents à signer",
-      'Accès sécurisé, données hébergées en France',
-    ],
-  },
-  {
     title: 'Meta Ads et Google Ads',
-    lead: "Pour toucher les particuliers et les entreprises qui cherchent un avocat maintenant.",
+    lead: "Pour toucher maintenant les clients qui cherchent ce que vous proposez.",
     body: "Un site sans visiteurs ne sert à rien. Nous mettons en place et pilotons vos campagnes : structure des comptes, audiences, rédaction et création des annonces, arbitrages de budget. Les conversions sont mesurées, pour savoir ce qui rapporte et ce qui coûte.",
     points: [
       'Création et structuration des comptes publicitaires',
@@ -72,7 +72,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'Référencement naturel',
-    lead: "Pour être trouvé sur « avocat » + votre domaine + votre ville, pas seulement sur votre nom.",
+    lead: "Pour être trouvé sur votre métier et votre ville, pas seulement sur votre nom.",
     body: "Le référencement se construit dès la conception : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus qui répondent aux questions réelles de vos clients. Nous livrons un site déjà prêt, puis nous suivons les positions.",
     points: [
       'Architecture et balisage optimisés dès le départ',

@@ -34,9 +34,9 @@ export interface PageSeo {
 /** Titre affiché dans l'onglet et en résultat de recherche. Viser 50 à 60 signes. */
 const HOME: PageSeo = {
   path: '/',
-  title: "Agence web pour avocats et cabinets d'avocats | Digitalz Dev",
+  title: 'Agence web : sites, applications et CRM sur mesure | Digitalz Dev',
   description:
-    "Sites internet sur mesure pour avocats et cabinets d'avocats : domaines d'intervention, prise de rendez-vous en ligne et référencement local. Devis sous 48 h.",
+    "Digitalz Dev conçoit des sites internet, e-commerce, applications mobiles et CRM sur mesure, avec référencement et campagnes publicitaires. Devis sous 48 h.",
 }
 
 const STATIC_PAGES: PageSeo[] = [
@@ -54,9 +54,9 @@ const STATIC_PAGES: PageSeo[] = [
   },
   {
     path: '/contact',
-    title: "Devis gratuit pour le site de votre cabinet d'avocats | Digitalz Dev",
+    title: 'Devis gratuit pour votre site ou votre application | Digitalz Dev',
     description:
-      "Avocats : décrivez le site de votre cabinet en deux minutes (domaines d'intervention, budget, délais). Réponse sous 24 à 48 h avec un devis adapté.",
+      "Décrivez votre projet en deux minutes (besoin, budget, délais). Réponse sous 24 à 48 h avec un devis adapté.",
   },
   {
     path: '/projet',
@@ -98,7 +98,7 @@ const PROJECT_PAGES: PageSeo[] = projects.map((project) => ({
   // La description du projet est déjà rédigée pour être lue : on la reprend,
   // en la bornant à la longueur qu'un extrait Google affiche réellement.
   description: truncate(
-    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web pour avocats.`,
+    `${project.description} Un projet conçu et développé par Digitalz Dev, agence web.`,
     158
   ),
 }))

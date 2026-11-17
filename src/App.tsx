@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Seo from './components/Seo'
 import SmoothScroll from './components/SmoothScroll'
@@ -41,12 +41,6 @@ export default function App() {
     || location.pathname === '/login'
     || location.pathname.startsWith('/espace/')
 
-  // L'accueil renvoie vers AvocatLeads. Vercel redirige déjà les visites
-  // directes ; ceci couvre la navigation interne vers « / ».
-  const navigate = useNavigate()
-  useEffect(() => {
-    if (location.pathname === '/') navigate('/avocatleads', { replace: true })
-  }, [location.pathname, navigate])
 
   // Le thème « studio » ne vaut que pour la vitrine. La page /crm porte
   // sa propre charte et garde ses propres titres.

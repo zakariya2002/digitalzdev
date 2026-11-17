@@ -10,44 +10,39 @@ interface QuestionReponse {
 
 export const FAQ: QuestionReponse[] = [
   {
-    question: 'Combien coûte le site d’un cabinet d’avocats ?',
+    question: 'Combien coûte un projet ?',
     reponse:
-      "Un site d'avocat démarre autour de 1 500 € ; un site avec une page par domaine d'intervention, prise de rendez-vous en ligne et espace client se situe plus haut, selon le nombre de pages et le travail de rédaction. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route.",
+      "Un site vitrine démarre autour de 1 500 € ; un e-commerce, une application ou un CRM sur mesure se chiffre selon les fonctionnalités et les intégrations. Nous chiffrons après un premier échange, sur la base d'un cahier des charges écrit : pas de fourchette au doigt mouillé, et pas de surprise en cours de route.",
   },
   {
-    question: 'Le site respecte-t-il les règles déontologiques ?',
+    question: 'Que réalisez-vous exactement ?',
     reponse:
-      "Oui. Les textes sont rédigés dans le cadre des règles de communication de la profession (article 10 du Règlement intérieur national) : informations obligatoires, mentions de spécialisation réservées aux certificats obtenus, pas de promesse de résultat ni de comparaison avec d'autres confrères, informations claires sur les honoraires. Vous validez chaque page avant la mise en ligne.",
+      "Des sites internet et e-commerce, des applications mobiles iOS et Android, des CRM et back-offices sur mesure, et les intégrations qui vont avec : paiement, téléphonie, emails, Google, Meta. Nous assurons aussi le référencement et les campagnes publicitaires.",
   },
   {
-    question: 'Combien de temps prend un projet de site web ?',
+    question: 'Combien de temps prend un projet ?',
     reponse:
-      "Comptez trois à six semaines pour un site de cabinet, six à dix semaines avec la prise de rendez-vous en ligne et un espace client. Le calendrier dépend surtout de la disponibilité de vos contenus, présentation des associés, domaines d'intervention et relecture, qui sont le premier facteur de retard.",
+      "Comptez trois à six semaines pour un site, davantage pour un e-commerce, une application ou un CRM, livrés par étapes. Le calendrier dépend surtout de la disponibilité de vos contenus et de vos retours, qui sont le premier facteur de retard.",
   },
   {
     question: 'Le site sera-t-il visible sur Google ?',
     reponse:
-      "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients : « avocat divorce », « avocat droit du travail », « avocat pénaliste » suivis de votre ville. Nous pouvons aussi accompagner le site après sa mise en ligne, en suivi de positions ou en campagnes Google Ads.",
+      "Le référencement naturel est intégré à la conception, pas ajouté après coup : structure des URL, balises, données structurées, temps de chargement, maillage interne et contenus rédigés pour les recherches réelles de vos futurs clients. Nous pouvons aussi suivre les positions après la mise en ligne ou lancer des campagnes Google Ads.",
   },
   {
     question: 'Puis-je modifier mon site moi-même ensuite ?',
     reponse:
-      "Oui. Vous ajoutez vous-même vos articles, actualités juridiques et nouveaux collaborateurs depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite.",
+      "Oui. Vous ajoutez vous-même vos articles, produits et pages depuis un back-office simple, sans toucher au code. Nous vous formons à la prise en main à la livraison, et nous restons joignables ensuite.",
   },
   {
     question: 'Travaillez-vous partout en France ?',
     reponse:
-      "Oui, dans toute la France et à l'international. Nous accompagnons aussi bien l'avocat qui s'installe que les cabinets de plusieurs associés. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
+      "Oui, dans toute la France et à l'international. Les échanges se font en visioconférence, avec des points d'avancement réguliers et un interlocuteur unique.",
   },
   {
     question: 'Que se passe-t-il après la mise en ligne ?',
     reponse:
       "Le site vous appartient, code et hébergement compris. Nous proposons ensuite un suivi à la carte : corrections, évolutions, ajout de pages, campagnes Meta Ads et Google Ads, ou simplement une intervention ponctuelle quand vous en avez besoin. Aucun abonnement n'est imposé.",
-  },
-  {
-    question: 'Reprenez-vous un site existant pour une refonte ?',
-    reponse:
-      "Régulièrement. Nous partons de l'existant, de vos statistiques et de ce qui fonctionne déjà, puis nous établissons un plan de redirections complet pour conserver le référencement acquis. Une refonte mal préparée fait chuter les positions : c'est précisément ce que ce plan évite.",
   },
 ]
 

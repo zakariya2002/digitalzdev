@@ -28,7 +28,7 @@ export default function AcquisitionStudio() {
  <>
     {/* La recherche Google rejouée au défilement */}
     <div id="acquisition">
-      <RechercheGoogle />
+      <RechercheGoogle scene="general" />
     </div>
 
     <section className="bg-surface px-5 pb-8 pt-16 md:px-10 md:pb-10 md:pt-8">

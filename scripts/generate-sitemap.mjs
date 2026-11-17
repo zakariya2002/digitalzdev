@@ -75,7 +75,8 @@ function derniereModification(fichier) {
 }
 
 const pages = [
-  // L'accueil redirige vers AvocatLeads : c'est elle qui porte la priorité.
+  // Accueil portfolio, toutes réalisations confondues.
+  { loc: '/', changefreq: 'weekly', priority: '1.0', source: 'src/pages/Home.tsx' },
   { loc: '/avocatleads', changefreq: 'weekly', priority: '1.0', source: 'src/pages/AvocatLeads.tsx' },
   { loc: '/contact', changefreq: 'monthly', priority: '0.8', source: 'src/pages/Contact.tsx' },
   // Les pages projet sont toutes rendues par le même composant à partir du

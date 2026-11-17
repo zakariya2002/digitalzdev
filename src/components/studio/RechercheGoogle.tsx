@@ -7,23 +7,45 @@ import {
   type MotionValue,
 } from 'framer-motion'
 
-const REQUETE = 'avocat droit des affaires lyon'
+/** Deux scénarios : un cabinet d'avocats (AvocatLeads) et un commerce local (accueil). */
+const SCENES = {
+  avocat: {
+    requete: 'avocat droit des affaires lyon',
+    concurrents: [
+      { titre: 'Cabinet Durand & Associés · Avocats Lyon', url: 'durand-avocats.fr', texte: 'Conseil et contentieux des entreprises. Prise de rendez-vous par téléphone.' },
+      { titre: 'Avocat affaires Lyon : annuaire des cabinets', url: 'annuaire-juridique.com', texte: 'Comparez 240 avocats en droit des affaires à Lyon et dans le Rhône.' },
+      { titre: 'Lefèvre Avocats · Droit commercial', url: 'lefevre-avocats.com', texte: 'Création de société, baux commerciaux, recouvrement de créances.' },
+      { titre: 'Droit des affaires : trouver un avocat', url: 'forum-entrepreneurs.fr', texte: 'Discussion · 38 réponses · Quel avocat choisir pour une levée de fonds ?' },
+    ],
+    client: {
+      titre: 'Martin Avocats · Droit des affaires à Lyon',
+      url: 'martin-avocats.fr',
+      texte: 'Cabinet dédié aux entreprises : création, contrats, levées de fonds. Premier rendez-vous sous 48 h.',
+    },
+    nom: 'Martin Avocats',
+    categorie: 'Avocat · Lyon 2e · Ouvert',
+  },
+  general: {
+    requete: 'architecte intérieur lyon',
+    concurrents: [
+      { titre: 'Studio Durand · Architecture intérieure Lyon', url: 'studio-durand.fr', texte: 'Rénovation d’appartements et de bureaux. Devis sur demande par téléphone.' },
+      { titre: 'Architecte intérieur Lyon : comparateur', url: 'annuaire-deco.com', texte: 'Comparez 180 architectes d’intérieur à Lyon et dans le Rhône.' },
+      { titre: 'Atelier Lefèvre · Décoration et agencement', url: 'atelier-lefevre.fr', texte: 'Cuisines, salles de bains, agencement sur mesure.' },
+      { titre: 'Trouver un architecte d’intérieur', url: 'forum-maison.fr', texte: 'Discussion · 42 réponses · Comment choisir son architecte d’intérieur ?' },
+    ],
+    client: {
+      titre: 'Maison Martin · Architecte intérieur à Lyon',
+      url: 'maison-martin.fr',
+      texte: 'Rénovation et décoration sur mesure, du plan à la livraison. Premier rendez-vous sous 48 h.',
+    },
+    nom: 'Maison Martin',
+    categorie: 'Architecte d’intérieur · Lyon 2e · Ouvert',
+  },
+}
+
 const NOTE_DEBUT = 3
 const NOTE_FIN = 5
-
-/** Les concurrents, dans l'ordre où Google les classe au départ. */
-const CONCURRENTS = [
-  { titre: 'Cabinet Durand & Associés · Avocats Lyon', url: 'durand-avocats.fr', texte: 'Conseil et contentieux des entreprises. Prise de rendez-vous par téléphone.' },
-  { titre: 'Avocat affaires Lyon : annuaire des cabinets', url: 'annuaire-juridique.com', texte: 'Comparez 240 avocats en droit des affaires à Lyon et dans le Rhône.' },
-  { titre: 'Lefèvre Avocats · Droit commercial', url: 'lefevre-avocats.com', texte: 'Création de société, baux commerciaux, recouvrement de créances.' },
-  { titre: 'Droit des affaires : trouver un avocat', url: 'forum-entrepreneurs.fr', texte: 'Discussion · 38 réponses · Quel avocat choisir pour une levée de fonds ?' },
-]
-
-const CLIENT = {
-  titre: 'Martin Avocats · Droit des affaires à Lyon',
-  url: 'martin-avocats.fr',
-  texte: 'Cabinet dédié aux entreprises : création, contrats, levées de fonds. Premier rendez-vous sous 48 h.',
-}
+const CONCURRENTS = SCENES.avocat.concurrents
 
 /** Hauteur d'une ligne de résultat, en pixels : plus haute sur mobile, où
  * les extraits passent sur trois lignes. */
@@ -247,7 +269,8 @@ function Badge({
  * l'un après l'autre. La section reste fixée le temps de la scène, puis
  * libère le défilement.
  */
-export default function RechercheGoogle() {
+export default function RechercheGoogle({ scene = 'avocat' }: { scene?: keyof typeof SCENES } = {}) {
+  const { requete: REQUETE, concurrents: LISTE, client: CLIENT, nom: NOM, categorie: CATEGORIE } = SCENES[scene]
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ['start start', 'end end'] })
 
@@ -264,7 +287,7 @@ export default function RechercheGoogle() {
   }
 
   // Position du client dans la liste : 4 (en bas) jusqu'à 0 (en tête).
-  const position = useTransform(p, [0.2, 0.75], [CONCURRENTS.length, 0], { clamp: true })
+  const position = useTransform(p, [0.2, 0.75], [LISTE.length, 0], { clamp: true })
   const H = useHauteurLigne()
   const yClient = useTransform(position, (v) => v * H)
   const resultatsOpacite = useTransform(p, [0.14, 0.22], [0, 1])
@@ -307,8 +330,8 @@ export default function RechercheGoogle() {
 
             <motion.div className="mt-5 grid gap-6 md:grid-cols-[1fr_15rem]" style={{ opacity: resultatsOpacite }}>
               {/* Résultats organiques */}
-              <div className="relative" style={{ height: (CONCURRENTS.length + 1) * H }}>
-                {CONCURRENTS.map((r, i) => (
+              <div className="relative" style={{ height: (LISTE.length + 1) * H }}>
+                {LISTE.map((r, i) => (
                   <Ligne key={r.url} i={i} position={position} r={r} h={H} />
                 ))}
                 <motion.div className="absolute inset-x-0 top-0 z-10 px-1" style={{ y: yClient }}>
@@ -327,13 +350,13 @@ export default function RechercheGoogle() {
               {/* Fiche Google de l'établissement */}
               <div className="hidden self-start rounded-xl p-4 ring-1 ring-black/10 md:block">
                 <div className="h-24 rounded-lg bg-gradient-to-br from-[#e8eaed] to-[#c9ccd1]" />
-                <p className="mt-3 text-[17px] text-[#202124]">Martin Avocats</p>
+                <p className="mt-3 text-[17px] text-[#202124]">{NOM}</p>
                 <p className="mt-0.5 flex items-center gap-1.5 text-sm text-[#4d5156]">
                   <motion.span className="tabular-nums text-[#202124]">{fiche.note}</motion.span>
                   <Etoiles remplissage={fiche.remplissage} />
                   <motion.span className="tabular-nums">{fiche.avis}</motion.span>
                 </p>
-                <p className="mt-1 text-xs text-[#4d5156]">Avocat · Lyon 2e · Ouvert</p>
+                <p className="mt-1 text-xs text-[#4d5156]">{CATEGORIE}</p>
                 <div className="mt-3 grid grid-cols-3 gap-1.5 text-center text-[11px] text-[#1a73e8]">
                   <span className="rounded-full py-1.5 ring-1 ring-black/10">Itinéraire</span>
                   <span className="rounded-full py-1.5 ring-1 ring-black/10">Site</span>

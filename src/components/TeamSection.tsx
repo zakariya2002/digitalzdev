@@ -34,14 +34,14 @@ export const MEMBERS: Member[] = [
 
 /** Chiffres tirés du portfolio publié sur cette page, rien de déclaratif. */
 export const FACTS = [
-  { value: '5', label: 'projets en ligne' },
-  { value: '1', label: "cabinet d'avocats d'affaires" },
+  { value: '12', label: 'réalisations publiées' },
+  { value: '4', label: 'CRM et back-offices' },
   { value: '2', label: 'métiers réunis' },
 ]
 
 /** Ce que l'agence prend en charge, au-delà de la seule mise en ligne. */
 export const SERVICES = [
-  { title: 'Conception et développement', body: "Sites de cabinets d'avocats, prise de rendez-vous en ligne et espaces client. Du cadrage à la mise en ligne." },
+  { title: 'Conception et développement', body: "Sites, e-commerce, applications mobiles, CRM et espaces client. Du cadrage à la mise en ligne." },
   { title: 'Meta Ads et Google Ads', body: "Mise en place et pilotage des campagnes : structure des comptes, audiences, création des annonces, budget et arbitrages." },
   { title: 'Mesure et conversions', body: "Tracking, événements de conversion et lecture des résultats, pour savoir ce qui rapporte et ce qui coûte." },
 ]
