@@ -71,6 +71,13 @@ const STATIC_PAGES: PageSeo[] = [
     icon: '/avocatleads-icon.svg',
   },
   {
+    path: '/crm',
+    title: 'CRM sur mesure pour Wage Portage | Digitalz Dev',
+    description:
+      "Les back-offices et CRM conçus par Digitalz Dev : modules, intégrations API, technologies, stockage et architecture proposée pour Wage Portage.",
+    noindex: true,
+  },
+  {
     path: '/mentions-legales',
     title: 'Mentions légales | Digitalz Dev',
     description:

@@ -95,7 +95,7 @@ const template = readFileSync(join(dist, 'index.html'), 'utf8')
 /** Longueur du texte visible d'un fragment HTML, balises retirées. */
 
 /** Pages publicitaires tenues hors de l'index, comme dans lib/seo.ts. */
-const PAGES_NOINDEX = ['/projet']
+const PAGES_NOINDEX = ['/projet', '/crm']
 
 function texteBrut(html) {
   return html

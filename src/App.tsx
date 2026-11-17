@@ -17,6 +17,7 @@ import PolitiqueConfidentialite from './pages/PolitiqueConfidentialite'
 import NotFound from './pages/NotFound'
 import Projet from './pages/Projet'
 import AvocatLeads from './pages/AvocatLeads'
+import Crm from './pages/Crm'
 import { projects } from './data/projects'
 
 // Le back-office embarque Supabase, Twilio, Recharts et pdf.js. Rien de tout
@@ -47,10 +48,12 @@ export default function App() {
     if (location.pathname === '/') navigate('/avocatleads', { replace: true })
   }, [location.pathname, navigate])
 
-  // Le thème « studio » ne vaut que pour la vitrine.
+  // Le thème « studio » ne vaut que pour la vitrine. La page /crm porte
+  // la charte de Wage Portage et garde ses propres titres.
+  const sansStudio = isDashboard || location.pathname.replace(/\/$/, '') === '/crm'
   useEffect(() => {
-    document.documentElement.classList.toggle('studio', !isDashboard)
-  }, [isDashboard])
+    document.documentElement.classList.toggle('studio', !sansStudio)
+  }, [sansStudio])
 
   if (isDashboard) {
     return (
@@ -82,6 +85,17 @@ export default function App() {
         <Seo />
         <ScrollToTop />
         <AvocatLeads />
+      </>
+    )
+  }
+
+  // Portfolio CRM préparé pour Wage Portage : page autonome, fond noir.
+  if (location.pathname.replace(/\/$/, '') === '/crm') {
+    return (
+      <>
+        <Seo />
+        <ScrollToTop />
+        <Crm />
       </>
     )
   }
