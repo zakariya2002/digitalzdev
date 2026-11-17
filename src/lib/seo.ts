@@ -78,6 +78,13 @@ const STATIC_PAGES: PageSeo[] = [
     noindex: true,
   },
   {
+    path: '/demarrer',
+    title: 'Démarrer votre projet | Digitalz Dev',
+    description:
+      "Quatre questions sur votre projet de site, d'application ou de CRM, puis on en parle directement sur WhatsApp. Réponse rapide, devis adapté.",
+    noindex: true,
+  },
+  {
     path: '/mentions-legales',
     title: 'Mentions légales | Digitalz Dev',
     description:

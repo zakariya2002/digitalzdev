@@ -19,7 +19,7 @@ const RACCOURCIS: Array<{ to: string; label: string; externe?: boolean }> = [
   { to: '/#faq', label: 'Questions fréquentes' },
   { to: '/contact', label: 'Nous contacter' },
   // Point d'entrée principal : le formulaire de projet, qui ouvre WhatsApp.
-  { to: 'https://quiz.digitalzdev.com', label: 'Démarrer mon projet', externe: true },
+  { to: '/demarrer', label: 'Démarrer mon projet' },
 ]
 
 const RESEAUX = [

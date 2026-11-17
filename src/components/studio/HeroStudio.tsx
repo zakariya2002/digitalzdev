@@ -135,7 +135,7 @@ export default function HeroStudio() {
             transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
           >
             <a
-              href="https://quiz.digitalzdev.com"
+              href="/demarrer"
               className="inline-flex h-[50px] items-center rounded-xl bg-[#0f0f0f] px-[38px] text-[16px] tracking-[0.01em] text-white transition-colors hover:bg-black"
             >
               Démarrer mon projet

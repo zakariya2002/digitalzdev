@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { supabase } from '../lib/supabase'
 import TravauxStudio from '../components/studio/TravauxStudio'
@@ -61,6 +61,27 @@ const QUESTIONS: Question[] = [
     titre: 'Pour quand ?',
     options: ['Dès que possible', 'Dans 1 à 3 mois', 'Plus tard, je me renseigne'],
   },
+]
+
+// Version ouverte à tous les projets, servie sur /demarrer.
+const QUESTIONS_GENERAL: Question[] = [
+  {
+    cle: 'metier',
+    titre: 'Quel est votre projet ?',
+    options: ['Site internet vitrine', 'Boutique en ligne', 'Application mobile', 'CRM ou outil de gestion sur mesure', 'Autre projet'],
+  },
+  {
+    cle: 'besoin',
+    titre: 'Où en êtes-vous aujourd\'hui ?',
+    options: [
+      "Je n'ai encore rien en place",
+      'J\'ai un site à refaire',
+      'Mon site ne m\'apporte pas de clients',
+      'Je veux automatiser ma gestion',
+    ],
+  },
+  QUESTIONS[2],
+  QUESTIONS[3],
 ]
 
 type Reponses = Partial<Record<Question['cle'], string>>
@@ -167,6 +188,9 @@ function lireAttribution() {
 }
 
 export default function Projet() {
+  // /demarrer : même parcours, ouvert à tous les projets.
+  const general = useLocation().pathname.startsWith('/demarrer')
+  const LISTE = general ? QUESTIONS_GENERAL : QUESTIONS
   const [etape, setEtape] = useState(0)
   const [reponses, setReponses] = useState<Reponses>({})
   const [nom, setNom] = useState('')
@@ -211,8 +235,8 @@ export default function Projet() {
     if (c === 'oui') chargerPixel()
   }
 
-  const total = QUESTIONS.length + 1
-  const question = QUESTIONS[etape]
+  const total = LISTE.length + 1
+  const question = LISTE[etape]
   const telValide = normaliserTelephone(telephone)
   const peutEnvoyer = nom.trim().length >= 2 && !!telValide && !envoi
 
@@ -239,15 +263,17 @@ export default function Projet() {
     }
 
     const texte = [
-      'Bonjour AvocatLeads, je suis avocat et je viens de remplir le formulaire de votre site.',
+      general
+        ? 'Bonjour Digitalz Dev, je viens de remplir le formulaire de votre site.'
+        : 'Bonjour AvocatLeads, je suis avocat et je viens de remplir le formulaire de votre site.',
       '',
-      `• Structure : ${ligne.metier}`,
-      `• Site actuel : ${ligne.besoin}`,
+      `• ${general ? 'Projet' : 'Structure'} : ${ligne.metier}`,
+      `• ${general ? 'Situation' : 'Site actuel'} : ${ligne.besoin}`,
       `• Budget : ${ligne.budget}`,
       `• Délai : ${ligne.delai}`,
       `• Nom : ${ligne.nom}`,
-      ligne.activite ? `• Cabinet / site : ${ligne.activite}` : null,
-      ligne.message ? `• Domaines et clients visés : ${ligne.message}` : null,
+      ligne.activite ? `• ${general ? 'Entreprise / site' : 'Cabinet / site'} : ${ligne.activite}` : null,
+      ligne.message ? `• ${general ? 'Projet en quelques mots' : 'Domaines et clients visés'} : ${ligne.message}` : null,
     ]
       .filter((l) => l !== null)
       .join('\n')
@@ -306,9 +332,16 @@ export default function Projet() {
   return (
     <main className="flex min-h-[100svh] flex-col overflow-x-clip bg-surface px-5 pt-6 md:px-10">
       <header className="mx-auto flex w-full max-w-2xl items-center justify-between">
-        <Link to="/avocatleads" className="flex min-h-[44px] items-center" aria-label="AvocatLeads">
-          <Logo />
-        </Link>
+        {general ? (
+          <Link to="/" className="flex min-h-[44px] items-center gap-2.5" aria-label="Digitalz Dev">
+            <img src="/logo-studio.png" alt="" className="h-9 w-9 rounded-full" />
+            <span className="text-lg tracking-tight text-text-primary">Digitalz Dev</span>
+          </Link>
+        ) : (
+          <Link to="/avocatleads" className="flex min-h-[44px] items-center" aria-label="AvocatLeads">
+            <Logo />
+          </Link>
+        )}
         <span className="text-sm text-text-muted">
           {Math.min(etape + 1, total)} / {total}
         </span>
@@ -367,7 +400,9 @@ export default function Projet() {
             >
               {etape === 0 && (
                 <p className="mb-4 text-text-secondary">
-                  Avocats : quatre questions sur votre cabinet, puis on en parle directement sur WhatsApp.
+                  {general
+                    ? 'Quatre questions sur votre projet, puis on en parle directement sur WhatsApp.'
+                    : 'Avocats : quatre questions sur votre cabinet, puis on en parle directement sur WhatsApp.'}
                 </p>
               )}
               <h1 className="text-3xl font-extrabold uppercase leading-[1.05] tracking-tight text-text-primary md:text-5xl">
@@ -439,7 +474,7 @@ export default function Projet() {
                   )}
                 </label>
                 <label className="grid gap-1.5">
-                  <span className="text-sm text-text-secondary">Le nom de votre cabinet ou votre site actuel (facultatif)</span>
+                  <span className="text-sm text-text-secondary">{general ? 'Le nom de votre entreprise ou votre site actuel (facultatif)' : 'Le nom de votre cabinet ou votre site actuel (facultatif)'}</span>
                   <input
                     value={activite}
                     onChange={(e) => setActivite(e.target.value)}
@@ -447,7 +482,7 @@ export default function Projet() {
                   />
                 </label>
                 <label className="grid gap-1.5">
-                  <span className="text-sm text-text-secondary">Vos domaines d'intervention et les clients que vous voulez attirer (facultatif)</span>
+                  <span className="text-sm text-text-secondary">{general ? 'Votre projet en quelques mots (facultatif)' : "Vos domaines d'intervention et les clients que vous voulez attirer (facultatif)"}</span>
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -485,12 +520,12 @@ export default function Projet() {
         <div className="-mx-5 mt-16 md:-mx-10">
           <div className="mx-auto max-w-5xl px-5 md:px-10">
             <h2 className="text-2xl font-extrabold uppercase tracking-tight text-text-primary md:text-4xl">
-              En attendant, découvrez Avocat<span className="text-accent">Leads</span>
+              {general ? 'En attendant, découvrez Digitalz Dev' : <>En attendant, découvrez Avocat<span className="text-accent">Leads</span></>}
             </h2>
             <video
               className="mt-6 aspect-[9/16] w-full rounded-2xl bg-surface-card object-cover md:aspect-video"
-              src={mobile ? '/videos/avocatleads-mobile.mp4' : '/videos/avocatleads.mp4'}
-              poster={mobile ? '/videos/avocatleads-mobile-poster.jpg' : '/videos/avocatleads-poster.jpg'}
+              src={general ? (mobile ? '/videos/presentation-mobile.mp4' : '/videos/presentation.mp4') : mobile ? '/videos/avocatleads-mobile.mp4' : '/videos/avocatleads.mp4'}
+              poster={general ? (mobile ? '/videos/presentation-mobile-poster.jpg' : '/videos/presentation-poster.jpg') : mobile ? '/videos/avocatleads-mobile-poster.jpg' : '/videos/avocatleads-poster.jpg'}
               autoPlay
               muted
               loop
@@ -500,7 +535,7 @@ export default function Projet() {
             />
           </div>
           <TravauxStudio titre="Nos créations" />
-          <RechercheGoogle />
+          <RechercheGoogle scene={general ? 'general' : 'avocat'} />
           <FinalStudio />
           <EquipeStudio />
           <Footer />

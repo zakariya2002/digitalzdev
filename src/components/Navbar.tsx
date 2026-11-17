@@ -16,8 +16,8 @@ const LIENS = [
 
 type Lien = (typeof LIENS)[number]
 
-/** Le quiz en quelques questions, ouvert à tous les projets. */
-const PROJET = 'https://quiz.digitalzdev.com'
+/** Le questionnaire en quatre questions, puis WhatsApp. */
+const PROJET = '/demarrer'
 const EASE = [0.76, 0, 0.24, 1] as const
 
 function estCourant(lien: Lien, chemin: string): boolean {

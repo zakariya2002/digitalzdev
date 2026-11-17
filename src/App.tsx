@@ -95,7 +95,7 @@ export default function App() {
   }
 
   // Page d'atterrissage des publicités : rien autour du formulaire.
-  if (location.pathname === '/projet') {
+  if (location.pathname === '/projet' || location.pathname.replace(/\/$/, '') === '/demarrer') {
     return (
       <>
         <Seo />
