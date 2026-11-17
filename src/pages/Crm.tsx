@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import { motion, MotionConfig, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
+import { WHATSAPP } from '../components/avocatleads/contenu'
 
 /*
  * Portfolio CRM et back-offices de Digitalz Dev.
@@ -11,6 +13,83 @@ import { useRef } from 'react'
  */
 
 const CONTACT = 'mailto:zdigitalzdev@gmail.com?subject=Projet%20CRM'
+
+const POLICE_MARQUE = { fontFamily: "'Inter Tight', system-ui, sans-serif" }
+
+/** Logo Digitalz Dev, dessiné comme celui d'AvocatLeads : carré gris, nom en deux graisses. */
+function Logo({ grand = false }: { grand?: boolean }) {
+  return (
+    <span className={`inline-flex items-center ${grand ? 'gap-4' : 'gap-2.5'}`}>
+      <svg viewBox="0 0 40 40" className={grand ? 'h-14 w-14' : 'h-8 w-8'} aria-hidden>
+        <rect width="40" height="40" rx="10" fill="#9EA2AA" />
+        <path d="M15.5 13.5L9 20l6.5 6.5M24.5 13.5L31 20l-6.5 6.5" fill="none" stroke="#FFFFFF" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <span className={`whitespace-nowrap tracking-[-0.03em] text-[#1D1D1F] ${grand ? 'text-[44px]' : 'text-[21px]'}`} style={POLICE_MARQUE}>
+        <span className="font-light">digitalz</span>
+        <span className="font-bold">dev</span>
+      </span>
+    </span>
+  )
+}
+
+const LIEN_PIED = 'inline-block py-2 text-[15px] font-medium text-black/55 transition-colors hover:text-black'
+
+function PiedDePage() {
+  return (
+    <footer className="overflow-hidden bg-[#F5F5F7] px-5 pt-12 md:px-10 md:pt-16">
+      <div className="mx-auto max-w-6xl">
+        <nav aria-label="Plan de la page" className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <p className="text-sm font-medium text-black/40">La page</p>
+            <ul className="mt-4">
+              {[['#savoir-faire', 'Savoir-faire'], ['#realisations', 'Réalisations'], ['#integrations', 'Intégrations'], ['#architecture', 'Architecture']].map(([h, l]) => (
+                <li key={h}><a href={h} className={LIEN_PIED}>{l}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div className="lg:col-span-4">
+            <p className="text-sm font-medium text-black/40">Parler de votre projet</p>
+            <ul className="mt-4">
+              <li><a href={CONTACT} className={LIEN_PIED}>zdigitalzdev@gmail.com</a></li>
+              <li><a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className={LIEN_PIED}>WhatsApp</a></li>
+              <li><a href="https://www.linkedin.com/in/zakariya-nebbache-7b0644214/" target="_blank" rel="noopener noreferrer" className={LIEN_PIED}>LinkedIn</a></li>
+            </ul>
+          </div>
+          <div className="lg:col-span-4">
+            <Logo />
+            <p className="mt-4 max-w-xs py-2 text-[15px] font-medium leading-relaxed text-black/55">
+              CRM, back-offices, applications mobiles et sites sur mesure, conçus et mis en production par notre équipe.
+            </p>
+          </div>
+        </nav>
+
+        <div className="mt-14 flex flex-col gap-3 text-sm font-medium text-black/40 md:flex-row md:items-center md:justify-between">
+          <p>Digitalz Dev &copy; {new Date().getFullYear()}, nom commercial de NEUROCARE SAS, RCS Bobigny 131 907 420.</p>
+          <div className="flex gap-6">
+            <Link to="/mentions-legales" className="py-2 transition-colors hover:text-black">Mentions légales</Link>
+            <Link to="/politique-confidentialite" className="py-2 transition-colors hover:text-black">Politique de confidentialité</Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Le nom en lettres géantes, comme sur AvocatLeads ; le jambage du « g » reste visible. */}
+      <div className="mt-10 overflow-hidden">
+        <motion.p
+          aria-hidden
+          className="whitespace-nowrap pb-[0.06em] text-center text-[13.5vw] font-bold leading-[1.05] tracking-[-0.05em] text-[#1D1D1F]"
+          style={POLICE_MARQUE}
+          initial={{ y: '60%' }}
+          whileInView={{ y: '0%' }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="font-light">digitalz</span>
+          <span>dev</span>
+        </motion.p>
+      </div>
+    </footer>
+  )
+}
 
 /** Apparition douce au défilement. */
 function Apparait({ children, delai = 0, className = '' }: { children: ReactNode; delai?: number; className?: string }) {
@@ -107,6 +186,127 @@ const SAVOIR_FAIRE: [string, string, string][] = [
   ['Acquisition reliée au CRM', 'Formulaires, simulateurs et publicités qui alimentent le CRM, statuts renvoyés à Meta.', 'Digitalz, AdsPilot'],
 ]
 
+/** Une fonctionnalité : capture d'un côté, explication de l'autre. */
+type EtapeProps = { sur: string; titre: string; texte: string; src: string; url: string; points?: string[]; inverse?: boolean; image?: boolean }
+
+function Etape({ sur, titre, texte, src, url, points, inverse = false, image = false }: EtapeProps) {
+  return (
+    <div className="grid items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12">
+      <Apparait className={inverse ? 'md:order-2' : ''}>
+        {image ? (
+          <img src={src} alt={titre} loading="lazy" className="w-full rounded-2xl shadow-[0_30px_80px_-30px_rgba(0,0,0,0.3)] ring-1 ring-black/[0.06]" />
+        ) : (
+          <Navigateur src={src} alt={titre} url={url} />
+        )}
+      </Apparait>
+      <Apparait delai={0.1} className={inverse ? 'md:order-1' : ''}>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">{sur}</p>
+        <h4 className="mt-3 text-2xl font-semibold leading-snug tracking-tight md:text-3xl">{titre}</h4>
+        <p className="mt-4 text-[15px] leading-relaxed text-black/60">{texte}</p>
+        {points && (
+          <ul className="mt-5 space-y-2">
+            {points.map((pt) => (
+              <li key={pt} className="flex gap-3 text-sm text-black/75">
+                <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-black" />
+                {pt}
+              </li>
+            ))}
+          </ul>
+        )}
+      </Apparait>
+    </div>
+  )
+}
+
+const ETAPES_DZ: EtapeProps[] = [
+  {
+    sur: 'Leads Meta',
+    titre: 'Les leads des publicités arrivent seuls dans le CRM.',
+    texte: 'Chaque formulaire rempli sur Facebook ou Instagram est transmis par webhook et crée sa fiche en quelques secondes, avec la source, les réponses et un statut de suivi.',
+    points: ['Webhook Facebook Lead Ads', 'Pipeline : nouveau, contacté, qualifié, client', 'Statut renvoyé à Meta pour optimiser les campagnes'],
+    src: '/crm/dz-clients.webp',
+    url: 'digitalzdev.com/dashboard/clients',
+  },
+  {
+    sur: 'Appels et notes',
+    titre: 'On appelle depuis la fiche et on note pendant l’appel.',
+    texte: 'Le téléphone est dans le navigateur. La fiche affiche tout ce qu’il faut savoir pendant l’appel, le script s’adapte au prospect, et la note est enregistrée avec le résultat et la date de rappel.',
+    points: ['Softphone Twilio intégré', 'Script d’appel partagé par l’équipe', 'Résultat en un clic et rappel programmé'],
+    src: '/crm/dz-fiche.webp',
+    url: 'digitalzdev.com/dashboard/prospection',
+  },
+  {
+    sur: 'Historique',
+    titre: 'Chaque échange reste sur la fiche du client.',
+    texte: 'Appels entrants et sortants, durée, SMS envoyés, prochaine relance : toute l’équipe sait où en est le client avant de l’appeler.',
+    src: '/crm/dz-client-appels.webp',
+    url: 'digitalzdev.com/dashboard/clients/duval-associes',
+  },
+  {
+    sur: 'Devis',
+    titre: 'Le devis se crée en quelques minutes, puis devient une facture.',
+    texte: 'Lignes depuis la grille tarifaire, conditions, validité, PDF à la charte. Une fois accepté, un clic le convertit en facture.',
+    points: ['Grille tarifaire réutilisable', 'Import d’un devis existant par IA', 'Lien de partage pour le client'],
+    src: '/crm/dz-devis.webp',
+    url: 'digitalzdev.com/dashboard/quotes/DEV-2026-041',
+  },
+  {
+    sur: 'Facture',
+    titre: 'La facture suit les paiements reçus.',
+    texte: 'Numérotation continue, acompte et solde, encaissements partiels : le statut passe de envoyée à payée tout seul quand le paiement est enregistré.',
+    src: '/crm/dz-facture.webp',
+    url: 'digitalzdev.com/dashboard/invoices/FAC-2026-118',
+  },
+  {
+    sur: 'Comptabilité',
+    titre: 'Les encaissements alimentent directement la comptabilité.',
+    texte: 'Chiffre d’affaires du mois et de l’année, charges estimées, revenu net, plafond du régime : la compta se tient à jour à partir des factures, sans ressaisie.',
+    src: '/crm/dz-finances.webp',
+    url: 'digitalzdev.com/dashboard/finances',
+  },
+]
+
+const ETAPES_PRO: EtapeProps[] = [
+  {
+    sur: 'Tableau de bord',
+    titre: 'L’activité du professionnel d’un coup d’œil.',
+    texte: 'Revenus du mois, vues du profil, rendez-vous à venir, avis : l’essentiel dès l’ouverture.',
+    src: '/crm/pro-accueil.webp',
+    url: 'neuro-care.fr/dashboard/educator',
+  },
+  {
+    sur: 'Transcription automatique',
+    titre: 'Il parle pendant la séance, le compte rendu s’écrit seul.',
+    texte: 'En mode séance, la dictée vocale ajoute le texte aux notes en direct. Les visios peuvent être transcrites avec l’accord de la famille, puis une synthèse est proposée, relue et validée par le professionnel.',
+    points: ['Dictée vocale en direct', 'Transcription des visios avec consentement', 'Synthèse rédigée par IA, validée par le pro'],
+    src: '/crm/pro-seance.webp',
+    url: 'neuro-care.fr/dashboard/educator/session',
+  },
+  {
+    sur: 'Facturation électronique',
+    titre: 'Factures au format Factur-X, en partenariat avec Pennylane.',
+    texte: 'NeuroCare est partenaire Solution Compatible de Pennylane, plateforme agréée pour la facturation électronique obligatoire. Les factures et avoirs sont produits depuis l’espace pro, sans rien changer aux habitudes.',
+    points: ['Factures et avoirs au format Factur-X', 'Partenaire Solution Compatible Pennylane', 'Statut de chaque facture suivi dans l’espace pro'],
+    src: '/crm/pro-pennylane.webp',
+    url: '',
+    image: true,
+  },
+  {
+    sur: 'Factures',
+    titre: 'Toutes les factures, prêtes en PDF.',
+    texte: 'Numérotation par série, montant facturé, statut, téléchargement : la facturation ne demande plus aucune saisie.',
+    src: '/crm/pro-factures.webp',
+    url: 'neuro-care.fr/dashboard/educator/invoices',
+  },
+  {
+    sur: 'Dossier de suivi',
+    titre: 'Le dossier de l’enfant, partagé avec la famille.',
+    texte: 'Objectifs, compétences, préférences, séances et PPA réunis au même endroit, partageables avec les parents et l’équipe.',
+    src: '/crm/pro-dossier.webp',
+    url: 'neuro-care.fr/dashboard/educator/dossier',
+  },
+]
+
 type Projet = {
   id: string
   nom: string
@@ -147,9 +347,17 @@ const PROJETS: Projet[] = [
             </Apparait>
           ))}
         </div>
-        <div className="mt-12 grid items-center gap-5 md:grid-cols-[1.7fr_1fr]">
-          <Apparait><Navigateur src="/crm/neuro-pro-ordi.webp" alt="Tunnel d’inscription des professionnels" url="pro.neuro-care.fr" /></Apparait>
-          <Apparait delai={0.1} className="mx-auto w-[62%] md:w-[70%]"><Iphone src="/crm/neuro-pro-mobile.webp" web alt="Tunnel professionnels sur mobile" /></Apparait>
+        <div className="mt-24">
+          <Apparait>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">NeuroCare Pro</p>
+            <h4 className="mt-3 max-w-3xl text-2xl font-semibold tracking-tight md:text-4xl">L’espace des professionnels : séances, dossiers, factures.</h4>
+            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-black/60">
+              Chaque professionnel gère son activité depuis son espace : agenda, dossiers de suivi, messagerie, facturation. Écrans réels de l’outil, avec des données fictives.
+            </p>
+          </Apparait>
+          <div className="mt-10 space-y-16">
+            {ETAPES_PRO.map((e, i) => <Etape key={e.titre} {...e} inverse={i % 2 === 1} />)}
+          </div>
         </div>
       </>
     ),
@@ -166,8 +374,11 @@ const PROJETS: Projet[] = [
       'Messagerie et signalements',
       'Objectifs trimestriels',
       'Carte de la demande',
+      'Mode séance et dictée vocale',
+      'Transcription automatique des visios',
+      'Facturation électronique Factur-X',
     ],
-    integrations: ['Stripe et Stripe Connect', 'Twilio Voice et SMS', 'Resend', 'Brevo', 'Claude (Anthropic)', 'Daily.co visio', 'Google Agenda', 'Google Ads et GA4', 'Meta Pixel et Conversions API', 'INSEE SIRET', 'Annuaire RPPS', 'OCR Tesseract', 'Calendly', 'Sentry'],
+    integrations: ['Pennylane, facturation électronique', 'Stripe et Stripe Connect', 'Twilio Voice et SMS', 'Resend', 'Brevo', 'Claude (Anthropic)', 'Daily.co visio', 'Google Agenda', 'Google Ads et GA4', 'Meta Pixel et Conversions API', 'INSEE SIRET', 'Annuaire RPPS', 'OCR Tesseract', 'Calendly', 'Sentry'],
     stack: ['Next.js 14', 'React 18', 'Expo et React Native', 'TypeScript', 'Tailwind CSS', 'Vercel'],
     stockage: 'Supabase Postgres, 93 migrations, environ 115 tables, sécurité ligne par ligne, 7 espaces de stockage de fichiers, connexion email, Google et Apple.',
     chiffres: [
@@ -175,6 +386,32 @@ const PROJETS: Projet[] = [
       ['≈ 300', 'routes d’API'],
       ['84', 'écrans mobiles'],
       ['10', 'tâches planifiées'],
+    ],
+  },
+  {
+    id: 'digitalz',
+    nom: 'Digitalz Dev',
+    type: 'Notre propre CRM, utilisé chaque jour',
+    resume:
+      'Nous avons construit le CRM qui fait tourner l’agence. Les leads des campagnes Meta arrivent seuls, on les appelle depuis leur fiche, on prend des notes, puis le devis devient une facture reliée aux encaissements et à la comptabilité. Il sert aussi à AvocatLeads, notre offre pour les avocats, avec une base de 81 101 cabinets à prospecter.',
+    visuels: (
+      <>
+        <Apparait><Navigateur src="/crm/dz-home.webp" alt="Tableau de bord du CRM Digitalz" url="digitalzdev.com/dashboard" /></Apparait>
+        <p className="mt-3 text-center text-xs text-black/45">Écrans réels du CRM, remplis de données fictives.</p>
+        <div className="mt-20 space-y-20">
+          {ETAPES_DZ.map((e, i) => <Etape key={e.titre} {...e} inverse={i % 2 === 1} />)}
+        </div>
+      </>
+    ),
+    modules: ['Clients et tunnel de vente', 'Prospection avec softphone', 'Script d’appel partagé', 'Base d’avocats enrichie', 'Devis, factures, paiements', 'Import de devis par IA', 'Simulateur fiscal', 'Projets, jalons, recette', 'Pointage et temps passé', 'Portail client', 'Messages et modèles SMS', 'Automatisations'],
+    integrations: ['Twilio Voice et SMS', 'Resend', 'Claude (Anthropic)', 'Facebook Lead Ads', 'Meta Conversions API', 'Serper (positions Google)', 'Cloudflare Turnstile', 'Upstash Redis'],
+    stack: ['React 18', 'Vite', 'TypeScript', 'Supabase Edge Functions', 'Next.js pour le tunnel', 'Vercel'],
+    stockage: 'Supabase Postgres et Auth, 10 fonctions serveur, déclencheur en base qui prévient Meta à chaque changement de statut d’un lead.',
+    chiffres: [
+      ['81 101', 'avocats en base'],
+      ['10', 'fonctions serveur'],
+      ['17', 'modules'],
+      ['CRM vers Meta', 'statuts synchronisés'],
     ],
   },
   {
@@ -215,35 +452,6 @@ const PROJETS: Projet[] = [
       ['56', 'routes d’API'],
       ['6', 'rôles'],
       ['15', 'fichiers de tests'],
-    ],
-  },
-  {
-    id: 'digitalz',
-    nom: 'Digitalz et AvocatLeads',
-    type: 'Notre propre CRM, son site et son tunnel d’acquisition',
-    resume:
-      'Le CRM de l’agence : clients, tunnel de vente, prospection téléphonique sur une base de 81 101 avocats, devis et factures, projets, pointage, messagerie et portail client. Le site et le tunnel alimentent le CRM, et les statuts du CRM remontent à Meta pour que les campagnes optimisent sur les vrais clients.',
-    visuels: (
-      <>
-        <div className="grid items-center gap-5 md:grid-cols-[1.7fr_1fr]">
-          <Apparait><Navigateur src="/crm/avocatleads-ordi.webp" alt="Site AvocatLeads" url="digitalzdev.com/avocatleads" /></Apparait>
-          <Apparait delai={0.1} className="mx-auto w-[62%] md:w-[70%]"><Iphone src="/crm/avocatleads-mobile.webp" web alt="AvocatLeads sur mobile" /></Apparait>
-        </div>
-        <div className="mt-5 grid items-center gap-5 md:grid-cols-[1fr_1.7fr]">
-          <Apparait className="order-2 mx-auto w-[62%] md:order-1 md:w-[70%]"><Iphone src="/crm/quiz-mobile.webp" web alt="Tunnel quiz sur mobile" /></Apparait>
-          <Apparait delai={0.1} className="order-1 md:order-2"><Navigateur src="/crm/quiz-ordi.webp" alt="Tunnel quiz" url="quiz.digitalzdev.com" /></Apparait>
-        </div>
-      </>
-    ),
-    modules: ['Clients et tunnel de vente', 'Prospection avec softphone', 'Script d’appel partagé', 'Base d’avocats enrichie', 'Devis, factures, paiements', 'Import de devis par IA', 'Simulateur fiscal', 'Projets, jalons, recette', 'Pointage et temps passé', 'Portail client', 'Messages et modèles SMS', 'Automatisations'],
-    integrations: ['Twilio Voice et SMS', 'Resend', 'Claude (Anthropic)', 'Facebook Lead Ads', 'Meta Conversions API', 'Serper (positions Google)', 'Cloudflare Turnstile', 'Upstash Redis'],
-    stack: ['React 18', 'Vite', 'TypeScript', 'Supabase Edge Functions', 'Next.js pour le tunnel', 'Vercel'],
-    stockage: 'Supabase Postgres et Auth, 10 fonctions serveur, déclencheur en base qui prévient Meta à chaque changement de statut d’un lead.',
-    chiffres: [
-      ['81 101', 'avocats en base'],
-      ['10', 'fonctions serveur'],
-      ['17', 'modules'],
-      ['CRM vers Meta', 'statuts synchronisés'],
     ],
   },
 ]
@@ -298,7 +506,7 @@ function Hero() {
   return (
     <section ref={ref} className="mx-auto max-w-6xl px-5 pb-10 pt-14 md:pt-24">
       <Apparait>
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-black/45">Portfolio CRM et back-offices</p>
+        <p className="text-base font-semibold uppercase tracking-[0.18em] text-black/50 md:text-xl">Portfolio CRM et back-offices</p>
         <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.06] tracking-tight md:text-[68px]">
           Des CRM sur mesure, déjà en production.
         </h1>
@@ -350,7 +558,7 @@ export default function Crm() {
       <div className="min-h-screen bg-white font-['Poppins',sans-serif] text-[#0A0A0A] antialiased selection:bg-black selection:text-white">
         <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-            <a href="/crm" className="text-sm font-semibold tracking-wide">Digitalz Dev</a>
+            <a href="/crm" aria-label="Digitalz Dev"><Logo /></a>
             <nav className="hidden items-center gap-7 text-sm text-black/55 md:flex">
               <a href="#savoir-faire" className="hover:text-black">Savoir-faire</a>
               <a href="#realisations" className="hover:text-black">Réalisations</a>
@@ -556,7 +764,7 @@ export default function Crm() {
           </section>
         </main>
 
-        <footer className="mx-auto max-w-6xl px-5 pb-10 text-xs text-black/40">Digitalz Dev, NEUROCARE SAS.</footer>
+        <PiedDePage />
       </div>
     </MotionConfig>
   )
