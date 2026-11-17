@@ -633,7 +633,7 @@ export default function Crm() {
         <main>
           <Hero />
 
-          <section id="savoir-faire" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <section id="savoir-faire" className="mx-auto max-w-6xl px-5 py-10 md:py-14">
             <Titre sur="Savoir-faire" intro="Les briques qu’on retrouve dans tout CRM sérieux, et les projets où elles tournent déjà.">
               Ce que nous savons construire.
             </Titre>
@@ -650,12 +650,12 @@ export default function Crm() {
             </div>
           </section>
 
-          <section id="realisations" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <section id="realisations" className="mx-auto max-w-6xl px-5 py-10 md:py-14">
             <Titre sur="Réalisations" intro="Pour chaque projet : de vraies captures, les modules, les services connectés, la technologie et le stockage des données.">
               Nos plateformes, en détail.
             </Titre>
 
-            <div className="mt-20 space-y-36">
+            <div className="mt-14 space-y-24">
               {PROJETS.map((p) => (
                 <article key={p.id} id={p.id}>
                   <Apparait>
@@ -757,7 +757,7 @@ export default function Crm() {
             </div>
           </section>
 
-          <section id="integrations" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <section id="integrations" className="mx-auto max-w-6xl px-5 py-10 md:py-14">
             <Titre sur="Intégrations" intro="Paiement, téléphonie, email, IA, Google, Meta, registres publics : un CRM utile se branche sur les outils de l’entreprise.">
               Plus de trente services déjà branchés.
             </Titre>
@@ -777,7 +777,7 @@ export default function Crm() {
             </div>
           </section>
 
-          <section id="architecture" className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <section id="architecture" className="mx-auto max-w-6xl px-5 py-10 md:py-14">
             <Titre sur="Architecture" intro="Le socle commun de nos projets : un site rapide, un CRM avec des espaces par rôle, une base unique sécurisée et des services connectés.">
               Un seul socle pour le site, le CRM et le mobile.
             </Titre>
@@ -797,7 +797,7 @@ export default function Crm() {
             </div>
           </section>
 
-          <section className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <section className="mx-auto max-w-6xl px-5 py-10 md:py-14">
             <Titre sur="Sécurité et données">Des données protégées dès la conception.</Titre>
             <div className="mt-12 grid gap-3 md:grid-cols-3">
               {SECURITE.map(([t, ic, d], i) => (
@@ -812,7 +812,7 @@ export default function Crm() {
             </div>
           </section>
 
-          <section className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+          <section className="mx-auto max-w-6xl px-5 py-10 md:py-14">
             <Titre sur="Méthode" centre>Un CRM livré par modules, utilisable dès la première étape.</Titre>
             <ol className="mt-14 flex flex-col items-stretch gap-2 md:flex-row md:items-start md:gap-0">
               {METHODE.map(([t, ic, d], i) => (
