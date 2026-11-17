@@ -116,7 +116,7 @@ function Navigateur({ src, alt, url }: { src: string; alt: string; url: string }
           <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
         </span>
-        <span className="mx-auto rounded-md bg-white px-4 py-0.5 text-[11px] text-black/45">{url}</span>
+        <span className="mx-auto truncate rounded-md bg-white px-4 py-0.5 text-[11px] text-black/45">{url}</span>
         <span className="w-[46px]" />
       </div>
       <img src={src} alt={alt} loading="lazy" className="block w-full" />
@@ -191,7 +191,7 @@ type EtapeProps = { sur: string; titre: string; texte: string; src: string; url:
 
 function Etape({ sur, titre, texte, src, url, points, inverse = false, image = false }: EtapeProps) {
   return (
-    <div className="grid items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12">
+    <div className="grid items-center gap-8 md:grid-cols-[1.45fr_1fr] md:gap-12 [&>*]:min-w-0">
       <Apparait className={inverse ? 'md:order-2' : ''}>
         {image ? (
           <img src={src} alt={titre} loading="lazy" className="w-full rounded-2xl shadow-[0_30px_80px_-30px_rgba(0,0,0,0.3)] ring-1 ring-black/[0.06]" />
@@ -240,7 +240,7 @@ const ETAPES_DZ: EtapeProps[] = [
     titre: 'Chaque échange reste sur la fiche du client.',
     texte: 'Appels entrants et sortants, durée, SMS envoyés, prochaine relance : toute l’équipe sait où en est le client avant de l’appeler.',
     src: '/crm/dz-client-appels.webp',
-    url: 'digitalzdev.com/dashboard/clients/duval-associes',
+    url: 'digitalzdev.com/dashboard/clients/studio-duval',
   },
   {
     sur: 'Devis',
@@ -480,21 +480,44 @@ const ARCHI: [string, string[]][] = [
   ['Services connectés', ['Paiement', 'Email, SMS, téléphonie', 'IA, Google, Meta']],
 ]
 
-const SECURITE: [string, string][] = [
-  ['Accès par rôle', 'Règles d’accès écrites en base de données : même une erreur d’interface ne peut pas exposer les données d’un autre compte.'],
-  ['Documents privés', 'Pièces et contrats dans des espaces privés, servis par liens signés à durée limitée.'],
-  ['Traçabilité', 'Journal d’activité et journal d’audit des actions d’administration.'],
-  ['RGPD', 'Suppression des données par lien signé, email et téléphone hachés avant tout envoi publicitaire.'],
-  ['Protection', 'Limitation du nombre de requêtes et vérification anti-robot sur les formulaires.'],
-  ['Qualité', 'Tests unitaires et tests de parcours sur les écrans critiques, alertes d’erreur en production.'],
+/** Pictogrammes au trait, dessinés sur une grille de 24. */
+const ICONES: Record<string, ReactNode> = {
+  role: <><circle cx="12" cy="8" r="3.5" /><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" /><path d="M17.5 4.5l1.5 1.5 2.5-2.5" /></>,
+  document: <><path d="M7 3h7l4 4v14H7z" /><path d="M14 3v4h4" /><rect x="9.5" y="12" width="6" height="5" rx="1" /><path d="M11 12v-1.2a1.5 1.5 0 013 0V12" /></>,
+  trace: <><path d="M4 6h10M4 12h10M4 18h6" /><circle cx="18" cy="16" r="3" /><path d="M18 14.6V16l1 .8" /></>,
+  rgpd: <><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z" /><path d="M9 12l2 2 4-4" /></>,
+  protection: <><rect x="5" y="10" width="14" height="10" rx="2" /><path d="M8 10V7a4 4 0 018 0v3" /><circle cx="12" cy="15" r="1.3" /></>,
+  qualite: <><circle cx="12" cy="12" r="8" /><path d="M8.5 12.5l2.3 2.3 4.7-5" /></>,
+  cadrage: <><circle cx="9" cy="9" r="3" /><circle cx="16.5" cy="10" r="2.5" /><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" /><path d="M14.5 15.2c.6-.2 1.3-.2 2-.2 2.4 0 4 1.5 4 4" /></>,
+  maquette: <><rect x="3" y="4" width="18" height="14" rx="2" /><path d="M3 8h18" /><rect x="6" y="11" width="5" height="4" rx=".8" /><path d="M14 11h4M14 14h3" /><path d="M9 21h6" /></>,
+  modules: <><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" /><path d="M17 14v6M14 17h6" /></>,
+  donnees: <><ellipse cx="12" cy="6" rx="7" ry="2.8" /><path d="M5 6v6c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6" /><path d="M5 12v6c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8v-6" /></>,
+  lancement: <><path d="M12 3c3.5 2 5 5.5 5 9l-2.5 3h-5L7 12c0-3.5 1.5-7 5-9z" /><circle cx="12" cy="9.5" r="1.6" /><path d="M9.5 15l-1.5 4 2.5-1.2M14.5 15l1.5 4-2.5-1.2" /></>,
+}
+
+function Picto({ nom, className = 'h-6 w-6' }: { nom: string; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      {ICONES[nom]}
+    </svg>
+  )
+}
+
+const SECURITE: [string, string, string][] = [
+  ['Accès par rôle', 'role', 'Règles d’accès écrites en base de données : même une erreur d’interface ne peut pas exposer les données d’un autre compte.'],
+  ['Documents privés', 'document', 'Pièces et contrats dans des espaces privés, servis par liens signés à durée limitée.'],
+  ['Traçabilité', 'trace', 'Journal d’activité et journal d’audit des actions d’administration.'],
+  ['RGPD', 'rgpd', 'Suppression des données par lien signé, email et téléphone hachés avant tout envoi publicitaire.'],
+  ['Protection', 'protection', 'Limitation du nombre de requêtes et vérification anti-robot sur les formulaires.'],
+  ['Qualité', 'qualite', 'Tests unitaires et tests de parcours sur les écrans critiques, alertes d’erreur en production.'],
 ]
 
-const METHODE: [string, string][] = [
-  ['Cadrage', 'Ateliers avec vos équipes pour lister les parcours, les données et ce qui doit sortir des fichiers Excel.'],
-  ['Maquettes', 'Les écrans principaux dessinés et validés avec vous avant toute ligne de code.'],
-  ['Livraison par modules', 'Chaque module est utilisable dès sa livraison, le suivant s’appuie sur vos retours.'],
-  ['Reprise des données', 'Import de vos clients, contrats et historiques, contrôlé ligne à ligne.'],
-  ['Mise en production', 'Formation des équipes, suivi rapproché, évolutions ensuite.'],
+const METHODE: [string, string, string][] = [
+  ['Cadrage', 'cadrage', 'Ateliers avec vos équipes pour lister les parcours, les données et ce qui doit sortir des fichiers Excel.'],
+  ['Maquettes', 'maquette', 'Les écrans principaux dessinés et validés avec vous avant toute ligne de code.'],
+  ['Livraison par modules', 'modules', 'Chaque module est utilisable dès sa livraison, le suivant s’appuie sur vos retours.'],
+  ['Reprise des données', 'donnees', 'Import de vos clients, contrats et historiques, contrôlé ligne à ligne.'],
+  ['Mise en production', 'lancement', 'Formation des équipes, suivi rapproché, évolutions ensuite.'],
 ]
 
 function Hero() {
@@ -726,9 +749,10 @@ export default function Crm() {
           <section className="mx-auto max-w-6xl px-5 py-20 md:py-28">
             <Titre sur="Sécurité et données">Des données protégées dès la conception.</Titre>
             <div className="mt-12 grid gap-3 md:grid-cols-3">
-              {SECURITE.map(([t, d], i) => (
+              {SECURITE.map(([t, ic, d], i) => (
                 <Apparait key={t} delai={(i % 3) * 0.06}>
                   <div className="h-full rounded-2xl bg-[#F5F5F7] p-6">
+                    <span className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-black text-white"><Picto nom={ic} className="h-5 w-5" /></span>
                     <p className="text-base font-semibold">{t}</p>
                     <p className="mt-2 text-sm leading-relaxed text-black/60">{d}</p>
                   </div>
@@ -739,29 +763,39 @@ export default function Crm() {
 
           <section className="mx-auto max-w-6xl px-5 py-20 md:py-28">
             <Titre sur="Méthode">Un CRM livré par modules, utilisable dès la première étape.</Titre>
-            <div className="mt-12 grid gap-3 md:grid-cols-5">
-              {METHODE.map(([t, d], i) => (
-                <Apparait key={t} delai={i * 0.06}>
-                  <div className="h-full rounded-2xl bg-[#F5F5F7] p-6">
-                    <p className="text-base font-semibold">{t}</p>
-                    <p className="mt-2 text-sm leading-relaxed text-black/60">{d}</p>
-                  </div>
-                </Apparait>
+            <ol className="mt-14 flex flex-col items-stretch gap-2 md:flex-row md:items-start md:gap-0">
+              {METHODE.map(([t, ic, d], i) => (
+                <li key={t} className="flex flex-col items-center md:flex-1 md:flex-row md:items-start">
+                  <motion.div
+                    className="flex w-full flex-col items-center text-center md:px-2"
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.6, delay: i * 0.18, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-black text-white shadow-[0_16px_40px_-18px_rgba(0,0,0,0.6)]">
+                      <Picto nom={ic} className="h-7 w-7" />
+                    </span>
+                    <p className="mt-5 text-base font-semibold">{t}</p>
+                    <p className="mt-2 max-w-[15rem] text-sm leading-relaxed text-black/60">{d}</p>
+                  </motion.div>
+                  {i < METHODE.length - 1 && (
+                    <motion.span
+                      aria-hidden
+                      className="my-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/[0.06] text-black/60 md:my-0 md:mt-4"
+                      initial={{ opacity: 0, scale: 0.6 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, margin: '-60px' }}
+                      transition={{ duration: 0.4, delay: i * 0.18 + 0.12 }}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-4 w-4 rotate-90 md:rotate-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                    </motion.span>
+                  )}
+                </li>
               ))}
-            </div>
+            </ol>
           </section>
 
-          <section className="mx-auto max-w-6xl px-5 pb-24">
-            <Apparait>
-              <div className="rounded-3xl bg-black px-8 py-14 text-center text-white md:py-20">
-                <h2 className="mx-auto max-w-3xl text-3xl font-semibold leading-tight tracking-tight md:text-5xl">Un CRM à l’image de votre activité.</h2>
-                <p className="mx-auto mt-5 max-w-xl text-base text-white/65">Parlons de vos process, de vos outils actuels et de vos priorités.</p>
-                <a href={CONTACT} className="mt-8 inline-flex rounded-full bg-white px-8 py-4 text-sm font-semibold text-black transition-opacity hover:opacity-85">
-                  Planifier un échange
-                </a>
-              </div>
-            </Apparait>
-          </section>
         </main>
 
         <PiedDePage />
