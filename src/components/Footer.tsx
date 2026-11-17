@@ -14,6 +14,7 @@ import { projects } from '../data/projects'
 const RACCOURCIS: Array<{ to: string; label: string; externe?: boolean }> = [
   { to: '/#services', label: 'Nos services' },
   { to: '/#projets', label: 'Nos réalisations' },
+  { to: '/crm', label: 'Nos CRM et back-offices' },
   { to: '/#agence', label: "L'agence" },
   { to: '/#faq', label: 'Questions fréquentes' },
   { to: '/contact', label: 'Nous contacter' },

@@ -1,6 +1,7 @@
 import HeroStudio from '../components/studio/HeroStudio'
 import ManifesteStudio from '../components/studio/ManifesteStudio'
 import TravauxStudio from '../components/studio/TravauxStudio'
+import LienCrm from '../components/studio/LienCrm'
 import ServicesStudio from '../components/studio/ServicesStudio'
 import AcquisitionStudio from '../components/studio/AcquisitionStudio'
 import EquipeStudio from '../components/studio/EquipeStudio'
@@ -26,6 +27,7 @@ export default function Home() {
       <HeroStudio />
       <ManifesteStudio />
       <TravauxStudio />
+      <LienCrm />
       <RendezVousStudio />
       <FinalStudio />
       <AcquisitionStudio />

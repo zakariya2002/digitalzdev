@@ -9,6 +9,7 @@ const LIENS = [
   { libelle: 'Accueil', vers: '/', interne: true },
   { libelle: 'Projets', vers: '/#projets', interne: false },
   { libelle: 'Services', vers: '/#services', interne: false },
+  { libelle: 'CRM', vers: '/crm', interne: true },
   { libelle: "L'agence", vers: '/#agence', interne: false },
   { libelle: 'Contact', vers: '/contact', interne: true },
 ] as const
