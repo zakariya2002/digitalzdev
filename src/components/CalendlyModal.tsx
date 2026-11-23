@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion'
  * variable de build imposerait de redéployer sans rien protéger.
  */
 export const CALENDLY_URL =
-  'https://calendly.com/zakariya-neurocare/call-decouverte-20min?hide_gdpr_banner=1'
+  'https://calendly.com/zakariya-neurocare/appel-presentation-15min?hide_gdpr_banner=1'
 
 const SCRIPT_SRC = 'https://assets.calendly.com/assets/external/widget.js'
 
