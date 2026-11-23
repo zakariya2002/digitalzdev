@@ -13,6 +13,7 @@ import KanbanPage from './KanbanPage'
 import CalendarPage from './CalendarPage'
 import ClientsPage from './ClientsPage'
 import ProspectionPage from './ProspectionPage'
+import CampagneMailsPage from './CampagneMailsPage'
 import ClientDetailPage from './ClientDetailPage'
 import SmsTemplatesPage from './SmsTemplatesPage'
 import QuotesPage from './QuotesPage'
@@ -57,6 +58,7 @@ export default function DashboardLayout() {
               <Route path="clients" element={<ClientsPage />} />
               <Route path="clients/:id" element={<ClientDetailPage />} />
               <Route path="prospection" element={<ProspectionPage />} />
+              <Route path="campagne-mails" element={<CampagneMailsPage />} />
               <Route path="tunnel" element={<TunnelPage />} />
               <Route path="sms-templates" element={<SmsTemplatesPage />} />
               <Route path="quotes" element={<QuotesPage />} />
