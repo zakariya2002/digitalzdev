@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase'
 import ErrorBanner from '../../components/dashboard/ErrorBanner'
 
 /**
- * Suivi de la campagne de mails aux avocats (table campagne_mails).
+ * Suivi des campagnes de mails (avocats, syndics) — table campagne_mails.
  *
  * Les lignes sont créées et mises à jour par annuaire-avocats/mail/envoi.py :
  * état d'envoi et dernier événement Resend (délivré, ouvert, rebond, plainte).
@@ -12,7 +12,11 @@ import ErrorBanner from '../../components/dashboard/ErrorBanner'
  * pas intéressé, STOP (un STOP empêche tout renvoi par le script).
  */
 
-const CAMPAGNE = 'seo-avocats-nov-2026'
+const CAMPAGNES = [
+  { id: 'seo-avocats-nov-2026', titre: 'avocats' },
+  { id: 'seo-syndics-nov-2026', titre: 'syndics' },
+] as const
+type CampagneId = (typeof CAMPAGNES)[number]['id']
 
 type Etat = 'a_envoyer' | 'envoye' | 'erreur'
 type Statut = 'aucune_reponse' | 'repondu' | 'rdv' | 'pas_interesse' | 'stop'
@@ -103,18 +107,19 @@ export default function CampagneMailsPage() {
   const [recherche, setRecherche] = useState('')
   const [ouverte, setOuverte] = useState<string | null>(null)
   const [majLe, setMajLe] = useState<Date | null>(null)
+  const [campagne, setCampagne] = useState<CampagneId>(CAMPAGNES[0].id)
 
   const charger = useCallback(async () => {
     const { data, error } = await db
       .from('campagne_mails')
       .select('id,email,nom,cabinet,ville,site,objet,defauts,etat,envoye_le,dernier_evenement,evenement_le,ouvert_le,statut,notes')
-      .eq('campagne', CAMPAGNE)
+      .eq('campagne', campagne)
       .order('envoye_le', { ascending: false, nullsFirst: false })
       .limit(5000)
     if (error) setErreur(`Chargement impossible : ${error.message}`)
     else { setLignes((data ?? []) as Ligne[]); setMajLe(new Date()) }
     setChargement(false)
-  }, [])
+  }, [campagne])
 
   useEffect(() => {
     void charger()
@@ -165,7 +170,15 @@ export default function CampagneMailsPage() {
     <div className="p-4 lg:p-8 max-w-7xl">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold">Campagne mails avocats</h1>
+          <h1 className="text-2xl font-semibold">Campagne mails {CAMPAGNES.find((c) => c.id === campagne)?.titre}</h1>
+          <div className="mt-3 flex gap-2">
+            {CAMPAGNES.map((c) => (
+              <button key={c.id} onClick={() => { setCampagne(c.id); setChargement(true); setLignes([]) }}
+                className={`rounded-full px-3 py-1 text-sm capitalize ${campagne === c.id ? 'bg-white text-gray-950' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'}`}>
+                {c.titre}
+              </button>
+            ))}
+          </div>
           <p className="text-sm text-gray-400 mt-1">
             Audit SEO du site et première page refaite · envoi depuis zakariya.nebbache@digitalzdev.com
           </p>
